@@ -16,6 +16,9 @@
     <Filter Include="Source Files\core">
       <UniqueIdentifier>{ebc9912f-03bb-4dcf-a4ba-f447915fa71f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Log Files">
+      <UniqueIdentifier>{1ecb81cc-cd77-46ab-a2bc-05d8c311aa47}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\core\bbox.cpp">
@@ -59,5 +62,10 @@
     <ClInclude Include="..\src\core\vector.h">
       <Filter>Source Files\core</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\log\20180811.md">
+      <Filter>Log Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

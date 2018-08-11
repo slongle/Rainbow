@@ -131,6 +131,9 @@
     <ClInclude Include="..\src\core\transform.h" />
     <ClInclude Include="..\src\core\vector.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\log\20180811.md" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
