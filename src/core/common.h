@@ -38,12 +38,14 @@ template<typename T> class Vector2;
 template<typename T> class Vector3;
 template<typename T> class Point2;
 template<typename T> class Point3;
+template<typename T> class Normal3;
 
 typedef Vector2<Float> Vector2f;
 typedef Vector3<Float> Vector3f;
 typedef Point2<int>	   Point2i;
 typedef Point2<Float>  Point2f;
 typedef Point3<Float>  Point3f;
+typedef Normal3<Float> Normal3f;
 
 RAINBOW_NAMESPACE_END
 
