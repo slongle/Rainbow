@@ -67,5 +67,8 @@
     <None Include="..\log\20180811.md">
       <Filter>Log Files</Filter>
     </None>
+    <None Include="..\log\20180813.md">
+      <Filter>Log Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
