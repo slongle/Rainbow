@@ -79,6 +79,7 @@ Matrix4x4 Inverse(const Matrix4x4 &m1) {
 	}
 	return Matrix4x4(minv);
 	*/
+	return Matrix4x4();
 }
 
 RAINBOW_NAMESPACE_END
