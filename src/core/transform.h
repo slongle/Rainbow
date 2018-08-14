@@ -14,6 +14,10 @@ public:
 	}
 
 	Matrix4x4(Float mat[4][4]);
+	Matrix4x4(Float m00, Float m01, Float m02, Float m03,
+		      Float m10, Float m11, Float m12, Float m13,
+		      Float m20, Float m21, Float m22, Float m23,
+		      Float m30, Float m31, Float m32, Float m33);
 
 	bool operator == (const Matrix4x4 &m1) const {
 		for (int i = 0; i < 4; i++)
