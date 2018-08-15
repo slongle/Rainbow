@@ -24,7 +24,7 @@ Matrix4x4 Transpose(const Matrix4x4 &m1) {
 }
 
 Matrix4x4 Inverse(const Matrix4x4 &m1) {
-	/*int indxc[4], indxr[4];
+	int indxc[4], indxr[4];
 	int ipiv[4] = { 0, 0, 0, 0 };
 	Float minv[4][4];
 	memcpy(minv, m1.m, 4 * 4 * sizeof(Float));
@@ -43,7 +43,8 @@ Matrix4x4 Inverse(const Matrix4x4 &m1) {
 						}
 					}
 					else if (ipiv[k] > 1)
-						Error("Singular matrix in MatrixInvert");
+						return Matrix4x4();
+						//Error("Singular matrix in MatrixInvert");
 				}
 			}
 		}
@@ -54,7 +55,9 @@ Matrix4x4 Inverse(const Matrix4x4 &m1) {
 		}
 		indxr[i] = irow;
 		indxc[i] = icol;
-		if (minv[icol][icol] == 0.f) Error("Singular matrix in MatrixInvert");
+		if (minv[icol][icol] == 0.f)
+			return Matrix4x4();
+			//Error("Singular matrix in MatrixInvert");
 
 		// Set $m[icol][icol]$ to one by scaling row _icol_ appropriately
 		Float pivinv = 1. / minv[icol][icol];
@@ -78,8 +81,6 @@ Matrix4x4 Inverse(const Matrix4x4 &m1) {
 		}
 	}
 	return Matrix4x4(minv);
-	*/
-	return Matrix4x4();
 }
 
 RAINBOW_NAMESPACE_END
