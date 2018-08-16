@@ -50,12 +50,21 @@ public:
 	friend Matrix4x4 Inverse(const Matrix4x4 &m1);
 
 	friend std::ostream &operator << (std::ostream &os, const Matrix4x4 &m1) {
-		os << "Matrix[\n" <<
+		os.setf(std::ios::fixed);				
+		
+		os << "Matrix[\n" << std::setprecision(4) <<
 			  "  [" << m1.m[0][0] << ", " << m1.m[0][1] << ", " << m1.m[0][2] << ", " << m1.m[0][3] << "],\n" <<
 			  "  [" << m1.m[1][0] << ", " << m1.m[1][1] << ", " << m1.m[1][2] << ", " << m1.m[1][3] << "],\n" <<
 			  "  [" << m1.m[2][0] << ", " << m1.m[2][1] << ", " << m1.m[2][2] << ", " << m1.m[2][3] << "],\n" <<
 			  "  [" << m1.m[3][0] << ", " << m1.m[3][1] << ", " << m1.m[3][2] << ", " << m1.m[3][3] << "],\n" <<
 			  "]";
+		return os;
+	}
+
+	friend std::istream &operator >>(std::istream &os, Matrix4x4 &m1) {
+		for (int i = 0; i < 4; i++)
+			for (int j = 0; j < 4; j++)
+				os >> m1.m[i][j];
 		return os;
 	}
 

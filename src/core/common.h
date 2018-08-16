@@ -2,6 +2,7 @@
 #define __COMMON_H
 
 #include<iostream>
+#include <iomanip>
 #include<assert.h>
 
 #if defined(_MSC_VER)

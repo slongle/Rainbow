@@ -42,34 +42,37 @@ Matrix4x4 Inverse(const Matrix4x4 &m1) {
 							icol = k;
 						}
 					}
-					else if (ipiv[k] > 1)
-						return Matrix4x4();
-						//Error("Singular matrix in MatrixInvert");
+					else if (ipiv[k] > 1) {
+						throw std::runtime_error("Singular matrix in MatrixInvert Position 1");
+					}
 				}
 			}
 		}
 		++ipiv[icol];
 		// Swap rows _irow_ and _icol_ for pivot
 		if (irow != icol) {
-			for (int k = 0; k < 4; ++k) std::swap(minv[irow][k], minv[icol][k]);
+			for (int k = 0; k < 4; ++k) 
+				std::swap(minv[irow][k], minv[icol][k]);
 		}
 		indxr[i] = irow;
 		indxc[i] = icol;
-		if (minv[icol][icol] == 0.f)
-			return Matrix4x4();
-			//Error("Singular matrix in MatrixInvert");
+		if (std::fabs(minv[icol][icol]) < Epsilon) {
+			throw std::runtime_error("Singular matrix in MatrixInvert Position 2");			
+		}
 
 		// Set $m[icol][icol]$ to one by scaling row _icol_ appropriately
 		Float pivinv = 1. / minv[icol][icol];
 		minv[icol][icol] = 1.;
-		for (int j = 0; j < 4; j++) minv[icol][j] *= pivinv;
+		for (int j = 0; j < 4; j++) 
+			minv[icol][j] *= pivinv;
 
 		// Subtract this row from others to zero out their columns
 		for (int j = 0; j < 4; j++) {
 			if (j != icol) {
 				Float save = minv[j][icol];
 				minv[j][icol] = 0;
-				for (int k = 0; k < 4; k++) minv[j][k] -= minv[icol][k] * save;
+				for (int k = 0; k < 4; k++) 
+					minv[j][k] -= minv[icol][k] * save;
 			}
 		}
 	}

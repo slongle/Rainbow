@@ -71,7 +71,8 @@ public:
 	friend Vector2<T> operator * (U f, Vector2<T> v) { return Vector2<T>(v.x*f, v.y*f); }
 
 	friend std::ostream &operator<<(std::ostream &os, const Vector2<T> &v) {
-		os << "[ " << v.x << ", " << v.y << " ]";
+		os.setf(std::ios::fixed);
+		os << std::setprecision(4) << "[ " << v.x << ", " << v.y << " ]";
 		return os;
 	}
 
@@ -166,7 +167,8 @@ public:
 	friend Vector3<T> operator * (U f, Vector3<T> v) { return Vector3<T>(v.x*f, v.y*f, v.z*f); }
 
 	friend std::ostream &operator<<(std::ostream &os, const Vector3<T> &v) {
-		os << "[ " << v.x << ", " << v.y << ", " << v.z << " ]";
+		os.setf(std::ios::fixed);
+		os << std::setprecision(4) << "[ " << v.x << ", " << v.y << ", " << v.z << " ]";
 		return os;
 	}
 
@@ -236,7 +238,8 @@ public:
 	Point3<T> operator * (const U f) const { return Point3<T>(x*f, y*f, z*f); }
 
 	friend std::ostream &operator << (std::ostream &os, const Point3<T> u) {
-		os << "[ " << u.x << ", " << u.y << ", " << u.z << " ]";
+		os.setf(std::ios::fixed);
+		os << std::setprecision(4) << "[ " << u.x << ", " << u.y << ", " << u.z << " ]";
 		return os;
 	}
 
@@ -268,7 +271,8 @@ public:
 	bool HasNaNs() const { return std::isnan(x) || std::isnan(y) || std::isnan(z); }
 
 	friend std::ostream &operator << (std::ostream &os, const Normal3<T> &u) {
-		os << "[ " << u.x << ", " << u.y << ", " << u.z << " ]";
+		os.setf(std::ios::fixed);
+		os << std::setprecision(4) << "[ " << u.x << ", " << u.y << ", " << u.z << " ]";
 		return os;
 	}
 
