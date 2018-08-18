@@ -43,7 +43,7 @@ Matrix4x4 Inverse(const Matrix4x4 &m1) {
 						}
 					}
 					else if (ipiv[k] > 1) {
-						throw std::runtime_error("Singular matrix in MatrixInvert Position 1");
+						Error("Singular matrix in MatrixInvert Position 1");
 					}
 				}
 			}
@@ -57,7 +57,7 @@ Matrix4x4 Inverse(const Matrix4x4 &m1) {
 		indxr[i] = irow;
 		indxc[i] = icol;
 		if (std::fabs(minv[icol][icol]) < Epsilon) {
-			throw std::runtime_error("Singular matrix in MatrixInvert Position 2");			
+			Error("Singular matrix in MatrixInvert Position 2");
 		}
 
 		// Set $m[icol][icol]$ to one by scaling row _icol_ appropriately

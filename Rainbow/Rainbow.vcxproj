@@ -120,6 +120,7 @@
   <ItemGroup>
     <ClCompile Include="..\src\core\bbox.cpp" />
     <ClCompile Include="..\src\core\common.cpp" />
+    <ClCompile Include="..\src\core\error.cpp" />
     <ClCompile Include="..\src\core\frame.cpp" />
     <ClCompile Include="..\src\core\ray.cpp" />
     <ClCompile Include="..\src\core\transform.cpp" />
@@ -127,8 +128,10 @@
     <ClCompile Include="..\src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\ext\tinyformat.h" />
     <ClInclude Include="..\src\core\bbox.h" />
     <ClInclude Include="..\src\core\common.h" />
+    <ClInclude Include="..\src\core\error.h" />
     <ClInclude Include="..\src\core\frame.h" />
     <ClInclude Include="..\src\core\ray.h" />
     <ClInclude Include="..\src\core\transform.h" />

@@ -1,5 +1,5 @@
-#ifndef _VECTOR_H
-#define _VECTOR_H
+#ifndef __VECTOR_H
+#define __VECTOR_H
 
 #include <algorithm>
 #include "common.h"
@@ -318,4 +318,4 @@ Normal3<T> FaceForward(const Normal3<T> &n, const Vector3<T> &u) {
 
 RAINBOW_NAMESPACE_END
 
-#endif // !_VECTOR_H
+#endif // !__VECTOR_H

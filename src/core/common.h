@@ -1,9 +1,12 @@
 #ifndef __COMMON_H
 #define __COMMON_H
 
+// Global Include Files
 #include<iostream>
-#include <iomanip>
+#include<iomanip>
 #include<assert.h>
+#include"../../ext/tinyformat.h"
+#include"error.h"
 
 #if defined(_MSC_VER)
 /* Disable some warnings on MSVC++ */
