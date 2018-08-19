@@ -3,9 +3,9 @@
 
 RAINBOW_NAMESPACE_BEGIN
 
-
-void Error(const std::string &st) {
-	std::cerr << st << std::endl;
+/* Print error message and halt program*/
+void Error(const std::string &error) {
+	tfm::format(std::cerr, "%s\n", error);
 	exit(0);
 }
 
