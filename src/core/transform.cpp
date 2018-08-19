@@ -61,7 +61,7 @@ Matrix4x4 Inverse(const Matrix4x4 &m1) {
 		}
 
 		// Set $m[icol][icol]$ to one by scaling row _icol_ appropriately
-		Float pivinv = 1. / minv[icol][icol];
+		Float pivinv = Float(1) / minv[icol][icol];
 		minv[icol][icol] = 1.;
 		for (int j = 0; j < 4; j++) 
 			minv[icol][j] *= pivinv;
@@ -110,6 +110,47 @@ Transform Scale(Float x, Float y, Float z) {
 	return Transform(m, mInv);
 }
 
+Transform RotateX(Float theta) {
+	Float sinTheta = std::sin(radToDeg(theta));
+	Float cosTheta = std::cos(radToDeg(theta));
+	Matrix4x4 m(1, 0, 0, 0,
+		        0, cosTheta, -sinTheta, 0,
+		        0, sinTheta, cosTheta, 0,
+		        0, 0, 0, 1);
+	Matrix4x4 mInv(1, 0, 0, 0,
+		           0, cosTheta, sinTheta, 0,
+		           0, -sinTheta, cosTheta, 0,
+		           0, 0, 0, 1);
+	return Transform(m, mInv);
+}
+
+Transform RotateY(Float theta) {
+	Float sinTheta = std::sin(radToDeg(theta));
+	Float cosTheta = std::cos(radToDeg(theta));
+	Matrix4x4 m(cosTheta, 0,  sinTheta, 0,
+		               0, 1,         0, 0,
+		       -sinTheta, 0,  cosTheta, 0,
+		               0, 0,         0, 1);
+	Matrix4x4 mInv(cosTheta, 0, -sinTheta, 0,
+		           0, 1, 0, 0,
+		           sinTheta, 0, cosTheta, 0,
+		           0, 0, 0, 1);
+	return Transform(m, mInv);
+}
+
+Transform RotateZ(Float theta) {
+	Float sinTheta = std::sin(radToDeg(theta));
+	Float cosTheta = std::cos(radToDeg(theta));
+	Matrix4x4 m(cosTheta, -sinTheta, 0, 0,
+		        sinTheta, cosTheta, 0, 0,
+		        0, 0, 1, 0,
+		        0, 0, 0, 1);
+	Matrix4x4 mInv(1, 0, 0, 0,
+		0, cosTheta, sinTheta, 0,
+		0, -sinTheta, cosTheta, 0,
+		0, 0, 0, 1);
+	return Transform(m, mInv);
+}
 
 
 RAINBOW_NAMESPACE_END

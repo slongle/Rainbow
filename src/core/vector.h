@@ -151,7 +151,7 @@ public:
 	template<typename U>
 	Vector3<T> operator / (U f) const {
 		DCHECK(f == 0);
-		double inv = double(1) / f;
+		Float inv = Float(1) / f;
 		return Vector3<T>(x*inv, y*inv, z*inv);
 	}
 	template<typename U>
@@ -310,8 +310,8 @@ Normal3<T> Cross(const Normal3<T> &u, const Normal3<T> &v) {
 
 template<typename T>
 Vector3<T> Cross(const Normal3<T> &u, const Vector3<T> &v) {
-	double ux = u.x, uy = u.y, uz = u.z;
-	double vx = v.x, vy = v.y, vz = v.z;
+	Float ux = u.x, uy = u.y, uz = u.z;
+	Float vx = v.x, vy = v.y, vz = v.z;
 	return Vector3<T>(uy * vz - uz * vy,
 		uz * vx - ux * vz,
 		ux * vy - uy * vx);
@@ -319,8 +319,8 @@ Vector3<T> Cross(const Normal3<T> &u, const Vector3<T> &v) {
 
 template<typename T>
 Vector3<T> Cross(const Vector3<T> &u, const Normal3<T> &v) {
-	double ux = u.x, uy = u.y, uz = u.z;
-	double vx = v.x, vy = v.y, vz = v.z;
+	Float ux = u.x, uy = u.y, uz = u.z;
+	Float vx = v.x, vy = v.y, vz = v.z;
 	return Vector3<T>(uy * vz - uz * vy,
 		uz * vx - ux * vz,
 		ux * vy - uy * vx);

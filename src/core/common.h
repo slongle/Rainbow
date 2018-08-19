@@ -58,6 +58,15 @@ typedef Bounds2<Float> Bounds2f;
 typedef Bounds2<int>   Bounds2i;
 typedef Bounds3<Float> Bounds3f;
 
+
+inline Float radToDeg(Float theta) {
+	return theta * M_PI / 180;
+}
+
+inline Float degToRad(Float theta) {
+	return theta * 180 / M_PI;
+}
+
 RAINBOW_NAMESPACE_END
 
 #endif // !__COMMON_H

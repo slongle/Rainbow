@@ -117,7 +117,9 @@ private:
 
 Transform Translate(const Vector3f &delta);
 Transform Scale(Float x, Float y, Float z);
-Transform Rotate();
+Transform RotateX(Float theta);
+Transform RotateY(Float theta);
+Transform RotateZ(Float theta);
 
 RAINBOW_NAMESPACE_END
 
