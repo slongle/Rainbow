@@ -7,6 +7,7 @@ RAINBOW_NAMESPACE_BEGIN
 
 template<typename T>
 class Bounds2 {
+public:
 	Bounds2() {
 		T minNum = std::numeric_limits<T>::lowest();
 		T maxNum = std::numeric_limits<T>::max();
@@ -19,11 +20,12 @@ class Bounds2 {
 		pMax(std::max(u.x, v.x), std::max(u.y, v.y));
 	}
 
+	std::string toString() const {
+		return tfm::format("[\n\tpMin = %s\n\tpMax = %s\n]", pMin, pMax);
+	}
+
 	friend std::ostream &operator << (std::ostream &os, const Bounds2<T> &bounds) {
-		cout << "[\n"
-			<< "  pMin = " << bounds.pMin << "\n"
-			<< "  pMax = " << bounds.pMax << "\n"
-			<< "]";
+		os << bounds.toString();
 		return os;
 	}
 
@@ -45,11 +47,12 @@ public:
 		pMax(std::max(u.x, v.x), std::max(u.y, v.y), std::max(u.z, v.z));
 	}
 
+	std::string toString() const {
+		return tfm::format("[\n\tpMin = %s\n\tpMax = %s\n]", pMin, pMax);
+	}
+
 	friend std::ostream &operator << (std::ostream &os, const Bounds3<T> &bounds) {
-		cout << "[\n"
-			 << "  pMin = " << bounds.pMin << "\n"
-			 << "  pMax = " << bounds.pMax << "\n"
-			 << "]";
+		os << bounds.toString();
 		return os;
 	}
 

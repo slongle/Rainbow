@@ -12,12 +12,12 @@ public:
 
 	Point3f operator ()(Float t) const { return o + d * t; }
 
+	std::string toString() const {
+		return tfm::format("[\n\to = %s\n\td = %s\n\ttMax = \6.4f\n]", o, d, tMax);
+	}
+
 	friend std::ostream &operator << (std::ostream &os, const Ray &r) {
-		os << "[\n"
-		   << "  o = " << r.o << "\n"
-		   << "  d = " << r.d << "\n"
-		   << "  tMax = " << r.tMax << "\n"
-		   << "]";
+		os << r.toString();
 		return os;
 	}
 

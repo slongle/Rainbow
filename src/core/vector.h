@@ -66,13 +66,15 @@ public:
 	}
 	Vector2<T> operator-() const { return Vector2<T>(-x, -y); }
 
+	std::string toString() const {
+		return tfm::format("[ %6.4f, %6.4f ]", x, y);
+	}
 
 	template<typename U>
 	friend Vector2<T> operator * (U f, Vector2<T> v) { return Vector2<T>(v.x*f, v.y*f); }
 
 	friend std::ostream &operator<<(std::ostream &os, const Vector2<T> &v) {
-		os.setf(std::ios::fixed);
-		os << std::setprecision(4) << "[ " << v.x << ", " << v.y << " ]";
+		os << v.toString();
 		return os;
 	}
 
@@ -163,12 +165,15 @@ public:
 	}
 	Vector3<T> operator-() const { return Vector3<T>(-x, -y, -z); }
 
+	std::string toString() const {
+		return tfm::format("[ %6.4f, %6.4f, %6.4f ]", x, y, z);
+	}
+
 	template<typename U>
 	friend Vector3<T> operator * (U f, Vector3<T> v) { return Vector3<T>(v.x*f, v.y*f, v.z*f); }
 
 	friend std::ostream &operator<<(std::ostream &os, const Vector3<T> &v) {
-		os.setf(std::ios::fixed);
-		os << std::setprecision(4) << "[ " << v.x << ", " << v.y << ", " << v.z << " ]";
+		os << v.toString();
 		return os;
 	}
 
@@ -207,8 +212,12 @@ public:
 
 	bool HasNaNs() { return std::isnan(x) || std::isnan(y); }
 
+	std::string toString() const {
+		return tfm::format("[ %6.4f, %6.4f ]", x, y);
+	}
+
 	friend std::ostream &operator << (std::ostream &os, const Point2<T> u) {
-		os << "[ " << u.x << ", " << u.y << " ]";
+		os << u.toString();
 		return os;
 	}
 
@@ -237,9 +246,12 @@ public:
 	template<typename U>
 	Point3<T> operator * (const U f) const { return Point3<T>(x*f, y*f, z*f); }
 
+	std::string toString() const {
+		return tfm::format("[ %6.4f, %6.4f, %6.4f ]", x, y, z);
+	}
+
 	friend std::ostream &operator << (std::ostream &os, const Point3<T> u) {
-		os.setf(std::ios::fixed);
-		os << std::setprecision(4) << "[ " << u.x << ", " << u.y << ", " << u.z << " ]";
+		os << u.toString();
 		return os;
 	}
 
@@ -270,9 +282,12 @@ public:
 
 	bool HasNaNs() const { return std::isnan(x) || std::isnan(y) || std::isnan(z); }
 
+	std::string toString() const {
+		return tfm::format("[ %6.4f, %6.4f, %6.4f ]", x, y, z);
+	}
+
 	friend std::ostream &operator << (std::ostream &os, const Normal3<T> &u) {
-		os.setf(std::ios::fixed);
-		os << std::setprecision(4) << "[ " << u.x << ", " << u.y << ", " << u.z << " ]";
+		os << u.toString();
 		return os;
 	}
 

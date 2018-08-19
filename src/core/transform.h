@@ -35,19 +35,19 @@ public:
 		return false;
 	}
 
-	static Matrix4x4 Mul(const Matrix4x4 &m1, const Matrix4x4 &m2) {
+	Matrix4x4 operator * (const Matrix4x4 &m1) {
 		Matrix4x4 ret;
 		for (int i = 0; i < 4; i++)
 			for (int j = 0; j < 4; j++)
-				ret.m[i][j] = m1.m[i][0] * m2.m[0][j] +
-				              m1.m[i][1] * m2.m[1][j] +
-				              m1.m[i][2] * m2.m[2][j] +
-                              m1.m[i][3] * m2.m[3][j];
+				ret.m[i][j] = m[i][0] * m1.m[0][j] +
+				              m[i][1] * m1.m[1][j] +
+				              m[i][2] * m1.m[2][j] +
+                              m[i][3] * m1.m[3][j];
 		return ret;
 	}
 
-	std::string toString() {
-		return tfm::format("Matrix[\n\t[%7.3f, %7.3f, %7.3f, %7.3f],\n\t[%7.3f, %7.3f, %7.3f, %7.3f],\n\t[%7.3f, %7.3f, %7.3f, %7.3f],\n\t[%7.3f, %7.3f, %7.3f, %7.3f],\n]",
+	std::string toString() const {
+		return tfm::format("[\n\t[%7.3f, %7.3f, %7.3f, %7.3f],\n\t[%7.3f, %7.3f, %7.3f, %7.3f],\n\t[%7.3f, %7.3f, %7.3f, %7.3f],\n\t[%7.3f, %7.3f, %7.3f, %7.3f],\n]",
 			m[0][0],m[0][1],m[0][2],m[0][3],
 			m[1][0], m[1][1], m[1][2], m[1][3], 
 			m[2][0], m[2][1], m[2][2], m[2][3], 
@@ -58,14 +58,15 @@ public:
 	friend Matrix4x4 Inverse(const Matrix4x4 &m1);
 
 	friend std::ostream &operator << (std::ostream &os, const Matrix4x4 &m1) {
-		os.setf(std::ios::fixed);				
-		
+		os << m1.toString();
+
+		/*os.setf(std::ios::fixed);						
 		os << "Matrix[\n" << std::setprecision(4) <<
 			  "  [" << m1.m[0][0] << "\t, " << m1.m[0][1] << "\t, " << m1.m[0][2] << "\t, " << m1.m[0][3] << "],\n" <<
 			  "  [" << m1.m[1][0] << "\t, " << m1.m[1][1] << "\t, " << m1.m[1][2] << "\t, " << m1.m[1][3] << "],\n" <<
 			  "  [" << m1.m[2][0] << "\t, " << m1.m[2][1] << "\t, " << m1.m[2][2] << "\t, " << m1.m[2][3] << "],\n" <<
 			  "  [" << m1.m[3][0] << "\t, " << m1.m[3][1] << "\t, " << m1.m[3][2] << "\t, " << m1.m[3][3] << "],\n" <<
-			  "]";
+			  "]";*/
 		return os;
 	}
 
