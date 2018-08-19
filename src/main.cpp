@@ -16,5 +16,7 @@ int main(int argc, char *argv[]) {
 	cout << b.toString() << endl;
 	Point2f c;
 	cout << c.toString() << endl;
+	Transform d;
+	cout << d.toString() << endl;
 	return 0;
 }

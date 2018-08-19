@@ -2,7 +2,7 @@
 
 RAINBOW_NAMESPACE_BEGIN
 
-Matrix4x4::Matrix4x4(Float mat[4][4]) {
+Matrix4x4::Matrix4x4(const Float mat[4][4]) {
 	memcpy(m, mat, 16 * sizeof(Float));
 }
 
@@ -85,6 +85,32 @@ Matrix4x4 Inverse(const Matrix4x4 &m1) {
 	}
 	return Matrix4x4(minv);
 }
+
+Transform Translate(const Vector3f & delta) {
+	Matrix4x4 m(1, 0, 0, delta.x,
+		        0, 1, 0, delta.y,
+		        0, 0, 1, delta.z,
+		        0, 0, 0, 1);
+	Matrix4x4 mInv(1, 0, 0, -delta.x,
+		           0, 1, 0, -delta.y,
+		           0, 0, 1, -delta.z,
+		           0, 0, 0, 1);
+	return Transform(m, mInv);
+}
+
+Transform Scale(Float x, Float y, Float z) {
+	Matrix4x4 m(x, 0, 0, 0,
+		        0, y, 0, 0,
+		        0, 0, z, 0,
+		        0, 0, 0, 1);
+	Matrix4x4 mInv(1 / x, 0, 0, 0,
+		           0, 1 / y, 0, 0,
+		           0, 0, 1 / z, 0,
+		           0, 0, 0, 1);
+	return Transform(m, mInv);
+}
+
+
 
 RAINBOW_NAMESPACE_END
 
