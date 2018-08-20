@@ -14,8 +14,9 @@ int main(int argc, char *argv[]) {
 	cout << a.toString() << endl;
 	Matrix4x4 b;
 	cout << b.toString() << endl;
-	Point2f c;
-	cout << c.toString() << endl;
+	Vector3f c;
+	cout << c.toString() << endl;	
+	c = c / 0;
 	Transform d;
 	cout << d.toString() << endl;
 	return 0;

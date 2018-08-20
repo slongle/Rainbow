@@ -52,13 +52,13 @@ public:
 	}
 	template<typename U>
 	Vector2<T> operator / (U f) const {
-		DCHECK(f == 0);
+		DCHECK(f != 0);
 		double inv = double(1) / f;
 		return Vector2<T>(x*inv, y*inv);
 	}
 	template<typename U>
 	Vector2<T> &operator /= (U f) {
-		DCHECK(f == 0);
+		DCHECK(f != 0);
 		double inv = double(1) / f;
 		x *= inv;
 		y *= inv;
@@ -150,13 +150,13 @@ public:
 	}
 	template<typename U>
 	Vector3<T> operator / (U f) const {
-		DCHECK(f == 0);
+		DCHECK(f != 0);
 		Float inv = Float(1) / f;
 		return Vector3<T>(x*inv, y*inv, z*inv);
 	}
 	template<typename U>
 	Vector3<T> &operator /= (U f) {
-		DCHECK(f == 0);
+		DCHECK(f != 0);
 		double inv = double(1) / f;
 		x *= inv;
 		y *= inv;
