@@ -152,6 +152,57 @@ Transform RotateZ(Float theta) {
 	return Transform(m, mInv);
 }
 
+Transform Rotate(Float theta, const Vector3f & axis){
+	Vector3f a = Normalize(axis);
+	Float sinTheta = std::sin(radToDeg(theta));
+	Float cosTheta = std::cos(radToDeg(theta));
+	Matrix4x4 m;
+	// Compute rotation of first basis vector
+	m.m[0][0] = a.x * a.x + (1 - a.x * a.x) * cosTheta;
+	m.m[0][1] = a.x * a.y * (1 - cosTheta) - a.z * sinTheta;
+	m.m[0][2] = a.x * a.z * (1 - cosTheta) + a.y * sinTheta;
+	m.m[0][3] = 0;
+
+	// Compute rotations of second basis vector
+	m.m[1][0] = a.x * a.y * (1 - cosTheta) + a.z * sinTheta;
+	m.m[1][1] = a.y * a.y + (1 - a.y * a.y) * cosTheta;
+	m.m[1][2] = a.y * a.z * (1 - cosTheta) - a.x * sinTheta;
+	m.m[1][3] = 0;
+
+	// Compute rotations of third basis vector
+	m.m[2][0] = a.x * a.z * (1 - cosTheta) - a.y * sinTheta;
+	m.m[2][1] = a.y * a.z * (1 - cosTheta) + a.x * sinTheta;
+	m.m[2][2] = a.z * a.z + (1 - a.z * a.z) * cosTheta;
+	m.m[2][3] = 0;
+	return Transform(m, Transpose(m));
+}
+
+
+template<typename T>
+Point3<T> Transform::operator()(const Point3<T> & p) {
+	T x = m.m[0][0] * p.x + m.m[0][1] * p.y + m.m[0][2] * p.z + m.m[0][3];
+	T y = m.m[1][0] * p.x + m.m[1][1] * p.y + m.m[1][2] * p.z + m.m[1][3];
+	T z = m.m[2][0] * p.x + m.m[2][1] * p.y + m.m[2][2] * p.z + m.m[2][3];
+	T w = m.m[3][0] * p.x + m.m[3][1] * p.y + m.m[3][2] * p.z + m.m[3][3];
+	DCHECK(w != 0);
+	if (w == 1)
+		return Point3<T>(x, y, z);
+	else
+		return Point3<T>(x / w, y / w, z / w);
+}
+
+template<typename T>
+Vector3<T> Transform::operator()(const Vector3<T> & v) {
+	return Vector3<T>(m.m[0][0] * v.x + m.m[0][1] * v.y + m.m[0][2] * v.z,
+		              m.m[1][0] * v.x + m.m[1][1] * v.y + m.m[1][2] * v.z,
+		              m.m[2][0] * v.x + m.m[2][1] * v.y + m.m[2][2] * v.z);
+}
+
+template<typename T>
+Normal3<T> Transform::operator()(const Normal3<T>& n) {
+	return Normal3<T>(mInv.m[0][0] * n.x + mInv.m[1][0] * n.y + mInv.m[2][0] * n.z,
+		              mInv.m[0][1] * n.x + mInv.m[1][1] * n.y + mInv.m[2][1] * n.z,
+		              mInv.m[0][2] * n.x + mInv.m[1][2] * n.y + mInv.m[2][2] * n.z);
+}
 
 RAINBOW_NAMESPACE_END
-

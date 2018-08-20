@@ -94,6 +94,13 @@ public:
 	Transform(const Matrix4x4 &_m) :m(_m), mInv(Inverse(m)) {}
 	Transform(const Matrix4x4 &_m, const Matrix4x4 &_mInv) :m(_m), mInv(_mInv) {}
 
+	template<typename T>
+	Point3<T> operator () (const Point3<T> &p);
+	template<typename T>
+	Vector3<T> operator () (const Vector3<T> &v);
+	template<typename T>
+	Normal3<T> operator () (const Normal3<T> &n);
+
 	std::string toString() const {
 		return tfm::format("[\nm = %s\nmInv = %s\n]", m, mInv);
 	}
@@ -120,6 +127,7 @@ Transform Scale(Float x, Float y, Float z);
 Transform RotateX(Float theta);
 Transform RotateY(Float theta);
 Transform RotateZ(Float theta);
+Transform Rotate(Float theta, const Vector3f &axis);
 
 RAINBOW_NAMESPACE_END
 
