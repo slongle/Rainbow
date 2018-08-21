@@ -259,6 +259,20 @@ public:
 };
 
 template<typename T>
+Point3<T> Min(const Point3<T> &p1, const Point3<T> &p2) {
+	return Point3<T>(std::min(p1.x, p2.x),
+                     std::min(p1.y, p2.y),
+                     std::min(p1.z, p2.z));
+}
+
+template<typename T>
+Point3<T> Max(const Point3<T> &p1, const Point3<T> &p2) {
+	return Point3<T>(std::max(p1.x, p2.x),
+                     std::max(p1.y, p2.y),
+                     std::max(p1.z, p2.z));
+}
+
+template<typename T>
 Float DistanceSquare(const Point3<T> &u, const Point3<T> &v) {
 	return (u.x - v.x)*(u.x - v.x) + (u.y - v.y)*(u.y - v.y) + (u.z - v.z)*(u.z - v.z);
 }

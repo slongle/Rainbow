@@ -59,6 +59,22 @@ public:
 	Point3<T> pMin, pMax;
 };
 
+template<typename T>
+Bounds3<T> Union(const Bounds3<T> &bounds, const Point3<T> &p) {
+	Bounds3<T> ret;
+	ret.pMin = Min(bounds.pMin, p);
+	ret.pMax = Max(bounds.pMax, p);
+	return ret;
+}
+
+template<typename T>
+Bounds3<T> Union(const Bounds3<T> &b1, const Bounds3<T> &b2) {
+	Bounds3<T> ret;
+	ret.pMin = Min(b1.pMin, b2.pMin);
+	ret.pMax = Max(b1.pMax, b2.pMax);
+	return ret;
+}
+
 RAINBOW_NAMESPACE_END
 
 #endif // !__BBOX_H
