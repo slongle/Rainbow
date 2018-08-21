@@ -3,6 +3,8 @@
 
 #include "common.h"
 #include "vector.h"
+#include "ray.h"
+#include "bbox.h"
 
 RAINBOW_NAMESPACE_BEGIN
 
@@ -100,6 +102,8 @@ public:
 	Vector3<T> operator () (const Vector3<T> &v);
 	template<typename T>
 	Normal3<T> operator () (const Normal3<T> &n);
+	Ray operator() (const Ray &r);
+	Bounds3f operator () (const Bounds3f &b);
 
 	std::string toString() const {
 		return tfm::format("[\nm = %s\nmInv = %s\n]", m, mInv);

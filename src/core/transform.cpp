@@ -205,4 +205,27 @@ Normal3<T> Transform::operator()(const Normal3<T>& n) {
 		              mInv.m[0][2] * n.x + mInv.m[1][2] * n.y + mInv.m[2][2] * n.z);
 }
 
+Ray Transform::operator()(const Ray & r) {
+	Point3f o = (*this)(r.o);
+	Vector3f d = (*this)(r.d);
+	return Ray(o, d, r.tMax);
+}
+
+Bounds3f Transform::operator()(const Bounds3f & b) {
+	/*
+	Transforming Axis-Aligned Bounding Boxes
+	by Transforming 8 Points
+	*/
+	Transform &t = (*this);
+	Bounds3f ret(t(Point3f(b.pMin.x,b.pMin.y,b.pMin.z)));
+	ret = Union(ret, t(Point3f(b.pMin.x, b.pMin.y, b.pMax.z)));	
+	ret = Union(ret, t(Point3f(b.pMin.x, b.pMax.y, b.pMin.z)));
+	ret = Union(ret, t(Point3f(b.pMin.x, b.pMax.y, b.pMax.z)));
+	ret = Union(ret, t(Point3f(b.pMax.x, b.pMin.y, b.pMin.z)));
+	ret = Union(ret, t(Point3f(b.pMax.x, b.pMin.y, b.pMax.z)));
+	ret = Union(ret, t(Point3f(b.pMax.x, b.pMax.y, b.pMin.z)));
+	ret = Union(ret, t(Point3f(b.pMax.x, b.pMax.y, b.pMax.z)));
+	return ret;
+}
+
 RAINBOW_NAMESPACE_END
