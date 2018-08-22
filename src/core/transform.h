@@ -38,7 +38,7 @@ public:
 		return false;
 	}
 
-	Matrix4x4 operator * (const Matrix4x4 &m1) {
+	Matrix4x4 operator * (const Matrix4x4 &m1) const {
 		Matrix4x4 ret;
 		for (int i = 0; i < 4; i++)
 			for (int j = 0; j < 4; j++)
@@ -96,14 +96,18 @@ public:
 	Transform(const Matrix4x4 &_m) :m(_m), mInv(Inverse(m)) {}
 	Transform(const Matrix4x4 &_m, const Matrix4x4 &_mInv) :m(_m), mInv(_mInv) {}
 
+	Transform operator * (const Transform &t) const {
+		return Transform(m * t.m, mInv * t.mInv);
+	}
+
 	template<typename T>
-	Point3<T> operator () (const Point3<T> &p);
+	Point3<T> operator () (const Point3<T> &p) const;
 	template<typename T>
-	Vector3<T> operator () (const Vector3<T> &v);
+	Vector3<T> operator () (const Vector3<T> &v) const;
 	template<typename T>
-	Normal3<T> operator () (const Normal3<T> &n);
-	Ray operator() (const Ray &r);
-	Bounds3f operator () (const Bounds3f &b);
+	Normal3<T> operator () (const Normal3<T> &n) const;
+	Ray operator() (const Ray &r) const;
+	Bounds3f operator () (const Bounds3f &b) const;
 
 	std::string toString() const {
 		return tfm::format("[\nm = %s\nmInv = %s\n]", m, mInv);

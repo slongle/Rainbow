@@ -42,8 +42,8 @@ Matrix4x4 Inverse(const Matrix4x4 &m1) {
 							icol = k;
 						}
 					}
-					else if (ipiv[k] > 1) {
-						Error("Singular matrix in MatrixInvert at Position 1");
+					else {
+						DCHECK(ipiv[k] <= 1, "Singular matrix in MatrixInvert at Position 1")
 					}
 				}
 			}
@@ -55,10 +55,9 @@ Matrix4x4 Inverse(const Matrix4x4 &m1) {
 				std::swap(minv[irow][k], minv[icol][k]);
 		}
 		indxr[i] = irow;
-		indxc[i] = icol;
-		if (std::fabs(minv[icol][icol]) < Epsilon) {
-			Error("Singular matrix in MatrixInvert at Position 2");
-		}
+		indxc[i] = icol;		
+		
+		DCHECK(std::fabs(minv[icol][icol]) > Epsilon, "Singular matrix in MatrixInvert at Position 2")
 
 		// Set $m[icol][icol]$ to one by scaling row _icol_ appropriately
 		Float pivinv = Float(1) / minv[icol][icol];
@@ -179,53 +178,85 @@ Transform Rotate(Float theta, const Vector3f & axis){
 
 
 template<typename T>
-Point3<T> Transform::operator()(const Point3<T> & p) {
+Point3<T> Transform::operator()(const Point3<T> & p) const {
 	T x = m.m[0][0] * p.x + m.m[0][1] * p.y + m.m[0][2] * p.z + m.m[0][3];
 	T y = m.m[1][0] * p.x + m.m[1][1] * p.y + m.m[1][2] * p.z + m.m[1][3];
 	T z = m.m[2][0] * p.x + m.m[2][1] * p.y + m.m[2][2] * p.z + m.m[2][3];
 	T w = m.m[3][0] * p.x + m.m[3][1] * p.y + m.m[3][2] * p.z + m.m[3][3];
-	DCHECK(w != 0);
+	DCHECK(w != 0, "Divide Zero")
 	if (w == 1)
 		return Point3<T>(x, y, z);
 	else
-		return Point3<T>(x / w, y / w, z / w);
+		return Point3<T>(x, y, z) / w;
 }
 
 template<typename T>
-Vector3<T> Transform::operator()(const Vector3<T> & v) {
+Vector3<T> Transform::operator()(const Vector3<T> & v) const {
 	return Vector3<T>(m.m[0][0] * v.x + m.m[0][1] * v.y + m.m[0][2] * v.z,
 		              m.m[1][0] * v.x + m.m[1][1] * v.y + m.m[1][2] * v.z,
 		              m.m[2][0] * v.x + m.m[2][1] * v.y + m.m[2][2] * v.z);
 }
 
 template<typename T>
-Normal3<T> Transform::operator()(const Normal3<T>& n) {
+Normal3<T> Transform::operator()(const Normal3<T>& n) const {
 	return Normal3<T>(mInv.m[0][0] * n.x + mInv.m[1][0] * n.y + mInv.m[2][0] * n.z,
 		              mInv.m[0][1] * n.x + mInv.m[1][1] * n.y + mInv.m[2][1] * n.z,
 		              mInv.m[0][2] * n.x + mInv.m[1][2] * n.y + mInv.m[2][2] * n.z);
 }
 
-Ray Transform::operator()(const Ray & r) {
+Ray Transform::operator()(const Ray & r) const {
 	Point3f o = (*this)(r.o);
 	Vector3f d = (*this)(r.d);
 	return Ray(o, d, r.tMax);
 }
 
-Bounds3f Transform::operator()(const Bounds3f & b) {
+Bounds3f Transform::operator()(const Bounds3f & bounds) const {
 	/*
 	Transforming Axis-Aligned Bounding Boxes
 	by Transforming 8 Points
 	*/
-	Transform &t = (*this);
-	Bounds3f ret(t(Point3f(b.pMin.x,b.pMin.y,b.pMin.z)));
-	ret = Union(ret, t(Point3f(b.pMin.x, b.pMin.y, b.pMax.z)));	
-	ret = Union(ret, t(Point3f(b.pMin.x, b.pMax.y, b.pMin.z)));
-	ret = Union(ret, t(Point3f(b.pMin.x, b.pMax.y, b.pMax.z)));
-	ret = Union(ret, t(Point3f(b.pMax.x, b.pMin.y, b.pMin.z)));
-	ret = Union(ret, t(Point3f(b.pMax.x, b.pMin.y, b.pMax.z)));
-	ret = Union(ret, t(Point3f(b.pMax.x, b.pMax.y, b.pMin.z)));
-	ret = Union(ret, t(Point3f(b.pMax.x, b.pMax.y, b.pMax.z)));
-	return ret;
+	/*const Transform &t = (*this);
+	Bounds3f ret(t(Point3f(bounds.pMin.x,bounds.pMin.y,bounds.pMin.z)));
+	ret = Union(ret, t(Point3f(bounds.pMin.x, bounds.pMin.y, bounds.pMax.z)));	
+	ret = Union(ret, t(Point3f(bounds.pMin.x, bounds.pMax.y, bounds.pMin.z)));
+	ret = Union(ret, t(Point3f(bounds.pMin.x, bounds.pMax.y, bounds.pMax.z)));
+	ret = Union(ret, t(Point3f(bounds.pMax.x, bounds.pMin.y, bounds.pMin.z)));
+	ret = Union(ret, t(Point3f(bounds.pMax.x, bounds.pMin.y, bounds.pMax.z)));
+	ret = Union(ret, t(Point3f(bounds.pMax.x, bounds.pMax.y, bounds.pMin.z)));
+	ret = Union(ret, t(Point3f(bounds.pMax.x, bounds.pMax.y, bounds.pMax.z)));*/
+
+
+	const Transform &M = *this;
+	Bounds3f ret(M(Point3f(bounds.pMin.x, bounds.pMin.y, bounds.pMin.z)));
+	ret = Union(ret, M(Point3f(bounds.pMax.x, bounds.pMin.y, bounds.pMin.z)));
+	ret = Union(ret, M(Point3f(bounds.pMin.x, bounds.pMax.y, bounds.pMin.z)));
+	ret = Union(ret, M(Point3f(bounds.pMin.x, bounds.pMin.y, bounds.pMax.z)));
+	ret = Union(ret, M(Point3f(bounds.pMin.x, bounds.pMax.y, bounds.pMax.z)));
+	ret = Union(ret, M(Point3f(bounds.pMax.x, bounds.pMax.y, bounds.pMin.z)));
+	ret = Union(ret, M(Point3f(bounds.pMax.x, bounds.pMin.y, bounds.pMax.z)));
+	ret = Union(ret, M(Point3f(bounds.pMax.x, bounds.pMax.y, bounds.pMax.z)));
+
+	//return ret;
+
+	/*
+	Transforming Axis-Aligned Bounding Boxes
+	by Jim Arvo
+	from "Graphics Gems", Academic Press, 1990
+	*/
+	
+	Point3f mn(m.m[0][3], m.m[1][3], m.m[2][3]);
+	Point3f mx(m.m[0][3], m.m[1][3], m.m[2][3]);
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 3; j++) {
+			Float a = m.m[j][i] * bounds.pMin[i];
+			Float b = m.m[j][i] * bounds.pMax[i];
+			mn[j] += std::min(a, b);
+			mx[j] += std::max(a, b);
+		}
+	}
+	Bounds3f ret1(mn, mx);
+	DCHECK(ret1 == ret, "Transform Bounds3 Algorithm Error")
+	return ret1;
 }
 
 RAINBOW_NAMESPACE_END

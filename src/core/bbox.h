@@ -42,9 +42,12 @@ public:
 		pMax = Point3<T>(minNum);
 	}
 	Bounds3(const Point3<T> &u) :pMin(u), pMax(u) {}
-	Bounds3(const Point3<T> &u, const Point3<T> &v) {
-		pMin(std::min(u.x, v.x), std::min(u.y, v.y), std::min(u.z, v.z));
-		pMax(std::max(u.x, v.x), std::max(u.y, v.y), std::max(u.z, v.z));
+	Bounds3(const Point3<T> &u, const Point3<T> &v):
+		pMin(std::min(u.x, v.x), std::min(u.y, v.y), std::min(u.z, v.z)),
+		pMax(std::max(u.x, v.x), std::max(u.y, v.y), std::max(u.z, v.z)) {}
+
+	bool operator == (const Bounds3<T> & b) const {
+		return pMin == b.pMin && pMax == b.pMax;
 	}
 
 	std::string toString() const {
