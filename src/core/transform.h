@@ -136,6 +136,7 @@ Transform RotateX(Float theta);
 Transform RotateY(Float theta);
 Transform RotateZ(Float theta);
 Transform Rotate(Float theta, const Vector3f &axis);
+Transform LookAt(const Vector3f &pos, const Vector3f &look, const Vector3f &up);
 
 RAINBOW_NAMESPACE_END
 

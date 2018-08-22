@@ -176,6 +176,34 @@ Transform Rotate(Float theta, const Vector3f & axis){
 	return Transform(m, Transpose(m));
 }
 
+Transform LookAt(const Vector3f & pos, const Vector3f & look, const Vector3f & up) {
+	Matrix4x4 cameraToWorld;
+	cameraToWorld.m[0][3] = pos[0];
+	cameraToWorld.m[1][3] = pos[1];
+	cameraToWorld.m[2][3] = pos[2];
+	cameraToWorld.m[3][3] = 1;
+
+	Vector3f dir = Normalize(look - pos);
+	Vector3f left = Normalize(Cross(up, dir));
+	Vector3f newUp = Cross(dir, left);
+	cameraToWorld.m[0][0] = left[0];
+	cameraToWorld.m[1][0] = left[1];
+	cameraToWorld.m[2][0] = left[2];
+	cameraToWorld.m[3][0] = 0;
+
+	cameraToWorld.m[0][1] = up[0];
+	cameraToWorld.m[1][1] = up[1];
+	cameraToWorld.m[2][1] = up[2];
+	cameraToWorld.m[3][1] = 0;
+
+	cameraToWorld.m[0][2] = newUp[0];
+	cameraToWorld.m[1][2] = newUp[1];
+	cameraToWorld.m[2][2] = newUp[2];
+	cameraToWorld.m[3][2] = 0;
+
+	return Transform(cameraToWorld,Inverse(cameraToWorld));
+}
+
 
 template<typename T>
 Point3<T> Transform::operator()(const Point3<T> & p) const {
