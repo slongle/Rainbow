@@ -16,7 +16,11 @@
 #endif
 
 /* Convecience for checking */
-#define DCHECK(expr) assert(expr)
+#define DCHECK(EXP, LOG) \
+	if (!(EXP)) { \
+		tfm::format(std::cerr, "%s\n", LOG); \
+		assert(EXP); \
+	}
 
 /* Convenience definitions */
 #define RAINBOW_NAMESPACE_BEGIN namespace rainbow {

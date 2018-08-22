@@ -9,21 +9,21 @@ RAINBOW_NAMESPACE_BEGIN
 template<typename T>
 class Vector2 {
 public:
-	Vector2(T _v = 0) { x = y = _v; DCHECK(!HasNaNs()); }
-	Vector2(T _x, T _y) { x = _x; y = _y; DCHECK(!HasNaNs()); }
+	Vector2(T _v = 0) { x = y = _v; DCHECK(!HasNaNs(), "Vector2 has HasNaN") }
+	Vector2(T _x, T _y) { x = _x; y = _y; DCHECK(!HasNaNs(), "Vector2 has HasNaN") }
 
 	bool HasNaNs() const {
 		return std::isnan(x) || std::isnan(y);
 	}
 
 	T operator[](int i) const {
-		DCHECK(0 <= i && i <= 1);
+		DCHECK(0 <= i && i <= 1, "Access Violation")
 		if (i == 0) return x;
 		return y;
 	}
 
 	T &operator[](int i) {
-		DCHECK(0 <= i && i <= 1);
+		DCHECK(0 <= i && i <= 1, "Access Violation")
 		if (i == 0) return x;
 		return y;
 	}
@@ -52,13 +52,13 @@ public:
 	}
 	template<typename U>
 	Vector2<T> operator / (U f) const {
-		DCHECK(f != 0);
+		DCHECK(f != 0, "Divide Zero")
 		double inv = double(1) / f;
 		return Vector2<T>(x*inv, y*inv);
 	}
 	template<typename U>
 	Vector2<T> &operator /= (U f) {
-		DCHECK(f != 0);
+		DCHECK(f != 0, "Divide Zero")
 		double inv = double(1) / f;
 		x *= inv;
 		y *= inv;
@@ -102,22 +102,22 @@ Vector2<T> Normalize(Vector2<T> v) {
 template<typename T>
 class Vector3 {
 public:
-	Vector3(T _v = 0) { x = y = z = _v; DCHECK(!HasNaNs()); }
-	Vector3(T _x, T _y, T _z) { x = _x; y = _y; z = _z; DCHECK(!HasNaNs()); }
+	Vector3(T _v = 0) { x = y = z = _v; DCHECK(!HasNaNs(), "Vector3 has HasNaN") }
+	Vector3(T _x, T _y, T _z) { x = _x; y = _y; z = _z; DCHECK(!HasNaNs(), "Vector3 has HasNaN") }
 
 	bool HasNaNs() const {
 		return std::isnan(x) || std::isnan(y) || std::isnan(z);
 	}
 
 	T operator[](int i) const {
-		DCHECK(0 <= i && i <= 2);
+		DCHECK(0 <= i && i <= 2, "Access Violation")
 		if (i == 0) return x;
 		if (i == 1) return y;
 		return z;
 	}
 
 	T &operator[](int i) {
-		DCHECK(0 <= i && i <= 2);
+		DCHECK(0 <= i && i <= 2, "Access Violation")
 		if (i == 0) return x;
 		if (i == 1) return y;
 		return z;
@@ -150,13 +150,13 @@ public:
 	}
 	template<typename U>
 	Vector3<T> operator / (U f) const {
-		DCHECK(f != 0);
+		DCHECK(f != 0, "Divide Zero")
 		Float inv = Float(1) / f;
 		return Vector3<T>(x*inv, y*inv, z*inv);
 	}
 	template<typename U>
 	Vector3<T> &operator /= (U f) {
-		DCHECK(f != 0);
+		DCHECK(f != 0, "Divide Zero")
 		double inv = double(1) / f;
 		x *= inv;
 		y *= inv;
@@ -206,9 +206,9 @@ Vector3<T> Normalize(Vector3<T> v) {
 template<typename T>
 class Point2 {
 public:
-	Point2(T _v = 0) { x = y = _v; DCHECK(!HasNaNs()); }
-	Point2(T _x, T _y) :x(_x), y(_y) { DCHECK(!HasNaNs()); }
-	explicit Point2(const Point3<T> &u) :x(u.x), y(u.y) { DCHECK(!HasNaNs()); }
+	Point2(T _v = 0) { x = y = _v; DCHECK(!HasNaNs(), "Point2 has HasNaN") }
+	Point2(T _x, T _y) :x(_x), y(_y) { DCHECK(!HasNaNs(), "Point2 has HasNaN") }
+	explicit Point2(const Point3<T> &u) :x(u.x), y(u.y) { DCHECK(!HasNaNs(), "Point2 has HasNaN") }
 
 	bool HasNaNs() { return std::isnan(x) || std::isnan(y); }
 
@@ -227,15 +227,30 @@ public:
 template<typename T>
 class Point3 {
 public:
-	Point3(T _v = 0) { x = y = z = _v; DCHECK(!HasNaNs()); }
-	Point3(T _x, T _y, T _z) :x(_x), y(_y), z(_z) { DCHECK(!HasNaNs()); }	
+	Point3(T _v = 0) { x = y = z = _v; DCHECK(!HasNaNs(), "Point3 has HasNaN") }
+	Point3(T _x, T _y, T _z) :x(_x), y(_y), z(_z) { DCHECK(!HasNaNs(), "Point3 has HasNaN") }
 	template<typename U> 
-	explicit Point3(const Point3<U> &v) :x(T(v.x)), y(T(v.y)), z(T(v.z)) { DCHECK(!HasNaNs()); }
+	explicit Point3(const Point3<U> &v) :x(T(v.x)), y(T(v.y)), z(T(v.z)) { DCHECK(!HasNaNs(), "Point3 has HasNaN") }
 	template<typename U> 
 	explicit operator Vector3<U>() const {return Vector3<U>(x, y, z); }
 
 	bool HasNaNs() { return std::isnan(x) || std::isnan(y) || std::isnan(z); }
 	
+	T operator[](int i) const {
+		DCHECK(0 <= i && i <= 2, "Access Violation")
+			if (i == 0) return x;
+		if (i == 1) return y;
+		return z;
+	}
+
+	T &operator[](int i) {
+		DCHECK(0 <= i && i <= 2, "Access Violation")
+			if (i == 0) return x;
+		if (i == 1) return y;
+		return z;
+	}
+
+	bool operator == (const Point3<T> & u) const { return x == u.x && y == u.y && z == u.z; }
 	Point3<T> operator + (const Vector3<T> &u) const { return Point3<T>(x + u.x, y + u.y, z + u.z); }
 	Point3<T> &operator += (const Vector3<T> &u) { x += u.x; y += u.y; z += u.z; return *this; }
 	Point3<T> operator + (const Point3<T> &u) const { return Point3<T>(x + u.x, y + u.y, z + u.z); }
@@ -243,8 +258,16 @@ public:
 	Vector3<T> operator - (const Point3<T> &u) const { return Vector3<T>(x - u.x, y - u.y, z - u.x); }
 	Point3<T> operator - (const Vector3<T> &u) const { return Point3<T>(x - u.x, y - u.y, z - u.z); }
 	Point3<T> &operator -= (const Vector3<T> &u) { x -= u.x; y -= u.y; z -= u.z; return *this; }
+
 	template<typename U>
 	Point3<T> operator * (const U f) const { return Point3<T>(x*f, y*f, z*f); }
+
+	template<typename U>
+	Point3<T> operator / (const U &f) const { 
+		DCHECK(f != 0, "Divide Zero")
+		U inv = U(1) / f; 
+		return Point3<T>(x, y, z) * inv;
+	}
 
 	std::string toString() const {
 		return tfm::format("[ %6.4f, %6.4f, %6.4f ]", x, y, z);
@@ -290,9 +313,9 @@ Point3<T> Lerp(const Point3<T> &u, const Point3<T> &v, Float t) {
 template<typename T>
 class Normal3 {
 public:
-	Normal3(T _v = 0) { x = y = z = _v; DCHECK(!HasNaNs()); }
-	Normal3(T _x, T _y, T _z) :x(_x), y(_y), z(_z) { DCHECK(!HasNaNs()); }
-	explicit Normal3(const Vector3<T> &v) :x(v.x), y(v.y), z(v.z) { DCHECK(!HasNaNs()); }
+	Normal3(T _v = 0) { x = y = z = _v; DCHECK(!HasNaNs(), "Normal3 has HasNaN") }
+	Normal3(T _x, T _y, T _z) :x(_x), y(_y), z(_z) { DCHECK(!HasNaNs(), "Normal3 has HasNaN") }
+	explicit Normal3(const Vector3<T> &v) :x(v.x), y(v.y), z(v.z) { DCHECK(!HasNaNs(), "Normal3 has HasNaN") }
 
 	bool HasNaNs() const { return std::isnan(x) || std::isnan(y) || std::isnan(z); }
 
