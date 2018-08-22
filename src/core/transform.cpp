@@ -43,7 +43,7 @@ Matrix4x4 Inverse(const Matrix4x4 &m1) {
 						}
 					}
 					else {
-						DCHECK(ipiv[k] <= 1, "Singular matrix in MatrixInvert at Position 1")
+						DCHECK(ipiv[k] <= 1, "Singular matrix in MatrixInvert at Position 1");
 					}
 				}
 			}
@@ -57,7 +57,7 @@ Matrix4x4 Inverse(const Matrix4x4 &m1) {
 		indxr[i] = irow;
 		indxc[i] = icol;		
 		
-		DCHECK(std::fabs(minv[icol][icol]) > Epsilon, "Singular matrix in MatrixInvert at Position 2")
+		DCHECK(std::fabs(minv[icol][icol]) > Epsilon, "Singular matrix in MatrixInvert at Position 2");
 
 		// Set $m[icol][icol]$ to one by scaling row _icol_ appropriately
 		Float pivinv = Float(1) / minv[icol][icol];
@@ -183,7 +183,7 @@ Point3<T> Transform::operator()(const Point3<T> & p) const {
 	T y = m.m[1][0] * p.x + m.m[1][1] * p.y + m.m[1][2] * p.z + m.m[1][3];
 	T z = m.m[2][0] * p.x + m.m[2][1] * p.y + m.m[2][2] * p.z + m.m[2][3];
 	T w = m.m[3][0] * p.x + m.m[3][1] * p.y + m.m[3][2] * p.z + m.m[3][3];
-	DCHECK(w != 0, "Divide Zero")
+	DCHECK(w != 0, "Divide Zero");
 	if (w == 1)
 		return Point3<T>(x, y, z);
 	else
@@ -215,17 +215,6 @@ Bounds3f Transform::operator()(const Bounds3f & bounds) const {
 	Transforming Axis-Aligned Bounding Boxes
 	by Transforming 8 Points
 	*/
-	/*const Transform &t = (*this);
-	Bounds3f ret(t(Point3f(bounds.pMin.x,bounds.pMin.y,bounds.pMin.z)));
-	ret = Union(ret, t(Point3f(bounds.pMin.x, bounds.pMin.y, bounds.pMax.z)));	
-	ret = Union(ret, t(Point3f(bounds.pMin.x, bounds.pMax.y, bounds.pMin.z)));
-	ret = Union(ret, t(Point3f(bounds.pMin.x, bounds.pMax.y, bounds.pMax.z)));
-	ret = Union(ret, t(Point3f(bounds.pMax.x, bounds.pMin.y, bounds.pMin.z)));
-	ret = Union(ret, t(Point3f(bounds.pMax.x, bounds.pMin.y, bounds.pMax.z)));
-	ret = Union(ret, t(Point3f(bounds.pMax.x, bounds.pMax.y, bounds.pMin.z)));
-	ret = Union(ret, t(Point3f(bounds.pMax.x, bounds.pMax.y, bounds.pMax.z)));*/
-
-
 	const Transform &M = *this;
 	Bounds3f ret(M(Point3f(bounds.pMin.x, bounds.pMin.y, bounds.pMin.z)));
 	ret = Union(ret, M(Point3f(bounds.pMax.x, bounds.pMin.y, bounds.pMin.z)));
@@ -235,7 +224,6 @@ Bounds3f Transform::operator()(const Bounds3f & bounds) const {
 	ret = Union(ret, M(Point3f(bounds.pMax.x, bounds.pMax.y, bounds.pMin.z)));
 	ret = Union(ret, M(Point3f(bounds.pMax.x, bounds.pMin.y, bounds.pMax.z)));
 	ret = Union(ret, M(Point3f(bounds.pMax.x, bounds.pMax.y, bounds.pMax.z)));
-
 	//return ret;
 
 	/*
@@ -243,19 +231,19 @@ Bounds3f Transform::operator()(const Bounds3f & bounds) const {
 	by Jim Arvo
 	from "Graphics Gems", Academic Press, 1990
 	*/
-	
 	Point3f mn(m.m[0][3], m.m[1][3], m.m[2][3]);
 	Point3f mx(m.m[0][3], m.m[1][3], m.m[2][3]);
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 3; j++) {
-			Float a = m.m[j][i] * bounds.pMin[i];
-			Float b = m.m[j][i] * bounds.pMax[i];
-			mn[j] += std::min(a, b);
-			mx[j] += std::max(a, b);
+			Float a = m.m[i][j] * bounds.pMin[j];
+			Float b = m.m[i][j] * bounds.pMax[j];
+			mn[i] += std::min(a, b);
+			mx[i] += std::max(a, b);
 		}
 	}
+
 	Bounds3f ret1(mn, mx);
-	DCHECK(ret1 == ret, "Transform Bounds3 Algorithm Error")
+	DCHECK(ret1 == ret, "Transform Bounds3 Algorithm Error");
 	return ret1;
 }
 
