@@ -10,6 +10,11 @@ using std::cout;
 using std::endl;
 
 int main(int argc, char *argv[]) {		
+	cout << 1 / 2 << endl;
+	Float f = 1 / 2;
+	cout << f << endl;
+	Float e = 0;
+	cout << 1 / e << endl;
 	Bounds3f a(Point3f(1,4,3),Point3f(9,1,7));
 	cout << a.toString() << endl;
 	Matrix4x4 b(1,2,3,7,

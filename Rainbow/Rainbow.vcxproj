@@ -122,10 +122,13 @@
     <ClCompile Include="..\src\core\common.cpp" />
     <ClCompile Include="..\src\core\error.cpp" />
     <ClCompile Include="..\src\core\frame.cpp" />
+    <ClCompile Include="..\src\core\interaction.cpp" />
     <ClCompile Include="..\src\core\ray.cpp" />
+    <ClCompile Include="..\src\core\shape.cpp" />
     <ClCompile Include="..\src\core\transform.cpp" />
     <ClCompile Include="..\src\core\vector.cpp" />
     <ClCompile Include="..\src\main.cpp" />
+    <ClCompile Include="..\src\shapes\sphere.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\ext\tinyformat.h" />
@@ -133,9 +136,12 @@
     <ClInclude Include="..\src\core\common.h" />
     <ClInclude Include="..\src\core\error.h" />
     <ClInclude Include="..\src\core\frame.h" />
+    <ClInclude Include="..\src\core\interaction.h" />
     <ClInclude Include="..\src\core\ray.h" />
+    <ClInclude Include="..\src\core\shape.h" />
     <ClInclude Include="..\src\core\transform.h" />
     <ClInclude Include="..\src\core\vector.h" />
+    <ClInclude Include="..\src\shapes\sphere.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\log\20180811.md" />
@@ -144,6 +150,7 @@
     <None Include="..\log\20180815.md" />
     <None Include="..\log\20180820.md" />
     <None Include="..\log\20180822.md" />
+    <None Include="..\log\20180823.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

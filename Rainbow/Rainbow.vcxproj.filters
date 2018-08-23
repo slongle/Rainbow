@@ -19,6 +19,9 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
+    <Filter Include="Source Files\shapes">
+      <UniqueIdentifier>{5ed22d41-2310-4b22-8e70-fd4c25b5a2d1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\core\bbox.cpp">
@@ -44,6 +47,15 @@
     </ClCompile>
     <ClCompile Include="..\src\core\error.cpp">
       <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\core\shape.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\core\interaction.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\shapes\sphere.cpp">
+      <Filter>Source Files\shapes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -71,6 +83,15 @@
     <ClInclude Include="..\ext\tinyformat.h">
       <Filter>Extend Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\core\shape.h">
+      <Filter>Source Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\core\interaction.h">
+      <Filter>Source Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\shapes\sphere.h">
+      <Filter>Source Files\shapes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\log\20180811.md">
@@ -89,6 +110,9 @@
       <Filter>Log Files</Filter>
     </None>
     <None Include="..\log\20180822.md">
+      <Filter>Log Files</Filter>
+    </None>
+    <None Include="..\log\20180823.md">
       <Filter>Log Files</Filter>
     </None>
   </ItemGroup>

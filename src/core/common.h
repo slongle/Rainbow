@@ -58,6 +58,10 @@ typedef Bounds2<Float> Bounds2f;
 typedef Bounds2<int>   Bounds2i;
 typedef Bounds3<Float> Bounds3f;
 
+class Shape;
+class Intersection;
+class SurfaceIntersection;
+
 
 inline Float radToDeg(Float theta) {
 	return theta * M_PI / 180;
@@ -65,6 +69,18 @@ inline Float radToDeg(Float theta) {
 
 inline Float degToRad(Float theta) {
 	return theta * 180 / M_PI;
+}
+
+inline bool Quadratic(Float a, Float b, Float c, Float * t0, Float * t1) {
+	Float discrim = b * b - 4 * a*c;
+	if (discrim < 0) return false;
+	Float rootDiscrim = std::sqrt(discrim);
+
+	*t0 = static_cast<Float>(0.5) * (-b + rootDiscrim) / a;
+	*t1 = static_cast<Float>(0.5) * (-b - rootDiscrim) / a;
+	if (*t0 > *t1) std::swap(*t0, *t1);
+
+	return true;
 }
 
 RAINBOW_NAMESPACE_END
