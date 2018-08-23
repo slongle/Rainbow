@@ -2,6 +2,7 @@
 #define __BBOX_H
 
 #include "common.h"
+#include "ray.h"
 
 RAINBOW_NAMESPACE_BEGIN
 
@@ -49,6 +50,8 @@ public:
 	bool operator == (const Bounds3<T> & b) const {
 		return pMin == b.pMin && pMax == b.pMax;
 	}
+	
+	bool Intersect(const Ray &ray) const;
 
 	std::string toString() const {
 		return tfm::format("[\n\tpMin = %s\n\tpMax = %s\n]", pMin, pMax);
