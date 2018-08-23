@@ -275,4 +275,12 @@ Bounds3f Transform::operator()(const Bounds3f & bounds) const {
 	return ret1;
 }
 
+SurfaceInteraction Transform::operator()(const SurfaceInteraction & si) const {
+	SurfaceInteraction ret;
+	ret.p = (*this)(si.p);
+	ret.n = (*this)(si.n);
+	ret.shape = si.shape;
+	return ret;
+}
+
 RAINBOW_NAMESPACE_END

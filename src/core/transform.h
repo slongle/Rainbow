@@ -5,6 +5,7 @@
 #include "vector.h"
 #include "ray.h"
 #include "bbox.h"
+#include "interaction.h"
 
 RAINBOW_NAMESPACE_BEGIN
 
@@ -108,6 +109,7 @@ public:
 	Normal3<T> operator () (const Normal3<T> &n) const;
 	Ray operator() (const Ray &r) const;
 	Bounds3f operator () (const Bounds3f &b) const;
+	SurfaceInteraction operator() (const SurfaceInteraction &si) const;
 
 	std::string toString() const {
 		return tfm::format("[\nm = %s\nmInv = %s\n]", m, mInv);
