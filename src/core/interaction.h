@@ -9,7 +9,7 @@ RAINBOW_NAMESPACE_BEGIN
 class Interaction {
 public:
 	Interaction() {}
-	Interaction(const Point3f &_p, const Vector3f & _n);
+	Interaction(const Point3f &_p, const Normal3f & _n);
 	
 	Point3f p;
 	Normal3f n;
@@ -18,7 +18,7 @@ public:
 class SurfaceInteraction :public Interaction {
 public:
 	SurfaceInteraction() {}
-	SurfaceInteraction(const Point3f &_p, const Vector3f & _n, const Shape * _shape);
+	SurfaceInteraction(const Point3f &_p, const Normal3f & _n, const Shape * _shape);
 	
 	const Shape *shape = nullptr;
 };

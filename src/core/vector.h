@@ -9,8 +9,8 @@ RAINBOW_NAMESPACE_BEGIN
 template<typename T>
 class Vector2 {
 public:
-	Vector2(T _v = 0) { x = y = _v; DCHECK(!HasNaNs(), "Vector2 has HasNaN"); }
-	Vector2(T _x, T _y) { x = _x; y = _y; DCHECK(!HasNaNs(), "Vector2 has HasNaN"); }
+	Vector2(T _v = 0) { x = y = _v; DCHECK(!HasNaNs(), "Vector2 has NaN"); }
+	Vector2(T _x, T _y) { x = _x; y = _y; DCHECK(!HasNaNs(), "Vector2 has NaN"); }
 
 	bool HasNaNs() const {
 		return std::isnan(x) || std::isnan(y);
@@ -102,8 +102,8 @@ Vector2<T> Normalize(Vector2<T> v) {
 template<typename T>
 class Vector3 {
 public:
-	Vector3(T _v = 0) { x = y = z = _v; DCHECK(!HasNaNs(), "Vector3 has HasNaN"); }
-	Vector3(T _x, T _y, T _z) { x = _x; y = _y; z = _z; DCHECK(!HasNaNs(), "Vector3 has HasNaN"); }
+	Vector3(T _v = 0) { x = y = z = _v; DCHECK(!HasNaNs(), "Vector3 has NaN"); }
+	Vector3(T _x, T _y, T _z) { x = _x; y = _y; z = _z; DCHECK(!HasNaNs(), "Vector3 has NaN"); }
 
 	bool HasNaNs() const {
 		return std::isnan(x) || std::isnan(y) || std::isnan(z);
@@ -199,16 +199,33 @@ Vector3<T> Cross(const Vector3<T> u, const Vector3<T> v) {
 }
 
 template<typename T>
-Vector3<T> Normalize(Vector3<T> v) {
+Vector3<T> Normalize(const Vector3<T> &v) {
 	return v / v.Length();
+}
+
+template<typename T>
+Vector3<T> Abs(const Vector3<T> &v) {
+	return Vector3<T>(std::abs(v.x), std::abs(v.y), std::abs(v.z));
+}
+
+template<typename T>
+int MaxDimension(const Vector3<T> &v) {
+	if (v.x > v.y && v.x > v.z) return 0;
+	if (v.y > v.z) return 1;
+	return 2;
+}
+
+template<typename T>
+Vector3<T> Permute(const Vector3<T> &v, const int &x, const int &y, const int &z) {
+	return Vector3<T>(v[x], v[y], v[z]);
 }
 
 template<typename T>
 class Point2 {
 public:
-	Point2(T _v = 0) { x = y = _v; DCHECK(!HasNaNs(), "Point2 has HasNaN"); }
-	Point2(T _x, T _y) :x(_x), y(_y) { DCHECK(!HasNaNs(), "Point2 has HasNaN"); }
-	explicit Point2(const Point3<T> &u) :x(u.x), y(u.y) { DCHECK(!HasNaNs(), "Point2 has HasNaN"); }
+	Point2(T _v = 0) { x = y = _v; DCHECK(!HasNaNs(), "Point2 has NaN"); }
+	Point2(T _x, T _y) :x(_x), y(_y) { DCHECK(!HasNaNs(), "Point2 has NaN"); }
+	explicit Point2(const Point3<T> &u) :x(u.x), y(u.y) { DCHECK(!HasNaNs(), "Point2 has NaN"); }
 
 	bool HasNaNs() { return std::isnan(x) || std::isnan(y); }
 
@@ -227,10 +244,10 @@ public:
 template<typename T>
 class Point3 {
 public:
-	Point3(T _v = 0) { x = y = z = _v; DCHECK(!HasNaNs(), "Point3 has HasNaN"); }
-	Point3(T _x, T _y, T _z) :x(_x), y(_y), z(_z) { DCHECK(!HasNaNs(), "Point3 has HasNaN"); }
+	Point3(T _v = 0) { x = y = z = _v; DCHECK(!HasNaNs(), "Point3 has NaN"); }
+	Point3(T _x, T _y, T _z) :x(_x), y(_y), z(_z) { DCHECK(!HasNaNs(), "Point3 has NaN"); }
 	template<typename U> 
-	explicit Point3(const Point3<U> &v) :x(T(v.x)), y(T(v.y)), z(T(v.z)) { DCHECK(!HasNaNs(), "Point3 has HasNaN"); }
+	explicit Point3(const Point3<U> &v) :x(T(v.x)), y(T(v.y)), z(T(v.z)) { DCHECK(!HasNaNs(), "Point3 has NaN"); }
 	template<typename U> 
 	explicit operator Vector3<U>() const {return Vector3<U>(x, y, z); }
 
@@ -258,6 +275,7 @@ public:
 	Vector3<T> operator - (const Point3<T> &u) const { return Vector3<T>(x - u.x, y - u.y, z - u.x); }
 	Point3<T> operator - (const Vector3<T> &u) const { return Point3<T>(x - u.x, y - u.y, z - u.z); }
 	Point3<T> &operator -= (const Vector3<T> &u) { x -= u.x; y -= u.y; z -= u.z; return *this; }
+	Point3<T> &operator -= (const Point3<T> &p) { x -= p.x; y -= p.y; z -= p.z; return *this; }
 
 	template<typename U>
 	Point3<T> operator * (const U f) const { return Point3<T>(x*f, y*f, z*f); }
@@ -321,13 +339,23 @@ Point3<T> Lerp(const Point3<T> &u, const Point3<T> &v, Float t) {
 }
 
 template<typename T>
+Point3<T> Permute(const Point3<T> &p, const int &x, const int &y, const int &z) {
+	return Point3<T>(p[x], p[y], p[z]);
+}
+
+template<typename T>
 class Normal3 {
 public:
-	Normal3(T _v = 0) { x = y = z = _v; DCHECK(!HasNaNs(), "Normal3 has HasNaN"); }
-	Normal3(T _x, T _y, T _z) :x(_x), y(_y), z(_z) { DCHECK(!HasNaNs(), "Normal3 has HasNaN"); }
-	explicit Normal3(const Vector3<T> &v) :x(v.x), y(v.y), z(v.z) { DCHECK(!HasNaNs(), "Normal3 has HasNaN"); }
+	Normal3(T _v = 0) { x = y = z = _v; DCHECK(!HasNaNs(), "Normal3 has NaN"); }
+	Normal3(T _x, T _y, T _z) :x(_x), y(_y), z(_z) { DCHECK(!HasNaNs(), "Normal3 has NaN"); }
+	explicit Normal3(const Vector3<T> &v) :x(v.x), y(v.y), z(v.z) { DCHECK(!HasNaNs(), "Normal3 has NaN"); }
+	explicit Normal3(const Point3<T> &p) :x(p.x), y(p.y), z(p.z) { DCHECK(!HasNaNs(), "Normal3 has NaN"); }
 
 	bool HasNaNs() const { return std::isnan(x) || std::isnan(y) || std::isnan(z); }
+
+	Normal3<T> operator + (const Normal3<T> &n) const { return Normal3<T>(x + n.x, y + n.y, z + n.z); }
+
+	Normal3<T> operator - () const { return Normal3<T>(-x, -y, -z); }
 
 	std::string toString() const {
 		return tfm::format("[ %6.4f, %6.4f, %6.4f ]", x, y, z);
@@ -343,6 +371,11 @@ public:
 
 template<typename T>
 T Dot(const Normal3<T> &u, const Normal3<T> &v) {
+	return u.x*v.x + u.y*v.y + u.z*v.z;
+}
+
+template<typename T>
+T Dot(const Normal3<T> &u, const Vector3<T> &v) {
 	return u.x*v.x + u.y*v.y + u.z*v.z;
 }
 
@@ -374,8 +407,12 @@ Vector3<T> Cross(const Vector3<T> &u, const Normal3<T> &v) {
 }
 
 template<typename T>
-Normal3<T> FaceForward(const Normal3<T> &n, const Vector3<T> &u) {
-	return Dot(n, v) > 0 ? n : -n;
+Normal3<T> FaceForward(const Normal3<T> &n, const Vector3<T> &v) {
+	Float dot = Dot(n, v);
+	if (dot != 0)
+		return dot > 0 ? n : -n;
+	dot = Dot(n + Normal3<T>(Epsilon, 0, 0), v);
+	return dot > 0 ? n : -n;
 }
 
 RAINBOW_NAMESPACE_END

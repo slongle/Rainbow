@@ -129,6 +129,7 @@
     <ClCompile Include="..\src\core\vector.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\shapes\sphere.cpp" />
+    <ClCompile Include="..\src\shapes\triangle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\ext\tinyformat.h" />
@@ -142,6 +143,7 @@
     <ClInclude Include="..\src\core\transform.h" />
     <ClInclude Include="..\src\core\vector.h" />
     <ClInclude Include="..\src\shapes\sphere.h" />
+    <ClInclude Include="..\src\shapes\triangle.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\log\20180811.md" />

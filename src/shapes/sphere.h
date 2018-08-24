@@ -1,7 +1,6 @@
 #ifndef __SPHERE_H
 #define __SPHERE_H
 
-#include "../core/common.h"
 #include "../core/shape.h"
 
 RAINBOW_NAMESPACE_BEGIN

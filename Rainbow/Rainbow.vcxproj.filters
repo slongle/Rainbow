@@ -57,6 +57,9 @@
     <ClCompile Include="..\src\shapes\sphere.cpp">
       <Filter>Source Files\shapes</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\shapes\triangle.cpp">
+      <Filter>Source Files\shapes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\core\bbox.h">
@@ -90,6 +93,9 @@
       <Filter>Source Files\core</Filter>
     </ClInclude>
     <ClInclude Include="..\src\shapes\sphere.h">
+      <Filter>Source Files\shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\shapes\triangle.h">
       <Filter>Source Files\shapes</Filter>
     </ClInclude>
   </ItemGroup>

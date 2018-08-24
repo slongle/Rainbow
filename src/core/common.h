@@ -4,6 +4,8 @@
 // Global Include Files
 #include<iostream>
 #include<iomanip>
+#include<vector>
+#include<memory>
 #include<assert.h>
 #include"../../ext/tinyformat.h"
 #include"error.h"
@@ -23,7 +25,7 @@
 #define RAINBOW_NAMESPACE_END }
 
 /* Define Epsilon for precision */
-#define Epsilon 1e-5
+#define Epsilon 1e-5f
 
 /* Define some useful constant variable*/
 #undef M_PI
@@ -60,7 +62,7 @@ typedef Bounds3<Float> Bounds3f;
 
 class Shape;
 class Intersection;
-class SurfaceIntersection;
+class SurfaceInteraction;
 
 
 inline Float radToDeg(Float theta) {
