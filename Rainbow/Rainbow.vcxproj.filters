@@ -22,6 +22,9 @@
     <Filter Include="Source Files\shapes">
       <UniqueIdentifier>{5ed22d41-2310-4b22-8e70-fd4c25b5a2d1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Extend Files\lodepng">
+      <UniqueIdentifier>{149acf9c-e34d-4c82-bb3b-9bb0ef518930}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\core\bbox.cpp">
@@ -60,6 +63,15 @@
     <ClCompile Include="..\src\shapes\triangle.cpp">
       <Filter>Source Files\shapes</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\core\imageio.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ext\lodepng\lodepng.cpp">
+      <Filter>Extend Files\lodepng</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\core\spectrum.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\core\bbox.h">
@@ -97,6 +109,15 @@
     </ClInclude>
     <ClInclude Include="..\src\shapes\triangle.h">
       <Filter>Source Files\shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\core\imageio.h">
+      <Filter>Source Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ext\lodepng\lodepng.h">
+      <Filter>Extend Files\lodepng</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\core\spectrum.h">
+      <Filter>Source Files\core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
