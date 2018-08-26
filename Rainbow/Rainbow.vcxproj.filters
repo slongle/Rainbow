@@ -72,6 +72,9 @@
     <ClCompile Include="..\src\core\spectrum.cpp">
       <Filter>Source Files\core</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\core\parser.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\core\bbox.h">
@@ -117,6 +120,9 @@
       <Filter>Extend Files\lodepng</Filter>
     </ClInclude>
     <ClInclude Include="..\src\core\spectrum.h">
+      <Filter>Source Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\core\parser.h">
       <Filter>Source Files\core</Filter>
     </ClInclude>
   </ItemGroup>

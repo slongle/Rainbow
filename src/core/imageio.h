@@ -21,7 +21,7 @@ public:
 
 	RGBSpectrum *operator () (const int &x, const int &y) { return &image[y*width + x]; }
 
-	void save(const std::string &filename);
+	void save(const std::string &filename) const;
 
 	int width, height;
 	std::vector<RGBSpectrum> image;

@@ -125,6 +125,7 @@
     <ClCompile Include="..\src\core\frame.cpp" />
     <ClCompile Include="..\src\core\imageio.cpp" />
     <ClCompile Include="..\src\core\interaction.cpp" />
+    <ClCompile Include="..\src\core\parser.cpp" />
     <ClCompile Include="..\src\core\ray.cpp" />
     <ClCompile Include="..\src\core\shape.cpp" />
     <ClCompile Include="..\src\core\spectrum.cpp" />
@@ -143,6 +144,7 @@
     <ClInclude Include="..\src\core\frame.h" />
     <ClInclude Include="..\src\core\imageio.h" />
     <ClInclude Include="..\src\core\interaction.h" />
+    <ClInclude Include="..\src\core\parser.h" />
     <ClInclude Include="..\src\core\ray.h" />
     <ClInclude Include="..\src\core\shape.h" />
     <ClInclude Include="..\src\core\spectrum.h" />

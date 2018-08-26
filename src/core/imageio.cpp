@@ -2,7 +2,7 @@
 
 RAINBOW_NAMESPACE_BEGIN
 
-void Image::save(const std::string & filename) {
+void Image::save(const std::string & filename) const {
 	std::vector<unsigned char> data; 
 	data.reserve(width * height * 4);
 	for (size_t i = 0; i < image.size(); i++) {

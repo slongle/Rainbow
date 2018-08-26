@@ -11,6 +11,10 @@
 #include"../../ext/tinyformat.h"
 #include"error.h"
 
+using std::cin;
+using std::cout;
+using std::endl;
+
 #if defined(_MSC_VER)
 /* Disable some warnings on MSVC++ */
 #pragma warning(disable : 4127 4702 4100 4515 4800 4146 4512)
