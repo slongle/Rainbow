@@ -23,6 +23,7 @@ public:
 
 	void save(const std::string &filename) const;
 
+private:
 	int width, height;
 	std::vector<RGBSpectrum> image;
 };

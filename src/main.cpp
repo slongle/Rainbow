@@ -4,6 +4,8 @@
 #include "core/ray.h"
 #include "core/transform.h"
 #include "core/imageio.h"
+#include "core/parser.h"
+#include "core/object.h"
 using namespace rainbow;
 
 int main(int argc, char *argv[]) {
@@ -14,41 +16,39 @@ int main(int argc, char *argv[]) {
 		for (int j = 0; j < height; j++)
 			*a(i,j) = RGBSpectrum(static_cast<Float>(i) / width, static_cast<Float>(j) / height, 1);
 	a.save("first.png");*/
-
-	int a = 3;
-	auto f=[](int a, int b) -> int {return a + b; };
-	auto g = [a](int b) mutable {a++; return a + b;  };
-	auto h = [&]() {a++; };
-	auto q = [a]() mutable -> bool {if (a>0) a--; return a > 0; };
-	cout << a << endl;
-	h();
-	cout << a << endl;
-	h();
-	cout << a << endl;
-	//cout << f(1, 5) << endl;
-	//cout << a << endl;
-	//cout << g(9) << endl;
-	//cout << a << endl;
-	//a = 100;
-	//cout << g(9) << endl;
-	//cout << g(9) << endl;
-
-	std::vector<std::string> x{ "aaa","slongle","popoqqq","fuck","yuki"};
-
-	/*sort(x.begin(), x.end(), 
-		[] (const std::string &s1, const std::string &s2) -> bool
-		{return s1 > s2; }
-	);*/
-
-
-	/*int SZ = 4;
-	sort(x.begin(), x.end(),
-		[SZ](const std::string &s1) -> bool
-	{return s1.length() < SZ; }
-	);*/
-
-	for (const std::string &s : x) {
-		cout << s << endl;
+	//std::map<std::string, ObjectFactory::Constructor> *a = ObjectFactory::constructors;
+	
+	std::vector<std::string> x;
+	for (int i = 0; i < 16; i++) {
+		std::string str; cin >> str;
+		x.push_back(str);
 	}
+	sort(x.begin(), x.end());
+	for (std::string &str : x)
+		cout << str << endl;
+	return 0;
+
+	std::string tmp("abc\0awdf");
+	cout << tmp << endl;
+	cout << tmp.c_str() << endl;
+
+	//std::string filename = "C:\\Users\\del\\Desktop\\cbox\\cbox.xml";
+	std::string filename = "C:/Users/del/Desktop/cbox/cbox.xml";
+	pugi::xml_document doc;
+	pugi::xml_parse_result result = doc.load_file(filename.c_str());
+
+	pugi::xml_node rootNode=doc.child("scene");
+	std::function<void (pugi::xml_node,int)> parserTag = [&](pugi::xml_node node,int num) {
+		for (pugi::xml_node childNode = node.first_child(); childNode; childNode = childNode.next_sibling()) {
+			for (int i = 0; i < num; i++) cout << "    ";
+			cout << childNode.name() << "  ";
+			for (pugi::xml_attribute attribute = childNode.first_attribute(); attribute; attribute = attribute.next_attribute()) {
+				cout << attribute.name() << "  " << attribute.value() << "    ";
+			}
+			cout << endl;
+			parserTag(childNode,num+1);
+		}
+	};
+	parserTag(rootNode, 0);
 	return 0;
 }
