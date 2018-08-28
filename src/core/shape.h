@@ -4,12 +4,13 @@
 #include "bbox.h"
 #include "common.h"
 #include "interaction.h"
+#include "object.h"
 #include "ray.h"
 #include "transform.h"
 
 RAINBOW_NAMESPACE_BEGIN
 
-class Shape {
+class Shape :public Object {
 public:
 	Shape(const Transform *_ObjectToWorld, const Transform *_WorldToObject);
 	virtual ~Shape() = default;

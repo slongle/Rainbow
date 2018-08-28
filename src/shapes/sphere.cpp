@@ -42,4 +42,10 @@ Float Sphere::Area() const {
 	return 4 * M_PI * radius *radius;
 }
 
+Sphere* CreateSphere(const PropertyList &list) {
+	return nullptr;
+}
+
+RAINBOW_REGISTER_CLASS(Sphere, "sphere")
+
 RAINBOW_NAMESPACE_END

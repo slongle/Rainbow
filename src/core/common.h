@@ -9,6 +9,7 @@
 #include<memory>
 #include<functional>
 #include<assert.h>
+#include<fstream>
 
 #include"../../ext/tinyformat.h"
 #include"error.h"
@@ -25,7 +26,9 @@ using std::endl;
 #endif
 
 /* Convecience for checking */
-#define DCHECK(EXP, LOG) if (!(EXP)) tfm::format(std::cerr, "%s\n", LOG), assert(EXP)
+//#define DCHECK(EXP, LOG) if (!(EXP)) tfm::format(std::cerr, "%s\n", LOG), assert(EXP)
+#define DCHECK(EXP, LOG) if (!(EXP)) tfm::format(std::cerr, "%s\n", LOG), assert(false)
+//#define DCHECK(EXP, LOG) if (!(EXP)) tfm::format(std::cerr, "%s\n", LOG), exit(-1)
 
 /* Convenience definitions */
 #define RAINBOW_NAMESPACE_BEGIN namespace rainbow {
@@ -71,6 +74,29 @@ class Shape;
 class Intersection;
 class SurfaceInteraction;
 
+inline std::string indent(const std::string &str, const int &num) {
+	return std::string(num, ' ') + str;
+}
+
+inline bool toBoolean(const std::string &str) {
+	DCHECK(str == "true" || str == "false", "Can't convert " + str + " to Boolean type");
+	if (str == "true") return true;
+	else return false;
+}
+
+inline int toInteger(const std::string &str) {
+	char *end_ptr = nullptr;
+	int result = (int) strtol(str.c_str(), &end_ptr, 10);
+	DCHECK(*end_ptr != '\0', "Can't convert " + str + " to Integer type");
+	return result;
+}
+
+inline Float toFloat(const std::string &str) {
+	char *end_ptr = nullptr;
+	float result = (float)strtof(str.c_str(), &end_ptr);
+	DCHECK(*end_ptr != '\0', "Can't convert " + str + " to Float type");
+	return result;
+}
 
 inline Float radToDeg(Float theta) {
 	return theta * M_PI / 180;

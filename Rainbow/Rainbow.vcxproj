@@ -121,15 +121,19 @@
     <ClCompile Include="..\ext\lodepng\lodepng.cpp" />
     <ClCompile Include="..\ext\pugixml\pugixml.cpp" />
     <ClCompile Include="..\src\core\bbox.cpp" />
+    <ClCompile Include="..\src\core\bsdf.cpp" />
+    <ClCompile Include="..\src\core\camera.cpp" />
     <ClCompile Include="..\src\core\common.cpp" />
     <ClCompile Include="..\src\core\error.cpp" />
     <ClCompile Include="..\src\core\frame.cpp" />
     <ClCompile Include="..\src\core\imageio.cpp" />
+    <ClCompile Include="..\src\core\integrator.cpp" />
     <ClCompile Include="..\src\core\interaction.cpp" />
     <ClCompile Include="..\src\core\object.cpp" />
     <ClCompile Include="..\src\core\parser.cpp" />
     <ClCompile Include="..\src\core\propertylist.cpp" />
     <ClCompile Include="..\src\core\ray.cpp" />
+    <ClCompile Include="..\src\core\scene.cpp" />
     <ClCompile Include="..\src\core\shape.cpp" />
     <ClCompile Include="..\src\core\spectrum.cpp" />
     <ClCompile Include="..\src\core\transform.cpp" />
@@ -144,15 +148,19 @@
     <ClInclude Include="..\ext\pugixml\pugixml.hpp" />
     <ClInclude Include="..\ext\tinyformat.h" />
     <ClInclude Include="..\src\core\bbox.h" />
+    <ClInclude Include="..\src\core\bsdf.h" />
+    <ClInclude Include="..\src\core\camera.h" />
     <ClInclude Include="..\src\core\common.h" />
     <ClInclude Include="..\src\core\error.h" />
     <ClInclude Include="..\src\core\frame.h" />
     <ClInclude Include="..\src\core\imageio.h" />
+    <ClInclude Include="..\src\core\integrator.h" />
     <ClInclude Include="..\src\core\interaction.h" />
     <ClInclude Include="..\src\core\object.h" />
     <ClInclude Include="..\src\core\parser.h" />
     <ClInclude Include="..\src\core\propertylist.h" />
     <ClInclude Include="..\src\core\ray.h" />
+    <ClInclude Include="..\src\core\scene.h" />
     <ClInclude Include="..\src\core\shape.h" />
     <ClInclude Include="..\src\core\spectrum.h" />
     <ClInclude Include="..\src\core\transform.h" />
@@ -169,6 +177,7 @@
     <None Include="..\log\20180822.md" />
     <None Include="..\log\20180823.md" />
     <None Include="..\log\20180827.md" />
+    <None Include="..\log\20180828.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -87,6 +87,18 @@
     <ClCompile Include="..\src\core\propertylist.cpp">
       <Filter>Source Files\core</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\core\scene.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\core\camera.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\core\bsdf.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\core\integrator.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\core\bbox.h">
@@ -149,6 +161,18 @@
     <ClInclude Include="..\src\core\propertylist.h">
       <Filter>Source Files\core</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\core\scene.h">
+      <Filter>Source Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\core\camera.h">
+      <Filter>Source Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\core\bsdf.h">
+      <Filter>Source Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\core\integrator.h">
+      <Filter>Source Files\core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\log\20180811.md">
@@ -173,6 +197,9 @@
       <Filter>Log Files</Filter>
     </None>
     <None Include="..\log\20180827.md">
+      <Filter>Log Files</Filter>
+    </None>
+    <None Include="..\log\20180828.md">
       <Filter>Log Files</Filter>
     </None>
   </ItemGroup>

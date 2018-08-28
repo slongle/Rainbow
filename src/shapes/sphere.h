@@ -20,6 +20,8 @@ private:
 	Float radius;
 };
 
+Sphere* CreateSphere(const PropertyList &list);
+
 RAINBOW_NAMESPACE_END
 
 #endif // !__SPHERE_H
