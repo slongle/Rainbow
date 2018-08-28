@@ -7,13 +7,23 @@
 RAINBOW_NAMESPACE_BEGIN
 
 template<typename T>
+inline bool isNaN(const T x) {
+	return std::isnan(x);
+}
+
+//template<>
+inline bool isNaN(const int x) {
+	return false;
+}
+
+template<typename T>
 class Vector2 {
 public:
 	Vector2(T _v = 0) { x = y = _v; DCHECK(!HasNaNs(), "Vector2 has NaN"); }
 	Vector2(T _x, T _y) { x = _x; y = _y; DCHECK(!HasNaNs(), "Vector2 has NaN"); }
 
 	bool HasNaNs() const {
-		return std::isnan(x) || std::isnan(y);
+		return isNaN(x) || isNaN(y);
 	}
 
 	T operator[](int i) const {
@@ -66,8 +76,8 @@ public:
 	}
 	Vector2<T> operator-() const { return Vector2<T>(-x, -y); }
 
-	std::string toString() const {
-		return tfm::format("[ %6.4f, %6.4f ]", x, y);
+	std::string toString(const int &spaceNum = 0) const {
+		return indent(tfm::format("[ %.4f, %.4f ]", x, y), spaceNum);
 	}
 
 	template<typename U>
@@ -106,7 +116,7 @@ public:
 	Vector3(T _x, T _y, T _z) { x = _x; y = _y; z = _z; DCHECK(!HasNaNs(), "Vector3 has NaN"); }
 
 	bool HasNaNs() const {
-		return std::isnan(x) || std::isnan(y) || std::isnan(z);
+		return isNaN(x) || isNaN(y) || isNaN(z);
 	}
 
 	T operator[](int i) const {
@@ -165,8 +175,8 @@ public:
 	}
 	Vector3<T> operator-() const { return Vector3<T>(-x, -y, -z); }
 
-	std::string toString() const {
-		return tfm::format("[ %6.4f, %6.4f, %6.4f ]", x, y, z);
+	std::string toString(const int &spaceNum = 0) const {
+		return indent(tfm::format("[ %.4f, %.4f, %.4f ]", x, y, z), spaceNum);
 	}
 
 	template<typename U>
@@ -220,6 +230,23 @@ Vector3<T> Permute(const Vector3<T> &v, const int &x, const int &y, const int &z
 	return Vector3<T>(v[x], v[y], v[z]);
 }
 
+inline Vector3f toVector(const std::string &str) {
+	Float tmp[3];
+	int num = 0;
+	std::string basStr = "";
+	for (size_t i = 0; i < str.length(); i++) {
+		if (str[i] == ',') {
+			tmp[num] = toFloat(basStr);
+			num++;
+			DCHECK(num < 3, "Can't convert " + str + " to Vector type");
+			basStr = "";
+		}
+		else basStr += str[i];
+	}
+	tmp[2] = toFloat(basStr);
+	return Vector3f(tmp[0], tmp[1], tmp[2]);
+}
+
 template<typename T>
 class Point2 {
 public:
@@ -227,10 +254,10 @@ public:
 	Point2(T _x, T _y) :x(_x), y(_y) { DCHECK(!HasNaNs(), "Point2 has NaN"); }
 	explicit Point2(const Point3<T> &u) :x(u.x), y(u.y) { DCHECK(!HasNaNs(), "Point2 has NaN"); }
 
-	bool HasNaNs() { return std::isnan(x) || std::isnan(y); }
+	bool HasNaNs() { return isNaN(x) || isNaN(y); }
 
-	std::string toString() const {
-		return tfm::format("[ %6.4f, %6.4f ]", x, y);
+	std::string toString(const int &spaceNum = 0) const {
+		return indent(tfm::format("[ %.4f, %.4f ]", x, y), spaceNum);
 	}
 
 	friend std::ostream &operator << (std::ostream &os, const Point2<T> u) {
@@ -251,7 +278,7 @@ public:
 	template<typename U> 
 	explicit operator Vector3<U>() const {return Vector3<U>(x, y, z); }
 
-	bool HasNaNs() { return std::isnan(x) || std::isnan(y) || std::isnan(z); }
+	bool HasNaNs() { return isNaN(x) || isNaN(y) || isNaN(z); }
 	
 	T operator[](int i) const {
 		DCHECK(0 <= i && i <= 2, "Access Violation");
@@ -297,8 +324,8 @@ public:
 		return *this;
 	}
 
-	std::string toString() const {
-		return tfm::format("[ %6.4f, %6.4f, %6.4f ]", x, y, z);
+	std::string toString(const int &spaceNum = 0) const {
+		return indent(tfm::format("[ %.4f, %.4f, %.4f ]", x, y, z), spaceNum);
 	}
 
 	friend std::ostream &operator << (std::ostream &os, const Point3<T> u) {
@@ -351,14 +378,14 @@ public:
 	explicit Normal3(const Vector3<T> &v) :x(v.x), y(v.y), z(v.z) { DCHECK(!HasNaNs(), "Normal3 has NaN"); }
 	explicit Normal3(const Point3<T> &p) :x(p.x), y(p.y), z(p.z) { DCHECK(!HasNaNs(), "Normal3 has NaN"); }
 
-	bool HasNaNs() const { return std::isnan(x) || std::isnan(y) || std::isnan(z); }
+	bool HasNaNs() const { return isNaN(x) || isNaN(y) || isNaN(z); }
 
 	Normal3<T> operator + (const Normal3<T> &n) const { return Normal3<T>(x + n.x, y + n.y, z + n.z); }
 
 	Normal3<T> operator - () const { return Normal3<T>(-x, -y, -z); }
 
-	std::string toString() const {
-		return tfm::format("[ %6.4f, %6.4f, %6.4f ]", x, y, z);
+	std::string toString(const int &spaceNum = 0) const {
+		return indent(tfm::format("[ %.4f, %.4f, %.4f ]", x, y, z), spaceNum);
 	}
 
 	friend std::ostream &operator << (std::ostream &os, const Normal3<T> &u) {
