@@ -16,13 +16,16 @@ public:
 		pMax = Point2<T>(maxNum);
 	}
 	Bounds2(const Point2<T> &u) :pMin(u), pMax(u) {}
-	Bounds2(const Point2<T> &u, const Point2<T> &v) {
-		pMin(std::min(u.x, v.x), std::min(u.y, v.y));
-		pMax(std::max(u.x, v.x), std::max(u.y, v.y));
-	}
+	Bounds2(const Point2<T> &u, const Point2<T> &v):
+		pMin(std::min(u.x, v.x), std::min(u.y, v.y)),
+		pMax(std::max(u.x, v.x), std::max(u.y, v.y)){}
 
-	std::string toString() const {
-		return tfm::format("[\n\tpMin = %s\n\tpMax = %s\n]", pMin, pMax);
+	std::string toString(const int &spaceNum=0) const {
+		return
+		indent("[\n", spaceNum) +
+			indent(tfm::format("pMin = %s,\n", pMin), spaceNum + 4) +
+			indent(tfm::format("pMax = %s,\n", pMax), spaceNum + 4) +
+		indent("]", spaceNum);		
 	}
 
 	friend std::ostream &operator << (std::ostream &os, const Bounds2<T> &bounds) {
@@ -54,7 +57,11 @@ public:
 	bool Intersect(const Ray &ray) const;
 
 	std::string toString() const {
-		return tfm::format("[\n\tpMin = %s\n\tpMax = %s\n]", pMin, pMax);
+		return
+		indent("[\n", spaceNum) +
+			indent(tfm::format("pMin = %s,\n", pMin), spaceNum + 4) +
+			indent(tfm::format("pMax = %s,\n", pMax), spaceNum + 4) +
+		indent("]", spaceNum);
 	}
 
 	friend std::ostream &operator << (std::ostream &os, const Bounds3<T> &bounds) {

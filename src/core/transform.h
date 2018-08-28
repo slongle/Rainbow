@@ -23,6 +23,8 @@ public:
 		      Float m20, Float m21, Float m22, Float m23,
 		      Float m30, Float m31, Float m32, Float m33);
 
+	void Identify();
+
 	bool operator == (const Matrix4x4 &m1) const {
 		for (int i = 0; i < 4; i++)
 			for (int j = 0; j < 4; j++)
@@ -50,12 +52,14 @@ public:
 		return ret;
 	}
 
-	std::string toString() const {
-		return tfm::format("[\n\t[%7.3f, %7.3f, %7.3f, %7.3f],\n\t[%7.3f, %7.3f, %7.3f, %7.3f],\n\t[%7.3f, %7.3f, %7.3f, %7.3f],\n\t[%7.3f, %7.3f, %7.3f, %7.3f],\n]",
-			m[0][0],m[0][1],m[0][2],m[0][3],
-			m[1][0], m[1][1], m[1][2], m[1][3], 
-			m[2][0], m[2][1], m[2][2], m[2][3], 
-			m[3][0], m[3][1], m[3][2], m[3][3]);
+	std::string toString(const int &spaceNum = 0) const {
+		return
+		indent("[\n", spaceNum) +
+			indent(tfm::format("[%.3f, %.3f, %.3f, %.3f],\n", m[0][0], m[0][1], m[0][2], m[0][3]), spaceNum + 4) +
+			indent(tfm::format("[%.3f, %.3f, %.3f, %.3f],\n", m[1][0], m[1][1], m[1][2], m[1][3]), spaceNum + 4) +
+			indent(tfm::format("[%.3f, %.3f, %.3f, %.3f],\n", m[2][0], m[2][1], m[2][2], m[2][3]), spaceNum + 4) +
+			indent(tfm::format("[%.3f, %.3f, %.3f, %.3f],\n", m[3][0], m[3][1], m[3][2], m[3][3]), spaceNum + 4) +
+		indent("]", spaceNum);
 	}
 
 	friend Matrix4x4 Transpose(const Matrix4x4 &m1);
@@ -84,6 +88,8 @@ public:
 	Float m[4][4];
 };
 
+Matrix4x4 toMatrix(const std::string &str);
+
 class Transform {
 public:
 	Transform() { }
@@ -97,8 +103,16 @@ public:
 	Transform(const Matrix4x4 &_m) :m(_m), mInv(Inverse(m)) {}
 	Transform(const Matrix4x4 &_m, const Matrix4x4 &_mInv) :m(_m), mInv(_mInv) {}
 
+	void Identify();
+
 	Transform operator * (const Transform &t) const {
 		return Transform(m * t.m, mInv * t.mInv);
+	}
+
+	Transform &operator *= (const Transform &t) {
+		m = m * t.m;
+		mInv = mInv * t.mInv;
+		return *this;
 	}
 
 	template<typename T>
@@ -111,8 +125,12 @@ public:
 	Bounds3f operator () (const Bounds3f &b) const;
 	SurfaceInteraction operator() (const SurfaceInteraction &si) const;
 
-	std::string toString() const {
-		return tfm::format("[\nm = %s\nmInv = %s\n]", m, mInv);
+	std::string toString(const int &spaceNum = 0) const {
+		return 
+		indent("[\n", spaceNum) +
+			m.toString(spaceNum + 4) + "\n" +
+			mInv.toString(spaceNum + 4) + "\n" +
+		indent("]", spaceNum);		
 	}
 
 	friend Transform Inverse(const Transform &t) {
@@ -133,6 +151,7 @@ private:
 };
 
 Transform Translate(const Vector3f &delta);
+Transform Scale(const Vector3f &scale);
 Transform Scale(Float x, Float y, Float z);
 Transform RotateX(Float theta);
 Transform RotateY(Float theta);

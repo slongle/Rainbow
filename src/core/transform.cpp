@@ -16,6 +16,12 @@ Matrix4x4::Matrix4x4(Float m00, Float m01, Float m02, Float m03,
 	m[3][0] = m30; m[3][1] = m31; m[3][2] = m32; m[3][3] = m33;
 }
 
+void Matrix4x4::Identify() {
+	m[0][0] = m[1][1] = m[2][2] = m[3][3] = 1;
+	m[0][1] = m[0][2] = m[0][3] = m[1][0] = m[1][2] = m[1][3] =
+	m[2][0] = m[2][1] = m[2][3] = m[3][0] = m[3][1] = m[3][2] = 0;
+}
+
 Matrix4x4 Transpose(const Matrix4x4 &m1) {
 	return Matrix4x4(m1.m[0][0], m1.m[1][0], m1.m[2][0], m1.m[3][0],
 		             m1.m[0][1], m1.m[1][1], m1.m[2][1], m1.m[3][1],
@@ -85,6 +91,27 @@ Matrix4x4 Inverse(const Matrix4x4 &m1) {
 	return Matrix4x4(minv);
 }
 
+Matrix4x4 toMatrix(const std::string & str) {
+	Float m[4][4];
+	int offset_x = 0, offset_y = 0;
+	std::string basStr = "";
+	for (size_t i = 0; i < str.length(); i++) {
+		if (str[i] == ' ') {
+			m[offset_x][offset_y] = toFloat(basStr);
+			offset_y++;
+			if (offset_y == 4) {
+				offset_y = 0; 
+				offset_x ++;
+			}
+			DCHECK(offset_x < 4, "Can't convert " + str + " to Matrix type");
+			basStr = "";
+		}
+		else basStr += str[i];
+	}
+	m[3][3] = toFloat(basStr);
+	return Matrix4x4(m);
+}
+
 Transform Translate(const Vector3f & delta) {
 	Matrix4x4 m(1, 0, 0, delta.x,
 		        0, 1, 0, delta.y,
@@ -94,6 +121,18 @@ Transform Translate(const Vector3f & delta) {
 		           0, 1, 0, -delta.y,
 		           0, 0, 1, -delta.z,
 		           0, 0, 0, 1);
+	return Transform(m, mInv);
+}
+
+Transform Scale(const Vector3f & scale) {
+	Matrix4x4 m(scale.x, 0, 0, 0,
+				0, scale.y, 0, 0,
+				0, 0, scale.z, 0,
+				0, 0, 0, 1);
+	Matrix4x4 mInv(1 / scale.x, 0, 0, 0,
+	               0, 1 / scale.y, 0, 0,
+	               0, 0, 1 / scale.z, 0,
+	               0, 0, 0, 1);
 	return Transform(m, mInv);
 }
 
@@ -176,14 +215,14 @@ Transform Rotate(Float theta, const Vector3f & axis){
 	return Transform(m, Transpose(m));
 }
 
-Transform LookAt(const Vector3f & pos, const Vector3f & look, const Vector3f & up) {
+Transform LookAt(const Vector3f & target, const Vector3f & origin, const Vector3f & up) {
 	Matrix4x4 cameraToWorld;
-	cameraToWorld.m[0][3] = pos[0];
-	cameraToWorld.m[1][3] = pos[1];
-	cameraToWorld.m[2][3] = pos[2];
+	cameraToWorld.m[0][3] = origin[0];
+	cameraToWorld.m[1][3] = origin[1];
+	cameraToWorld.m[2][3] = origin[2];
 	cameraToWorld.m[3][3] = 1;
 
-	Vector3f dir = Normalize(look - pos);
+	Vector3f dir = Normalize(target - origin);
 	Vector3f left = Normalize(Cross(up, dir));
 	Vector3f newUp = Cross(dir, left);
 	cameraToWorld.m[0][0] = left[0];
@@ -230,6 +269,11 @@ Normal3<T> Transform::operator()(const Normal3<T>& n) const {
 	return Normal3<T>(mInv.m[0][0] * n.x + mInv.m[1][0] * n.y + mInv.m[2][0] * n.z,
 		              mInv.m[0][1] * n.x + mInv.m[1][1] * n.y + mInv.m[2][1] * n.z,
 		              mInv.m[0][2] * n.x + mInv.m[1][2] * n.y + mInv.m[2][2] * n.z);
+}
+
+void Transform::Identify() {
+	m.Identify();
+	mInv.Identify();
 }
 
 Ray Transform::operator()(const Ray & r) const {

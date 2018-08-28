@@ -12,8 +12,13 @@ public:
 
 	Point3f operator ()(Float t) const { return o + d * t; }
 
-	std::string toString() const {
-		return tfm::format("[\n\to = %s\n\td = %s\n\ttMax = \6.4f\n]", o, d, tMax);
+	std::string toString(const int &spaceNum = 0) const {
+		return
+		indent("[\n", spaceNum) +
+			indent(tfm::format("o = %s,\n", o), spaceNum + 4) +
+			indent(tfm::format("d = %s,\n", d), spaceNum + 4) +
+			indent(tfm::format("tMax = %.3f,\n", tMax), spaceNum + 4) +
+		indent("]", spaceNum);
 	}
 
 	friend std::ostream &operator << (std::ostream &os, const Ray &r) {
