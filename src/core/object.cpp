@@ -12,10 +12,9 @@ void ObjectFactory::registerClass(const std::string & name, const Constructor & 
 }
 
 Object * ObjectFactory::createInstance(const std::string & name, const PropertyList & list) {
-	DCHECK((*constructors).find(name) != (*constructors).end(), "Lose " + name + "\'s Constructor");
+	DCHECK(constructors->find(name) != constructors->end(), "Missing " + name + "\'s Constructor");
 	return (*constructors)[name](list);
 }
-
 
 RAINBOW_NAMESPACE_END
 

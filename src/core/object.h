@@ -8,7 +8,39 @@ RAINBOW_NAMESPACE_BEGIN
 
 class Object {
 public:
-	Object(const PropertyList &list) {}
+	enum EClassType{
+		EScene,
+		ECamera,
+		EBSDF,
+		EFilm,
+		EIntegrator,
+		EShape,
+		ESampler,
+		ERFilter,
+		ELight
+	};
+
+	virtual EClassType getClassType()const = 0;
+	virtual void setParent(Object *parent) = 0;
+	virtual void addChild(Object *child) = 0;
+	virtual void active() = 0;
+
+	virtual std::string toString() const = 0;
+
+	static std::string classTypeName(EClassType type) {
+		switch (type) {
+			case EScene      : return "scene";    
+			case ECamera     : return "camera";        
+			case EBSDF       : return "BSDF";        
+			case EFilm       : return "film";    
+			case EIntegrator : return "integrator";  
+			case EShape      : return "shape"; 
+			case ESampler    : return "sampler"; 
+			case ERFilter    : return "rfilter";
+			default          : return "<unknown>";
+		}
+	}
+
 };
 
 class ObjectFactory {
@@ -24,7 +56,7 @@ private:
 #define RAINBOW_REGISTER_CLASS(ClassName, XMLName)\
     static struct ClassName##Struct{ \
         ClassName##Struct() {\
-            ObjectFactory::registerClass(XMLNAME, Create##ClassName);\
+            ObjectFactory::registerClass(XMLName, Create##ClassName);\
         }\
     }ClassName##_Rainbow;
 

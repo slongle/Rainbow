@@ -35,6 +35,7 @@ ADD_PROPERTYLIST_FUNCTIONS(int, Integer, integer)
 ADD_PROPERTYLIST_FUNCTIONS(Float, Float, float)
 ADD_PROPERTYLIST_FUNCTIONS(std::string, String, string)
 ADD_PROPERTYLIST_FUNCTIONS(Vector3f, Vector, vector)
+ADD_PROPERTYLIST_FUNCTIONS(RGBSpectrum, Color, color)
 ADD_PROPERTYLIST_FUNCTIONS(Transform, Transform, transform)
 
 RAINBOW_NAMESPACE_END

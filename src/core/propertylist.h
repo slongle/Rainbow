@@ -17,6 +17,7 @@ struct Property {
 		EPFloat,
 		EPString,
 		EPVector,
+		EPColor,
 		EPTransform
 	} type;
 
@@ -34,6 +35,7 @@ struct Property {
 		float       float_value;
 		std::string string_value;
 		Vector3f    vector_value;
+		RGBSpectrum color_value;
 		Transform   transform_value;
 	} value; 
 };
@@ -54,6 +56,9 @@ public:
 
 	void setVector(const std::string &name, const Vector3f &value);
 	Vector3f getVector(const std::string &name);
+
+	void setColor(const std::string &name, const RGBSpectrum &value);
+	RGBSpectrum getColor(const std::string &name);
 
 	void setTransform(const std::string &name, const Transform &value);
 	Transform getTransform(const std::string &name);
