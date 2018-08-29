@@ -27,7 +27,7 @@ void ParserXMLFile(const std::string & filename) {
 		return "byte offset " + std::to_string(pos);
 	};
 
-	DCHECK(result, "Error while parsing \"" + filename + "\": " + result.description() + " (at " + offset(result.offset) + ")");
+	Assert(result, "Error while parsing \"" + filename + "\": " + result.description() + " (at " + offset(result.offset) + ")");
 	
 	auto checkAttribute = [&](const pugi::xml_node &node, const std::string &name) -> bool {
 		for (pugi::xml_attribute &attribute : node.attributes()) {
@@ -126,7 +126,7 @@ void ParserXMLFile(const std::string & filename) {
 		bool isObject = tag < EBoolean;
 
 		if (isObject) {
-			DCHECK(checkAttribute(node, "type"), "Missing attribute \"type\" in " + 
+			Assert(checkAttribute(node, "type"), "Missing attribute \"type\" in " + 
 				                        static_cast<std::string>(node.name()));
 			std::string name = static_cast<std::string>(node.attribute("type").value());
 			result = ObjectFactory::createInstance(name, 

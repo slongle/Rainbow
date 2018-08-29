@@ -19,21 +19,21 @@ inline bool isNaN(const int x) {
 template<typename T>
 class Vector2 {
 public:
-	Vector2(T _v = 0) { x = y = _v; DCHECK(!HasNaNs(), "Vector2 has NaN"); }
-	Vector2(T _x, T _y) { x = _x; y = _y; DCHECK(!HasNaNs(), "Vector2 has NaN"); }
+	Vector2(T _v = 0) { x = y = _v; Assert(!HasNaNs(), "Vector2 has NaN"); }
+	Vector2(T _x, T _y) { x = _x; y = _y; Assert(!HasNaNs(), "Vector2 has NaN"); }
 
 	bool HasNaNs() const {
 		return isNaN(x) || isNaN(y);
 	}
 
 	T operator[](int i) const {
-		DCHECK(0 <= i && i <= 1, "Access Violation");
+		Assert(0 <= i && i <= 1, "Access Violation");
 		if (i == 0) return x;
 		return y;
 	}
 
 	T &operator[](int i) {
-		DCHECK(0 <= i && i <= 1, "Access Violation");
+		Assert(0 <= i && i <= 1, "Access Violation");
 		if (i == 0) return x;
 		return y;
 	}
@@ -62,13 +62,13 @@ public:
 	}
 	template<typename U>
 	Vector2<T> operator / (U f) const {
-		DCHECK(f != 0, "Divide Zero");
+		Assert(f != 0, "Divide Zero");
 		double inv = double(1) / f;
 		return Vector2<T>(x*inv, y*inv);
 	}
 	template<typename U>
 	Vector2<T> &operator /= (U f) {
-		DCHECK(f != 0, "Divide Zero");
+		Assert(f != 0, "Divide Zero");
 		double inv = double(1) / f;
 		x *= inv;
 		y *= inv;
@@ -112,22 +112,22 @@ Vector2<T> Normalize(Vector2<T> v) {
 template<typename T>
 class Vector3 {
 public:
-	Vector3(T _v = 0) { x = y = z = _v; DCHECK(!HasNaNs(), "Vector3 has NaN"); }
-	Vector3(T _x, T _y, T _z) { x = _x; y = _y; z = _z; DCHECK(!HasNaNs(), "Vector3 has NaN"); }
+	Vector3(T _v = 0) { x = y = z = _v; Assert(!HasNaNs(), "Vector3 has NaN"); }
+	Vector3(T _x, T _y, T _z) { x = _x; y = _y; z = _z; Assert(!HasNaNs(), "Vector3 has NaN"); }
 
 	bool HasNaNs() const {
 		return isNaN(x) || isNaN(y) || isNaN(z);
 	}
 
 	T operator[](int i) const {
-		DCHECK(0 <= i && i <= 2, "Access Violation");
+		Assert(0 <= i && i <= 2, "Access Violation");
 		if (i == 0) return x;
 		if (i == 1) return y;
 		return z;
 	}
 
 	T &operator[](int i) {
-		DCHECK(0 <= i && i <= 2, "Access Violation");
+		Assert(0 <= i && i <= 2, "Access Violation");
 		if (i == 0) return x;
 		if (i == 1) return y;
 		return z;
@@ -160,13 +160,13 @@ public:
 	}
 	template<typename U>
 	Vector3<T> operator / (U f) const {
-		DCHECK(f != 0, "Divide Zero");
+		Assert(f != 0, "Divide Zero");
 		Float inv = Float(1) / f;
 		return Vector3<T>(x*inv, y*inv, z*inv);
 	}
 	template<typename U>
 	Vector3<T> &operator /= (U f) {
-		DCHECK(f != 0, "Divide Zero");
+		Assert(f != 0, "Divide Zero");
 		double inv = double(1) / f;
 		x *= inv;
 		y *= inv;
@@ -238,7 +238,7 @@ inline Vector3f toVector(const std::string &str) {
 		if (str[i] == ',') {
 			tmp[num] = toFloat(basStr);
 			num++;
-			DCHECK(num < 3, "Can't convert " + str + " to Vector type");
+			Assert(num < 3, "Can't convert " + str + " to Vector type");
 			basStr = "";
 		}
 		else basStr += str[i];
@@ -250,9 +250,9 @@ inline Vector3f toVector(const std::string &str) {
 template<typename T>
 class Point2 {
 public:
-	Point2(T _v = 0) { x = y = _v; DCHECK(!HasNaNs(), "Point2 has NaN"); }
-	Point2(T _x, T _y) :x(_x), y(_y) { DCHECK(!HasNaNs(), "Point2 has NaN"); }
-	explicit Point2(const Point3<T> &u) :x(u.x), y(u.y) { DCHECK(!HasNaNs(), "Point2 has NaN"); }
+	Point2(T _v = 0) { x = y = _v; Assert(!HasNaNs(), "Point2 has NaN"); }
+	Point2(T _x, T _y) :x(_x), y(_y) { Assert(!HasNaNs(), "Point2 has NaN"); }
+	explicit Point2(const Point3<T> &u) :x(u.x), y(u.y) { Assert(!HasNaNs(), "Point2 has NaN"); }
 
 	bool HasNaNs() { return isNaN(x) || isNaN(y); }
 
@@ -271,24 +271,24 @@ public:
 template<typename T>
 class Point3 {
 public:
-	Point3(T _v = 0) { x = y = z = _v; DCHECK(!HasNaNs(), "Point3 has NaN"); }
-	Point3(T _x, T _y, T _z) :x(_x), y(_y), z(_z) { DCHECK(!HasNaNs(), "Point3 has NaN"); }
+	Point3(T _v = 0) { x = y = z = _v; Assert(!HasNaNs(), "Point3 has NaN"); }
+	Point3(T _x, T _y, T _z) :x(_x), y(_y), z(_z) { Assert(!HasNaNs(), "Point3 has NaN"); }
 	template<typename U> 
-	explicit Point3(const Point3<U> &v) :x(T(v.x)), y(T(v.y)), z(T(v.z)) { DCHECK(!HasNaNs(), "Point3 has NaN"); }
+	explicit Point3(const Point3<U> &v) :x(T(v.x)), y(T(v.y)), z(T(v.z)) { Assert(!HasNaNs(), "Point3 has NaN"); }
 	template<typename U> 
 	explicit operator Vector3<U>() const {return Vector3<U>(x, y, z); }
 
 	bool HasNaNs() { return isNaN(x) || isNaN(y) || isNaN(z); }
 	
 	T operator[](int i) const {
-		DCHECK(0 <= i && i <= 2, "Access Violation");
+		Assert(0 <= i && i <= 2, "Access Violation");
 			if (i == 0) return x;
 		if (i == 1) return y;
 		return z;
 	}
 
 	T &operator[](int i) {
-		DCHECK(0 <= i && i <= 2, "Access Violation");
+		Assert(0 <= i && i <= 2, "Access Violation");
 			if (i == 0) return x;
 		if (i == 1) return y;
 		return z;
@@ -310,13 +310,13 @@ public:
 	Point3<T> &operator *= (const U f) { x *= f; y *= f; z *= f; return *this; }
 	template<typename U>
 	Point3<T> operator / (const U &f) const { 
-		DCHECK(f != 0, "Divide Zero");
+		Assert(f != 0, "Divide Zero");
 		U inv = U(1) / f; 
 		return Point3<T>(x, y, z) * inv;
 	}
 	template<typename U>
 	Point3<T> &operator /= (const U &f) {
-		DCHECK(f != 0, "Divide Zero");
+		Assert(f != 0, "Divide Zero");
 		U inv = U(1) / f;
 		x *= inv; 
 		y *= inv;
@@ -373,10 +373,10 @@ Point3<T> Permute(const Point3<T> &p, const int &x, const int &y, const int &z) 
 template<typename T>
 class Normal3 {
 public:
-	Normal3(T _v = 0) { x = y = z = _v; DCHECK(!HasNaNs(), "Normal3 has NaN"); }
-	Normal3(T _x, T _y, T _z) :x(_x), y(_y), z(_z) { DCHECK(!HasNaNs(), "Normal3 has NaN"); }
-	explicit Normal3(const Vector3<T> &v) :x(v.x), y(v.y), z(v.z) { DCHECK(!HasNaNs(), "Normal3 has NaN"); }
-	explicit Normal3(const Point3<T> &p) :x(p.x), y(p.y), z(p.z) { DCHECK(!HasNaNs(), "Normal3 has NaN"); }
+	Normal3(T _v = 0) { x = y = z = _v; Assert(!HasNaNs(), "Normal3 has NaN"); }
+	Normal3(T _x, T _y, T _z) :x(_x), y(_y), z(_z) { Assert(!HasNaNs(), "Normal3 has NaN"); }
+	explicit Normal3(const Vector3<T> &v) :x(v.x), y(v.y), z(v.z) { Assert(!HasNaNs(), "Normal3 has NaN"); }
+	explicit Normal3(const Point3<T> &p) :x(p.x), y(p.y), z(p.z) { Assert(!HasNaNs(), "Normal3 has NaN"); }
 
 	bool HasNaNs() const { return isNaN(x) || isNaN(y) || isNaN(z); }
 

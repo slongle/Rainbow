@@ -1,0 +1,27 @@
+#ifndef __RAINBOW_H
+#define __RAINBOW_H
+
+#include<iostream>
+#include<iomanip>
+#include<vector>
+#include<map>
+#include<memory>
+#include<functional>
+#include<assert.h>
+#include<fstream>
+
+using std::cin;
+using std::cout;
+using std::endl;
+
+#include"logger.h"
+
+#define Log(message) do { \
+		(tfm::format)(std::cerr,"%s", message); \
+	} while(0)
+
+#define Assert(cond, explanation) do { \
+		if (!(cond)) std::cerr<<"Assertion occoured at "<<__FILE__<<" "<<__LINE__<<" ( "<<explanation<<" )", throw std::runtime_error(explanation); \
+	} while (0)
+
+#endif // !__RAINBOW_H

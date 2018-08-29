@@ -124,7 +124,7 @@
     <ClCompile Include="..\src\core\bsdf.cpp" />
     <ClCompile Include="..\src\core\camera.cpp" />
     <ClCompile Include="..\src\core\common.cpp" />
-    <ClCompile Include="..\src\core\error.cpp" />
+    <ClCompile Include="..\src\core\logger.cpp" />
     <ClCompile Include="..\src\core\frame.cpp" />
     <ClCompile Include="..\src\core\imageio.cpp" />
     <ClCompile Include="..\src\core\integrator.cpp" />
@@ -151,7 +151,7 @@
     <ClInclude Include="..\src\core\bsdf.h" />
     <ClInclude Include="..\src\core\camera.h" />
     <ClInclude Include="..\src\core\common.h" />
-    <ClInclude Include="..\src\core\error.h" />
+    <ClInclude Include="..\src\core\logger.h" />
     <ClInclude Include="..\src\core\frame.h" />
     <ClInclude Include="..\src\core\imageio.h" />
     <ClInclude Include="..\src\core\integrator.h" />
@@ -159,6 +159,7 @@
     <ClInclude Include="..\src\core\object.h" />
     <ClInclude Include="..\src\core\parser.h" />
     <ClInclude Include="..\src\core\propertylist.h" />
+    <ClInclude Include="..\src\core\rainbow.h" />
     <ClInclude Include="..\src\core\ray.h" />
     <ClInclude Include="..\src\core\scene.h" />
     <ClInclude Include="..\src\core\shape.h" />

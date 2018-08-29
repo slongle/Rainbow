@@ -49,7 +49,7 @@ Matrix4x4 Inverse(const Matrix4x4 &m1) {
 						}
 					}
 					else {
-						DCHECK(ipiv[k] <= 1, "Singular matrix in MatrixInvert at Position 1");
+						Assert(ipiv[k] <= 1, "Singular matrix in MatrixInvert at Position 1");
 					}
 				}
 			}
@@ -63,7 +63,7 @@ Matrix4x4 Inverse(const Matrix4x4 &m1) {
 		indxr[i] = irow;
 		indxc[i] = icol;		
 		
-		DCHECK(std::fabs(minv[icol][icol]) > Epsilon, "Singular matrix in MatrixInvert at Position 2");
+		Assert(std::fabs(minv[icol][icol]) > Epsilon, "Singular matrix in MatrixInvert at Position 2");
 
 		// Set $m[icol][icol]$ to one by scaling row _icol_ appropriately
 		Float pivinv = Float(1) / minv[icol][icol];
@@ -103,7 +103,7 @@ Matrix4x4 toMatrix(const std::string & str) {
 				offset_y = 0; 
 				offset_x ++;
 			}
-			DCHECK(offset_x < 4, "Can't convert " + str + " to Matrix type");
+			Assert(offset_x < 4, "Can't convert " + str + " to Matrix type");
 			basStr = "";
 		}
 		else basStr += str[i];
@@ -250,7 +250,7 @@ Point3<T> Transform::operator()(const Point3<T> & p) const {
 	T y = m.m[1][0] * p.x + m.m[1][1] * p.y + m.m[1][2] * p.z + m.m[1][3];
 	T z = m.m[2][0] * p.x + m.m[2][1] * p.y + m.m[2][2] * p.z + m.m[2][3];
 	T w = m.m[3][0] * p.x + m.m[3][1] * p.y + m.m[3][2] * p.z + m.m[3][3];
-	DCHECK(w != 0, "Divide Zero");
+	Assert(w != 0, "Divide Zero");
 	if (w == 1)
 		return Point3<T>(x, y, z);
 	else
@@ -315,7 +315,7 @@ Bounds3f Transform::operator()(const Bounds3f & bounds) const {
 	}
 
 	Bounds3f ret1(mn, mx);
-	DCHECK(ret1 == ret, "Transform Bounds3 Algorithm Error");
+	Assert(ret1 == ret, "Transform Bounds3 Algorithm Error");
 	return ret1;
 }
 

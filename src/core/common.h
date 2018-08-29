@@ -1,23 +1,6 @@
 #ifndef __COMMON_H
 #define __COMMON_H
 
-// Global Include Files
-#include<iostream>
-#include<iomanip>
-#include<vector>
-#include<map>
-#include<memory>
-#include<functional>
-#include<assert.h>
-#include<fstream>
-
-#include"../../ext/tinyformat.h"
-#include"error.h"
-
-using std::cin;
-using std::cout;
-using std::endl;
-
 #if defined(_MSC_VER)
 /* Disable some warnings on MSVC++ */
 #pragma warning(disable : 4127 4702 4100 4515 4800 4146 4512)
@@ -25,10 +8,11 @@ using std::endl;
 #define NOMINMAX                /* Don't override min/max */
 #endif
 
-/* Convecience for checking */
-//#define DCHECK(EXP, LOG) if (!(EXP)) tfm::format(std::cerr, "%s\n", LOG), assert(EXP)
-#define DCHECK(EXP, LOG) if (!(EXP)) tfm::format(std::cerr, "%s\n", LOG), assert(false)
-//#define DCHECK(EXP, LOG) if (!(EXP)) tfm::format(std::cerr, "%s\n", LOG), exit(-1)
+#if defined(Assert)
+# undef Assert
+#endif
+
+#include "rainbow.h"
 
 /* Convenience definitions */
 #define RAINBOW_NAMESPACE_BEGIN namespace rainbow {
@@ -79,7 +63,7 @@ inline std::string indent(const std::string &str, const int &num) {
 }
 
 inline bool toBoolean(const std::string &str) {
-	DCHECK(str == "true" || str == "false", "Can't convert " + str + " to Boolean type");
+	Assert(str == "true" || str == "false", "Can't convert " + str + " to Boolean type");
 	if (str == "true") return true;
 	else return false;
 }
@@ -87,14 +71,14 @@ inline bool toBoolean(const std::string &str) {
 inline int toInteger(const std::string &str) {
 	char *end_ptr = nullptr;
 	int result = (int) strtol(str.c_str(), &end_ptr, 10);
-	DCHECK(*end_ptr != '\0', "Can't convert " + str + " to Integer type");
+	Assert(*end_ptr != '\0', "Can't convert " + str + " to Integer type");
 	return result;
 }
 
 inline Float toFloat(const std::string &str) {
 	char *end_ptr = nullptr;
 	float result = (float)strtof(str.c_str(), &end_ptr);
-	DCHECK(*end_ptr != '\0', "Can't convert " + str + " to Float type");
+	Assert(*end_ptr != '\0', "Can't convert " + str + " to Float type");
 	return result;
 }
 

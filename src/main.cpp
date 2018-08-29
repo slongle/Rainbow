@@ -22,10 +22,13 @@ int main(int argc, char *argv[]) {
 		7,11,13,17,
 		19,23,29,31,
 		37,41,43,49);
+	cout << __FILE__ << endl;
+	cout << __LINE__ << endl;
 	Transform a(aa);
 	cout << a << endl;
 	Ray b;
 	cout << b << endl;
+	cout << __LINE__ << endl;
 	Point2i c(2);
 	cout << c << endl;
 

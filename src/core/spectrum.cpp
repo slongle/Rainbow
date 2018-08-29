@@ -8,14 +8,14 @@ RGBSpectrum toColor(const std::string &str) {
 	std::string basStr = "";
 	for (size_t i = 0; i < str.length(); i++) {
 		if (str[i] == ',') {
-			DCHECK(num < 3, "Can't convert " + str + " to Vector type");
+			Assert(num < 3, "Can't convert " + str + " to Vector type");
 			tmp[num] = toFloat(basStr);
 			num++;
 			basStr = "";
 		}
 		else basStr += str[i];
 	}
-	DCHECK(num < 3, "Can't convert " + str + " to Vector type");
+	Assert(num < 3, "Can't convert " + str + " to Vector type");
 	tmp[num] = toFloat(basStr);
 	return RGBSpectrum(tmp[0], tmp[1], tmp[2]);
 }

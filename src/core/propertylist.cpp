@@ -10,9 +10,16 @@ RAINBOW_NAMESPACE_BEGIN
 	} \
 	\
     Type PropertyList::get##Typename(const std::string &name) { \
-		DCHECK(list.find(name) != list.end(), "Not Found The Value Named" + name); \
+		Assert(list.find(name) != list.end(), "Not Found The Value Named" + name); \
 		Property property = list[name]; \
-		DCHECK(property.type == Property::EP##Typename, "Wrong Value's Type"); \
+		Assert(property.type == Property::EP##Typename, "Wrong Value's Type"); \
+		return property.value.XMLName##_value; \
+	} \
+	Type PropertyList::get##Typename(const std::string &name, const Type & defaultValue) { \
+		if (list.find(name) == list.end()) \
+			return defaultValue; \
+		Property property = list[name]; \
+		Assert(property.type == Property::EP##Typename, "Wrong Value's Type"); \
 		return property.value.XMLName##_value; \
 	}
 
@@ -24,9 +31,9 @@ RAINBOW_NAMESPACE_BEGIN
 }
 
 bool PropertyList::getBoolean(const std::string & name) {
-	DCHECK(list.find(name) != list.end(), "Not Found The Value Named" + name);
+	Assert(list.find(name) != list.end(), "Not Found The Value Named" + name);
 	Property property = list[name];
-	DCHECK(property.type == Property::EPBool, "Wrong Value's Type");
+	Assert(property.type == Property::EPBool, "Wrong Value's Type");
 	return property.value.boolean_value;
 }*/
 

@@ -12,7 +12,7 @@ void Image::save(const std::string & filename) const {
 		data.push_back(static_cast<unsigned char>(255));
 	}
 	unsigned error = lodepng::encode(filename, data, width, height);
-	DCHECK(!error, "Encode Error as Saving PNG");
+	Assert(!error, "Encode Error as Saving PNG");
 }
 
 
