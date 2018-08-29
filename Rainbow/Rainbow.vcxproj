@@ -124,9 +124,10 @@
     <ClCompile Include="..\src\core\bsdf.cpp" />
     <ClCompile Include="..\src\core\camera.cpp" />
     <ClCompile Include="..\src\core\common.cpp" />
+    <ClCompile Include="..\src\core\filter.cpp" />
     <ClCompile Include="..\src\core\logger.cpp" />
     <ClCompile Include="..\src\core\frame.cpp" />
-    <ClCompile Include="..\src\core\imageio.cpp" />
+    <ClCompile Include="..\src\core\film.cpp" />
     <ClCompile Include="..\src\core\integrator.cpp" />
     <ClCompile Include="..\src\core\interaction.cpp" />
     <ClCompile Include="..\src\core\object.cpp" />
@@ -138,6 +139,8 @@
     <ClCompile Include="..\src\core\spectrum.cpp" />
     <ClCompile Include="..\src\core\transform.cpp" />
     <ClCompile Include="..\src\core\vector.cpp" />
+    <ClCompile Include="..\src\filters\box.cpp" />
+    <ClCompile Include="..\src\filters\tent.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\shapes\sphere.cpp" />
     <ClCompile Include="..\src\shapes\triangle.cpp" />
@@ -151,9 +154,10 @@
     <ClInclude Include="..\src\core\bsdf.h" />
     <ClInclude Include="..\src\core\camera.h" />
     <ClInclude Include="..\src\core\common.h" />
+    <ClInclude Include="..\src\core\filter.h" />
     <ClInclude Include="..\src\core\logger.h" />
     <ClInclude Include="..\src\core\frame.h" />
-    <ClInclude Include="..\src\core\imageio.h" />
+    <ClInclude Include="..\src\core\film.h" />
     <ClInclude Include="..\src\core\integrator.h" />
     <ClInclude Include="..\src\core\interaction.h" />
     <ClInclude Include="..\src\core\object.h" />
@@ -166,6 +170,8 @@
     <ClInclude Include="..\src\core\spectrum.h" />
     <ClInclude Include="..\src\core\transform.h" />
     <ClInclude Include="..\src\core\vector.h" />
+    <ClInclude Include="..\src\filters\box.h" />
+    <ClInclude Include="..\src\filters\tent.h" />
     <ClInclude Include="..\src\shapes\sphere.h" />
     <ClInclude Include="..\src\shapes\triangle.h" />
   </ItemGroup>

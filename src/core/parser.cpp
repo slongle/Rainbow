@@ -128,6 +128,9 @@ void ParserXMLFile(const std::string & filename) {
 		if (isObject) {
 			Assert(checkAttribute(node, "type"), "Missing attribute \"type\" in " + 
 				                        static_cast<std::string>(node.name()));
+
+			if (tag == EFilm) node.attribute("type").set_value("film");
+
 			std::string name = static_cast<std::string>(node.attribute("type").value());
 			result = ObjectFactory::createInstance(name, 
                                                    m_list);

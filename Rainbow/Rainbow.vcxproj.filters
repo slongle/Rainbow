@@ -28,6 +28,9 @@
     <Filter Include="Extend Files\pugixml">
       <UniqueIdentifier>{5d0ad2dd-8d6b-4b55-91bf-cd0aaf12d844}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\filters">
+      <UniqueIdentifier>{d0c7ce6b-0911-46ad-ae7c-3d3201345c03}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\core\bbox.cpp">
@@ -63,9 +66,6 @@
     <ClCompile Include="..\src\shapes\triangle.cpp">
       <Filter>Source Files\shapes</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\core\imageio.cpp">
-      <Filter>Source Files\core</Filter>
-    </ClCompile>
     <ClCompile Include="..\ext\lodepng\lodepng.cpp">
       <Filter>Extend Files\lodepng</Filter>
     </ClCompile>
@@ -98,6 +98,18 @@
     </ClCompile>
     <ClCompile Include="..\src\core\logger.cpp">
       <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\core\film.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\core\filter.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\filters\box.cpp">
+      <Filter>Source Files\filters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\filters\tent.cpp">
+      <Filter>Source Files\filters</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -133,9 +145,6 @@
     </ClInclude>
     <ClInclude Include="..\src\shapes\triangle.h">
       <Filter>Source Files\shapes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\core\imageio.h">
-      <Filter>Source Files\core</Filter>
     </ClInclude>
     <ClInclude Include="..\ext\lodepng\lodepng.h">
       <Filter>Extend Files\lodepng</Filter>
@@ -175,6 +184,18 @@
     </ClInclude>
     <ClInclude Include="..\src\core\rainbow.h">
       <Filter>Source Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\core\film.h">
+      <Filter>Source Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\core\filter.h">
+      <Filter>Source Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\filters\box.h">
+      <Filter>Source Files\filters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\filters\tent.h">
+      <Filter>Source Files\filters</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

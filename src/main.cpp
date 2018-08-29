@@ -3,7 +3,7 @@
 #include "core/bbox.h"
 #include "core/ray.h"
 #include "core/transform.h"
-#include "core/imageio.h"
+#include "core/film.h"
 #include "core/parser.h"
 #include "core/object.h"
 using namespace rainbow;
