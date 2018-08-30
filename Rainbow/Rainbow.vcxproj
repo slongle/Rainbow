@@ -125,6 +125,7 @@
     <ClCompile Include="..\src\core\camera.cpp" />
     <ClCompile Include="..\src\core\common.cpp" />
     <ClCompile Include="..\src\core\filter.cpp" />
+    <ClCompile Include="..\src\core\imageio.cpp" />
     <ClCompile Include="..\src\core\logger.cpp" />
     <ClCompile Include="..\src\core\frame.cpp" />
     <ClCompile Include="..\src\core\film.cpp" />
@@ -155,6 +156,7 @@
     <ClInclude Include="..\src\core\camera.h" />
     <ClInclude Include="..\src\core\common.h" />
     <ClInclude Include="..\src\core\filter.h" />
+    <ClInclude Include="..\src\core\imageio.h" />
     <ClInclude Include="..\src\core\logger.h" />
     <ClInclude Include="..\src\core\frame.h" />
     <ClInclude Include="..\src\core\film.h" />

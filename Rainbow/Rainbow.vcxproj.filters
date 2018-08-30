@@ -111,6 +111,9 @@
     <ClCompile Include="..\src\filters\tent.cpp">
       <Filter>Source Files\filters</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\core\imageio.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\core\bbox.h">
@@ -196,6 +199,9 @@
     </ClInclude>
     <ClInclude Include="..\src\filters\tent.h">
       <Filter>Source Files\filters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\core\imageio.h">
+      <Filter>Source Files\core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

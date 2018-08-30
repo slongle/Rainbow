@@ -9,7 +9,7 @@
 #endif
 
 #if defined(Assert)
-# undef Assert
+	#undef Assert
 #endif
 
 #include "rainbow.h"
@@ -100,6 +100,21 @@ inline bool Quadratic(Float a, Float b, Float c, Float * t0, Float * t1) {
 	if (*t0 > *t1) std::swap(*t0, *t1);
 
 	return true;
+}
+
+inline Float GammaCorrect(Float value) {
+	if (value <= 0.0031308f) 
+		return 12.92f * value;
+	return 1.055f * std::pow(value, (Float)(1.f / 2.4f)) - 0.055f;
+}
+
+template<typename T, typename U, typename V>
+inline T Clamp(const T &val, const U &low, const V &up) {
+	if (val < low)
+		return low;
+	if (val > up)
+		return up;
+	return val;
 }
 
 RAINBOW_NAMESPACE_END

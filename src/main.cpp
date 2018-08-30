@@ -17,6 +17,8 @@ int main(int argc, char *argv[]) {
 			*a(i,j) = RGBSpectrum(static_cast<Float>(i) / width, static_cast<Float>(j) / height, 1);
 	a.save("first.png");*/
 	//std::map<std::string, ObjectFactory::Constructor> *a = ObjectFactory::constructors;
+	std::unique_ptr<uint8_t[]> rgb8(new uint8_t[4 *100]);
+
 
 	Matrix4x4 aa(1,2,3,5,
 		7,11,13,17,

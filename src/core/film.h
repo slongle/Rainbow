@@ -1,11 +1,11 @@
-#ifndef __IMAGEIO_H
-#define __IMAGEIO_H
+#ifndef __FILM_H
+#define __FILM_H
 
 #include "common.h"
-#include "spectrum.h"
 #include "filter.h"
-
-#include "../../ext/lodepng/lodepng.h"
+#include "spectrum.h"
+#include "vector.h"
+#include "imageio.h"
 
 RAINBOW_NAMESPACE_BEGIN
 
@@ -18,16 +18,27 @@ RAINBOW_NAMESPACE_BEGIN
 
 class Film{
 public:
-	Film(const int &_width, const int &_height) :width(_width), height(_height) { film.resize(width*height); }
+	Film(const Point2i &_resolution, std::unique_ptr<Filter> _filter, const std::string &_filename);
 
-	RGBSpectrum *operator () (const int &x, const int &y) { return &film[y*width + x]; }
+	void SaveImage();
 
-	void save(const std::string &filename) const;
+	const std::string filename;
+	const Point2i resolution;
+	std::unique_ptr<Filter> filter;
 
 private:
-	int width, height;
-	const std::unique_ptr<Filter> filter;
-	std::vector<RGBSpectrum> film;
+	struct Pixel {
+		Pixel() { rgb[0] = rgb[1] = rgb[2] = filterSum; }
+		Float rgb[3];
+		Float filterSum;
+	};
+	std::unique_ptr<Pixel[]> pixels;
+
+	Pixel &GetPixel(const Point2i &p) const {
+		Assert(0 <= p.x && p.x < resolution.x && 0 <= p.y && p.y < resolution.y, "Access Violation");
+		return pixels[p.y*resolution.x + p.x];
+	}
+
 };
 
 RAINBOW_NAMESPACE_END
