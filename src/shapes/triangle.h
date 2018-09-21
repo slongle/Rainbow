@@ -17,6 +17,7 @@ struct TriangleMesh {
 
 class Triangle :public Shape{
 public:
+	Triangle() {}
 	Triangle(const Transform *_ObjectToWorld, const Transform * _WorldToObject, 
 		const std::shared_ptr<TriangleMesh> & _mesh, int triNumber);
 
@@ -30,9 +31,11 @@ public:
 
 private:
 	const std::shared_ptr<TriangleMesh> mesh;
-	const int * index;
-	const int triNumber;
+	const int * index = nullptr;
+	const int triNumber = 0;
 };
+
+Triangle* CreateWavefrontOBJ(PropertyList &list);
 
 RAINBOW_NAMESPACE_END
 

@@ -24,4 +24,8 @@ void Film::SaveImage() {
 	WriteImage(filename, rgb, resolution);
 }
 
+Film * CreateFilm(PropertyList & list) {
+	return new Film();
+}
+
 RAINBOW_NAMESPACE_END

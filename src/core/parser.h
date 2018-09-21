@@ -1,8 +1,8 @@
 #ifndef __PARSER_H
 #define __PARSER_H
 
-#include"scene.h"
-#include"object.h"
+#include "api.h"
+#include "object.h"
 
 #include "../../ext/pugixml/pugixml.hpp"
 

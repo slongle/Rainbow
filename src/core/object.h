@@ -20,12 +20,12 @@ public:
 		ELight
 	};
 
-	virtual EClassType getClassType()const = 0;
-	virtual void setParent(Object *parent) = 0;
-	virtual void addChild(Object *child) = 0;
-	virtual void active() = 0;
+	virtual EClassType getClassType() const = 0;
+	virtual void setParent(Object *parent);	
+	virtual void addChild(Object *child);
+	virtual void active();
 
-	virtual std::string toString() const = 0;
+	//virtual std::string toString() const = 0;
 
 	static std::string classTypeName(EClassType type) {
 		switch (type) {
@@ -43,7 +43,7 @@ public:
 
 };
 
-class ObjectFactory {
+/*class ObjectFactory {
 public:
 	typedef std::function<Object *(const PropertyList &)> Constructor;
 	
@@ -59,6 +59,7 @@ private:
             ObjectFactory::registerClass(XMLName, Create##ClassName);\
         }\
     }ClassName##_Rainbow;
+*/
 
 RAINBOW_NAMESPACE_END
 

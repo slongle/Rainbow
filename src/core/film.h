@@ -6,6 +6,7 @@
 #include "spectrum.h"
 #include "vector.h"
 #include "imageio.h"
+#include "object.h"
 
 RAINBOW_NAMESPACE_BEGIN
 
@@ -16,11 +17,15 @@ RAINBOW_NAMESPACE_BEGIN
   right-lower corner is (width - 1, height - 1)
 */
 
-class Film{
+class Film : public Object{
 public:
+	Film() {}
 	Film(const Point2i &_resolution, std::unique_ptr<Filter> _filter, const std::string &_filename);
 
+
 	void SaveImage();
+
+	EClassType getClassType() const { return EFilm; }
 
 	const std::string filename;
 	const Point2i resolution;
@@ -40,6 +45,8 @@ private:
 	}
 
 };
+
+Film * CreateFilm(PropertyList &list);
 
 RAINBOW_NAMESPACE_END
 

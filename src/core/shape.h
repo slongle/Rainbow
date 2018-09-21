@@ -12,6 +12,7 @@ RAINBOW_NAMESPACE_BEGIN
 
 class Shape :public Object {
 public:
+	Shape() {}
 	Shape(const Transform *_ObjectToWorld, const Transform *_WorldToObject);
 	virtual ~Shape() = default;
 
@@ -22,6 +23,7 @@ public:
 	virtual bool IntersectP(const Ray & ray) const;
 
 	virtual Float Area() const = 0;
+	EClassType getClassType() const { return EShape; }
 
 	const Transform *ObjectToWorld, *WorldToObject;
 };

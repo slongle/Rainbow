@@ -31,6 +31,9 @@
     <Filter Include="Source Files\filters">
       <UniqueIdentifier>{d0c7ce6b-0911-46ad-ae7c-3d3201345c03}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\cameras">
+      <UniqueIdentifier>{e491e262-363e-4829-86f9-15de0cac4e16}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\core\bbox.cpp">
@@ -113,6 +116,12 @@
     </ClCompile>
     <ClCompile Include="..\src\core\imageio.cpp">
       <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\core\api.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\cameras\perspective.cpp">
+      <Filter>Source Files\cameras</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -203,6 +212,12 @@
     <ClInclude Include="..\src\core\imageio.h">
       <Filter>Source Files\core</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\core\api.h">
+      <Filter>Source Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\cameras\perspective.h">
+      <Filter>Source Files\cameras</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\log\20180811.md">
@@ -223,13 +238,13 @@
     <None Include="..\log\20180822.md">
       <Filter>Log Files</Filter>
     </None>
-    <None Include="..\log\20180823.md">
-      <Filter>Log Files</Filter>
-    </None>
     <None Include="..\log\20180827.md">
       <Filter>Log Files</Filter>
     </None>
     <None Include="..\log\20180828.md">
+      <Filter>Log Files</Filter>
+    </None>
+    <None Include="..\log\20180823.md">
       <Filter>Log Files</Filter>
     </None>
   </ItemGroup>

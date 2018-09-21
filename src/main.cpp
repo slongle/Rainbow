@@ -1,11 +1,12 @@
 #include "core/common.h"
-#include "core/vector.h"
-#include "core/bbox.h"
-#include "core/ray.h"
-#include "core/transform.h"
-#include "core/film.h"
+//#include "core/vector.h"
+//#include "core/bbox.h"
+//#include "core/ray.h"
+//#include "core/transform.h"
+//#include "core/film.h"
 #include "core/parser.h"
-#include "core/object.h"
+//#include "core/object.h"
+
 using namespace rainbow;
 
 int main(int argc, char *argv[]) {
@@ -17,7 +18,7 @@ int main(int argc, char *argv[]) {
 			*a(i,j) = RGBSpectrum(static_cast<Float>(i) / width, static_cast<Float>(j) / height, 1);
 	a.save("first.png");*/
 	//std::map<std::string, ObjectFactory::Constructor> *a = ObjectFactory::constructors;
-	std::unique_ptr<uint8_t[]> rgb8(new uint8_t[4 *100]);
+	/*std::unique_ptr<uint8_t[]> rgb8(new uint8_t[4 *100]);
 
 
 	Matrix4x4 aa(1,2,3,5,
@@ -32,7 +33,7 @@ int main(int argc, char *argv[]) {
 	cout << b << endl;
 	cout << __LINE__ << endl;
 	Point2i c(2);
-	cout << c << endl;
+	cout << c << endl;*/
 
 	std::string filename = "C:/Users/del/Desktop/cbox/cbox.xml";
 	ParserXMLFile(filename);

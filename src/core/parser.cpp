@@ -95,6 +95,7 @@ void ParserXMLFile(const std::string & filename) {
 
 	std::function<Object *(pugi::xml_node, PropertyList, int)> ParserTag  =
 		[&](pugi::xml_node node, PropertyList list, int num) -> Object* {
+		//std::cout << node.find_attribute("id").value() << std::endl;
 
 		if (node.type() == pugi::node_comment || node.type() == pugi::node_declaration)
 			return nullptr;
@@ -128,19 +129,54 @@ void ParserXMLFile(const std::string & filename) {
 		if (isObject) {
 			Assert(checkAttribute(node, "type"), "Missing attribute \"type\" in " + 
 				                        static_cast<std::string>(node.name()));
+			 
+			if (tag == ERef) result = references[static_cast<std::string>(node.attribute("id").value())];
+			else {
+				std::string name = static_cast<std::string>(node.attribute("type").value());
+				switch (tag) {
+					case EScene:
+						result = MakeScene();
+						break;
+					case EIntegrator:
+						result = MakeIntegrator(name, list);
+						break;
+					case ECamera:
+						result = MakeCamera(name, list);
+						break;
+					//case ESampler:
+					//	result = MakeSampler();
+					//	break;
+					case EFilm:
+						result = MakeFilm(name, list);
+						break;
+					case EBSDF:
+						result = MakeBSDF(name, list);
+						break;
+					case EShape:
+						result = MakeShape(name, list);
+						break;
+					//case ELight:
+					//	result = MakeLight();
+					//	break;
+				}
+			}
 
-			if (tag == EFilm) node.attribute("type").set_value("film");
+			///*
+			//if (tag == EFilm) node.attribute("type").set_value("film");
 
-			std::string name = static_cast<std::string>(node.attribute("type").value());
-			result = ObjectFactory::createInstance(name, 
-                                                   m_list);
+			//result = ObjectFactory::createInstance(name, 
+                                                   //m_list);
 
 			for (Object *child : children) {
-				child->setParent(result);
+				//child->setParent(result);
 				result->addChild(child);
 			}
 
-			result->active();
+			//if (node.find_attribute("id")!=pugi::xml_attribute()) {
+			//	references[static_cast<std::string>(node.attribute("id").value())] = result;
+			//}
+			//result->active();
+			
 		}
 		else {
 			switch (tag) {

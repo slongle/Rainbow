@@ -160,4 +160,9 @@ Float Triangle::Area() const {
  	return static_cast<Float>(0.5) * Cross(p1-p0,p2-p0).Length();
 }
 
+
+Triangle * CreateWavefrontOBJ(PropertyList & list) {
+	return new Triangle();
+}
+
 RAINBOW_NAMESPACE_END
