@@ -13,9 +13,7 @@ public:
 	EClassType getClassType() const { return EBSDF; }
 };
 
-BSDF* CreateDiffuseBSDF(PropertyList &list) {
-	return new BSDF();
-}
+BSDF* CreateDiffuseBSDF(PropertyList &list);
 
 RAINBOW_NAMESPACE_END
 

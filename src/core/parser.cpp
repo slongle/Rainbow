@@ -83,11 +83,11 @@ void ParserXMLFile(const std::string & filename) {
 	tags["spectrum"]    = EColor;
 
 	tags["transform"]   = ETransform;
-	tags["ELookAt"]     = ELookAt;
-	tags["ETranslate"]  = ETranslate;
-	tags["EScale"]      = EScale;
-	tags["ERotate"]     = ERotate;
-	tags["EMatrix"]     = EMatrix;
+	tags["lookAt"]     = ELookAt;
+	tags["translate"]  = ETranslate;
+	tags["scale"]      = EScale;
+	tags["rotate"]     = ERotate;
+	tags["matrix"]     = EMatrix;
 
 
 	Transform m_transform;
@@ -103,7 +103,9 @@ void ParserXMLFile(const std::string & filename) {
 		if (tags.find(node.name()) == tags.end())
 			return nullptr;
 
+
 		ETag tag = tags[node.name()];
+		//std::cout << tag << std::endl;
 		if (tag == EScene)
 			node.append_attribute("type=scene");
 		else if (tag == ETransform)
@@ -201,7 +203,10 @@ void ParserXMLFile(const std::string & filename) {
 					break;
 				}
 				case EColor: {
-					list.setColor(node.attribute("name").value(), toColor(node.attribute("value").value()));
+					if (node.name() == "spectrum") {
+						// TODO: Fix Spectrum declared with wavelength
+					}
+					else list.setColor(node.attribute("name").value(), toColor(node.attribute("value").value()));
 					break;
 				}
 				case ETransform: {

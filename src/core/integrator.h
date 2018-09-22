@@ -8,13 +8,16 @@ RAINBOW_NAMESPACE_BEGIN
 
 class Integrator :public Object{
 public:
+	Integrator() {}
 	virtual void Render() = 0;
 };
 
 class SamplerIntegrator :public Integrator {
 public:
 	SamplerIntegrator() {}
-	void Render();
+	void Render () override;
+
+	EClassType getClassType() const override { return Object::EIntegrator; }
 };
 
 SamplerIntegrator* CreateSampleIntegrator(PropertyList &list);

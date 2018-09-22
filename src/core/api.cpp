@@ -1,5 +1,5 @@
 #include "api.h"
-#include "scene.h"
+
 
 #include "../cameras/perspective.h"
 #include "../shapes/triangle.h"

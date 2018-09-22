@@ -10,9 +10,7 @@ public:
 	Perspective() {}
 };
 
-Perspective* CreatePerspectiveCamera(PropertyList &list) {
-	return new Perspective();
-}
+Perspective* CreatePerspectiveCamera(PropertyList &list);
 
 RAINBOW_NAMESPACE_END
 

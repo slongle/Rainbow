@@ -2,13 +2,12 @@
 
 RAINBOW_NAMESPACE_BEGIN
 
-
 void SamplerIntegrator::Render() {
-
 }
 
+
 SamplerIntegrator * CreateSampleIntegrator(PropertyList & list) {
-	return nullptr;
+	return new SamplerIntegrator();
 }
 
 RAINBOW_NAMESPACE_END

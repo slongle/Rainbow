@@ -7,7 +7,7 @@ Camera::Camera() {
 
 void Camera::addChild(Object * child) {
 	if (child->getClassType() == EFilm) {
-		Assert(film != nullptr, "Camera has a film!");
+		Assert(film == nullptr, "Camera has a film!");
 		film = static_cast<Film*>(child);
 	}
 }

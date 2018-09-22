@@ -191,6 +191,7 @@
     <None Include="..\log\20180823.md" />
     <None Include="..\log\20180827.md" />
     <None Include="..\log\20180828.md" />
+    <None Include="..\log\20180922.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

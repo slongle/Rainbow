@@ -72,14 +72,14 @@ inline bool toBoolean(const std::string &str) {
 inline int toInteger(const std::string &str) {
 	char *end_ptr = nullptr;
 	int result = (int) strtol(str.c_str(), &end_ptr, 10);
-	Assert(*end_ptr != '\0', "Can't convert " + str + " to Integer type");
+	Assert((*end_ptr == '\0'), "Can't convert " + str + " to Integer type");
 	return result;
 }
 
 inline Float toFloat(const std::string &str) {
 	char *end_ptr = nullptr;
-	float result = (float)strtof(str.c_str(), &end_ptr);
-	Assert(*end_ptr != '\0', "Can't convert " + str + " to Float type");
+	float result = (float)strtof(str.c_str(), &end_ptr);	
+	Assert((*end_ptr == '\0'), "Can't convert " + str + " to Float type");
 	return result;
 }
 
