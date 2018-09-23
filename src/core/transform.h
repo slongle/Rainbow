@@ -41,6 +41,10 @@ public:
 		return false;
 	}
 
+	Float &operator [](const int index) {
+		return m[index / 4][index % 4];
+	}
+
 	Matrix4x4 operator * (const Matrix4x4 &m1) const {
 		Matrix4x4 ret;
 		for (int i = 0; i < 4; i++)

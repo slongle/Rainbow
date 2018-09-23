@@ -35,6 +35,7 @@ int main(int argc, char *argv[]) {
 	Point2i c(2);
 	cout << c << endl;*/
 
+	//std::string filename = "C:/Users/del/Desktop/cornell-box/scene.xml";
 	std::string filename = "C:/Users/del/Desktop/cbox/cbox.xml";
 	ParserXMLFile(filename);
 

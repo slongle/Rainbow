@@ -81,8 +81,9 @@ void ParserXMLFile(const std::string & filename) {
 	tags["string"]      = EString;
 	tags["vector"]      = EVector;
 	tags["spectrum"]    = EColor;
+	tags["rgb"]         = EColor;
 
-	tags["transform"]   = ETransform;
+	tags["transform"]  = ETransform;
 	tags["lookAt"]     = ELookAt;
 	tags["translate"]  = ETranslate;
 	tags["scale"]      = EScale;
@@ -96,6 +97,7 @@ void ParserXMLFile(const std::string & filename) {
 	std::function<Object *(pugi::xml_node, PropertyList, int)> ParserTag  =
 		[&](pugi::xml_node node, PropertyList list, int num) -> Object* {
 		//std::cout << node.find_attribute("id").value() << std::endl;
+		//std::cout << node.name() << std::endl;
 
 		if (node.type() == pugi::node_comment || node.type() == pugi::node_declaration)
 			return nullptr;
@@ -106,8 +108,10 @@ void ParserXMLFile(const std::string & filename) {
 
 		ETag tag = tags[node.name()];
 		//std::cout << tag << std::endl;
-		if (tag == EScene)
-			node.append_attribute("type=scene");
+		if (tag == EScene) {
+			node.append_attribute("type");
+			node.attribute("type").set_value("scene");
+		}
 		else if (tag == ETransform)
 			m_transform.Identify();
 		else if (tag == ERef)
@@ -169,9 +173,11 @@ void ParserXMLFile(const std::string & filename) {
 			//result = ObjectFactory::createInstance(name, 
                                                    //m_list);
 
-			for (Object *child : children) {
-				//child->setParent(result);
-				result->addChild(child);
+			if (result != nullptr) {
+				for (Object *child : children) {
+					//child->setParent(result);
+					result->addChild(child);
+				}
 			}
 
 			//if (node.find_attribute("id")!=pugi::xml_attribute()) {
@@ -206,7 +212,9 @@ void ParserXMLFile(const std::string & filename) {
 					if (node.name() == "spectrum") {
 						// TODO: Fix Spectrum declared with wavelength
 					}
-					else list.setColor(node.attribute("name").value(), toColor(node.attribute("value").value()));
+					else if (node.name() == "rgb") {
+						list.setColor(node.attribute("name").value(), toColor(node.attribute("value").value()));
+					}
 					break;
 				}
 				case ETransform: {

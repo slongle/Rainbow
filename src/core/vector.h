@@ -231,7 +231,23 @@ Vector3<T> Permute(const Vector3<T> &v, const int &x, const int &y, const int &z
 }
 
 inline Vector3f toVector(const std::string &str) {
-	Float tmp[3];
+	Vector3f ret;
+	char * endptr;
+#ifdef __FLOAT_TYPE
+	ret[0] = strtof(str.c_str(), &endptr);
+	for (int i = 1; i < 3; i++){
+		endptr++;
+		ret[i] = strtof(endptr, &endptr);
+	}
+#else
+	ret[0] = strtod(str.c_str(), &endptr);
+	for (int i = 1; i < 3; i++) {
+		endptr++;
+		ret[i] = strtod(endptr, &endptr);
+	}
+#endif // __FLOAT_TYPE
+	return ret;
+	/*Float tmp[3];
 	int num = 0;
 	std::string basStr = "";
 	for (size_t i = 0; i < str.length(); i++) {
@@ -244,7 +260,7 @@ inline Vector3f toVector(const std::string &str) {
 		else basStr += str[i];
 	}
 	tmp[2] = toFloat(basStr);
-	return Vector3f(tmp[0], tmp[1], tmp[2]);
+	return Vector3f(tmp[0], tmp[1], tmp[2]);*/
 }
 
 template<typename T>

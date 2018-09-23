@@ -4,7 +4,7 @@ RAINBOW_NAMESPACE_BEGIN
 
 void Scene::addChild(Object * child) {
 	if (child->getClassType() == ECamera) {		
-		cout << (camera == nullptr) << endl;
+		//cout << (camera == nullptr) << endl;
 		Assert(camera == nullptr, "Scene has a camera!");
 		camera = static_cast<Camera *>(child);
 	}

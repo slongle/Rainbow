@@ -92,24 +92,19 @@ Matrix4x4 Inverse(const Matrix4x4 &m1) {
 }
 
 Matrix4x4 toMatrix(const std::string & str) {
-	Float m[4][4];
-	int offset_x = 0, offset_y = 0;
-	std::string basStr = "";
-	for (size_t i = 0; i < str.length(); i++) {
-		if (str[i] == ' ') {
-			m[offset_x][offset_y] = toFloat(basStr);
-			offset_y++;
-			if (offset_y == 4) {
-				offset_y = 0; 
-				offset_x ++;
-			}
-			Assert(offset_x < 4, "Can't convert " + str + " to Matrix type");
-			basStr = "";
-		}
-		else basStr += str[i];
-	}
-	m[3][3] = toFloat(basStr);
-	return Matrix4x4(m);
+	Matrix4x4 ret;
+	char *endptr;
+#ifdef __FLOAT_TYPE
+	ret[0] = strtof(str.c_str(), &endptr);
+	for (int i = 1; i < 16; i++)
+		ret[i] = strtof(endptr, &endptr);
+#else
+	ret[0] = strtod(str.c_str(), &endptr);
+	for (int i = 1; i < 16; i++)
+		ret[i] = strtod(endptr, &endptr);
+#endif // __FLOAT_TYPE
+	//std::cout << ret << std::endl;
+	return ret;
 }
 
 Transform Translate(const Vector3f & delta) {
@@ -223,22 +218,27 @@ Transform LookAt(const Vector3f & target, const Vector3f & origin, const Vector3
 	cameraToWorld.m[3][3] = 1;
 
 	Vector3f dir = Normalize(target - origin);
+	//std::cout << dir << std::endl;
 	Vector3f left = Normalize(Cross(up, dir));
+	//std::cout << left << std::endl;
 	Vector3f newUp = Cross(dir, left);
+	//std::cout << newUp << std::endl;
 	cameraToWorld.m[0][0] = left[0];
 	cameraToWorld.m[1][0] = left[1];
 	cameraToWorld.m[2][0] = left[2];
 	cameraToWorld.m[3][0] = 0;
 
-	cameraToWorld.m[0][1] = up[0];
-	cameraToWorld.m[1][1] = up[1];
-	cameraToWorld.m[2][1] = up[2];
+	cameraToWorld.m[0][1] = newUp[0];
+	cameraToWorld.m[1][1] = newUp[1];
+	cameraToWorld.m[2][1] = newUp[2];
 	cameraToWorld.m[3][1] = 0;
 
-	cameraToWorld.m[0][2] = newUp[0];
-	cameraToWorld.m[1][2] = newUp[1];
-	cameraToWorld.m[2][2] = newUp[2];
+	cameraToWorld.m[0][2] = dir[0];
+	cameraToWorld.m[1][2] = dir[1];
+	cameraToWorld.m[2][2] = dir[2];
 	cameraToWorld.m[3][2] = 0;
+
+	//std::cout << cameraToWorld << std::endl;
 
 	return Transform(cameraToWorld,Inverse(cameraToWorld));
 }

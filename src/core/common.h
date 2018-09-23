@@ -31,7 +31,12 @@
 #define INV_SQRT_TWO 0.70710678118654752440f
 
 /* Define Float for changing precision conveniently*/
+#define __FLOAT_TYPE
+#ifdef __FLOAT_TYPE
 typedef float Float;
+#else
+typedef double Float;
+#endif
 
 RAINBOW_NAMESPACE_BEGIN
 
@@ -71,14 +76,18 @@ inline bool toBoolean(const std::string &str) {
 
 inline int toInteger(const std::string &str) {
 	char *end_ptr = nullptr;
-	int result = (int) strtol(str.c_str(), &end_ptr, 10);
+	int result = strtol(str.c_str(), &end_ptr, 10);
 	Assert((*end_ptr == '\0'), "Can't convert " + str + " to Integer type");
 	return result;
 }
 
 inline Float toFloat(const std::string &str) {
 	char *end_ptr = nullptr;
-	float result = (float)strtof(str.c_str(), &end_ptr);	
+#ifdef __FLOAT_TYPE
+	float result = strtof(str.c_str(), &end_ptr);
+#else
+	double result = strtod(str.c_str(), &end_ptr);
+#endif // __FLOAT_TYPE
 	Assert((*end_ptr == '\0'), "Can't convert " + str + " to Float type");
 	return result;
 }
