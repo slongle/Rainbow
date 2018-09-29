@@ -3,7 +3,7 @@
 RAINBOW_NAMESPACE_BEGIN
 
 template<typename T>
-inline bool Bounds3<T>::Intersect(const Ray & ray) const{
+bool Bounds3<T>::IntersectP(const Ray & ray) const{
 	Float t0 = 0, t1 = ray.tMax;
 	for (int i = 0; i < 3; i++) {
 		Float invDir = 1 / ray.d[i];
@@ -17,5 +17,7 @@ inline bool Bounds3<T>::Intersect(const Ray & ray) const{
 	}
 	return true;
 }
+
+template class Bounds3<Float>;
 
 RAINBOW_NAMESPACE_END

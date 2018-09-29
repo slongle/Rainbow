@@ -3,6 +3,7 @@
 
 #include "../cameras/perspective.h"
 #include "../shapes/triangle.h"
+#include "../shapes/cube.h"
 
 RAINBOW_NAMESPACE_BEGIN
 

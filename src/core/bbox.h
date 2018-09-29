@@ -1,8 +1,8 @@
 #ifndef __BBOX_H
 #define __BBOX_H
 
-#include "common.h"
 #include "ray.h"
+#include "interaction.h"
 
 RAINBOW_NAMESPACE_BEGIN
 
@@ -54,9 +54,19 @@ public:
 		return pMin == b.pMin && pMax == b.pMax;
 	}
 	
-	bool Intersect(const Ray &ray) const;
+	bool IntersectP(const Ray &ray) const;
 
-	std::string toString() const {
+	Vector3<T> Diagonal() const { return pMax - pMin; }
+	T Area() const {
+		Vector3<T> det = Diagonal();
+		return 2 * (det.x * det.y + det.y * det.z + det.x * det.z);
+	}
+	T Volume() const {
+		Vector3<T> det = Diagonal();
+		return det.x * det.y * det.z;
+	}
+
+	std::string toString(const int &spaceNum = 0) const {
 		return
 		indent("[\n", spaceNum) +
 			indent(tfm::format("pMin = %s,\n", pMin), spaceNum + 4) +

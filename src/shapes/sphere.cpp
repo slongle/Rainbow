@@ -35,7 +35,25 @@ bool Sphere::Intersect(const Ray & ray, Float * tHit, Interaction * inter) const
 }
 
 bool Sphere::IntersectP(const Ray & ray) const {
-	return false;
+	Ray r = (*WorldToObject)(ray);
+	Float ox = r.o.x, oy = r.o.y, oz = r.o.z;
+	Float dx = r.d.x, dy = r.d.y, dz = r.d.z;
+
+	Float a = dx * dx + dy * dy + dz * dz;
+	Float b = 2 * (ox*dx + oy * dy + oz * dz);
+	Float c = ox * ox + oy * oy + oz * oz;
+
+	Float t0, t1;
+	if (!Quadratic(a, b, c, &t0, &t1)) return false;
+
+	if (t0 > r.tMax || t1 < 0) return false;
+	Float tShapeHit = t0;
+	if (tShapeHit < 0) {
+		tShapeHit = t1;
+		if (t1 > r.tMax) return false;
+	}
+
+	return true;
 }
 
 Float Sphere::Area() const {
@@ -45,5 +63,6 @@ Float Sphere::Area() const {
 Sphere* CreateSphere(const PropertyList &list) {
 	return nullptr;
 }
+
 
 RAINBOW_NAMESPACE_END

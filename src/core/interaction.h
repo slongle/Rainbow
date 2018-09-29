@@ -1,7 +1,6 @@
 #ifndef __INTERACTION_H
 #define __INTERACTION_H
 
-#include "common.h"
 #include "vector.h"
 
 RAINBOW_NAMESPACE_BEGIN

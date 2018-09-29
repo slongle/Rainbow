@@ -6,6 +6,7 @@
 //#include "core/film.h"
 #include "core/parser.h"
 //#include "core/object.h"
+#include "shapes/sphere.h"
 
 using namespace rainbow;
 

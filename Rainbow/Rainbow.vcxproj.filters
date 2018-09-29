@@ -123,6 +123,9 @@
     <ClCompile Include="..\src\cameras\perspective.cpp">
       <Filter>Source Files\cameras</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\shapes\cube.cpp">
+      <Filter>Source Files\shapes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\core\bbox.h">
@@ -218,6 +221,9 @@
     <ClInclude Include="..\src\cameras\perspective.h">
       <Filter>Source Files\cameras</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\shapes\cube.h">
+      <Filter>Source Files\shapes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\log\20180811.md">
@@ -248,6 +254,9 @@
       <Filter>Log Files</Filter>
     </None>
     <None Include="..\log\20180922.md">
+      <Filter>Log Files</Filter>
+    </None>
+    <None Include="..\log\20180924.md">
       <Filter>Log Files</Filter>
     </None>
   </ItemGroup>

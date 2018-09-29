@@ -145,6 +145,7 @@
     <ClCompile Include="..\src\filters\box.cpp" />
     <ClCompile Include="..\src\filters\tent.cpp" />
     <ClCompile Include="..\src\main.cpp" />
+    <ClCompile Include="..\src\shapes\cube.cpp" />
     <ClCompile Include="..\src\shapes\sphere.cpp" />
     <ClCompile Include="..\src\shapes\triangle.cpp" />
   </ItemGroup>
@@ -178,6 +179,7 @@
     <ClInclude Include="..\src\core\vector.h" />
     <ClInclude Include="..\src\filters\box.h" />
     <ClInclude Include="..\src\filters\tent.h" />
+    <ClInclude Include="..\src\shapes\cube.h" />
     <ClInclude Include="..\src\shapes\sphere.h" />
     <ClInclude Include="..\src\shapes\triangle.h" />
   </ItemGroup>
@@ -192,6 +194,7 @@
     <None Include="..\log\20180827.md" />
     <None Include="..\log\20180828.md" />
     <None Include="..\log\20180922.md" />
+    <None Include="..\log\20180924.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

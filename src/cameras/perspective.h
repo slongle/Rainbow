@@ -1,5 +1,5 @@
-#ifndef __RAINBOW_PERSPECTIVE
-#define __RAINBOW_PERSPECTIVE
+#ifndef __PERSPECTIVE_H
+#define __PERSPECTIVE_H
 
 #include "../core/camera.h"
 
@@ -15,4 +15,4 @@ Perspective* CreatePerspectiveCamera(PropertyList &list);
 RAINBOW_NAMESPACE_END
 
 
-#endif // !__RAINBOW_PERSPECTIVE
+#endif // !__PERSPECTIVE_H

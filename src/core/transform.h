@@ -1,8 +1,6 @@
 #ifndef __TRANSFORM_H
 #define __TRANSFORM_H
 
-#include "common.h"
-#include "vector.h"
 #include "ray.h"
 #include "bbox.h"
 #include "interaction.h"

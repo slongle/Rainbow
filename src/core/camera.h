@@ -1,8 +1,6 @@
 #ifndef __CAMERA_H
 #define __CAMERA_H
 
-#include "common.h"
-#include "vector.h"
 #include "ray.h"
 #include "object.h"
 #include "film.h"

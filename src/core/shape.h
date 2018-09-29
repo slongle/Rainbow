@@ -1,11 +1,7 @@
 #ifndef __SHAPE_H
 #define __SHAPE_H
 
-#include "bbox.h"
-#include "common.h"
-#include "interaction.h"
 #include "object.h"
-#include "ray.h"
 #include "transform.h"
 
 RAINBOW_NAMESPACE_BEGIN
@@ -23,7 +19,7 @@ public:
 	virtual bool IntersectP(const Ray & ray) const;
 
 	virtual Float Area() const = 0;
-	EClassType getClassType() const { return EShape; }
+	EClassType getClassType() const override { return EShape; }
 
 	const Transform *ObjectToWorld, *WorldToObject;
 };
