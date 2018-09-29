@@ -95,17 +95,17 @@ public:
 };
 
 template<typename T>
-T Dot(Vector2<T> u, Vector2<T> v) {
+inline T Dot(Vector2<T> u, Vector2<T> v) {
 	return u.x*v.x + u.y*v.y;
 }
 
 template<typename T>
-T Cross(Vector2<T> u, Vector2<T> v) {
+inline T Cross(Vector2<T> u, Vector2<T> v) {
 	return u.x*v.y - v.x*u.y;
 }
 
 template<typename T>
-Vector2<T> Normalize(Vector2<T> v) {
+inline Vector2<T> Normalize(Vector2<T> v) {
 	return v / v.Length();
 }
 
@@ -194,12 +194,12 @@ public:
 };
 
 template<typename T>
-T Dot(const Vector3<T> u, const Vector3<T> v) {
+inline T Dot(const Vector3<T> u, const Vector3<T> v) {
 	return u.x*v.x + u.y*v.y + u.z*v.z;
 }
 
 template<typename T>
-Vector3<T> Cross(const Vector3<T> u, const Vector3<T> v) {
+inline Vector3<T> Cross(const Vector3<T> u, const Vector3<T> v) {
 	Float ux = u.x, uy = u.y, uz = u.z;
 	Float vx = v.x, vy = v.y, vz = v.z;
 	return Vector3<T>(
@@ -209,24 +209,24 @@ Vector3<T> Cross(const Vector3<T> u, const Vector3<T> v) {
 }
 
 template<typename T>
-Vector3<T> Normalize(const Vector3<T> &v) {
+inline Vector3<T> Normalize(const Vector3<T> &v) {
 	return v / v.Length();
 }
 
 template<typename T>
-Vector3<T> Abs(const Vector3<T> &v) {
+inline Vector3<T> Abs(const Vector3<T> &v) {
 	return Vector3<T>(std::abs(v.x), std::abs(v.y), std::abs(v.z));
 }
 
 template<typename T>
-int MaxDimension(const Vector3<T> &v) {
+inline int MaxDimension(const Vector3<T> &v) {
 	if (v.x > v.y && v.x > v.z) return 0;
 	if (v.y > v.z) return 1;
 	return 2;
 }
 
 template<typename T>
-Vector3<T> Permute(const Vector3<T> &v, const int &x, const int &y, const int &z) {
+inline Vector3<T> Permute(const Vector3<T> &v, const int &x, const int &y, const int &z) {
 	return Vector3<T>(v[x], v[y], v[z]);
 }
 
@@ -353,36 +353,36 @@ public:
 };
 
 template<typename T>
-Point3<T> Min(const Point3<T> &p1, const Point3<T> &p2) {
+inline Point3<T> Min(const Point3<T> &p1, const Point3<T> &p2) {
 	return Point3<T>(std::min(p1.x, p2.x),
                      std::min(p1.y, p2.y),
                      std::min(p1.z, p2.z));
 }
 
 template<typename T>
-Point3<T> Max(const Point3<T> &p1, const Point3<T> &p2) {
+inline Point3<T> Max(const Point3<T> &p1, const Point3<T> &p2) {
 	return Point3<T>(std::max(p1.x, p2.x),
                      std::max(p1.y, p2.y),
                      std::max(p1.z, p2.z));
 }
 
 template<typename T>
-Float DistanceSquare(const Point3<T> &u, const Point3<T> &v) {
+inline Float DistanceSquare(const Point3<T> &u, const Point3<T> &v) {
 	return (u.x - v.x)*(u.x - v.x) + (u.y - v.y)*(u.y - v.y) + (u.z - v.z)*(u.z - v.z);
 }
 
 template<typename T>
-Float Distance(const Point3<T> &u, const Point3<T> &v) {
+inline Float Distance(const Point3<T> &u, const Point3<T> &v) {
 	return std::sqrt(DistanceSquare(u, v));
 }
 
 template<typename T>
-Point3<T> Lerp(const Point3<T> &u, const Point3<T> &v, Float t) {
+inline Point3<T> Lerp(const Point3<T> &u, const Point3<T> &v, Float t) {
 	return u * (1 - t) + v * t;
 }
 
 template<typename T>
-Point3<T> Permute(const Point3<T> &p, const int &x, const int &y, const int &z) {
+inline Point3<T> Permute(const Point3<T> &p, const int &x, const int &y, const int &z) {
 	return Point3<T>(p[x], p[y], p[z]);
 }
 
@@ -413,17 +413,17 @@ public:
 };
 
 template<typename T>
-T Dot(const Normal3<T> &u, const Normal3<T> &v) {
+inline T Dot(const Normal3<T> &u, const Normal3<T> &v) {
 	return u.x*v.x + u.y*v.y + u.z*v.z;
 }
 
 template<typename T>
-T Dot(const Normal3<T> &u, const Vector3<T> &v) {
+inline T Dot(const Normal3<T> &u, const Vector3<T> &v) {
 	return u.x*v.x + u.y*v.y + u.z*v.z;
 }
 
 template<typename T>
-Normal3<T> Cross(const Normal3<T> &u, const Normal3<T> &v) {
+inline Normal3<T> Cross(const Normal3<T> &u, const Normal3<T> &v) {
 	double ux = u.x, uy = u.y, uz = u.z;
 	double vx = v.x, vy = v.y, vz = v.z;
 	return Normal3<T>(uy * vz - uz * vy,
@@ -432,7 +432,7 @@ Normal3<T> Cross(const Normal3<T> &u, const Normal3<T> &v) {
 }
 
 template<typename T>
-Vector3<T> Cross(const Normal3<T> &u, const Vector3<T> &v) {
+inline Vector3<T> Cross(const Normal3<T> &u, const Vector3<T> &v) {
 	Float ux = u.x, uy = u.y, uz = u.z;
 	Float vx = v.x, vy = v.y, vz = v.z;
 	return Vector3<T>(uy * vz - uz * vy,
@@ -441,7 +441,7 @@ Vector3<T> Cross(const Normal3<T> &u, const Vector3<T> &v) {
 }
 
 template<typename T>
-Vector3<T> Cross(const Vector3<T> &u, const Normal3<T> &v) {
+inline Vector3<T> Cross(const Vector3<T> &u, const Normal3<T> &v) {
 	Float ux = u.x, uy = u.y, uz = u.z;
 	Float vx = v.x, vy = v.y, vz = v.z;
 	return Vector3<T>(uy * vz - uz * vy,
@@ -450,7 +450,7 @@ Vector3<T> Cross(const Vector3<T> &u, const Normal3<T> &v) {
 }
 
 template<typename T>
-Normal3<T> FaceForward(const Normal3<T> &n, const Vector3<T> &v) {
+inline Normal3<T> FaceForward(const Normal3<T> &n, const Vector3<T> &v) {
 	Float dot = Dot(n, v);
 	if (dot != 0)
 		return dot > 0 ? n : -n;
