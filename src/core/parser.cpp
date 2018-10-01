@@ -95,8 +95,8 @@ Scene* ParserXMLFile(const std::string & filename) {
 	Transform m_transform;
 	std::map<std::string, Object*> references;
 
-	std::function<Object *(pugi::xml_node, PropertyList, int)> ParserTag  =
-		[&](pugi::xml_node node, PropertyList list, int num) -> Object* {
+	std::function<Object *(pugi::xml_node, PropertyList&, int)> ParserTag  =
+		[&](pugi::xml_node node, PropertyList &list, int num) -> Object* {
 		//std::cout << node.find_attribute("id").value() << std::endl;
 		//std::cout << node.name() << std::endl;
 
@@ -145,22 +145,22 @@ Scene* ParserXMLFile(const std::string & filename) {
 						result = MakeScene();
 						break;
 					case EIntegrator:
-						result = MakeIntegrator(name, list);
+						result = MakeIntegrator(name, m_list);
 						break;
-					case ECamera:
-						result = MakeCamera(name, list);
+					case ECamera:						
+						result = MakeCamera(name, m_list);
 						break;
 					//case ESampler:
 					//	result = MakeSampler();
 					//	break;
 					case EFilm:
-						result = MakeFilm(name, list);
+						result = MakeFilm(name, m_list);
 						break;
 					case EBSDF:
-						result = MakeBSDF(name, list);
+						result = MakeBSDF(name, m_list);
 						break;
 					case EShape:
-						result = MakeShape(name, list);
+						result = MakeShape(name, m_list);
 						break;
 					//case ELight:
 					//	result = MakeLight();

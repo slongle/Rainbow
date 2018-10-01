@@ -30,8 +30,8 @@ void rainbow::Film::addChild(Object *child) {
 Film * CreateFilm(PropertyList & list) {
 	std::string filename = list.getString("filename", "output.png");
 	Point2i resolution;
-	resolution.x = list.getInteger("height", 1280);
-	resolution.y = list.getInteger("width" , 720);
+	resolution.x = list.getInteger("width" , 1280);
+	resolution.y = list.getInteger("height", 720);
 	return new Film(filename, resolution);
 }
 
