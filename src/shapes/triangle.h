@@ -5,7 +5,8 @@
 
 RAINBOW_NAMESPACE_BEGIN
 
-struct TriangleMesh {
+class TriangleMesh :public Shape {
+public:
 	TriangleMesh(const Transform &ObjectToWorld, const int &_nTriangles, const int &_nVertices,
 		const int *_vertexIndices, const Point3f *_p, const Normal3f *_n);
 

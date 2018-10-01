@@ -2,6 +2,11 @@
 
 RAINBOW_NAMESPACE_BEGIN
 
+Cube::Cube(const Transform * _ObjectToWorld, const Transform * _WorldToObject) :Shape(_ObjectToWorld, _WorldToObject) {
+
+}
+
+
 Bounds3f Cube::ObjectBounds() const {
 	return bound;
 }

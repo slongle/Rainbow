@@ -4,6 +4,7 @@
 #include "../cameras/perspective.h"
 #include "../shapes/triangle.h"
 #include "../shapes/cube.h"
+#include "../integrators/whitted.h"
 
 RAINBOW_NAMESPACE_BEGIN
 
@@ -13,8 +14,8 @@ Scene * MakeScene() {
 
 Integrator * MakeIntegrator(std::string &name, PropertyList &list) {
 	Integrator* integrator = nullptr;
-	if (name == "path") {
-		integrator = CreateSampleIntegrator(list);
+	if (name == "whitted") {
+		integrator = CreateWhittedIntegrator(list);
 	}
 	return integrator;
 }

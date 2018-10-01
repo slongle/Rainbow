@@ -144,6 +144,7 @@
     <ClCompile Include="..\src\core\vector.cpp" />
     <ClCompile Include="..\src\filters\box.cpp" />
     <ClCompile Include="..\src\filters\tent.cpp" />
+    <ClCompile Include="..\src\integrators\whitted.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\shapes\cube.cpp" />
     <ClCompile Include="..\src\shapes\sphere.cpp" />
@@ -179,6 +180,7 @@
     <ClInclude Include="..\src\core\vector.h" />
     <ClInclude Include="..\src\filters\box.h" />
     <ClInclude Include="..\src\filters\tent.h" />
+    <ClInclude Include="..\src\integrators\whitted.h" />
     <ClInclude Include="..\src\shapes\cube.h" />
     <ClInclude Include="..\src\shapes\sphere.h" />
     <ClInclude Include="..\src\shapes\triangle.h" />

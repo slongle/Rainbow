@@ -2,8 +2,8 @@
 
 RAINBOW_NAMESPACE_BEGIN
 
-Film::Film(const Point2i & _resolution, std::unique_ptr<Filter> _filter, const std::string & _filename) :
-	resolution(_resolution), filter(std::move(_filter)), filename(_filename) {
+Film::Film(const std::string & _filename, const Point2i & _resolution) :
+	resolution(_resolution), filename(_filename) {
 	pixels = std::unique_ptr<Pixel[]>(new Pixel[resolution.x * resolution.y]);
 }
 
@@ -24,8 +24,15 @@ void Film::SaveImage() {
 	WriteImage(filename, rgb, resolution);
 }
 
+void rainbow::Film::addChild(Object *child) {	
+}
+
 Film * CreateFilm(PropertyList & list) {
-	return new Film();
+	std::string filename = list.getString("filename", "output.png");
+	Point2i resolution;
+	resolution.x = list.getInteger("height", 1280);
+	resolution.y = list.getInteger("width" , 720);
+	return new Film(filename, resolution);
 }
 
 RAINBOW_NAMESPACE_END

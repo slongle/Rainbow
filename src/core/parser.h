@@ -8,7 +8,7 @@
 
 RAINBOW_NAMESPACE_BEGIN
 
-void ParserXMLFile(const std::string &filename);
+Scene* ParserXMLFile(const std::string &filename);
 
 RAINBOW_NAMESPACE_END
 

@@ -1,26 +1,25 @@
 #ifndef __INTEGRATOR_H
 #define __INTEGRATOR_H
 
-#include "common.h"
-#include "object.h"
+#include "scene.h"
 
 RAINBOW_NAMESPACE_BEGIN
 
 class Integrator :public Object{
 public:
 	Integrator() {}
-	virtual void Render() = 0;
-};
-
-class SamplerIntegrator :public Integrator {
-public:
-	SamplerIntegrator() {}
-	void Render () override;
+	virtual void Render(const Scene &scene) = 0;
 
 	EClassType getClassType() const override { return Object::EIntegrator; }
 };
 
-SamplerIntegrator* CreateSampleIntegrator(PropertyList &list);
+//class SamplerIntegrator :public Integrator {
+//public:
+//	SamplerIntegrator() {}
+//	void Render (const Scene &scene) override;
+//};
+//
+//SamplerIntegrator* CreateSampleIntegrator(PropertyList &list);
 
 RAINBOW_NAMESPACE_END
 

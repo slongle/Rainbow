@@ -13,8 +13,8 @@ public:
 
 	//virtual Ray GenerateRay(const Point2i p) const = 0;
 
-	void addChild(Object *child);
-	EClassType getClassType() const { return ECamera; }
+	void addChild(Object *child) override;
+	EClassType getClassType() const override { return ECamera; }
 
 	Film* film;
 };

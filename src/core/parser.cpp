@@ -2,7 +2,7 @@
 
 RAINBOW_NAMESPACE_BEGIN
 
-void ParserXMLFile(const std::string & filename) {
+Scene* ParserXMLFile(const std::string & filename) {
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file(filename.c_str());
 	
@@ -67,6 +67,7 @@ void ParserXMLFile(const std::string & filename) {
 	tags["scene"]       = EScene;
 	tags["integrator"]  = EIntegrator;
 	tags["sensor"]      = ECamera;
+	tags["camera"]      = ECamera;
 	tags["sampler"]     = ESampler;
 	tags["film"]        = EFilm;
 	tags["bsdf"]        = EBSDF;
@@ -272,7 +273,8 @@ void ParserXMLFile(const std::string & filename) {
 	};
 
 	PropertyList prop;
-	ParserTag(*doc.begin(), prop, 0);
+	Scene* scene = static_cast<Scene*>(ParserTag(*doc.begin(), prop, 0));
+	return scene;
 }
 
 RAINBOW_NAMESPACE_END

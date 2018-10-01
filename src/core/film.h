@@ -20,12 +20,13 @@ RAINBOW_NAMESPACE_BEGIN
 class Film : public Object{
 public:
 	Film() {}
-	Film(const Point2i &_resolution, std::unique_ptr<Filter> _filter, const std::string &_filename);
+	Film(const std::string & _filename, const Point2i & _resolution);
 
 
 	void SaveImage();
 
-	EClassType getClassType() const { return EFilm; }
+	void addChild(Object *child) override;
+	EClassType getClassType() const override { return EFilm; }
 
 	const std::string filename;
 	const Point2i resolution;

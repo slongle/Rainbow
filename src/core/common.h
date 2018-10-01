@@ -61,6 +61,8 @@ typedef Bounds3<Float> Bounds3f;
 
 class PropertyList;
 class Shape;
+class Integrator;
+class Scene;
 class Intersection;
 class SurfaceInteraction;
 

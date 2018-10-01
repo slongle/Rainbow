@@ -7,10 +7,7 @@ RAINBOW_NAMESPACE_BEGIN
 
 class Cube :public Shape {
 public:
-	Cube(const Transform *_ObjectToWorld, const Transform *_WorldToObject) :
-		Shape(_ObjectToWorld, _WorldToObject) {
-		bound = (*ObjectToWorld)(Bounds3f(Point3f(-1, -1, -1), Point3f(1, 1, 1)));
-	}
+	Cube(const Transform *_ObjectToWorld, const Transform *_WorldToObject);
 
 	Bounds3f ObjectBounds() const override;
 
@@ -18,7 +15,7 @@ public:
 	bool IntersectP(const Ray & ray) const override;
 
 	Float Area() const override; 
-
+private:
 	Bounds3f bound;
 };
 

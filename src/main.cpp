@@ -6,9 +6,15 @@
 //#include "core/film.h"
 #include "core/parser.h"
 //#include "core/object.h"
-#include "shapes/sphere.h"
+//#include "shapes/sphere.h"
 
 using namespace rainbow;
+
+void Render(const Scene* scene) {
+	Assert(scene->integrator != nullptr, "Hasn't Parsed Integrator!");
+	Integrator* integrator = scene->integrator;
+	integrator->Render(*scene);
+}
 
 int main(int argc, char *argv[]) {
 	/*int height = 100;
@@ -37,8 +43,9 @@ int main(int argc, char *argv[]) {
 	cout << c << endl;*/
 
 	//std::string filename = "C:/Users/del/Desktop/cornell-box/scene.xml";
-	std::string filename = "C:/Users/del/Desktop/cbox/cbox.xml";
-	ParserXMLFile(filename);
-
+	//std::string filename = "C:/Users/del/Desktop/cbox/cbox.xml";
+	std::string filename = "C:/Users/del/Desktop/cbox-Rainbow/cbox-distributed.xml";
+	Scene* scene = ParserXMLFile(filename);
+	Render(scene);
 	return 0;
 }
