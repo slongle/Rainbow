@@ -94,12 +94,12 @@ inline Float toFloat(const std::string &str) {
 	return result;
 }
 
-inline Float radToDeg(Float theta) {
-	return theta * M_PI / 180;
+inline Float Radians(Float deg) {
+	return deg * M_PI / 180;
 }
 
-inline Float degToRad(Float theta) {
-	return theta * 180 / M_PI;
+inline Float Degrees(Float rad) {
+	return rad * 180 / M_PI;
 }
 
 inline bool Quadratic(Float a, Float b, Float c, Float * t0, Float * t1) {

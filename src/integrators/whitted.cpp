@@ -4,7 +4,15 @@ RAINBOW_NAMESPACE_BEGIN
 
 void WhittedIntegrator::Render(const Scene & scene) {
 	Camera* camera = scene.camera;
-	camera->film->SaveImage();
+	Film* film = camera->film;
+	Ray ray;
+	for (int y = 0; y < film->resolution.y; y++) {
+		for (int x = 0; x < film->resolution.x; x++) {
+			// TODO: Implement Sampler
+			camera->GenerateRay(ray, Point2f(x + 0.1f, y + 0.1f));
+		}
+	}
+	film->SaveImage();
 }
 
 WhittedIntegrator* CreateWhittedIntegrator(const PropertyList &list) {

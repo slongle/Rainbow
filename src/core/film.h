@@ -18,8 +18,7 @@ RAINBOW_NAMESPACE_BEGIN
 */
 
 class Film : public Object{
-public:
-	Film() {}
+public:	
 	Film(const std::string & _filename, const Point2i & _resolution);
 
 
@@ -30,6 +29,7 @@ public:
 
 	const std::string filename;
 	const Point2i resolution;
+	const Float aspect;
 	std::unique_ptr<Filter> filter;
 
 private:

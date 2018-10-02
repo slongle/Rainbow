@@ -112,8 +112,8 @@ inline Vector2<T> Normalize(Vector2<T> v) {
 template<typename T>
 class Vector3 {
 public:
-	Vector3(T _v = 0) { x = y = z = _v; Assert(!HasNaNs(), "Vector3 has NaN"); }
-	Vector3(T _x, T _y, T _z) { x = _x; y = _y; z = _z; Assert(!HasNaNs(), "Vector3 has NaN"); }
+	Vector3(const T _v = 0) { x = y = z = _v; Assert(!HasNaNs(), "Vector3 has NaN"); }
+	Vector3(const T _x, const T _y, const T _z) { x = _x; y = _y; z = _z; Assert(!HasNaNs(), "Vector3 has NaN"); }
 
 	bool HasNaNs() const {
 		return isNaN(x) || isNaN(y) || isNaN(z);
@@ -212,6 +212,10 @@ template<typename T>
 inline Vector3<T> Normalize(const Vector3<T> &v) {
 	return v / v.Length();
 }
+template<typename T>
+inline Vector3<T> Normalize(const Point3<T> &p) {
+	return Normalize(Vector3<T>(p));
+}
 
 template<typename T>
 inline Vector3<T> Abs(const Vector3<T> &v) {
@@ -266,8 +270,8 @@ inline Vector3f toVector(const std::string &str) {
 template<typename T>
 class Point2 {
 public:
-	Point2(T _v = 0) { x = y = _v; Assert(!HasNaNs(), "Point2 has NaN"); }
-	Point2(T _x, T _y) :x(_x), y(_y) { Assert(!HasNaNs(), "Point2 has NaN"); }
+	Point2(const T _v = 0) { x = y = _v; Assert(!HasNaNs(), "Point2 has NaN"); }
+	Point2(const T _x, const T _y) :x(_x), y(_y) { Assert(!HasNaNs(), "Point2 has NaN"); }
 	explicit Point2(const Point3<T> &u) :x(u.x), y(u.y) { Assert(!HasNaNs(), "Point2 has NaN"); }
 
 	bool HasNaNs() { return isNaN(x) || isNaN(y); }
@@ -287,8 +291,8 @@ public:
 template<typename T>
 class Point3 {
 public:
-	Point3(T _v = 0) { x = y = z = _v; Assert(!HasNaNs(), "Point3 has NaN"); }
-	Point3(T _x, T _y, T _z) :x(_x), y(_y), z(_z) { Assert(!HasNaNs(), "Point3 has NaN"); }
+	Point3(const T _v = 0) { x = y = z = _v; Assert(!HasNaNs(), "Point3 has NaN"); }
+	Point3(const T _x, const T _y, const T _z) :x(_x), y(_y), z(_z) { Assert(!HasNaNs(), "Point3 has NaN"); }
 	template<typename U> 
 	explicit Point3(const Point3<U> &v) :x(T(v.x)), y(T(v.y)), z(T(v.z)) { Assert(!HasNaNs(), "Point3 has NaN"); }
 	template<typename U> 
@@ -389,8 +393,8 @@ inline Point3<T> Permute(const Point3<T> &p, const int &x, const int &y, const i
 template<typename T>
 class Normal3 {
 public:
-	Normal3(T _v = 0) { x = y = z = _v; Assert(!HasNaNs(), "Normal3 has NaN"); }
-	Normal3(T _x, T _y, T _z) :x(_x), y(_y), z(_z) { Assert(!HasNaNs(), "Normal3 has NaN"); }
+	Normal3(const T _v = 0) { x = y = z = _v; Assert(!HasNaNs(), "Normal3 has NaN"); }
+	Normal3(const T _x, const T _y, const T _z) :x(_x), y(_y), z(_z) { Assert(!HasNaNs(), "Normal3 has NaN"); }
 	explicit Normal3(const Vector3<T> &v) :x(v.x), y(v.y), z(v.z) { Assert(!HasNaNs(), "Normal3 has NaN"); }
 	explicit Normal3(const Point3<T> &p) :x(p.x), y(p.y), z(p.z) { Assert(!HasNaNs(), "Normal3 has NaN"); }
 

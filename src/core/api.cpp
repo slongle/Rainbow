@@ -20,10 +20,10 @@ Integrator * MakeIntegrator(std::string &name, PropertyList &list) {
 	return integrator;
 }
 
-Camera * MakeCamera(std::string &name, PropertyList &list) {
+Camera * MakeCamera(std::string &name, PropertyList &list, const Film* film) {
 	Camera *camera = nullptr;
 	if (name == "perspective") {
-		camera = CreatePerspectiveCamera(list);
+		camera = CreatePerspectiveCamera(list, film);
 	}
 	return camera;
 }

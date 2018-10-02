@@ -2,7 +2,9 @@
 
 RAINBOW_NAMESPACE_BEGIN
 
-Camera::Camera() {
+Camera::Camera(const Transform& _CameraToWorld) :
+	CameraToWorld(_CameraToWorld), WorldToCamera(Inverse(CameraToWorld)) {
+
 }
 
 void Camera::addChild(Object * child) {

@@ -3,7 +3,7 @@
 RAINBOW_NAMESPACE_BEGIN
 
 Film::Film(const std::string & _filename, const Point2i & _resolution) :
-	resolution(_resolution), filename(_filename) {
+	resolution(_resolution), filename(_filename), aspect(static_cast<Float>(resolution.x) / resolution.y) {
 	pixels = std::unique_ptr<Pixel[]>(new Pixel[resolution.x * resolution.y]);
 }
 

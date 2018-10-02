@@ -152,6 +152,7 @@ private:
 	Matrix4x4 m, mInv;
 };
 
+Transform Translate(const Float& x, const Float& y, const Float& z);
 Transform Translate(const Vector3f &delta);
 Transform Scale(const Vector3f &scale);
 Transform Scale(Float x, Float y, Float z);
@@ -160,6 +161,7 @@ Transform RotateY(Float theta);
 Transform RotateZ(Float theta);
 Transform Rotate(Float theta, const Vector3f &axis);
 Transform LookAt(const Vector3f &pos, const Vector3f &look, const Vector3f &up);
+Transform Perspective(const Float &fov, const Float& near, const Float& far, const Float& aspect);
 
 RAINBOW_NAMESPACE_END
 

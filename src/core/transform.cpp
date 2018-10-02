@@ -107,6 +107,18 @@ Matrix4x4 toMatrix(const std::string & str) {
 	return ret;
 }
 
+Transform Translate(const Float& x,const Float& y,const Float& z) {
+	Matrix4x4 m(1, 0, 0, x,
+		0, 1, 0, y,
+		0, 0, 1, z,
+		0, 0, 0, 1);
+	Matrix4x4 mInv(1, 0, 0, -x,
+		0, 1, 0, -y,
+		0, 0, 1, -z,
+		0, 0, 0, 1);
+	return Transform(m, mInv);
+}
+
 Transform Translate(const Vector3f & delta) {
 	Matrix4x4 m(1, 0, 0, delta.x,
 		        0, 1, 0, delta.y,
@@ -144,8 +156,8 @@ Transform Scale(Float x, Float y, Float z) {
 }
 
 Transform RotateX(Float theta) {
-	Float sinTheta = std::sin(radToDeg(theta));
-	Float cosTheta = std::cos(radToDeg(theta));
+	Float sinTheta = std::sin(Radians(theta));
+	Float cosTheta = std::cos(Radians(theta));
 	Matrix4x4 m(1, 0, 0, 0,
 		        0, cosTheta, -sinTheta, 0,
 		        0, sinTheta, cosTheta, 0,
@@ -158,8 +170,8 @@ Transform RotateX(Float theta) {
 }
 
 Transform RotateY(Float theta) {
-	Float sinTheta = std::sin(radToDeg(theta));
-	Float cosTheta = std::cos(radToDeg(theta));
+	Float sinTheta = std::sin(Radians(theta));
+	Float cosTheta = std::cos(Radians(theta));
 	Matrix4x4 m(cosTheta, 0,  sinTheta, 0,
 		               0, 1,         0, 0,
 		       -sinTheta, 0,  cosTheta, 0,
@@ -172,8 +184,8 @@ Transform RotateY(Float theta) {
 }
 
 Transform RotateZ(Float theta) {
-	Float sinTheta = std::sin(radToDeg(theta));
-	Float cosTheta = std::cos(radToDeg(theta));
+	Float sinTheta = std::sin(Radians(theta));
+	Float cosTheta = std::cos(Radians(theta));
 	Matrix4x4 m(cosTheta, -sinTheta, 0, 0,
 		        sinTheta, cosTheta, 0, 0,
 		        0, 0, 1, 0,
@@ -187,8 +199,8 @@ Transform RotateZ(Float theta) {
 
 Transform Rotate(Float theta, const Vector3f & axis){
 	Vector3f a = Normalize(axis);
-	Float sinTheta = std::sin(radToDeg(theta));
-	Float cosTheta = std::cos(radToDeg(theta));
+	Float sinTheta = std::sin(Radians(theta));
+	Float cosTheta = std::cos(Radians(theta));
 	Matrix4x4 m;
 	// Compute rotation of first basis vector
 	m.m[0][0] = a.x * a.x + (1 - a.x * a.x) * cosTheta;
@@ -241,6 +253,16 @@ Transform LookAt(const Vector3f & target, const Vector3f & origin, const Vector3
 	//std::cout << cameraToWorld << std::endl;
 
 	return Transform(cameraToWorld,Inverse(cameraToWorld));
+}
+
+Transform Perspective(const Float & fov, const Float &n, const Float &f, const Float& aspect) {
+	Matrix4x4 persp(
+		1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, f / (f - n), -f * n / (f - n),
+		0, 0, 1, 0);
+	Float invTanAng = 1 / std::tan(Radians(fov) / 2);
+	return Scale(invTanAng / n, invTanAng / n * aspect, 1) *Transform(persp);
 }
 
 

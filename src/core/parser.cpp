@@ -147,9 +147,19 @@ Scene* ParserXMLFile(const std::string & filename) {
 					case EIntegrator:
 						result = MakeIntegrator(name, m_list);
 						break;
-					case ECamera:						
-						result = MakeCamera(name, m_list);
+					case ECamera: 
+						{
+						Film* film = nullptr;
+						for (Object *child : children) {							
+							if (child->getClassType() == EFilm) {
+								film = static_cast<Film*>(child);
+								break;
+							}
+						}
+						Assert(film != nullptr, "No Film for Camera!");
+						result = MakeCamera(name, m_list, film);
 						break;
+						}
 					//case ESampler:
 					//	result = MakeSampler();
 					//	break;
@@ -180,6 +190,8 @@ Scene* ParserXMLFile(const std::string & filename) {
 					result->addChild(child);
 				}
 			}
+
+
 
 			//if (node.find_attribute("id")!=pugi::xml_attribute()) {
 			//	references[static_cast<std::string>(node.attribute("id").value())] = result;

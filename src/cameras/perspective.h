@@ -5,12 +5,18 @@
 
 RAINBOW_NAMESPACE_BEGIN
 
-class Perspective :public Camera {
+class PerspectiveCamera :public Camera {
 public:
-	Perspective() {}
+	PerspectiveCamera(const Transform& CameraToWorld, const Float& fov, const Float& near, const Float& far);
+
+	RGBSpectrum GenerateRay(Ray& r, const Point2f& p) const override;
+
+	Transform CameraToScreen, ScreenToCamera;
+	Transform ScreenToRaster, RasterToScreen;
+	Transform RasterToCamera, CameraToRaster;
 };
 
-Perspective* CreatePerspectiveCamera(PropertyList &list);
+PerspectiveCamera* CreatePerspectiveCamera(PropertyList &list, const Film* film);
 
 RAINBOW_NAMESPACE_END
 
