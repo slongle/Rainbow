@@ -5,22 +5,21 @@
 
 RAINBOW_NAMESPACE_BEGIN
 
-class TriangleMesh :public Shape {
-public:
-	TriangleMesh(const Transform &ObjectToWorld, const int &_nTriangles, const int &_nVertices,
-		const int *_vertexIndices, const Point3f *_p, const Normal3f *_n);
+struct TriangleMesh{
+	TriangleMesh(const Transform *ObjectToWorld, 
+		const int &_VertexNum, const int &_TriangleNum,
+		const std::vector<Point3f>& _p, const std::vector<int>& _VertexIndices, const Normal3f *_n);
 
-	const int nTriangles, nVertices;
-	std::vector<int> vertexIndices;
-	std::unique_ptr<Point3f[]> p;
+	const int TriangleNum, VertexNum;
+	std::vector<int> VertexIndices;
+	std::vector<Point3f> Position;
 	std::unique_ptr<Normal3f[]> n;
 };
 
 class Triangle :public Shape{
 public:
 	Triangle() {}
-	Triangle(const Transform *_ObjectToWorld, const Transform * _WorldToObject, 
-		const std::shared_ptr<TriangleMesh> & _mesh, int triNumber);
+	Triangle(const std::shared_ptr<TriangleMesh> & _mesh, int triNumber);
 
 	Bounds3f ObjectBounds() const;
 	Bounds3f WorldBounds() const;
@@ -36,7 +35,7 @@ private:
 	const int triNumber = 0;
 };
 
-Triangle* CreateWavefrontOBJ(PropertyList &list);
+std::vector<Triangle*>* CreateWavefrontOBJ(PropertyList &list);
 
 RAINBOW_NAMESPACE_END
 

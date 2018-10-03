@@ -191,8 +191,6 @@ Scene* ParserXMLFile(const std::string & filename) {
 				}
 			}
 
-
-
 			//if (node.find_attribute("id")!=pugi::xml_attribute()) {
 			//	references[static_cast<std::string>(node.attribute("id").value())] = result;
 			//}

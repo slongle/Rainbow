@@ -42,6 +42,14 @@ int main(int argc, char *argv[]) {
 	Point2i c(2);
 	cout << c << endl;*/
 
+	/*std::vector<int> d;
+	d.resize(100);
+	for (int i = 0; i < 10; i++)
+		d[i] = i;
+	int* a = &d[3];
+	for (int i = 0; i < 5; i++)
+		std::cout << a[i] << std::endl;*/
+
 	//std::string filename = "C:/Users/del/Desktop/cornell-box/scene.xml";
 	//std::string filename = "C:/Users/del/Desktop/cbox/cbox.xml";
 	std::string filename = "C:/Users/del/Desktop/cbox-Rainbow/cbox-distributed.xml";

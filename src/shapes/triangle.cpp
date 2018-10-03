@@ -2,48 +2,47 @@
 
 RAINBOW_NAMESPACE_BEGIN
 
-TriangleMesh::TriangleMesh(const Transform & ObjectToWorld,
-	const int & _nTriangles, const int & _nVertices, const int * _vertexIndices,
-	const Point3f * _p, const Normal3f * _n) :nTriangles(_nTriangles), nVertices(_nVertices), 
-	vertexIndices(_vertexIndices, _vertexIndices + nTriangles * 3) {
+TriangleMesh::TriangleMesh(const Transform * ObjectToWorld,
+	const int & _VertexNum, const int & _TriangleNum,
+	const std::vector<Point3f>& _Position, const std::vector<int>& _VertexIndices, const Normal3f * _n = nullptr) :
+	TriangleNum(_TriangleNum), VertexNum(_VertexNum), VertexIndices(_VertexIndices) {
 	
-	p.reset(new Point3f[nVertices]);
-	for (int i = 0; i < nVertices; i++)
-		p[i] = ObjectToWorld(_p[i]);
+	Position.resize(VertexNum);
+	for (int i = 0; i < VertexNum; i++)
+		Position[i] = (*ObjectToWorld)(_Position[i]);
 
 	if (_n) {
-		n.reset(new Normal3f[nTriangles]);
-		for (int i = 0; i < nTriangles; i++)
-			n[i] = ObjectToWorld(_n[i]);
+		n.reset(new Normal3f[TriangleNum]);
+		for (int i = 0; i < TriangleNum; i++)
+			n[i] = (*ObjectToWorld)(_n[i]);
 	}
 }
 
-Triangle::Triangle(const Transform * _ObjectToWorld, const Transform * _WorldToObject, 
-	const std::shared_ptr<TriangleMesh>& _mesh, int _triNumber):
-	Shape(_ObjectToWorld,_WorldToObject),mesh(_mesh),triNumber(_triNumber){
-	index = &(mesh->vertexIndices[3 * triNumber]);
+Triangle::Triangle(const std::shared_ptr<TriangleMesh>& _mesh, int _triNumber):
+	mesh(_mesh),triNumber(_triNumber){
+	index = &(mesh->VertexIndices[3 * triNumber]);
 }
 
 Bounds3f Triangle::ObjectBounds() const {
-	const Point3f &p0 = mesh->p[index[0]];
-	const Point3f &p1 = mesh->p[index[1]];
-	const Point3f &p2 = mesh->p[index[2]];
+	const Point3f &p0 = mesh->Position[index[0]];
+	const Point3f &p1 = mesh->Position[index[1]];
+	const Point3f &p2 = mesh->Position[index[2]];
 	const Transform &T = *WorldToObject;
 	return Union(Bounds3f(T(p0), T(p1)), T(p2));
 }
 
 Bounds3f Triangle::WorldBounds() const {
-	const Point3f &p0 = mesh->p[index[0]];
-	const Point3f &p1 = mesh->p[index[1]];
-	const Point3f &p2 = mesh->p[index[2]];
+	const Point3f &p0 = mesh->Position[index[0]];
+	const Point3f &p1 = mesh->Position[index[1]];
+	const Point3f &p2 = mesh->Position[index[2]];
 	return Union(Bounds3f(p0, p1), p2);
 }
 
 bool Triangle::Intersect(const Ray & ray, Float * tHit, Interaction * inter) const {
 	/* Get Triangle's Vertices p0, p1, p2*/
-	const Point3f &p0 = mesh->p[index[0]];
-	const Point3f &p1 = mesh->p[index[1]];
-	const Point3f &p2 = mesh->p[index[2]];
+	const Point3f &p0 = mesh->Position[index[0]];
+	const Point3f &p1 = mesh->Position[index[1]];
+	const Point3f &p2 = mesh->Position[index[2]];
 
 	Point3f tp0(p0), tp1(p1), tp2(p2);
 	tp0 -= ray.o;
@@ -108,9 +107,9 @@ bool Triangle::Intersect(const Ray & ray, Float * tHit, Interaction * inter) con
 
 bool Triangle::IntersectP(const Ray & ray) const {
 	/* Get Triangle's Vertices p0, p1, p2*/
-	const Point3f &p0 = mesh->p[index[0]];
-	const Point3f &p1 = mesh->p[index[1]];
-	const Point3f &p2 = mesh->p[index[2]];
+	const Point3f &p0 = mesh->Position[index[0]];
+	const Point3f &p1 = mesh->Position[index[1]];
+	const Point3f &p2 = mesh->Position[index[2]];
 
 	Point3f tp0(p0), tp1(p1), tp2(p2);
 	tp0 -= ray.o;
@@ -154,16 +153,34 @@ bool Triangle::IntersectP(const Ray & ray) const {
 }
 
 Float Triangle::Area() const {
-	const Point3f &p0 = mesh->p[index[0]];
-	const Point3f &p1 = mesh->p[index[1]];
-	const Point3f &p2 = mesh->p[index[2]];
+	const Point3f &p0 = mesh->Position[index[0]];
+	const Point3f &p1 = mesh->Position[index[1]];
+	const Point3f &p2 = mesh->Position[index[2]];
  	return static_cast<Float>(0.5) * Cross(p1-p0,p2-p0).Length();
 }
 
+void ParseWavefrontOBJ(const std::string& name, int* VertexNum, int* TriangleNum,
+	std::vector<Point3f>* Position, std::vector<int>* Indices) {
+	
+}
 
-Triangle * CreateWavefrontOBJ(PropertyList & list) {
+std::vector<Triangle*>* CreateWavefrontOBJ(PropertyList & list) {
 	std::string name = list.getString("filename");
-	return new Triangle();
+	Transform ObjectToWorld = list.getTransform("toWorld", Transform());
+	int VertexNum = 0, TriangleNum = 0;
+	std::vector<Point3f> Position;
+	std::vector<int> Indices;
+	ParseWavefrontOBJ(name, &VertexNum, &TriangleNum, &Position, &Indices);
+	std::shared_ptr<TriangleMesh> mesh
+		=std::make_shared<TriangleMesh>(&ObjectToWorld, VertexNum, TriangleNum, Position, Indices);
+		//(new TriangleMesh(&ObjectToWorld, VertexNum, TriangleNum, Position, Indices));
+	
+	std::vector<Triangle*> Triangles;
+	Triangles.resize(TriangleNum);
+	for (int i = 0; i < TriangleNum; i++) {
+		Triangles[i] = new Triangle(mesh, i);
+	}
+	return &Triangles;
 }
 
 RAINBOW_NAMESPACE_END
