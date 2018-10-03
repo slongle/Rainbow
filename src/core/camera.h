@@ -10,7 +10,7 @@ class Camera : public Object {
 public:
 	Camera(const Transform& CameraToWorld);
 
-	virtual RGBSpectrum GenerateRay(Ray& r,const Point2f& p) const = 0;
+	virtual RGBSpectrum GenerateRay(Ray* r,const Point2f& p) const = 0;
 
 	void addChild(Object *child) override;
 	EClassType getClassType() const override { return ECamera; }

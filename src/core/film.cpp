@@ -21,6 +21,7 @@ void Film::SaveImage() {
 			pos += 3;
 		}
 	}
+	//std::cout << filename;
 	WriteImage(filename, rgb, resolution);
 }
 

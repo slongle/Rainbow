@@ -29,20 +29,20 @@ RAINBOW_NAMESPACE_BEGIN
 ADD_PROPERTYLIST_FUNCTIONS(bool, Boolean, boolean)
 ADD_PROPERTYLIST_FUNCTIONS(int, Integer, integer)
 ADD_PROPERTYLIST_FUNCTIONS(Float, Float, float)
-ADD_PROPERTYLIST_FUNCTIONS(std::string, String, string)
+//ADD_PROPERTYLIST_FUNCTIONS(std::string, String, string)
 ADD_PROPERTYLIST_FUNCTIONS(Vector3f, Vector, vector)
 ADD_PROPERTYLIST_FUNCTIONS(RGBSpectrum, Color, color)
 ADD_PROPERTYLIST_FUNCTIONS(Transform, Transform, transform)
 
 
-	/*void PropertyList::setString(const std::string &name, const std::string &v) {
+	void PropertyList::setString(const std::string &name, const std::string &v) {
 		Property &property = list[name]; 
 		property.type = Property::EPString;
 		property.value.string_value = v;
 	} 
 	
     std::string PropertyList::getString(const std::string &name) {
-		Assert(list.find(name) != list.end(), "Not Found The Value Named" + name);
+		Assert(list.find(name) != list.end(), "Not Found The Value Named " + name);
 		Property &property = list[name]; 
 		Assert(property.type == Property::EPString, "Wrong Value's Type");
 		return property.value.string_value;
@@ -54,6 +54,6 @@ ADD_PROPERTYLIST_FUNCTIONS(Transform, Transform, transform)
 		Property &property = list[name]; 
 		Assert(property.type == Property::EPString, "Wrong Value's Type");
 		return property.value.string_value;
-	}*/
+	}
 
 RAINBOW_NAMESPACE_END

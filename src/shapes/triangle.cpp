@@ -162,7 +162,7 @@ Float Triangle::Area() const {
 
 
 Triangle * CreateWavefrontOBJ(PropertyList & list) {
-	std::string name = list.getString("obj");
+	std::string name = list.getString("filename");
 	return new Triangle();
 }
 

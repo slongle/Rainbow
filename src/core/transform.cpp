@@ -255,14 +255,14 @@ Transform LookAt(const Vector3f & target, const Vector3f & origin, const Vector3
 	return Transform(cameraToWorld,Inverse(cameraToWorld));
 }
 
-Transform Perspective(const Float & fov, const Float &n, const Float &f, const Float& aspect) {
+Transform Perspective(const Float & fov, const Float &n, const Float &f) {
 	Matrix4x4 persp(
 		1, 0, 0, 0,
 		0, 1, 0, 0,
 		0, 0, f / (f - n), -f * n / (f - n),
 		0, 0, 1, 0);
 	Float invTanAng = 1 / std::tan(Radians(fov) / 2);
-	return Scale(invTanAng / n, invTanAng / n * aspect, 1) *Transform(persp);
+	return Scale(invTanAng, invTanAng, 1) *Transform(persp);
 }
 
 

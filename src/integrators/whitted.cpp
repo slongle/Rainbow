@@ -9,7 +9,7 @@ void WhittedIntegrator::Render(const Scene & scene) {
 	for (int y = 0; y < film->resolution.y; y++) {
 		for (int x = 0; x < film->resolution.x; x++) {
 			// TODO: Implement Sampler
-			camera->GenerateRay(ray, Point2f(x + 0.1f, y + 0.1f));
+			camera->GenerateRay(&ray, Point2f(x + 0.1f, y + 0.1f));
 		}
 	}
 	film->SaveImage();
