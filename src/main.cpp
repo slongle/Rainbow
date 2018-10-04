@@ -53,6 +53,8 @@ int main(int argc, char *argv[]) {
 	//std::string filename = "C:/Users/del/Desktop/cornell-box/scene.xml";
 	//std::string filename = "C:/Users/del/Desktop/cbox/cbox.xml";
 	std::string filename = "C:/Users/del/Desktop/cbox-Rainbow/cbox-distributed.xml";
+	filesystem::path path(filename);
+	getFileResolver()->prepend(path.parent_path());
 	Scene* scene = ParserXMLFile(filename);
 	Render(scene);
 	return 0;

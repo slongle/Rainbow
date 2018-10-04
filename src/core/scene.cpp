@@ -1,4 +1,5 @@
 #include"scene.h"
+#include "../shapes/triangle.h"
 
 RAINBOW_NAMESPACE_BEGIN
 
@@ -13,7 +14,14 @@ void Scene::addChild(Object * child) {
 		integrator = static_cast<Integrator *>(child);
 	}
 	else if (child->getClassType() == EShape) {
-		shapes.push_back(static_cast<Shape *>(child));
+		Shape *shape = static_cast<Shape *>(child);
+		if (shape->getShapeType() == Shape::EShapeMesh) {
+			std::shared_ptr<TriangleMesh> mesh(static_cast<TriangleMesh*>(shape));
+			for (int i = 0; i < mesh->TriangleNum; i++) {
+				shapes.push_back(new Triangle(mesh, i));
+			}
+		}
+		else shapes.push_back(shape);
 	}
 }
 

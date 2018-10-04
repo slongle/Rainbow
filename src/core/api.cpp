@@ -45,11 +45,12 @@ BSDF * MakeBSDF(std::string &name, PropertyList &list) {
 }
 
 Shape* MakeShape(std::string &name, PropertyList &list) {
-	Shape* shapes = nullptr;
+	Shape* shape = nullptr;
 	if (name == "obj") {
 		// TODO: Fix issue about return value's type
+		shape = CreateWavefrontOBJ(list);
 	}
-	return shapes;
+	return shape;
 }
 
 RAINBOW_NAMESPACE_END

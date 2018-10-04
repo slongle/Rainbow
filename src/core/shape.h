@@ -21,6 +21,12 @@ public:
 	virtual Float Area() const = 0;
 	EClassType getClassType() const override { return EShape; }
 
+	enum EShapeType {
+		EShapeMesh,
+		EShapeOthers
+	};
+	virtual EShapeType getShapeType() const { return EShapeOthers; }
+
 	const Transform *ObjectToWorld, *WorldToObject;
 };
 

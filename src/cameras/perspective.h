@@ -8,7 +8,7 @@ RAINBOW_NAMESPACE_BEGIN
 class PerspectiveCamera :public Camera {
 public:
 	PerspectiveCamera(const Transform& CameraToWorld, const Film* film,
-		const Float& fov, const Float& near, const Float& far);
+		const Float& fov, const Float& nearClip, const Float& farClip);
 
 	RGBSpectrum GenerateRay(Ray* r, const Point2f& p) const override;
 

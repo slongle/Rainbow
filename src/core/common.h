@@ -13,6 +13,7 @@
 #endif
 
 #include "rainbow.h"
+#include "filesystem/filesystem/resolver.h"
 
 /* Convenience definitions */
 #define RAINBOW_NAMESPACE_BEGIN namespace rainbow {
@@ -65,6 +66,11 @@ class Integrator;
 class Scene;
 class Intersection;
 class SurfaceInteraction;
+
+inline filesystem::resolver *getFileResolver() {
+	static filesystem::resolver *resolver = new filesystem::resolver();
+	return resolver;
+}
 
 inline std::string indent(const std::string &str, const int &num) {
 	return std::string(num, ' ') + str;

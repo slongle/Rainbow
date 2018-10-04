@@ -5,10 +5,16 @@
 
 RAINBOW_NAMESPACE_BEGIN
 
-struct TriangleMesh{
+class TriangleMesh:public Shape{
+public:
 	TriangleMesh(const Transform *ObjectToWorld, 
 		const int &_VertexNum, const int &_TriangleNum,
 		const std::vector<Point3f>& _p, const std::vector<int>& _VertexIndices, const Normal3f *_n);
+
+	Bounds3f ObjectBounds() const { Assert(false, "Invoke TriangleMesh's ObjectBounds() Function!"); }
+	bool Intersect(const Ray & ray, Float *tHit, Interaction *inter) const 
+		{ Assert(false, "Invoke TriangleMesh's Intersect() Function!"); }
+	Float Area() const { Assert(false, "Invoke TriangleMesh's Area() Function!"); }
 
 	const int TriangleNum, VertexNum;
 	std::vector<int> VertexIndices;
@@ -27,7 +33,7 @@ public:
 	bool Intersect(const Ray & ray, Float *tHit, Interaction *inter) const;
 	bool IntersectP(const Ray & ray) const;
 
-	Float Area() const;
+	Float Area() const;	
 
 private:
 	const std::shared_ptr<TriangleMesh> mesh;
@@ -35,7 +41,7 @@ private:
 	const int triNumber = 0;
 };
 
-std::vector<Triangle*>* CreateWavefrontOBJ(PropertyList &list);
+TriangleMesh* CreateWavefrontOBJ(PropertyList &list);
 
 RAINBOW_NAMESPACE_END
 
