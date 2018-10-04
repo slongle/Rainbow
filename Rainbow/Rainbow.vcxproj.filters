@@ -37,6 +37,9 @@
     <Filter Include="Source Files\integrators">
       <UniqueIdentifier>{5b8e40e6-3b0e-4a36-ac28-a43c9c20a95e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\accelerators">
+      <UniqueIdentifier>{f1111002-91cd-4841-ad5c-cab06f6a2edd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\core\bbox.cpp">
@@ -131,6 +134,12 @@
     </ClCompile>
     <ClCompile Include="..\src\integrators\whitted.cpp">
       <Filter>Source Files\integrators</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\core\primitive.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\accelerators\bvh.cpp">
+      <Filter>Source Files\accelerators</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -232,6 +241,12 @@
     </ClInclude>
     <ClInclude Include="..\src\integrators\whitted.h">
       <Filter>Source Files\integrators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\core\primitive.h">
+      <Filter>Source Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\accelerators\bvh.h">
+      <Filter>Source Files\accelerators</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
