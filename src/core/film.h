@@ -22,6 +22,7 @@ public:
 	Film(const std::string & _filename, const Point2i & _resolution);
 
 
+	void SetPixel(const Point2i& p, const RGBSpectrum& L) const;
 	void SaveImage();
 
 	void addChild(Object *child) override;
@@ -34,9 +35,9 @@ public:
 
 private:
 	struct Pixel {
-		Pixel() { rgb[0] = rgb[1] = rgb[2] = filterSum; }
+		Pixel() { rgb[0] = rgb[1] = rgb[2] = 0; }// filterSum;	
 		Float rgb[3];
-		Float filterSum;
+		//Float filterSum;
 	};
 	std::unique_ptr<Pixel[]> pixels;
 

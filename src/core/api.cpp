@@ -44,13 +44,16 @@ BSDF * MakeBSDF(std::string &name, PropertyList &list) {
 	return bsdf;
 }
 
-Shape* MakeShape(std::string &name, PropertyList &list) {
-	Shape* shape = nullptr;
+Primitive MakeShape(std::string &name, PropertyList &list) {
 	if (name == "obj") {
-		// TODO: Fix issue about return value's type
-		shape = CreateWavefrontOBJ(list);
+		// TODO: Fix issue about return value's type		
+		TriangleMesh mesh = CreateWavefrontOBJ(list);
+		return Primitive(&mesh);
+				
 	}
-	return shape;
+	return Primitive(nullptr);
+	//if (shape != nullptr) return new Primitive(std::shared_ptr<Shape>(shape));
+	//else return nullptr;
 }
 
 RAINBOW_NAMESPACE_END

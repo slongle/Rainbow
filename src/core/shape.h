@@ -6,7 +6,7 @@
 
 RAINBOW_NAMESPACE_BEGIN
 
-class Shape :public Object {
+class Shape{
 public:
 	Shape() {}
 	Shape(const Transform *_ObjectToWorld, const Transform *_WorldToObject);
@@ -19,7 +19,7 @@ public:
 	virtual bool IntersectP(const Ray & ray) const;
 
 	virtual Float Area() const = 0;
-	EClassType getClassType() const override { return EShape; }
+	//EClassType getClassType() const override { return EPrimitive; }
 
 	enum EShapeType {
 		EShapeMesh,

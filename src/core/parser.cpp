@@ -2,7 +2,7 @@
 
 RAINBOW_NAMESPACE_BEGIN
 
-Scene* ParserXMLFile(const std::string & filename) {
+Scene* ParserXMLFile(const std::string & filename,Object* a) {
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file(filename.c_str());
 	
@@ -43,7 +43,7 @@ Scene* ParserXMLFile(const std::string & filename) {
 		EBSDF       = Object::EBSDF,          
 		EFilm       = Object::EFilm,        
 		EIntegrator = Object::EIntegrator,         
-		EShape      = Object::EShape,         
+		EShape      = Object::EPrimitive,         
 		ESampler    = Object::ESampler,         
 		ERFilter    = Object::ERFilter,    
 		ELight      = Object::ELight,
@@ -142,6 +142,9 @@ Scene* ParserXMLFile(const std::string & filename) {
 				std::string name = static_cast<std::string>(node.attribute("type").value());
 				switch (tag) {
 					case EScene:
+						for (Object *child : children) {
+
+						}
 						result = MakeScene();
 						break;
 					case EIntegrator:
@@ -170,7 +173,7 @@ Scene* ParserXMLFile(const std::string & filename) {
 						result = MakeBSDF(name, m_list);
 						break;
 					case EShape:
-						result = MakeShape(name, m_list);
+						result = &MakeShape(name, m_list);						
 						break;
 					//case ELight:
 					//	result = MakeLight();
@@ -188,6 +191,11 @@ Scene* ParserXMLFile(const std::string & filename) {
 				for (Object *child : children) {
 					//child->setParent(result);
 					result->addChild(child);
+				}
+				if (result->getClassType() == EScene) {
+					Scene* scene = static_cast<Scene*>(result);
+					scene->aggregate = new Aggregate();
+					scene->aggregate->primitives = scene->primitives;
 				}
 			}
 

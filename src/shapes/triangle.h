@@ -15,7 +15,9 @@ public:
 	bool Intersect(const Ray & ray, Float *tHit, Interaction *inter) const 
 		{ Assert(false, "Invoke TriangleMesh's Intersect() Function!"); }
 	Float Area() const { Assert(false, "Invoke TriangleMesh's Area() Function!"); }
-
+	
+	EShapeType getShapeType() const { return EShapeMesh; }
+	
 	const int TriangleNum, VertexNum;
 	std::vector<int> VertexIndices;
 	std::vector<Point3f> Position;
@@ -25,7 +27,8 @@ public:
 class Triangle :public Shape{
 public:
 	Triangle() {}
-	Triangle(const std::shared_ptr<TriangleMesh> & _mesh, int triNumber);
+	Triangle(TriangleMesh* _mesh, int _triNumber);
+	Triangle(const std::shared_ptr<TriangleMesh> & _mesh, int _triNumber);
 
 	Bounds3f ObjectBounds() const;
 	Bounds3f WorldBounds() const;
@@ -36,12 +39,14 @@ public:
 	Float Area() const;	
 
 private:
-	const std::shared_ptr<TriangleMesh> mesh;
+	//const 
+	//std::shared_ptr<TriangleMesh> mesh;
+	TriangleMesh * mesh;
 	const int * index = nullptr;
 	const int triNumber = 0;
 };
 
-TriangleMesh* CreateWavefrontOBJ(PropertyList &list);
+TriangleMesh CreateWavefrontOBJ(PropertyList &list);
 
 RAINBOW_NAMESPACE_END
 

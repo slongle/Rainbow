@@ -16,7 +16,18 @@ void Render(const Scene* scene) {
 	integrator->Render(*scene);
 }
 
+void test(int *a) {
+	int *b = new int(3);
+	a = b;
+	cout << *a << endl;
+}
+
 int main(int argc, char *argv[]) {
+	/*int a;
+	test(&a);
+	cout << a << endl;
+	exit(0);*/
+
 	/*int height = 100;
 	int width = 100;
 	Image a(width, height);
@@ -52,10 +63,12 @@ int main(int argc, char *argv[]) {
 
 	//std::string filename = "C:/Users/del/Desktop/cornell-box/scene.xml";
 	//std::string filename = "C:/Users/del/Desktop/cbox/cbox.xml";
-	std::string filename = "C:/Users/del/Desktop/cbox-Rainbow/cbox-distributed.xml";
+	Object* a=nullptr;
+	std::string filename = "C:/Users/del/Desktop/cbox-Rainbow/cbox-distributed_test.xml";
 	filesystem::path path(filename);
 	getFileResolver()->prepend(path.parent_path());
-	Scene* scene = ParserXMLFile(filename);
+	Scene* scene = ParserXMLFile(filename,a);
+
 	Render(scene);
 	return 0;
 }

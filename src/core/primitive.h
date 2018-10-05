@@ -5,9 +5,9 @@
 
 RAINBOW_NAMESPACE_BEGIN
 
-class Primitive {
+class Primitive :public Object {
 public:
-	Primitive() {}
+	Primitive(Shape* _shape) :shape(_shape) {}
 
 	bool Intersect(const Ray & ray, Float *tHit, Interaction *inter) const {
 		return shape->Intersect(ray, tHit, inter);
@@ -16,7 +16,9 @@ public:
 		return shape->IntersectP(ray);
 	}
 
-	std::shared_ptr<Shape> shape;
+	EClassType getClassType() const override { return EPrimitive; }
+
+	Shape* shape;
 };
 
 class Aggregate{
@@ -25,7 +27,7 @@ public:
 	virtual bool Intersect(const Ray & ray, Float *tHit, Interaction *inter) const;
 	virtual bool IntersectP(const Ray & ray) const;
 
-	std::vector<std::shared_ptr<Primitive> > primitives;
+	std::vector<Primitive*> primitives;
 };
 
 RAINBOW_NAMESPACE_END

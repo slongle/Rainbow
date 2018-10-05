@@ -18,9 +18,16 @@ TriangleMesh::TriangleMesh(const Transform * ObjectToWorld,
 	}
 }
 
-Triangle::Triangle(const std::shared_ptr<TriangleMesh>& _mesh, int _triNumber):
-	mesh(_mesh),triNumber(_triNumber){
+Triangle::Triangle(TriangleMesh * _mesh, int _triNumber) :
+	triNumber(_triNumber) {
+	mesh = &(*_mesh);
 	index = &(mesh->VertexIndices[3 * triNumber]);
+}
+
+Triangle::Triangle(const std::shared_ptr<TriangleMesh>& _mesh, int _triNumber):
+	mesh(&(*_mesh)),triNumber(_triNumber){
+	index = &(mesh->VertexIndices[3 * triNumber]);
+	std::cout << index[0] << ' ' << index[1] << ' ' << index[2] << std::endl;
 }
 
 Bounds3f Triangle::ObjectBounds() const {
@@ -204,7 +211,7 @@ void ParseWavefrontOBJ(const std::string& name, int* VertexNum, int* TriangleNum
 	puts("");*/
 }
 
-TriangleMesh* CreateWavefrontOBJ(PropertyList & list) {
+TriangleMesh CreateWavefrontOBJ(PropertyList & list) {
 	std::string name = list.getString("filename");
 	Transform ObjectToWorld = list.getTransform("toWorld", Transform());
 	int VertexNum = 0, TriangleNum = 0;
@@ -212,7 +219,10 @@ TriangleMesh* CreateWavefrontOBJ(PropertyList & list) {
 	std::vector<int> Indices;
 	ParseWavefrontOBJ(name, &VertexNum, &TriangleNum, &Position, &Indices);
 
+	return TriangleMesh(&ObjectToWorld, VertexNum, TriangleNum, Position, Indices);
+	/*
 	TriangleMesh* mesh = new TriangleMesh(&ObjectToWorld, VertexNum, TriangleNum, Position, Indices);
+	*/
 
 	/*std::shared_ptr<TriangleMesh> mesh
 		=std::make_shared<TriangleMesh>(&ObjectToWorld, VertexNum, TriangleNum, Position, Indices);
@@ -225,7 +235,7 @@ TriangleMesh* CreateWavefrontOBJ(PropertyList & list) {
 		Triangles[i] = new Triangle(mesh, i);
 	}*/
 
-	return mesh;
+	//return mesh;
 }
 
 RAINBOW_NAMESPACE_END

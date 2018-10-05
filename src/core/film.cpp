@@ -7,6 +7,13 @@ Film::Film(const std::string & _filename, const Point2i & _resolution) :
 	pixels = std::unique_ptr<Pixel[]>(new Pixel[resolution.x * resolution.y]);
 }
 
+void Film::SetPixel(const Point2i & p, const RGBSpectrum & L) const {
+	Pixel &pixel = GetPixel(p);
+	pixel.rgb[0] = L.c[0];
+	pixel.rgb[1] = L.c[1];
+	pixel.rgb[2] = L.c[2];
+}
+
 void Film::SaveImage() {
 	Float *rgb = new Float[3 * resolution.x * resolution.y];
 	Float *pos = rgb;
@@ -14,7 +21,7 @@ void Film::SaveImage() {
 	for (int y = 0; y < resolution.y; y++) {
 		for (int x = 0; x < resolution.x; x++) {
 			Pixel &pixel = GetPixel(Point2i(x, y));
-			Float invWeight = Float(1) / pixel.filterSum;
+			Float invWeight = Float(1);// / pixel.filterSum;
 			pos[0] = pixel.rgb[0] * invWeight;
 			pos[1] = pixel.rgb[1] * invWeight;
 			pos[2] = pixel.rgb[2] * invWeight;

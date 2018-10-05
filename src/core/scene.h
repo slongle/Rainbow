@@ -4,7 +4,7 @@
 #include "object.h"
 #include "bsdf.h"
 #include "integrator.h"
-#include "shape.h"
+#include "primitive.h"
 #include "camera.h"
 
 
@@ -16,10 +16,17 @@ public:
 
 	void addChild(Object *child);
 
+	bool Intersect(const Ray & ray, Float *tHit, Interaction *inter) const {
+		return aggregate->Intersect(ray, tHit, inter);
+	}
+	bool IntersectP(const Ray & ray) const {
+		return aggregate->IntersectP(ray);
+	}
+	
 	EClassType getClassType() const { return EScene; }
 	
-
-	std::vector<Shape*> shapes;
+	Aggregate* aggregate;
+	std::vector<Primitive*> primitives;
 	Camera* camera = nullptr;
 	Integrator* integrator = nullptr;
 };

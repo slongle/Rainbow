@@ -14,7 +14,7 @@ public:
 		EBSDF,
 		EFilm,
 		EIntegrator,
-		EShape,
+		EPrimitive,
 		ESampler,
 		ERFilter,
 		ELight
@@ -34,7 +34,7 @@ public:
 			case EBSDF       : return "BSDF";        
 			case EFilm       : return "film";    
 			case EIntegrator : return "integrator";  
-			case EShape      : return "shape"; 
+			case EPrimitive  : return "primitive"; 
 			case ESampler    : return "sampler"; 
 			case ERFilter    : return "rfilter";
 			default          : return "<unknown>";

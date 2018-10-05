@@ -11,7 +11,7 @@ Integrator* MakeIntegrator(std::string &name, PropertyList &list);
 Camera* MakeCamera(std::string &name, PropertyList &list, const Film* film);
 Film* MakeFilm(std::string &name, PropertyList &list);
 BSDF* MakeBSDF(std::string &name, PropertyList &list);
-Shape* MakeShape(std::string &name, PropertyList &list);
+Primitive MakeShape(std::string &name, PropertyList &list);
 
 
 RAINBOW_NAMESPACE_END
