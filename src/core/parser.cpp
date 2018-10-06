@@ -2,7 +2,7 @@
 
 RAINBOW_NAMESPACE_BEGIN
 
-Scene* ParserXMLFile(const std::string & filename,Object* a) {
+Scene* ParserXMLFile(const std::string & filename) {
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file(filename.c_str());
 	
@@ -85,6 +85,7 @@ Scene* ParserXMLFile(const std::string & filename,Object* a) {
 	tags["rgb"]         = EColor;
 
 	tags["transform"]  = ETransform;
+	tags["lookat"]     = ELookAt;
 	tags["lookAt"]     = ELookAt;
 	tags["translate"]  = ETranslate;
 	tags["scale"]      = EScale;
@@ -259,11 +260,8 @@ Scene* ParserXMLFile(const std::string & filename,Object* a) {
 				}
 				case EScale: {
 					Vector3f scale(1);
-					for (pugi::xml_attribute &attribute : node.attributes()) {
-						if (attribute.name() == "x") scale.x = toFloat(attribute.value());
-						if (attribute.name() == "y") scale.y = toFloat(attribute.value());
-						if (attribute.name() == "z") scale.z = toFloat(attribute.value());
-					}
+					scale = toVector(node.attribute("value").value());
+					Transform s = Scale(scale);
 					m_transform *= Scale(scale);
 					break;
 				}

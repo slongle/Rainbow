@@ -16,17 +16,19 @@ void Render(const Scene* scene) {
 	integrator->Render(*scene);
 }
 
-void test(int *a) {
-	int *b = new int(3);
-	a = b;
+/*void test(std::shared_ptr<int>& a) {
+	std::shared_ptr<int> b(new int(3));
+	//int *b = new int(3);
+	a = std::make_shared<int>((*b));
 	cout << *a << endl;
-}
+}*/
 
 int main(int argc, char *argv[]) {
-	/*int a;
-	test(&a);
-	cout << a << endl;
-	exit(0);*/
+	//std::cout << LookAt(Vector3f(0, 0.893051, 4.41198), Vector3f(0, 0.919769, 5.41159), Vector3f(0, 1, 0)) << std::endl;
+	//std::shared_ptr<int> a;
+	//test(a);
+	//cout << *a << endl;
+	//exit(0);
 
 	/*int height = 100;
 	int width = 100;
@@ -62,12 +64,11 @@ int main(int argc, char *argv[]) {
 		std::cout << a[i] << std::endl;*/
 
 	//std::string filename = "C:/Users/del/Desktop/cornell-box/scene.xml";
-	//std::string filename = "C:/Users/del/Desktop/cbox/cbox.xml";
-	Object* a=nullptr;
+	//std::string filename = "C:/Users/del/Desktop/cbox/cbox.xml";	
 	std::string filename = "C:/Users/del/Desktop/cbox-Rainbow/cbox-distributed_test.xml";
 	filesystem::path path(filename);
 	getFileResolver()->prepend(path.parent_path());
-	Scene* scene = ParserXMLFile(filename,a);
+	Scene* scene = ParserXMLFile(filename);
 
 	Render(scene);
 	return 0;

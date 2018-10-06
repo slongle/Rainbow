@@ -6,6 +6,8 @@
 
 RAINBOW_NAMESPACE_BEGIN
 
+void Init();
+
 Scene* MakeScene();
 Integrator* MakeIntegrator(std::string &name, PropertyList &list);
 Camera* MakeCamera(std::string &name, PropertyList &list, const Film* film);

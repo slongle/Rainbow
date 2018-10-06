@@ -5,8 +5,23 @@
 #include "../shapes/triangle.h"
 #include "../shapes/cube.h"
 #include "../integrators/whitted.h"
+#include <memory>
 
 RAINBOW_NAMESPACE_BEGIN
+
+struct RenderOptions {
+	Integrator* MakeIntegrator();
+	Scene* MakeScene();
+
+	std::vector<std::shared_ptr<Primitive>> primitives;
+};
+
+std::shared_ptr<RenderOptions> renderOptions;
+
+void Init() {
+	renderOptions = std::make_shared<RenderOptions>();
+}
+
 
 Scene * MakeScene() {
 	return new Scene();
@@ -47,8 +62,8 @@ BSDF * MakeBSDF(std::string &name, PropertyList &list) {
 Primitive MakeShape(std::string &name, PropertyList &list) {
 	if (name == "obj") {
 		// TODO: Fix issue about return value's type		
-		TriangleMesh mesh = CreateWavefrontOBJ(list);
-		return Primitive(&mesh);
+		TriangleMesh* mesh = CreateWavefrontOBJ(list);
+		return Primitive(mesh);
 				
 	}
 	return Primitive(nullptr);

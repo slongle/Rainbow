@@ -27,7 +27,7 @@ public:
 	virtual bool Intersect(const Ray & ray, Float *tHit, Interaction *inter) const;
 	virtual bool IntersectP(const Ray & ray) const;
 
-	std::vector<Primitive*> primitives;
+	std::vector<std::shared_ptr<Primitive>> primitives;
 };
 
 RAINBOW_NAMESPACE_END

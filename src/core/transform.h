@@ -107,6 +107,10 @@ public:
 
 	void Identify();
 
+	bool operator == (const Transform& t) const {
+		return m == t.m;
+	}
+
 	Transform operator * (const Transform &t) const {
 		return Transform(m * t.m, mInv * t.mInv);
 	}
@@ -160,7 +164,7 @@ Transform RotateX(Float theta);
 Transform RotateY(Float theta);
 Transform RotateZ(Float theta);
 Transform Rotate(Float theta, const Vector3f &axis);
-Transform LookAt(const Vector3f &pos, const Vector3f &look, const Vector3f &up);
+Transform LookAt(const Vector3f &target, const Vector3f &origin, const Vector3f &up);
 Transform Perspective(const Float &fov, const Float& near, const Float& far);
 
 RAINBOW_NAMESPACE_END

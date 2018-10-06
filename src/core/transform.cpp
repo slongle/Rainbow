@@ -261,7 +261,7 @@ Transform Perspective(const Float & fov, const Float &n, const Float &f) {
 		0, 1, 0, 0,
 		0, 0, f / (f - n), -f * n / (f - n),
 		0, 0, 1, 0);
-	Float invTanAng = 1 / std::tan(Radians(fov) / 2);
+	Float invTanAng = 1 / std::tan(Radians(fov*0.5f));
 	return Scale(invTanAng, invTanAng, 1) *Transform(persp);
 }
 

@@ -26,7 +26,7 @@ public:
 	EClassType getClassType() const { return EScene; }
 	
 	Aggregate* aggregate;
-	std::vector<Primitive*> primitives;
+	std::vector<std::shared_ptr<Primitive>> primitives;
 	Camera* camera = nullptr;
 	Integrator* integrator = nullptr;
 };

@@ -2,13 +2,33 @@
 
 RAINBOW_NAMESPACE_BEGIN
 
-PerspectiveCamera::PerspectiveCamera(const Transform & CameraToWorld, const Film* _film,
-	const Float & fov, const Float &nearClip, const Float & farClip) :
+PerspectiveCamera::PerspectiveCamera(const Transform& CameraToWorld, const Bounds2f& screen, 
+	const Float& fov, const Film* _film, const Float& nearClip, const Float& farClip):
 	Camera(CameraToWorld) {
-	CameraToScreen = Scale(Float(_film->resolution.x), Float(_film->resolution.y) * _film->aspect, 1) * Perspective(fov, nearClip, farClip);	
-	ScreenToRaster = Scale(1, -1, 1)*Translate(-(_film->resolution.x)*0.5f, -(_film->resolution.y)*0.5f, 0);
+	//std::cout << CameraToWorld << std::endl;
+
+
+	CameraToScreen = Perspective(fov, nearClip, farClip);
+	ScreenToRaster = Scale(_film->resolution.x, _film->resolution.y, 1) *
+		Scale(1 / (screen.pMax.x - screen.pMin.x),
+			1 / (screen.pMin.y - screen.pMax.y), 1) *
+		Translate(Vector3f(-screen.pMin.x, -screen.pMax.y, 0));
+
 	RasterToScreen = Inverse(ScreenToRaster);
-	RasterToCamera = Inverse(CameraToScreen)*RasterToScreen;
+	RasterToCamera = Inverse(CameraToScreen) * RasterToScreen;
+	//std::cout << RasterToCamera << std::endl;
+	//CameraToScreen = Scale(Float(_film->resolution.x), Float(_film->resolution.y) * _film->aspect, 1) * 
+	//	Perspective(fov, nearClip, farClip);	
+	//ScreenToRaster = Scale(1, -1, 1)*Translate(-(_film->resolution.x)*0.5f, -(_film->resolution.y)*0.5f, 0);
+	//RasterToScreen = Inverse(ScreenToRaster);
+	//RasterToCamera = Inverse(CameraToScreen)*RasterToScreen;	
+	//
+	//
+	//RasterToCamera = Inverse(Perspective(fov, nearClip, farClip))*
+	//	Inverse(Translate(-1, -1 / _film->aspect, 0))*Inverse(Scale(-0.5, -0.5*_film->aspect, 1));
+
+	//RasterToCamera = Inverse(Scale(-0.5, -0.5*_film->aspect, 1)*Translate(-1, -1 / _film->aspect, 0)*Perspective(fov, nearClip, farClip));
+	//std::cout << RasterToCamera << std::endl;
 }
 
 
@@ -25,7 +45,13 @@ PerspectiveCamera * CreatePerspectiveCamera(PropertyList & list, const Film* fil
 	Float fov = list.getFloat("fov", 30.0);
 	Float nearClip = list.getFloat("nearClip", 1e-2f);
 	Float farClip = list.getFloat("farClip", 1000);
-	return new PerspectiveCamera(CameraToWorld, film, fov, nearClip, farClip);
+	Float frame = film->aspect;
+	Bounds2f screen;
+	screen.pMin.x = -frame;
+	screen.pMin.y = -1;
+	screen.pMax.x = frame;
+	screen.pMax.y = 1;
+	return new PerspectiveCamera(CameraToWorld, screen, fov, film,nearClip, farClip);
 }
 
 RAINBOW_NAMESPACE_END

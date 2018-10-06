@@ -46,7 +46,7 @@ private:
 	const int triNumber = 0;
 };
 
-TriangleMesh CreateWavefrontOBJ(PropertyList &list);
+TriangleMesh* CreateWavefrontOBJ(PropertyList &list);
 
 RAINBOW_NAMESPACE_END
 
