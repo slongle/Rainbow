@@ -26,8 +26,7 @@ public:
 
 class Triangle :public Shape{
 public:
-	Triangle() {}
-	Triangle(TriangleMesh* _mesh, int _triNumber);
+	Triangle() {}	
 	Triangle(const std::shared_ptr<TriangleMesh> & _mesh, int _triNumber);
 
 	Bounds3f ObjectBounds() const;
@@ -40,8 +39,8 @@ public:
 
 private:
 	//const 
-	//std::shared_ptr<TriangleMesh> mesh;
-	TriangleMesh * mesh;
+	std::shared_ptr<TriangleMesh> mesh;
+	//TriangleMesh * mesh;
 	const int * index = nullptr;
 	const int triNumber = 0;
 };

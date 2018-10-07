@@ -6,6 +6,7 @@ void WhittedIntegrator::Render(const Scene & scene) {
 	std::shared_ptr<Film> film = camera->film;
 	Ray ray;
 	std::cout << scene.aggregate->primitives.size() << std::endl;
+	//exit(0);
 	for (int y = 0; y < film->resolution.y; y++) {
 		for (int x = 0; x < film->resolution.x; x++) {
 			// TODO: Implement Sampler

@@ -72,6 +72,7 @@ void RainbowShape(const std::string & type, PropertyList & list) {
 	for (auto s : shapes) {
 		prims.push_back(std::make_shared<Primitive>(s));
 	}
+	renderOptions->primitives.insert(renderOptions->primitives.end(), prims.begin(), prims.end());
 }
 
 Aggregate* RenderOptions::MakeAggregate() {

@@ -18,14 +18,8 @@ TriangleMesh::TriangleMesh(const Transform * ObjectToWorld,
 	}
 }
 
-Triangle::Triangle(TriangleMesh * _mesh, int _triNumber) :
-	triNumber(_triNumber) {
-	mesh = &(*_mesh);
-	index = &(mesh->VertexIndices[3 * triNumber]);
-}
-
 Triangle::Triangle(const std::shared_ptr<TriangleMesh>& _mesh, int _triNumber):
-	mesh(&(*_mesh)),triNumber(_triNumber){
+	mesh(_mesh),triNumber(_triNumber){
 	index = &(mesh->VertexIndices[3 * triNumber]);
 	//std::cout << index[0] << ' ' << index[1] << ' ' << index[2] << std::endl;
 }
