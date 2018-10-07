@@ -2,20 +2,21 @@
 
 RAINBOW_NAMESPACE_BEGIN
 
-PerspectiveCamera::PerspectiveCamera(const Transform& CameraToWorld, const Bounds2f& screen, 
-	const Float& fov, const std::shared_ptr<Film> _film, const Float& nearClip, const Float& farClip):
-	Camera(CameraToWorld,_film) {
+PerspectiveCamera::PerspectiveCamera(const Transform& CameraToWorld, const Bounds2f& screen,
+	const Float& fov, const std::shared_ptr<Film> _film, const Float& nearClip, const Float& farClip) :
+	Camera(CameraToWorld, _film) {
 	//std::cout << CameraToWorld << std::endl;
 
-
 	CameraToScreen = Perspective(fov, nearClip, farClip);
-	ScreenToRaster = Scale(film->resolution.x, film->resolution.y, 1) *
+	ScreenToRaster = 
+		Scale(film->resolution.x, film->resolution.y, 1) *
 		Scale(1 / (screen.pMax.x - screen.pMin.x),
-			1 / (screen.pMin.y - screen.pMax.y), 1) *
+			  1 / (screen.pMin.y - screen.pMax.y), 1)*
 		Translate(Vector3f(-screen.pMin.x, -screen.pMax.y, 0));
 
 	RasterToScreen = Inverse(ScreenToRaster);
 	RasterToCamera = Inverse(CameraToScreen) * RasterToScreen;
+
 	//std::cout << RasterToCamera << std::endl;
 	//CameraToScreen = Scale(Float(_film->resolution.x), Float(_film->resolution.y) * _film->aspect, 1) * 
 	//	Perspective(fov, nearClip, farClip);	
@@ -51,7 +52,7 @@ PerspectiveCamera * CreatePerspectiveCamera(PropertyList & list, const std::shar
 	screen.pMin.y = -1;
 	screen.pMax.x = frame;
 	screen.pMax.y = 1;
-	return new PerspectiveCamera(CameraToWorld, screen, fov, film,nearClip, farClip);
+	return new PerspectiveCamera(CameraToWorld, screen, fov, film, nearClip, farClip);
 }
 
 RAINBOW_NAMESPACE_END
