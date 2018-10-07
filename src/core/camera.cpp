@@ -2,16 +2,10 @@
 
 RAINBOW_NAMESPACE_BEGIN
 
-Camera::Camera(const Transform& _CameraToWorld) :
-	CameraToWorld(_CameraToWorld), WorldToCamera(Inverse(CameraToWorld)) {
+Camera::Camera(const Transform& _CameraToWorld, const std::shared_ptr<Film> _film) :
+	CameraToWorld(_CameraToWorld), WorldToCamera(Inverse(CameraToWorld)), film(_film) {
 
 }
 
-void Camera::addChild(Object * child) {
-	if (child->getClassType() == EFilm) {
-		Assert(film == nullptr, "Camera has already had a film!");
-		film = static_cast<Film*>(child);
-	}
-}
 
 RAINBOW_NAMESPACE_END

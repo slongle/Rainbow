@@ -15,17 +15,6 @@ Object * ObjectFactory::createInstance(const std::string & name, const PropertyL
 	return (*constructors)[name](list);
 }*/
 
-void Object::setParent(Object * parent)
-{
-}
-
-void Object::addChild(Object * child)
-{
-}
-
-void Object::active()
-{
-}
 
 RAINBOW_NAMESPACE_END
 

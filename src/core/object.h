@@ -21,9 +21,6 @@ public:
 	};
 
 	virtual EClassType getClassType() const = 0;
-	virtual void setParent(Object *parent);	
-	virtual void addChild(Object *child);
-	virtual void active();
 
 	//virtual std::string toString() const = 0;
 

@@ -2,10 +2,7 @@
 #define __SCENE_H
 
 #include "object.h"
-#include "bsdf.h"
-#include "integrator.h"
 #include "primitive.h"
-#include "camera.h"
 
 
 RAINBOW_NAMESPACE_BEGIN
@@ -13,6 +10,7 @@ RAINBOW_NAMESPACE_BEGIN
 class Scene :public Object{
 public:
 	Scene() {}
+	Scene(std::shared_ptr<Aggregate> _aggregate) :aggregate(_aggregate) {}
 
 	void addChild(Object *child);
 
@@ -25,10 +23,7 @@ public:
 	
 	EClassType getClassType() const { return EScene; }
 	
-	Aggregate* aggregate;
-	std::vector<std::shared_ptr<Primitive>> primitives;
-	Camera* camera = nullptr;
-	Integrator* integrator = nullptr;
+	std::shared_ptr<Aggregate> aggregate;
 };
 
 RAINBOW_NAMESPACE_END

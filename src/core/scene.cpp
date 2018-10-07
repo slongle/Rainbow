@@ -4,7 +4,7 @@
 
 RAINBOW_NAMESPACE_BEGIN
 
-void Scene::addChild(Object * child) {
+/*void Scene::addChild(Object * child) {
 	if (child->getClassType() == ECamera) {
 		//cout << (camera == nullptr) << endl;
 		Assert(camera == nullptr, "Scene has a camera!");		
@@ -28,6 +28,6 @@ void Scene::addChild(Object * child) {
 		}
 		//else primitives.push_back(std::make_shared<Primitive>(static_cast<Primitive *>(child)));
 	}
-}
+}*/
 
 RAINBOW_NAMESPACE_END

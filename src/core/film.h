@@ -1,7 +1,6 @@
 #ifndef __FILM_H
 #define __FILM_H
 
-#include "common.h"
 #include "filter.h"
 #include "spectrum.h"
 #include "vector.h"
@@ -25,7 +24,6 @@ public:
 	void SetPixel(const Point2i& p, const RGBSpectrum& L) const;
 	void SaveImage();
 
-	void addChild(Object *child) override;
 	EClassType getClassType() const override { return EFilm; }
 
 	const std::string filename;

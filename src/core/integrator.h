@@ -2,6 +2,7 @@
 #define __INTEGRATOR_H
 
 #include "scene.h"
+#include "camera.h"
 
 RAINBOW_NAMESPACE_BEGIN
 
@@ -11,6 +12,9 @@ public:
 	virtual void Render(const Scene &scene) = 0;
 
 	EClassType getClassType() const override { return Object::EIntegrator; }
+
+	std::shared_ptr<Camera> camera;
+	//std::shared_ptr<Sampler> sampler;
 };
 
 //class SamplerIntegrator :public Integrator {

@@ -3,13 +3,13 @@
 RAINBOW_NAMESPACE_BEGIN
 
 PerspectiveCamera::PerspectiveCamera(const Transform& CameraToWorld, const Bounds2f& screen, 
-	const Float& fov, const Film* _film, const Float& nearClip, const Float& farClip):
-	Camera(CameraToWorld) {
+	const Float& fov, const std::shared_ptr<Film> _film, const Float& nearClip, const Float& farClip):
+	Camera(CameraToWorld,_film) {
 	//std::cout << CameraToWorld << std::endl;
 
 
 	CameraToScreen = Perspective(fov, nearClip, farClip);
-	ScreenToRaster = Scale(_film->resolution.x, _film->resolution.y, 1) *
+	ScreenToRaster = Scale(film->resolution.x, film->resolution.y, 1) *
 		Scale(1 / (screen.pMax.x - screen.pMin.x),
 			1 / (screen.pMin.y - screen.pMax.y), 1) *
 		Translate(Vector3f(-screen.pMin.x, -screen.pMax.y, 0));
@@ -40,7 +40,7 @@ RGBSpectrum PerspectiveCamera::GenerateRay(Ray* r, const Point2f & p) const {
 }
 
 
-PerspectiveCamera * CreatePerspectiveCamera(PropertyList & list, const Film* film) {	
+PerspectiveCamera * CreatePerspectiveCamera(PropertyList & list, const std::shared_ptr<Film> film) {
 	Transform CameraToWorld = list.getTransform("toWorld", Transform());	
 	Float fov = list.getFloat("fov", 30.0);
 	Float nearClip = list.getFloat("nearClip", 1e-2f);

@@ -7,7 +7,7 @@ RAINBOW_NAMESPACE_BEGIN
 
 class PerspectiveCamera :public Camera {
 public:
-	PerspectiveCamera(const Transform& CameraToWorld,const Bounds2f& screen, const Float& fov, const Film* film,
+	PerspectiveCamera(const Transform& CameraToWorld,const Bounds2f& screen, const Float& fov, const std::shared_ptr<Film> film,
 		const Float& nearClip, const Float& farClip);
 
 	RGBSpectrum GenerateRay(Ray* r, const Point2f& p) const override;
@@ -17,7 +17,7 @@ public:
 	Transform RasterToCamera;
 };
 
-PerspectiveCamera* CreatePerspectiveCamera(PropertyList &list, const Film* film);
+PerspectiveCamera* CreatePerspectiveCamera(PropertyList &list, const std::shared_ptr<Film> film);
 
 RAINBOW_NAMESPACE_END
 

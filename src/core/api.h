@@ -1,19 +1,18 @@
 #ifndef __RAINBOW_API_H
 #define __RAINBOW_API_H
 
-#include "common.h"
-#include "scene.h"
+#include "propertylist.h"
 
 RAINBOW_NAMESPACE_BEGIN
 
-void Init();
+void RainbowInit();
+void RainbowWorld();
 
-Scene* MakeScene();
-Integrator* MakeIntegrator(std::string &name, PropertyList &list);
-Camera* MakeCamera(std::string &name, PropertyList &list, const Film* film);
-Film* MakeFilm(std::string &name, PropertyList &list);
-BSDF* MakeBSDF(std::string &name, PropertyList &list);
-Primitive MakeShape(std::string &name, PropertyList &list);
+void RainbowIntegrator(const std::string& type, const PropertyList& list);
+void RainbowCamera(const std::string& type, const PropertyList& list);
+void RainbowSampler(const std::string& type, const PropertyList& list);
+void RainbowFilm(const std::string& type, const PropertyList& list);
+void RainbowShape(const std::string& type, PropertyList& list);
 
 
 RAINBOW_NAMESPACE_END

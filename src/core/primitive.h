@@ -7,7 +7,7 @@ RAINBOW_NAMESPACE_BEGIN
 
 class Primitive :public Object {
 public:
-	Primitive(Shape* _shape) :shape(_shape) {}
+	Primitive(std::shared_ptr<Shape> _shape) :shape(_shape) {}
 
 	bool Intersect(const Ray & ray, Float *tHit, Interaction *inter) const {
 		return shape->Intersect(ray, tHit, inter);
@@ -18,7 +18,7 @@ public:
 
 	EClassType getClassType() const override { return EPrimitive; }
 
-	Shape* shape;
+	std::shared_ptr<Shape> shape;
 };
 
 class Aggregate{

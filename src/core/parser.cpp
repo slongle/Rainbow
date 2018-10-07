@@ -1,8 +1,9 @@
 #include "parser.h"
+#include "object.h"
 
 RAINBOW_NAMESPACE_BEGIN
 
-Scene* ParserXMLFile(const std::string & filename) {
+void ParserXMLFile(const std::string & filename) {
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file(filename.c_str());
 	
@@ -93,7 +94,154 @@ Scene* ParserXMLFile(const std::string & filename) {
 	tags["matrix"]     = EMatrix;
 
 
-	Transform m_transform;
+	Transform m_transform;	
+
+	std::function<void (pugi::xml_node, PropertyList&, int)> ParserTag =
+		[&](pugi::xml_node node, PropertyList &list, int num) -> void {
+		//std::cout << node.find_attribute("id").value() << std::endl;
+		//std::cout << node.name() << std::endl;
+
+		if (node.type() == pugi::node_comment || node.type() == pugi::node_declaration) 
+			return;
+
+		if (tags.find(node.name()) == tags.end())
+			return;
+
+
+		ETag tag = tags[node.name()];
+		//std::cout << tag << std::endl;
+		if (tag == EScene) {
+			node.append_attribute("type");
+			node.attribute("type").set_value("scene");
+		}
+		else if (tag == ETransform)
+			m_transform.Identify();
+
+		PropertyList m_list;
+		for (pugi::xml_node &child : node.children()) {
+			ParserTag(child, m_list, num + 4);
+		}
+
+		bool isObject = tag < EBoolean;
+
+		if (isObject) {
+			Assert(checkAttribute(node, "type"), "Missing attribute \"type\" in " +
+				static_cast<std::string>(node.name()));
+
+			std::string name = static_cast<std::string>(node.attribute("type").value());
+			switch (tag) {
+				case EScene:
+					break;
+				case EIntegrator:
+					RainbowIntegrator(name, m_list);
+					break;
+				case ECamera:			
+					RainbowCamera(name, m_list);
+					break;			
+				case ESampler:
+					RainbowSampler(name, m_list);
+					break;
+				case EFilm:
+					RainbowFilm(name, m_list);
+					break;
+				case EBSDF:
+					//result = MakeBSDF(name, m_list);
+					break;
+				case EShape:
+					RainbowShape(name, m_list);
+					break;
+					//case ELight:
+					//	result = MakeLight();
+					//	break;
+			}			
+		}
+		else {
+			switch (tag) {
+			case EBoolean: {
+				list.setBoolean(node.attribute("name").value(), toBoolean(node.attribute("value").value()));
+				break;
+			}
+			case EInteger: {
+				list.setInteger(node.attribute("name").value(), toInteger(node.attribute("value").value()));
+				break;
+			}
+			case EFloat: {
+				list.setFloat(node.attribute("name").value(), toFloat(node.attribute("value").value()));
+				break;
+			}
+			case EString: {
+				list.setString(node.attribute("name").value(), node.attribute("value").value());
+				break;
+			}
+			case EVector: {
+				list.setVector(node.attribute("name").value(), toVector(node.attribute("value").value()));
+				break;
+			}
+			case EColor: {
+				if (node.name() == "spectrum") {
+					// TODO: Fix Spectrum declared with wavelength
+				}
+				else if (node.name() == "rgb") {
+					list.setColor(node.attribute("name").value(), toColor(node.attribute("value").value()));
+				}
+				break;
+			}
+			case ETransform: {
+				list.setTransform(node.attribute("name").value(), m_transform);
+				break;
+			}
+			case ELookAt: {
+				Vector3f target = toVector(node.attribute("target").value());
+				Vector3f origin = toVector(node.attribute("origin").value());
+				Vector3f up = toVector(node.attribute("up").value());
+				m_transform *= LookAt(target, origin, up);
+				break;
+			}
+			case ETranslate: {
+				Vector3f delta;
+				for (pugi::xml_attribute &attribute : node.attributes()) {
+					if (attribute.name() == "x") delta.x = toFloat(attribute.value());
+					if (attribute.name() == "y") delta.y = toFloat(attribute.value());
+					if (attribute.name() == "z") delta.z = toFloat(attribute.value());
+				}
+				m_transform *= Translate(delta);
+				break;
+			}
+			case EScale: {
+				Vector3f scale(1);
+				scale = toVector(node.attribute("value").value());
+				Transform s = Scale(scale);
+				m_transform *= Scale(scale);
+				break;
+			}
+			case ERotate: {
+				Vector3f axis;
+				Float angle;
+				for (pugi::xml_attribute &attribute : node.attributes()) {
+					if (attribute.name() == "x") axis.x = toFloat(attribute.value());
+					if (attribute.name() == "y") axis.y = toFloat(attribute.value());
+					if (attribute.name() == "z") axis.z = toFloat(attribute.value());
+					if (attribute.name() == "angle") angle = toFloat(attribute.value());
+				}
+				m_transform *= Rotate(angle, axis);
+				break;
+			}
+			case EMatrix: {
+				Matrix4x4 mat = toMatrix(node.attribute("value").value());
+				m_transform *= Transform(mat);
+				break;
+			}
+			}
+		}
+	};
+
+	PropertyList prop;
+	ParserTag(*doc.begin(), prop, 0);
+	RainbowWorld();
+	
+
+
+	/*
 	std::map<std::string, Object*> references;
 
 	std::function<Object *(pugi::xml_node, PropertyList&, int)> ParserTag  =
@@ -290,7 +438,7 @@ Scene* ParserXMLFile(const std::string & filename) {
 
 	PropertyList prop;
 	Scene* scene = static_cast<Scene*>(ParserTag(*doc.begin(), prop, 0));
-	return scene;
+	return scene;*/
 }
 
 RAINBOW_NAMESPACE_END

@@ -32,9 +32,6 @@ void Film::SaveImage() {
 	WriteImage(filename, rgb, resolution);
 }
 
-void rainbow::Film::addChild(Object *child) {	
-}
-
 Film * CreateFilm(PropertyList & list) {
 	std::string filename = list.getString("filename", "output.png");
 	Point2i resolution;

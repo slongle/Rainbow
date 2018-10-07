@@ -19,7 +19,6 @@ public:
 	virtual bool IntersectP(const Ray & ray) const;
 
 	virtual Float Area() const = 0;
-	//EClassType getClassType() const override { return EPrimitive; }
 
 	enum EShapeType {
 		EShapeMesh,

@@ -2,13 +2,12 @@
 #define __PARSER_H
 
 #include "api.h"
-#include "object.h"
 
 #include "pugixml/pugixml.hpp"
 
 RAINBOW_NAMESPACE_BEGIN
 
-Scene* ParserXMLFile(const std::string &filename);
+void ParserXMLFile(const std::string &filename);
 
 RAINBOW_NAMESPACE_END
 

@@ -46,7 +46,7 @@ private:
 	const int triNumber = 0;
 };
 
-TriangleMesh* CreateWavefrontOBJ(PropertyList &list);
+std::vector<std::shared_ptr<Shape>> CreateWavefrontOBJ(PropertyList &list);
 
 RAINBOW_NAMESPACE_END
 

@@ -10,11 +10,6 @@
 
 using namespace rainbow;
 
-void Render(const Scene* scene) {
-	Assert(scene->integrator != nullptr, "Hasn't Parsed Integrator!");
-	Integrator* integrator = scene->integrator;
-	integrator->Render(*scene);
-}
 
 /*void test(std::shared_ptr<int>& a) {
 	std::shared_ptr<int> b(new int(3));
@@ -22,6 +17,7 @@ void Render(const Scene* scene) {
 	a = std::make_shared<int>((*b));
 	cout << *a << endl;
 }*/
+
 
 int main(int argc, char *argv[]) {
 	//std::cout << LookAt(Vector3f(0, 0.893051, 4.41198), Vector3f(0, 0.919769, 5.41159), Vector3f(0, 1, 0)) << std::endl;
@@ -65,11 +61,11 @@ int main(int argc, char *argv[]) {
 
 	//std::string filename = "C:/Users/del/Desktop/cornell-box/scene.xml";
 	//std::string filename = "C:/Users/del/Desktop/cbox/cbox.xml";	
+	RainbowInit();
 	std::string filename = "C:/Users/del/Desktop/cbox-Rainbow/cbox-distributed_test.xml";
 	filesystem::path path(filename);
 	getFileResolver()->prepend(path.parent_path());
-	Scene* scene = ParserXMLFile(filename);
+	ParserXMLFile(filename);
 
-	Render(scene);
 	return 0;
 }

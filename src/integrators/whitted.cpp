@@ -2,9 +2,8 @@
 
 RAINBOW_NAMESPACE_BEGIN	
 
-void WhittedIntegrator::Render(const Scene & scene) {
-	Camera* camera = scene.camera;
-	Film* film = camera->film;
+void WhittedIntegrator::Render(const Scene & scene) {	
+	std::shared_ptr<Film> film = camera->film;
 	Ray ray;
 	std::cout << scene.aggregate->primitives.size() << std::endl;
 	for (int y = 0; y < film->resolution.y; y++) {

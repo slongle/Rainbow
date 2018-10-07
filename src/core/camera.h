@@ -8,16 +8,15 @@ RAINBOW_NAMESPACE_BEGIN
 
 class Camera : public Object {
 public:
-	Camera(const Transform& CameraToWorld);
+	Camera(const Transform& CameraToWorld, const std::shared_ptr<Film> film);
 
 	virtual RGBSpectrum GenerateRay(Ray* r,const Point2f& p) const = 0;
 
-	void addChild(Object *child) override;
 	EClassType getClassType() const override { return ECamera; }
 
 	Transform CameraToWorld, WorldToCamera;
 
-	Film* film;
+	const std::shared_ptr<Film> film;
 };
 
 RAINBOW_NAMESPACE_END
