@@ -3,6 +3,7 @@
 
 #include "scene.h"
 #include "camera.h"
+#include "interaction.h"
 
 RAINBOW_NAMESPACE_BEGIN
 

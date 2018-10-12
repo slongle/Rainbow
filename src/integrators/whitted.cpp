@@ -10,7 +10,7 @@ void WhittedIntegrator::Render(const Scene & scene) {
 	for (int y = 0; y < film->resolution.y; y++) {
 		for (int x = 0; x < film->resolution.x; x++) {
 			// TODO: Implement Sampler
-			camera->GenerateRay(&ray, Point2f(x - film->resolution.x / 2, y - film->resolution.y / 2));
+			camera->GenerateRay(&ray, Point2f(x - film->resolution.x *0.5, y - film->resolution.y *0.5));
 			if (scene.IntersectP(ray)) {
 				film->SetPixel(Point2i(x, y), RGBSpectrum(0, 0, 0));
 			}
@@ -24,8 +24,37 @@ void WhittedIntegrator::Render(const Scene & scene) {
 	film->SaveImage();
 }
 
+RGBSpectrum WhittedIntegrator::Li(const Ray & ray, const Scene & scene, int depth) {
+	RGBSpectrum L(0.0);
+	SurfaceInteraction intersection;
+	if (!scene.Intersect(ray, &intersection)) {
+		return L;
+	}
+
+	Vector3f wo = ray.d;
+
+	L += intersection.Le(wo);
+
+	if (depth + 1 < maxDep) {
+		L += SpecularReflect(ray, scene, depth, intersection);
+		L += SpecularRefract(ray, scene, depth, intersection);
+	}
+
+	return L;
+}
+
+RGBSpectrum WhittedIntegrator::SpecularReflect
+(const Ray & ray, const Scene & scene, int depth, SurfaceInteraction intersection) {
+	return RGBSpectrum();
+}
+
+RGBSpectrum WhittedIntegrator::SpecularRefract
+(const Ray & ray, const Scene & scene, int depth, SurfaceInteraction intersection) {
+	return RGBSpectrum();
+}
+
 WhittedIntegrator* CreateWhittedIntegrator(const PropertyList &list) {
-	return new WhittedIntegrator();
+	return new WhittedIntegrator(5);
 }
 
 RAINBOW_NAMESPACE_END

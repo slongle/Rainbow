@@ -46,7 +46,7 @@ public:
 		y += v.y;
 		return *this;
 	}
-	Vector2<T> operator - (const Vector2 &v) const { return Vector2<T>(x - v.x, y - v.y, z - v.z); }
+	Vector2<T> operator - (const Vector2<T> &v) const { return Vector2<T>(x - v.x, y - v.y, z - v.z); }
 	Vector2<T> &operator-=(const Vector2<T> &v) {
 		x -= v.x;
 		y -= v.y;

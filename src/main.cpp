@@ -7,6 +7,7 @@
 #include "core/parser.h"
 //#include "core/object.h"
 //#include "shapes/sphere.h"
+#include "core/spectrum.h"
 
 using namespace rainbow;
 
@@ -61,6 +62,9 @@ int main(int argc, char *argv[]) {
 
 	//std::string filename = "C:/Users/del/Desktop/cornell-box/scene.xml";
 	//std::string filename = "C:/Users/del/Desktop/cbox/cbox.xml";	
+	std::string test = "0.725 0.71 0.68";
+	cout<<toColor(test)<<endl;
+	return 0;
 	RainbowInit();
 	std::string filename = "C:/Users/del/Desktop/cbox-Rainbow/cbox-distributed_test.xml";
 	filesystem::path path(filename);

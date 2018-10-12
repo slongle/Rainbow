@@ -9,9 +9,8 @@ Film::Film(const std::string & _filename, const Point2i & _resolution) :
 
 void Film::SetPixel(const Point2i & p, const RGBSpectrum & L) const {
 	Pixel &pixel = GetPixel(p);
-	pixel.rgb[0] = L.c[0];
-	pixel.rgb[1] = L.c[1];
-	pixel.rgb[2] = L.c[2];
+	for (int i = 0; i < 3; i++)
+		pixel.rgb[i] = L[i];
 }
 
 void Film::SaveImage() {

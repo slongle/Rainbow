@@ -11,7 +11,7 @@ public:
 
 	Bounds3f ObjectBounds() const override;
 
-	bool Intersect(const Ray & ray, Float *tHit, Interaction *inter) const override;
+	bool Intersect(const Ray & ray, Float *tHit, SurfaceInteraction*inter) const override;
 	bool IntersectP(const Ray & ray) const override;
 
 	Float Area() const override; 

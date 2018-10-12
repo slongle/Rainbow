@@ -141,6 +141,9 @@
     <ClCompile Include="..\src\accelerators\bvh.cpp">
       <Filter>Source Files\accelerators</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\core\light.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\core\bbox.h">
@@ -248,6 +251,9 @@
     <ClInclude Include="..\src\accelerators\bvh.h">
       <Filter>Source Files\accelerators</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\core\light.h">
+      <Filter>Source Files\core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\log\20180811.md">
@@ -281,6 +287,9 @@
       <Filter>Log Files</Filter>
     </None>
     <None Include="..\log\20180924.md">
+      <Filter>Log Files</Filter>
+    </None>
+    <None Include="..\log\20181011.md">
       <Filter>Log Files</Filter>
     </None>
   </ItemGroup>

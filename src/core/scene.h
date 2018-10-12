@@ -14,8 +14,8 @@ public:
 
 	void addChild(Object *child);
 
-	bool Intersect(const Ray & ray, Float *tHit, Interaction *inter) const {
-		return aggregate->Intersect(ray, tHit, inter);
+	bool Intersect(const Ray & ray, SurfaceInteraction*inter) const {
+		return aggregate->Intersect(ray, inter);
 	}
 	bool IntersectP(const Ray & ray) const {
 		return aggregate->IntersectP(ray);

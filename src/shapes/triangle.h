@@ -12,7 +12,7 @@ public:
 		const std::vector<Point3f>& _p, const std::vector<int>& _VertexIndices, const Normal3f *_n);
 
 	Bounds3f ObjectBounds() const { Assert(false, "Invoke TriangleMesh's ObjectBounds() Function!"); }
-	bool Intersect(const Ray & ray, Float *tHit, Interaction *inter) const 
+	bool Intersect(const Ray & ray, Float *tHit, SurfaceInteraction*inter) const 
 		{ Assert(false, "Invoke TriangleMesh's Intersect() Function!"); }
 	Float Area() const { Assert(false, "Invoke TriangleMesh's Area() Function!"); }
 	
@@ -32,7 +32,7 @@ public:
 	Bounds3f ObjectBounds() const;
 	Bounds3f WorldBounds() const;
 
-	bool Intersect(const Ray & ray, Float *tHit, Interaction *inter) const;
+	bool Intersect(const Ray & ray, Float *tHit, SurfaceInteraction*inter) const;
 	bool IntersectP(const Ray & ray) const;
 
 	Float Area() const;	

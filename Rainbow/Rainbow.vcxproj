@@ -131,6 +131,7 @@
     <ClCompile Include="..\src\core\common.cpp" />
     <ClCompile Include="..\src\core\filter.cpp" />
     <ClCompile Include="..\src\core\imageio.cpp" />
+    <ClCompile Include="..\src\core\light.cpp" />
     <ClCompile Include="..\src\core\logger.cpp" />
     <ClCompile Include="..\src\core\frame.cpp" />
     <ClCompile Include="..\src\core\film.cpp" />
@@ -168,6 +169,7 @@
     <ClInclude Include="..\src\core\common.h" />
     <ClInclude Include="..\src\core\filter.h" />
     <ClInclude Include="..\src\core\imageio.h" />
+    <ClInclude Include="..\src\core\light.h" />
     <ClInclude Include="..\src\core\logger.h" />
     <ClInclude Include="..\src\core\frame.h" />
     <ClInclude Include="..\src\core\film.h" />
@@ -203,6 +205,7 @@
     <None Include="..\log\20180828.md" />
     <None Include="..\log\20180922.md" />
     <None Include="..\log\20180924.md" />
+    <None Include="..\log\20181011.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

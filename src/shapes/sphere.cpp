@@ -6,7 +6,7 @@ Bounds3f Sphere::ObjectBounds() const {
 	return Bounds3f(Point3f(-radius, -radius, -radius), Point3f(radius, radius, radius));
 }
 
-bool Sphere::Intersect(const Ray & ray, Float * tHit, Interaction * inter) const {
+bool Sphere::Intersect(const Ray & ray, Float * tHit, SurfaceInteraction* inter) const {
 	Ray r = (*WorldToObject)(ray);
 	Float ox = r.o.x, oy = r.o.y, oz = r.o.z;
 	Float dx = r.d.x, dy = r.d.y, dz = r.d.z;

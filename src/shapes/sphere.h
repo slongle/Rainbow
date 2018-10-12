@@ -12,7 +12,7 @@ public:
 
 	Bounds3f ObjectBounds() const;
 
-	bool Intersect(const Ray & ray, Float *tHit, Interaction *inter) const;
+	bool Intersect(const Ray & ray, Float *tHit, SurfaceInteraction*inter) const;
 	bool IntersectP(const Ray & ray) const;
 	Float Area() const;
 

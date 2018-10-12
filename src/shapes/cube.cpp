@@ -11,7 +11,7 @@ Bounds3f Cube::ObjectBounds() const {
 	return bound;
 }
 
-bool Cube::Intersect(const Ray & ray, Float * tHit, Interaction * inter) const {
+bool Cube::Intersect(const Ray & ray, Float * tHit, SurfaceInteraction* inter) const {
 	Ray r = (*WorldToObject)(ray);
 	Float t0 = 0, t1 = r.tMax;
 	for (int i = 0; i < 3; i++) {

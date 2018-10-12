@@ -66,6 +66,9 @@ class Integrator;
 class Scene;
 class Intersection;
 class SurfaceInteraction;
+class Primitive;
+class Light;
+class AreaLight;
 
 inline filesystem::resolver *getFileResolver() {
 	static filesystem::resolver *resolver = new filesystem::resolver();
