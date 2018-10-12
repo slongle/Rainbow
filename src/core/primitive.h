@@ -5,7 +5,7 @@
 
 RAINBOW_NAMESPACE_BEGIN
 
-class Primitive :public Object {
+class Primitive{
 public:
 	Primitive(std::shared_ptr<Shape> _shape, std::shared_ptr<AreaLight> _areaLight = nullptr) :
 		shape(_shape), areaLight(_areaLight) {}
@@ -14,7 +14,6 @@ public:
 	bool IntersectP(const Ray & ray) const;
 
 	AreaLight* getAreaLight() const { return areaLight.get(); }
-	EClassType getClassType() const override { return EPrimitive; }
 
 	std::shared_ptr<Shape> shape;
 	std::shared_ptr<AreaLight> areaLight;

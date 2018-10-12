@@ -6,14 +6,20 @@
 
 RAINBOW_NAMESPACE_BEGIN
 
-class BSDF :public Object{
+class BxDF{
 public:
-	BSDF() {}
-
-	EClassType getClassType() const { return EBSDF; }
+	BxDF() {}	
 };
 
-BSDF* CreateDiffuseBSDF(PropertyList &list);
+class SpecularReflect :public BxDF {
+public:
+
+};
+
+class SpecularTransmission :public BxDF {
+public:
+
+};
 
 RAINBOW_NAMESPACE_END
 

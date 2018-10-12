@@ -16,15 +16,13 @@ RAINBOW_NAMESPACE_BEGIN
   right-lower corner is (width - 1, height - 1)
 */
 
-class Film : public Object{
+class Film{
 public:	
 	Film(const std::string & _filename, const Point2i & _resolution);
 
 
 	void SetPixel(const Point2i& p, const RGBSpectrum& L) const;
 	void SaveImage();
-
-	EClassType getClassType() const override { return EFilm; }
 
 	const std::string filename;
 	const Point2i resolution;
