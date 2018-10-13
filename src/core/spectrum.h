@@ -26,13 +26,29 @@ public:
 	}
 
 	RGBSpectrum operator + (const RGBSpectrum& s) const { return RGBSpectrum(r + s.r, g + s.g, b + s.b); }
-	RGBSpectrum &operator += (const RGBSpectrum&s) { r += s.r; g += s.g; b += s.b; return *this; }
+	RGBSpectrum &operator += (const RGBSpectrum& s) { r += s.r; g += s.g; b += s.b; return *this; }
 	RGBSpectrum operator - (const RGBSpectrum& s) const { return RGBSpectrum(r - s.r, g - s.g, b - s.b); }
-	RGBSpectrum &operator -= (const RGBSpectrum&s) { r -= s.r; g -= s.g; b -= s.b; return *this; }
+	RGBSpectrum &operator -= (const RGBSpectrum& s) { r -= s.r; g -= s.g; b -= s.b; return *this; }
+	RGBSpectrum operator *(const RGBSpectrum& s) const { return RGBSpectrum(r*s.r, g*s.g, b*s.b); }
+	RGBSpectrum &operator *=(const RGBSpectrum& s) { r *= s.r; g *= s.g; b *= s.b; return *this; }
+	RGBSpectrum operator *(const Float& u) const { return RGBSpectrum(r*u, g*u, b*u); }
+	RGBSpectrum &operator *=(const Float& u) { r *= u; g *= u; b *= u; return *this; }
+	RGBSpectrum operator / (const Float& u) const {
+		Assert(u != 0, "Divide zero");
+		Float inv = 1.0f / u;
+		return (*this)*inv;
+	}
+	RGBSpectrum &operator /= (const Float& u) {
+		Assert(u != 0, "Divide zero");
+		Float inv = 1.0f / u;
+		return (*this) *= inv;
+	}
 
 	std::string toString(const int &spaceNum = 0) const {
 		return indent(tfm::format("%.3f, %.3f, %.3f", r, g, b), spaceNum);
 	}
+
+	friend RGBSpectrum operator * (const Float u,const RGBSpectrum s) { return RGBSpectrum(u*s.r, u*s.g, u*s.b); }
 
 	friend std::ostream &operator << (std::ostream &os, const RGBSpectrum &color) {
 		os << color.toString();

@@ -142,7 +142,8 @@ public:
 		z += v.z;
 		return *this;
 	}
-	Vector3<T> operator - (const Vector3 &v) const { return Vector3<T>(x - v.x, y - v.y, z - v.z); }
+	Vector3<T> operator - (const Vector3<T> &v) const { return Vector3<T>(x - v.x, y - v.y, z - v.z); }
+	Vector3<T> operator - (const Normal3<T> &v) const { return Vector3<T>(x - v.x, y - v.y, z - v, z); }
 	Vector3<T> &operator-=(const Vector3<T> &v) {
 		x -= v.x;
 		y -= v.y;
@@ -179,8 +180,14 @@ public:
 		return indent(tfm::format("[ %.4f, %.4f, %.4f ]", x, y, z), spaceNum);
 	}
 
+	template<typename T>
+	Vector3<T> operator + (const Normal3<T> &v) const {
+		return Vector3<T>(x + v.x, y + v.y, z + v.z);
+	}
+
 	template<typename U>
 	friend Vector3<T> operator * (U f, Vector3<T> v) { return Vector3<T>(v.x*f, v.y*f, v.z*f); }
+
 
 	friend std::ostream &operator<<(std::ostream &os, const Vector3<T> &v) {
 		os << v.toString();
@@ -401,8 +408,13 @@ public:
 	bool HasNaNs() const { return isNaN(x) || isNaN(y) || isNaN(z); }
 
 	Normal3<T> operator + (const Normal3<T> &n) const { return Normal3<T>(x + n.x, y + n.y, z + n.z); }
-
 	Normal3<T> operator - () const { return Normal3<T>(-x, -y, -z); }
+	Normal3<T> operator * (const Float &u) const { return Normal3<T>(x*u, y*u, z*u); }
+
+	template<typename U>
+	friend Normal3<T> operator * (const U& f, const Normal3<T>& n) { return Normal3<T>(n.x*f, n.y*f, n.z*f); }	
+
+	friend Vector3<T> operator - (const Normal3<T>& n, const Vector3<T>& v) { return Vector3<T>(n.x - v.x, n.y - v.y, n.z - v.z); }
 
 	std::string toString(const int &spaceNum = 0) const {
 		return indent(tfm::format("[ %.4f, %.4f, %.4f ]", x, y, z), spaceNum);
@@ -423,6 +435,11 @@ inline T Dot(const Normal3<T> &u, const Normal3<T> &v) {
 
 template<typename T>
 inline T Dot(const Normal3<T> &u, const Vector3<T> &v) {
+	return u.x*v.x + u.y*v.y + u.z*v.z;
+}
+
+template<typename T>
+inline T Dot(const Vector3<T> &u, const Normal3<T> &v) {
 	return u.x*v.x + u.y*v.y + u.z*v.z;
 }
 
