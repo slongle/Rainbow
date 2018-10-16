@@ -12,11 +12,17 @@ bool Primitive::IntersectP(const Ray & ray) const {
 	return shape->IntersectP(ray);
 }
 
+void Primitive::ComputeScatteringFunctions(SurfaceInteraction * intersection) const {
+	if (material)
+		material->ComputeScatteringFunctions(intersection);
+	else Assert(material != nullptr, "No Material for Primitive");
+}
+
 bool Aggregate::Intersect(const Ray & ray, SurfaceInteraction* inter) const {
 	bool hit = false;
-	Float *tHit = nullptr;
+	Float tHit;
 	for (const auto& primitive : primitives) {
-		if (primitive->Intersect(ray, tHit, inter)) {			
+		if (primitive->Intersect(ray, &tHit, inter)) {			
 			hit = true;
 		}
 	}

@@ -283,6 +283,8 @@ public:
 
 	bool HasNaNs() { return isNaN(x) || isNaN(y); }
 
+	friend Point2<T> operator * (const T& u, const Point2<T>& v) { return Point2<T>(u*v.x, u*v.y); }
+
 	std::string toString(const int &spaceNum = 0) const {
 		return indent(tfm::format("[ %.4f, %.4f ]", x, y), spaceNum);
 	}
@@ -294,6 +296,11 @@ public:
 
 	T x, y;
 };
+
+template<typename T>
+Point2<T> operator - (const Point2<T>& u,const Vector2<T>& v){
+	return Point2<T>(u.x - v.x, u.y - v.y);
+}
 
 template<typename T>
 class Point3 {
@@ -441,6 +448,11 @@ inline T Dot(const Normal3<T> &u, const Vector3<T> &v) {
 template<typename T>
 inline T Dot(const Vector3<T> &u, const Normal3<T> &v) {
 	return u.x*v.x + u.y*v.y + u.z*v.z;
+}
+
+template<typename T>
+inline T AbsDot(const Vector3<T> &u, const Normal3<T> &v) {
+	return std::abs(Dot(u, v));
 }
 
 template<typename T>

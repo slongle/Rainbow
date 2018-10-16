@@ -3,6 +3,7 @@
 
 #include "scene.h"
 #include "camera.h"
+#include "sampler.h"
 #include "interaction.h"
 
 RAINBOW_NAMESPACE_BEGIN
@@ -13,7 +14,7 @@ public:
 	virtual void Render(const Scene &scene) = 0;
 
 	std::shared_ptr<Camera> camera;
-	//std::shared_ptr<Sampler> sampler;
+	std::shared_ptr<Sampler> sampler;
 };
 
 //class SamplerIntegrator :public Integrator {

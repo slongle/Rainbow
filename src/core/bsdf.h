@@ -1,9 +1,9 @@
 #ifndef __BSDF_H
 #define __BSDF_H
 
-#include "common.h"
-#include "object.h"
+#include "vector.h"
 #include "spectrum.h"
+#include "sampling.h"
 
 RAINBOW_NAMESPACE_BEGIN
 
@@ -21,6 +21,10 @@ inline Vector3f Reflect(const Vector3f& wi, const Normal3f& n) {
 }
 
 inline bool Refract(const Vector3f & wi, const Normal3f & n, Float eta, Vector3f* wt);
+
+inline bool SameHemisphere(const Vector3f &w, const Vector3f &wp) {
+	return w.z * wp.z > 0;
+}
 
 class BxDF{
 public:
@@ -87,7 +91,7 @@ public:
 	LambertianReflection(const RGBSpectrum& m_R) :
 		BxDF(BxDFType(BSDF_REFLECTION | BSDF_DIFFUSE)), R(m_R) {}
 	RGBSpectrum f(const Vector3f& wo, const Vector3f& wi);
-	//RGBSpectrum sampleF(const Vector3f& wo, Vector3f* wi, const Point2f &sample, Float *pdf);
+	RGBSpectrum sampleF(const Vector3f& wo, Vector3f* wi, const Point2f &sample, Float *pdf);
 
 	const RGBSpectrum R;
 };

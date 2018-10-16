@@ -30,6 +30,9 @@
 #define INV_FOURPI   0.07957747154594766788f
 #define SQRT_TWO     1.41421356237309504880f
 #define INV_SQRT_TWO 0.70710678118654752440f
+#define PiOver2      1.57079632679489661923f
+#define PiOver4      0.78539816339744830961f
+
 
 /* Define Float for changing precision conveniently*/
 #define __FLOAT_TYPE
@@ -69,6 +72,7 @@ class SurfaceInteraction;
 class Primitive;
 class Light;
 class AreaLight;
+class Sampler;
 
 inline filesystem::resolver *getFileResolver() {
 	static filesystem::resolver *resolver = new filesystem::resolver();

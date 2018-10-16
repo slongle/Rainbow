@@ -27,7 +27,7 @@ bool Sphere::Intersect(const Ray & ray, Float * tHit, SurfaceInteraction* inter)
 
 	Point3f pHit = r(tShapeHit);
 
-	*inter = (*ObjectToWorld)(SurfaceInteraction(pHit, static_cast<Normal3f>(pHit/radius), this));
+	*inter = (*ObjectToWorld)(SurfaceInteraction(pHit, static_cast<Normal3f>(pHit / radius), -r.d, this));
 
 	*tHit = tShapeHit;
 

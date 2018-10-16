@@ -137,11 +137,14 @@
     <ClCompile Include="..\src\core\film.cpp" />
     <ClCompile Include="..\src\core\integrator.cpp" />
     <ClCompile Include="..\src\core\interaction.cpp" />
+    <ClCompile Include="..\src\core\material.cpp" />
     <ClCompile Include="..\src\core\object.cpp" />
     <ClCompile Include="..\src\core\parser.cpp" />
     <ClCompile Include="..\src\core\primitive.cpp" />
     <ClCompile Include="..\src\core\propertylist.cpp" />
     <ClCompile Include="..\src\core\ray.cpp" />
+    <ClCompile Include="..\src\core\sampler.cpp" />
+    <ClCompile Include="..\src\core\sampling.cpp" />
     <ClCompile Include="..\src\core\scene.cpp" />
     <ClCompile Include="..\src\core\shape.cpp" />
     <ClCompile Include="..\src\core\spectrum.cpp" />
@@ -151,12 +154,15 @@
     <ClCompile Include="..\src\filters\tent.cpp" />
     <ClCompile Include="..\src\integrators\whitted.cpp" />
     <ClCompile Include="..\src\main.cpp" />
+    <ClCompile Include="..\src\materials\matte.cpp" />
+    <ClCompile Include="..\src\samplers\independent.cpp" />
     <ClCompile Include="..\src\shapes\cube.cpp" />
     <ClCompile Include="..\src\shapes\sphere.cpp" />
     <ClCompile Include="..\src\shapes\triangle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\ext\lodepng\lodepng.h" />
+    <ClInclude Include="..\ext\pcg32\pcg32.h" />
     <ClInclude Include="..\ext\pugixml\pugiconfig.hpp" />
     <ClInclude Include="..\ext\pugixml\pugixml.hpp" />
     <ClInclude Include="..\ext\tinyformat.h" />
@@ -175,12 +181,15 @@
     <ClInclude Include="..\src\core\film.h" />
     <ClInclude Include="..\src\core\integrator.h" />
     <ClInclude Include="..\src\core\interaction.h" />
+    <ClInclude Include="..\src\core\material.h" />
     <ClInclude Include="..\src\core\object.h" />
     <ClInclude Include="..\src\core\parser.h" />
     <ClInclude Include="..\src\core\primitive.h" />
     <ClInclude Include="..\src\core\propertylist.h" />
     <ClInclude Include="..\src\core\rainbow.h" />
     <ClInclude Include="..\src\core\ray.h" />
+    <ClInclude Include="..\src\core\sampler.h" />
+    <ClInclude Include="..\src\core\sampling.h" />
     <ClInclude Include="..\src\core\scene.h" />
     <ClInclude Include="..\src\core\shape.h" />
     <ClInclude Include="..\src\core\spectrum.h" />
@@ -189,6 +198,8 @@
     <ClInclude Include="..\src\filters\box.h" />
     <ClInclude Include="..\src\filters\tent.h" />
     <ClInclude Include="..\src\integrators\whitted.h" />
+    <ClInclude Include="..\src\materials\matte.h" />
+    <ClInclude Include="..\src\samplers\independent.h" />
     <ClInclude Include="..\src\shapes\cube.h" />
     <ClInclude Include="..\src\shapes\sphere.h" />
     <ClInclude Include="..\src\shapes\triangle.h" />

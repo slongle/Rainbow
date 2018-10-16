@@ -101,7 +101,7 @@ bool Triangle::Intersect(const Ray & ray, Float * tHit, SurfaceInteraction* inte
 		nHit = static_cast<Normal3f>(Cross(p1 - p0, p2 - p0));
 		nHit = -FaceForward(nHit, ray.d);
 	}
-	*inter = SurfaceInteraction(pHit, nHit, this);
+	*inter = SurfaceInteraction(pHit, nHit, -ray.d, this);
 
 	return true;
 }

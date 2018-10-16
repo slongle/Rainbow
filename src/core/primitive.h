@@ -2,20 +2,25 @@
 #define __PRIMITIVE_H
 
 #include "shape.h"
+#include "material.h"
 
 RAINBOW_NAMESPACE_BEGIN
 
 class Primitive{
 public:
-	Primitive(std::shared_ptr<Shape> _shape, std::shared_ptr<AreaLight> _areaLight = nullptr) :
-		shape(_shape), areaLight(_areaLight) {}
+	Primitive(std::shared_ptr<Shape> m_shape, std::shared_ptr<Material> m_material = nullptr,
+		std::shared_ptr<AreaLight> m_areaLight = nullptr) :
+		shape(m_shape), material(m_material), areaLight(m_areaLight) {}
 
 	bool Intersect(const Ray & ray, Float *tHit, SurfaceInteraction*inter) const;
 	bool IntersectP(const Ray & ray) const;
 
+	void ComputeScatteringFunctions(SurfaceInteraction* intersection) const;
+
 	AreaLight* getAreaLight() const { return areaLight.get(); }
 
 	std::shared_ptr<Shape> shape;
+	std::shared_ptr<Material> material;
 	std::shared_ptr<AreaLight> areaLight;
 };
 

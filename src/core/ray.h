@@ -8,7 +8,7 @@ RAINBOW_NAMESPACE_BEGIN
 class Ray {
 public:
 	Ray() :tMax(INFINITY) {}
-	Ray(const Point3f &_o, const Vector3f &_d, const Float _tMax = INFINITY) :o(_o), d(_d), tMax(_tMax) {}
+	Ray(const Point3f &m_o, const Vector3f &m_d, const Float m_tMax = INFINITY) :o(m_o), d(m_d), tMax(m_tMax) {}
 
 	Point3f operator ()(Float t) const { return o + d * t; }
 

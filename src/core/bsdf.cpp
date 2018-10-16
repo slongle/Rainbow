@@ -79,8 +79,12 @@ RGBSpectrum LambertianReflection::f(const Vector3f & wo, const Vector3f & wi) {
 	return R * INV_PI;
 }
 
-/*RGBSpectrum LambertianReflection::sampleF(const Vector3f & wo, Vector3f * wi, const Point2f & sample, Float * pdf) {
-	return RGBSpectrum();
-}*/
+RGBSpectrum LambertianReflection::sampleF(const Vector3f & wo, Vector3f * wi, const Point2f & sample, Float * pdf) {
+	//Assert(false,"No Implement!");
+	*wi = CosineSampleHemisphere(sample);
+	if (wo.z < 0) wi->z *= -1;
+	*pdf = SameHemisphere(wo, *wi) ? AbsCosTheta(*wi) * INV_PI : 0;
+	return R * INV_PI;
+}
 
 RAINBOW_NAMESPACE_END

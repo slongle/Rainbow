@@ -40,6 +40,15 @@
     <Filter Include="Source Files\accelerators">
       <UniqueIdentifier>{f1111002-91cd-4841-ad5c-cab06f6a2edd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\materials">
+      <UniqueIdentifier>{36a8525d-2110-47b7-b688-fe313c9a75a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Extend Files\pcg32">
+      <UniqueIdentifier>{0df689f1-f236-456b-98db-9462fb28218c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\samplers">
+      <UniqueIdentifier>{af784d53-f15b-4026-bbe9-c486296345a2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\core\bbox.cpp">
@@ -142,6 +151,21 @@
       <Filter>Source Files\accelerators</Filter>
     </ClCompile>
     <ClCompile Include="..\src\core\light.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\core\material.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\materials\matte.cpp">
+      <Filter>Source Files\materials</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\core\sampler.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\samplers\independent.cpp">
+      <Filter>Source Files\samplers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\core\sampling.cpp">
       <Filter>Source Files\core</Filter>
     </ClCompile>
   </ItemGroup>
@@ -252,6 +276,24 @@
       <Filter>Source Files\accelerators</Filter>
     </ClInclude>
     <ClInclude Include="..\src\core\light.h">
+      <Filter>Source Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\core\material.h">
+      <Filter>Source Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\materials\matte.h">
+      <Filter>Source Files\materials</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\core\sampler.h">
+      <Filter>Source Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ext\pcg32\pcg32.h">
+      <Filter>Extend Files\pcg32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\samplers\independent.h">
+      <Filter>Source Files\samplers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\core\sampling.h">
       <Filter>Source Files\core</Filter>
     </ClInclude>
   </ItemGroup>

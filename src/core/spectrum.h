@@ -11,6 +11,10 @@ public:
 	RGBSpectrum(const Float &_r, const Float &_g, const Float &_b) { r = _r; g = _g; b = _b; }
 	RGBSpectrum(const Float *_c) { r = _c[0]; g = _c[1]; b = _c[2]; }	
 
+	bool IsBlack() const {
+		return (r == 0.f && g == 0.f && b == 0.f);
+	}
+
 	Float operator [] (const int index) const {
 		Assert(0 <= index && index <= 2, "Access Violation");
 		if (index == 0) return r;

@@ -84,6 +84,7 @@ void ParserXMLFile(const std::string & filename) {
 	tags["vector"]      = EVector;
 	tags["spectrum"]    = EColor;
 	tags["rgb"]         = EColor;
+	tags["color"]       = EColor;
 
 	tags["transform"]  = ETransform;
 	tags["lookat"]     = ELookAt;
@@ -117,10 +118,17 @@ void ParserXMLFile(const std::string & filename) {
 		else if (tag == ETransform)
 			m_transform.Identify();
 
+		/*
+		if (tag == EBSDF) {
+			int a = 1;
+		}*/
+
 		PropertyList m_list;
 		for (pugi::xml_node &child : node.children()) {
 			ParserTag(child, m_list, num + 4);
 		}
+
+		
 
 		bool isObject = tag < EBoolean;
 
@@ -145,7 +153,7 @@ void ParserXMLFile(const std::string & filename) {
 					RainbowFilm(name, m_list);
 					break;
 				case EBSDF:
-					//result = MakeBSDF(name, m_list);
+					RainbowMaterial(name,m_list);
 					break;
 				case EShape:
 					RainbowShape(name, m_list);
@@ -178,10 +186,10 @@ void ParserXMLFile(const std::string & filename) {
 				break;
 			}
 			case EColor: {
-				if (node.name() == "spectrum") {
+				if (strcmp(node.name(), "spectrum") == 0) {
 					// TODO: Fix Spectrum declared with wavelength
 				}
-				else if (node.name() == "rgb") {
+				else if (strcmp(node.name(), "rgb") == 0 || strcmp(node.name(), "color") == 0) {
 					list.setColor(node.attribute("name").value(), toColor(node.attribute("value").value()));
 				}
 				break;
