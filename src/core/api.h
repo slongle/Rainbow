@@ -14,6 +14,7 @@ void RainbowSampler(const std::string& type, const PropertyList& list);
 void RainbowFilm(const std::string& type, const PropertyList& list);
 void RainbowShape(const std::string& type, PropertyList& list);
 void RainbowMaterial(const std::string& type, PropertyList& list);
+void RainbowLight(const std::string& type, PropertyList& list);
 
 
 RAINBOW_NAMESPACE_END

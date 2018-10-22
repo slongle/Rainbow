@@ -9,16 +9,15 @@ void WhittedIntegrator::Render(const Scene & scene) {
 	//exit(0);
 	for (int y = 0; y < film->resolution.y; y++) {
 		for (int x = 0; x < film->resolution.x; x++) {
-			// TODO: Implement Sampler
-			camera->GenerateRay(&ray, Point2f(x - film->resolution.x *0.5, y - film->resolution.y *0.5));
-			film->SetPixel(Point2i(x, y), Li(ray, scene, 0));
-			/*if (scene.IntersectP(ray)) {
-				film->SetPixel(Point2i(x, y), RGBSpectrum(0, 0, 0));
+			RGBSpectrum L(0.0);
+			int SampleNum = 500;
+			for (int i = 0; i < SampleNum; i++) {
+				camera->GenerateRay(&ray,
+					Point2f(x - film->resolution.x *0.5, y - film->resolution.y *0.5) + sampler->Get2D());
+				L += Li(ray, scene, 0);
 			}
-			else {
-				film->SetPixel(Point2i(x, y), RGBSpectrum(1, 1, 1));
-			}*/			
-			//std::cout << x << " " << y << std::endl;
+			L /= SampleNum;
+			film->SetPixel(Point2i(x, y), L);
 		}
 		std::cout << y << std::endl;
 	}
@@ -31,19 +30,24 @@ RGBSpectrum WhittedIntegrator::Li(const Ray & ray, const Scene & scene, int dept
 	if (!scene.Intersect(ray, &intersection)) {
 		return L;
 	}
-	//std::cout << "Hit!" << std::endl;
-	Vector3f wo = ray.d;
 
-	intersection.ComputeScatteringFunctions();
-	
+
+	//std::cout << "Hit!" << std::endl;
+	Vector3f wo = intersection.wo;
+
 	/*Direct Light*/
 	L += intersection.Le(wo);
-	//L += RGBSpectrum(40.0);
+	
+	intersection.ComputeScatteringFunctions();
+	if (!intersection.bxdf)
+		return L;
 
 	if (depth + 1 < maxDep) {
 		L += SpecularReflect(ray, scene, depth, intersection);
 		//L += SpecularRefract(ray, scene, depth, intersection);
 	}
+
+	delete(intersection.bxdf);
 
 	return L;
 }
@@ -52,16 +56,13 @@ RGBSpectrum WhittedIntegrator::SpecularReflect
 (const Ray & ray, const Scene & scene, int depth, SurfaceInteraction intersection) {
 	Vector3f wo = intersection.wo, wi;
 	Float pdf;
-	// TODO: Implement Sampler Class
+
 	RGBSpectrum f = intersection.bxdf->sampleF(wo, &wi, sampler->Get2D(), &pdf);
 	Normal3f n = intersection.n;	
 	if (pdf > 0.f && !f.IsBlack() && Dot(n, wi) != 0.f) {
 		Ray r = intersection.SpawnRay(wi);
-		
-		/*
-		Special
-		*/
-		return f;
+	
+		//return f;
 		
 		return f * Li(r, scene, depth + 1)*AbsDot(wi, n) / pdf;
 	}

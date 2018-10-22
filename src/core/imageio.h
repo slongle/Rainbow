@@ -4,7 +4,7 @@
 #include "common.h"
 #include "vector.h"
 
-#include "lodepng/lodepng.h"
+#include "../../ext/lodepng/lodepng.h"
 
 RAINBOW_NAMESPACE_BEGIN
 

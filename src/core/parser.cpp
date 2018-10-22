@@ -158,9 +158,9 @@ void ParserXMLFile(const std::string & filename) {
 				case EShape:
 					RainbowShape(name, m_list);
 					break;
-					//case ELight:
-					//	result = MakeLight();
-					//	break;
+				case ELight:
+					RainbowLight(name, m_list);
+					break;
 			}			
 		}
 		else {

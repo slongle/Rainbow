@@ -15,7 +15,7 @@ bool Primitive::IntersectP(const Ray & ray) const {
 void Primitive::ComputeScatteringFunctions(SurfaceInteraction * intersection) const {
 	if (material)
 		material->ComputeScatteringFunctions(intersection);
-	else Assert(material != nullptr, "No Material for Primitive");
+	//else Assert(material != nullptr, "No Material for Primitive");
 }
 
 bool Aggregate::Intersect(const Ray & ray, SurfaceInteraction* inter) const {

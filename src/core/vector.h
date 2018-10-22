@@ -283,6 +283,8 @@ public:
 
 	bool HasNaNs() { return isNaN(x) || isNaN(y); }
 
+	Point2<T> operator + (const Point2<T>& u) const { return Point2<T>(x + u.x, y + u.y); }
+
 	friend Point2<T> operator * (const T& u, const Point2<T>& v) { return Point2<T>(u*v.x, u*v.y); }
 
 	std::string toString(const int &spaceNum = 0) const {

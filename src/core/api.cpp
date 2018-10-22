@@ -3,6 +3,7 @@
 #include "api.h"
 #include "film.h"
 #include "scene.h"
+#include "light.h"
 #include "material.h"
 
 #include "../cameras/perspective.h"
@@ -29,14 +30,18 @@ struct RenderOptions {
 	PropertyList SamplerProperty;
 	std::string FilmType;
 	PropertyList FilmProperty;
+	std::string LightType;
+	PropertyList LightProperty;
 	std::shared_ptr<Material> CurrentMaterial;
 	std::vector<std::shared_ptr<Primitive>> primitives;
+	std::vector<std::shared_ptr<Light>> lights;
 };
 
 static std::shared_ptr<RenderOptions> renderOptions;
 
 std::vector<std::shared_ptr<Shape>> MakeShapes(const std::string & type, PropertyList & list);
 std::shared_ptr<Material> MakeMaterial(const std::string & type, PropertyList & list);
+std::shared_ptr<AreaLight> MakeAreaLight(PropertyList & list, const std::shared_ptr<Shape> shape);
 
 void RainbowInit() {
 	renderOptions = std::make_shared<RenderOptions>();
@@ -73,17 +78,33 @@ void RainbowFilm(const std::string & type, const PropertyList & list) {
 void RainbowShape(const std::string & type, PropertyList & list) {
 	std::vector<std::shared_ptr<Primitive>> prims;
 	std::vector<std::shared_ptr<Shape>> shapes = MakeShapes(type, list);
+	std::vector<std::shared_ptr<Light>> lights;
 	std::shared_ptr<Material> mtl = renderOptions->CurrentMaterial;
 	if (shapes.empty()) return;
 	for (auto s : shapes) {
-		prims.push_back(std::make_shared<Primitive>(s, mtl));
+		std::shared_ptr<AreaLight> area;
+		if (!renderOptions->LightType.empty()) {
+			area = MakeAreaLight(renderOptions->LightProperty, s);
+			lights.push_back(area);
+		}
+		prims.push_back(std::make_shared<Primitive>(s, mtl, area));
 	}
 	renderOptions->primitives.insert(renderOptions->primitives.end(), prims.begin(), prims.end());
+	renderOptions->CurrentMaterial = nullptr;
+	if (!lights.empty()) {
+		renderOptions->lights.insert(renderOptions->lights.end(), lights.begin(), lights.end());
+		renderOptions->LightType = "";
+	}
 }
 
 void RainbowMaterial(const std::string & type, PropertyList & list) {
 	std::shared_ptr<Material> material = MakeMaterial(type, list);
 	renderOptions->CurrentMaterial = material;
+}
+
+void RainbowLight(const std::string & type, PropertyList & list) {
+	renderOptions->LightType = type;
+	renderOptions->LightProperty = list;
 }
 
 Aggregate* RenderOptions::MakeAggregate() {
@@ -95,7 +116,11 @@ Aggregate* RenderOptions::MakeAggregate() {
 
 Scene* RenderOptions::MakeScene() {
 	std::shared_ptr<Aggregate> aggregate(MakeAggregate());
-	Scene* scene = new Scene(aggregate);
+	Scene* scene = new Scene(aggregate, lights);
+
+	primitives.clear();
+	lights.clear();
+
 	return scene;
 }
 
@@ -157,6 +182,12 @@ std::shared_ptr<Material> MakeMaterial(const std::string & type, PropertyList & 
 		material = CreateMatteMaterial(list);
 	}
 	return std::shared_ptr<Material>(material);
+}
+
+std::shared_ptr<AreaLight> MakeAreaLight(PropertyList & list, const std::shared_ptr<Shape> shape) {
+	std::shared_ptr<AreaLight> area;
+	area = CreateAreaLight(list, shape);
+	return area;
 }
 
 RAINBOW_NAMESPACE_END
