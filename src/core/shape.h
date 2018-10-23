@@ -1,8 +1,9 @@
 #ifndef __SHAPE_H
 #define __SHAPE_H
 
-#include "object.h"
 #include "transform.h"
+#include "sampling.h"
+#include "propertylist.h"
 
 RAINBOW_NAMESPACE_BEGIN
 
@@ -18,6 +19,7 @@ public:
 	virtual bool Intersect(const Ray & ray,Float *tHit, SurfaceInteraction*inter) const = 0;
 	virtual bool IntersectP(const Ray & ray) const;
 
+	virtual Point3f Sample(const Point2f& sample, Float* pdf)const = 0;
 	virtual Float Area() const = 0;
 
 	enum EShapeType {

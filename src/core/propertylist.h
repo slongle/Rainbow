@@ -1,10 +1,8 @@
 #ifndef __PROPERTYLIST_H
 #define __PROPERTYLIST_H
 
-#include"common.h"
 #include"spectrum.h"
 #include"transform.h"
-#include"vector.h"
 
 RAINBOW_NAMESPACE_BEGIN
 

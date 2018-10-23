@@ -4,7 +4,7 @@
 #include "scene.h"
 #include "camera.h"
 #include "sampler.h"
-#include "interaction.h"
+#include "light.h"
 
 RAINBOW_NAMESPACE_BEGIN
 

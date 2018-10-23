@@ -31,6 +31,12 @@ inline Vector3f CosineSampleHemisphere(const Point2f &u) {
 	return Vector3f(d.x, d.y, z);
 }
 
+inline Point2f UniformSampleTriangle(const Point2f &u) {
+	Float su0 = std::sqrt(u[0]);
+	return Point2f(1 - su0, u[1] * su0);
+}
+
+
 RAINBOW_NAMESPACE_END
 
 #endif // __SAMPLING_H

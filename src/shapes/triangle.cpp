@@ -192,6 +192,16 @@ bool Triangle::IntersectP(const Ray & ray) const {
 	return true;
 }
 
+Point3f Triangle::Sample(const Point2f & sample, Float * pdf) const {
+	Point2f q = UniformSampleTriangle(sample);
+	const Point3f &p0 = mesh->Position[index[0]];
+	const Point3f &p1 = mesh->Position[index[1]];
+	const Point3f &p2 = mesh->Position[index[2]];
+	Point3f p = q[0] * p0 + q[1] * p1 + (1 - q[0] - q[1]) * p2;
+	*pdf = 1.0f / Area();
+	return p;
+}
+
 Float Triangle::Area() const {
 	const Point3f &p0 = mesh->Position[index[0]];
 	const Point3f &p1 = mesh->Position[index[1]];

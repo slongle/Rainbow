@@ -10,7 +10,7 @@ void WhittedIntegrator::Render(const Scene & scene) {
 	for (int y = 0; y < film->resolution.y; y++) {
 		for (int x = 0; x < film->resolution.x; x++) {
 			RGBSpectrum L(0.0);
-			int SampleNum = 500;
+			int SampleNum = 10;
 			for (int i = 0; i < SampleNum; i++) {
 				camera->GenerateRay(&ray,
 					Point2f(x - film->resolution.x *0.5, y - film->resolution.y *0.5) + sampler->Get2D());
@@ -34,6 +34,7 @@ RGBSpectrum WhittedIntegrator::Li(const Ray & ray, const Scene & scene, int dept
 
 	//std::cout << "Hit!" << std::endl;
 	Vector3f wo = intersection.wo;
+	Normal3f n = intersection.n;
 
 	/*Direct Light*/
 	L += intersection.Le(wo);
@@ -45,6 +46,16 @@ RGBSpectrum WhittedIntegrator::Li(const Ray & ray, const Scene & scene, int dept
 	if (depth + 1 < maxDep) {
 		L += SpecularReflect(ray, scene, depth, intersection);
 		//L += SpecularRefract(ray, scene, depth, intersection);
+	}
+
+	for (auto light : scene.lights) {
+		Vector3f wi;
+		Float pdf;
+		RGBSpectrum Li = light->SampleLi(intersection.p, sampler->Get2D(), &wi, &pdf);
+		if (Li.IsBlack() || pdf == 0) continue;
+		RGBSpectrum f = intersection.bxdf->f(wo, wi);
+		if (!f.IsBlack())
+			L += f * Li*AbsDot(wi, n) / pdf;
 	}
 
 	delete(intersection.bxdf);

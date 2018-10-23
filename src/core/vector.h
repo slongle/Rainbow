@@ -281,6 +281,12 @@ public:
 	Point2(const T _x, const T _y) :x(_x), y(_y) { Assert(!HasNaNs(), "Point2 has NaN"); }
 	explicit Point2(const Point3<T> &u) :x(u.x), y(u.y) { Assert(!HasNaNs(), "Point2 has NaN"); }
 
+	T operator [] (const int& i) const {
+		Assert(0 <= i && i <= 1, "Access Violation!");
+		if (i == 0) return x;
+		else return y;
+	}
+
 	bool HasNaNs() { return isNaN(x) || isNaN(y); }
 
 	Point2<T> operator + (const Point2<T>& u) const { return Point2<T>(x + u.x, y + u.y); }
@@ -362,6 +368,11 @@ public:
 
 	std::string toString(const int &spaceNum = 0) const {
 		return indent(tfm::format("[ %.4f, %.4f, %.4f ]", x, y, z), spaceNum);
+	}
+
+	template<typename U, typename T>
+	friend Point3<T> operator * (const U& f, const Point3<T>& p) {
+		return Point3<T>(f*p.x, f*p.y, f*p.z);
 	}
 
 	friend std::ostream &operator << (std::ostream &os, const Point3<T> u) {
