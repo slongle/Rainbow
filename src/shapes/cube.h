@@ -14,7 +14,7 @@ public:
 	bool Intersect(const Ray & ray, Float *tHit, SurfaceInteraction*inter) const override;
 	bool IntersectP(const Ray & ray) const override;
 
-	Point3f Sample(const Point2f& sample, Float* pdf)const {
+	Interaction Sample(const Point3f &p, const Point2f& sample, Float* pdf)const {
 		Assert(false, "No Implement!");
 	}
 	Float Area() const override; 

@@ -5,6 +5,13 @@
 
 RAINBOW_NAMESPACE_BEGIN
 
+/*
+V[f(x)] = E[(f(x)-E[f(x)])^2]
+        = E[f^2(x) + E^2[f(x)] - 2 f(x) E[f(x)]]
+		= E[f^2(x)] + E^2[f(x)] - 2 E^2[f(x)]  
+		= E[f^2(x)] - E^2[f(x)]
+*/
+
 class WhittedIntegrator :public Integrator {
 public:
 	WhittedIntegrator(const int& maxDep) :maxDep(maxDep) {}

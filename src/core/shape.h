@@ -19,7 +19,8 @@ public:
 	virtual bool Intersect(const Ray & ray,Float *tHit, SurfaceInteraction*inter) const = 0;
 	virtual bool IntersectP(const Ray & ray) const;
 
-	virtual Point3f Sample(const Point2f& sample, Float* pdf)const = 0;
+	virtual Interaction Sample(const Point3f &p, const Point2f& sample, Float* pdf) const = 0;
+	virtual Interaction Sample(const Interaction &ref, const Point2f& samplse, Float* pdf) const;
 	virtual Float Area() const = 0;
 
 	enum EShapeType {

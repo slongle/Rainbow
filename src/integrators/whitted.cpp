@@ -10,7 +10,7 @@ void WhittedIntegrator::Render(const Scene & scene) {
 	for (int y = 0; y < film->resolution.y; y++) {
 		for (int x = 0; x < film->resolution.x; x++) {
 			RGBSpectrum L(0.0);
-			int SampleNum = 10;
+			int SampleNum = 50;
 			for (int i = 0; i < SampleNum; i++) {
 				camera->GenerateRay(&ray,
 					Point2f(x - film->resolution.x *0.5, y - film->resolution.y *0.5) + sampler->Get2D());
@@ -31,6 +31,10 @@ RGBSpectrum WhittedIntegrator::Li(const Ray & ray, const Scene & scene, int dept
 		return L;
 	}
 
+	//if (((scene.aggregate->primitives[5]).get() != intersection.primitive) && ((scene.aggregate->primitives[4]).get() != intersection.primitive)){
+	//	return L;
+	//}
+
 
 	//std::cout << "Hit!" << std::endl;
 	Vector3f wo = intersection.wo;
@@ -40,26 +44,48 @@ RGBSpectrum WhittedIntegrator::Li(const Ray & ray, const Scene & scene, int dept
 	L += intersection.Le(wo);
 	
 	intersection.ComputeScatteringFunctions();
-	if (!intersection.bxdf)
+	if (!intersection.bxdf) {
+		//cout << "HH!" << endl;
 		return L;
+	}
+
+	//for (auto light : scene.lights) {
+	int kind;
+	if (sampler->Get1D() > 0.5f) kind = 1;
+	else kind = 0;
+	auto light = scene.lights[kind];
+		Vector3f wi;
+		Float pdf;
+		RGBSpectrum Li = light->SampleLi(intersection, sampler->Get2D(), &wi, &pdf);
+		//if (Li.IsBlack() || pdf == 0) continue;
+		pdf *= 0.5;
+		RGBSpectrum f = intersection.bxdf->f(wo, wi);
+		if (!f.IsBlack()) {
+			//cout << light << endl;
+			//cout << f << endl;
+			//cout << pdf << endl;
+			//cout << (f * Li*AbsDot(wi, n) / pdf) << endl;
+			
+			//cout << AbsDot(wi, n) << endl;
+
+			L += f * Li * AbsDot(wi, n) / pdf;			
+		}
+	//}
+
+	//exit(0);
+
 
 	if (depth + 1 < maxDep) {
 		L += SpecularReflect(ray, scene, depth, intersection);
 		//L += SpecularRefract(ray, scene, depth, intersection);
 	}
 
-	for (auto light : scene.lights) {
-		Vector3f wi;
-		Float pdf;
-		RGBSpectrum Li = light->SampleLi(intersection.p, sampler->Get2D(), &wi, &pdf);
-		if (Li.IsBlack() || pdf == 0) continue;
-		RGBSpectrum f = intersection.bxdf->f(wo, wi);
-		if (!f.IsBlack())
-			L += f * Li*AbsDot(wi, n) / pdf;
-	}
+	
 
 	delete(intersection.bxdf);
-
+	
+	//cout << L << endl;
+	
 	return L;
 }
 
@@ -75,7 +101,7 @@ RGBSpectrum WhittedIntegrator::SpecularReflect
 	
 		//return f;
 		
-		return f * Li(r, scene, depth + 1)*AbsDot(wi, n) / pdf;
+		return f * Li(r, scene, depth + 1)*AbsDot(wi,n) / pdf;
 	}
 	else
 		return RGBSpectrum(0.f);
@@ -87,7 +113,7 @@ RGBSpectrum WhittedIntegrator::SpecularRefract
 }
 
 WhittedIntegrator* CreateWhittedIntegrator(const PropertyList &list) {
-	return new WhittedIntegrator(5);
+	return new WhittedIntegrator(1);
 }
 
 RAINBOW_NAMESPACE_END

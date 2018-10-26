@@ -13,4 +13,19 @@ bool Shape::IntersectP(const Ray & ray) const {
 	return Intersect(ray, nullptr, nullptr);
 }
 
+Interaction Shape::Sample(const Interaction & ref, const Point2f & sample, Float * pdf) const {
+	Interaction intr = Sample(ref.p, sample, pdf);
+	Vector3f wi = intr.p - ref.p;
+	if (wi.LengthSquare() == 0)
+		*pdf = 0;
+	else {
+		wi = Normalize(wi);
+		// Convert from area measure, as returned by the Sample() call
+		// above, to solid angle measure.
+		*pdf *= DistanceSquare(ref.p, intr.p) / AbsDot(-wi, intr.n);
+		if (std::isinf(*pdf)) *pdf = 0.f;
+	}
+	return intr;
+}
+
 RAINBOW_NAMESPACE_END

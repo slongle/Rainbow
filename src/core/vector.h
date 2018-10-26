@@ -341,7 +341,7 @@ public:
 	Point3<T> &operator += (const Vector3<T> &u) { x += u.x; y += u.y; z += u.z; return *this; }
 	Point3<T> operator + (const Point3<T> &u) const { return Point3<T>(x + u.x, y + u.y, z + u.z); }
 	Point3<T> &operator += (const Point3<T> &u) { x += u.x; y += u.y; z += u.z; return *this; }
-	Vector3<T> operator - (const Point3<T> &u) const { return Vector3<T>(x - u.x, y - u.y, z - u.x); }
+	Vector3<T> operator - (const Point3<T> &u) const { return Vector3<T>(x - u.x, y - u.y, z - u.z); }
 	Point3<T> operator - (const Vector3<T> &u) const { return Point3<T>(x - u.x, y - u.y, z - u.z); }
 	Point3<T> &operator -= (const Vector3<T> &u) { x -= u.x; y -= u.y; z -= u.z; return *this; }
 	Point3<T> &operator -= (const Point3<T> &p) { x -= p.x; y -= p.y; z -= p.z; return *this; }
@@ -430,15 +430,22 @@ public:
 	Normal3<T> operator + (const Normal3<T> &n) const { return Normal3<T>(x + n.x, y + n.y, z + n.z); }
 	Normal3<T> operator - () const { return Normal3<T>(-x, -y, -z); }
 	Normal3<T> operator * (const Float &u) const { return Normal3<T>(x*u, y*u, z*u); }
+	Normal3<T> operator / (const Float &u) const { 
+		Assert(u != 0, "Divide Zero!");
+		Float inv = 1.0f / u;
+		return Normal3<T>(x*inv, y*inv, z*inv);
+	}
 
-	template<typename U>
-	friend Normal3<T> operator * (const U& f, const Normal3<T>& n) { return Normal3<T>(n.x*f, n.y*f, n.z*f); }	
-
-	friend Vector3<T> operator - (const Normal3<T>& n, const Vector3<T>& v) { return Vector3<T>(n.x - v.x, n.y - v.y, n.z - v.z); }
+	Float Length() const { return std::sqrt(x*x + y * y + z * z); }
 
 	std::string toString(const int &spaceNum = 0) const {
 		return indent(tfm::format("[ %.4f, %.4f, %.4f ]", x, y, z), spaceNum);
 	}
+
+	template<typename U>
+	friend Normal3<T> operator * (const U& f, const Normal3<T>& n) { return Normal3<T>(n.x*f, n.y*f, n.z*f); }	
+	template<typename T>
+	friend Vector3<T> operator - (const Normal3<T>& n, const Vector3<T>& v) { return Vector3<T>(n.x - v.x, n.y - v.y, n.z - v.z); }
 
 	friend std::ostream &operator << (std::ostream &os, const Normal3<T> &u) {
 		os << u.toString();
@@ -496,12 +503,22 @@ inline Vector3<T> Cross(const Vector3<T> &u, const Normal3<T> &v) {
 }
 
 template<typename T>
+inline Normal3<T> Normalize(const Normal3<T>& n) {
+	return n / n.Length();
+}
+
+template<typename T>
 inline Normal3<T> FaceForward(const Normal3<T> &n, const Vector3<T> &v) {
 	Float dot = Dot(n, v);
 	if (dot != 0)
 		return dot > 0 ? n : -n;
 	dot = Dot(n + Normal3<T>(Epsilon, 0, 0), v);
 	return dot > 0 ? n : -n;
+}
+
+template <typename T>
+inline Normal3<T> FaceForward(const Normal3<T> &n, const Normal3<T> &n2) {
+	return (Dot(n, n2) < 0.f) ? -n : n;
 }
 
 RAINBOW_NAMESPACE_END
