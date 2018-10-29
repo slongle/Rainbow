@@ -268,16 +268,17 @@ void ParseWavefrontOBJ(const std::string& name, int* VertexNum, int* TriangleNum
 	puts("");*/
 }
 
-std::vector<std::shared_ptr<Shape>> CreateWavefrontOBJ(PropertyList & list) {
+std::vector<std::shared_ptr<Shape>> CreateWavefrontOBJ(const Transform* o2w, const Transform* w2o, 
+	PropertyList & list) {
+	
 	std::string name = list.getString("filename");
-	Transform ObjectToWorld = list.getTransform("toWorld", Transform());
 	int VertexNum = 0, TriangleNum = 0;
 	std::vector<Point3f> Position;
 	std::vector<int> Indices;
 	ParseWavefrontOBJ(name, &VertexNum, &TriangleNum, &Position, &Indices);
 
 	std::shared_ptr<TriangleMesh> mesh =
-		std::make_shared<TriangleMesh>(&ObjectToWorld, VertexNum, TriangleNum, Position, Indices);
+		std::make_shared<TriangleMesh>(o2w, VertexNum, TriangleNum, Position, Indices);
 	std::vector<std::shared_ptr<Shape>> tris;
 	tris.reserve(TriangleNum);
 	for (int i = 0; i < mesh->TriangleNum; i++) {

@@ -36,4 +36,12 @@ bool Aggregate::IntersectP(const Ray & ray) const {
 	return false;
 }
 
+Bounds3f Aggregate::Bounds() const {
+	Bounds3f ret;
+	for (const auto& primitive : primitives) {
+		ret = Union(ret, primitive->shape->WorldBounds());
+	}
+	return ret;
+}
+
 RAINBOW_NAMESPACE_END

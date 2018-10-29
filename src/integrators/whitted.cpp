@@ -5,8 +5,24 @@ RAINBOW_NAMESPACE_BEGIN
 void WhittedIntegrator::Render(const Scene & scene) {	
 	std::shared_ptr<Film> film = camera->film;
 	Ray ray;
-	std::cout << scene.aggregate->primitives.size() << std::endl;
-	//exit(0);
+	
+	//std::cout << scene.aggregate->primitives.size() << std::endl;
+	//cout << scene.lights.size() << endl;
+	
+	//cout << camera->CameraToWorld << endl;
+
+	/*for (auto prim : scene.aggregate->primitives) {
+		cout << prim->shape->Area() << endl;
+	}*/
+
+	/*
+	auto a = scene.aggregate;
+	Bounds3f bound = a->Bounds();
+	cout << bound << endl;
+	cout << bound.Center() << endl;
+	cout << bound.Diagonal() << endl;
+	exit(0);*/
+
 	for (int y = 0; y < film->resolution.y; y++) {
 		for (int x = 0; x < film->resolution.x; x++) {
 			RGBSpectrum L(0.0);
@@ -49,17 +65,13 @@ RGBSpectrum WhittedIntegrator::Li(const Ray & ray, const Scene & scene, int dept
 		return L;
 	}
 
-	//for (auto light : scene.lights) {
-	int kind;
-	if (sampler->Get1D() > 0.5f) kind = 1;
-	else kind = 0;
-	auto light = scene.lights[kind];
+	for (auto light : scene.lights) {
 		Vector3f wi;
 		Float pdf;
 		RGBSpectrum Li = light->SampleLi(intersection, sampler->Get2D(), &wi, &pdf);
-		//if (Li.IsBlack() || pdf == 0) continue;
-		pdf *= 0.5;
+		if (Li.IsBlack() || pdf == 0) continue;		
 		RGBSpectrum f = intersection.bxdf->f(wo, wi);
+		//return f;
 		if (!f.IsBlack()) {
 			//cout << light << endl;
 			//cout << f << endl;
@@ -70,7 +82,7 @@ RGBSpectrum WhittedIntegrator::Li(const Ray & ray, const Scene & scene, int dept
 
 			L += f * Li * AbsDot(wi, n) / pdf;			
 		}
-	//}
+	}
 
 	//exit(0);
 

@@ -7,8 +7,8 @@ RAINBOW_NAMESPACE_BEGIN
 
 class Sphere :public Shape {
 public:	
-	Sphere(const Transform *_ObjectToWorld, const Transform *_WorldToObject, Float _radius) :
-		Shape(_ObjectToWorld, _WorldToObject), radius(_radius) {}
+	Sphere(const Transform *m_ObjectToWorld, const Transform *m_WorldToObject, Float m_radius) :
+		Shape(m_ObjectToWorld, m_WorldToObject), radius(m_radius) {}
 
 	Bounds3f ObjectBounds() const;
 
@@ -24,7 +24,7 @@ private:
 	Float radius;
 };
 
-Sphere* CreateSphere(const PropertyList &list);
+std::shared_ptr<Sphere> CreateSphere(const Transform* o2w, const Transform* w2o, PropertyList &list);
 
 RAINBOW_NAMESPACE_END
 

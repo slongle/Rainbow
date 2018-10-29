@@ -30,6 +30,8 @@ public:
 	virtual bool Intersect(const Ray & ray, SurfaceInteraction*inter) const;
 	virtual bool IntersectP(const Ray & ray) const;
 
+	Bounds3f Bounds() const ;
+
 	std::vector<std::shared_ptr<Primitive>> primitives;
 };
 

@@ -118,10 +118,15 @@ void ParserXMLFile(const std::string & filename) {
 		else if (tag == ETransform)
 			m_transform.Identify();
 
-		/*
-		if (tag == EBSDF) {
+		
+		if (tag == EShape) {
 			int a = 1;
-		}*/
+		}
+
+
+		bool isObject = tag < EBoolean;
+
+		if (isObject) InitialTransform();
 
 		PropertyList m_list;
 		for (pugi::xml_node &child : node.children()) {
@@ -130,12 +135,10 @@ void ParserXMLFile(const std::string & filename) {
 
 		
 
-		bool isObject = tag < EBoolean;
 
 		if (isObject) {
 			Assert(checkAttribute(node, "type"), "Missing attribute \"type\" in " +
 				static_cast<std::string>(node.name()));
-
 			std::string name = static_cast<std::string>(node.attribute("type").value());
 			switch (tag) {
 				case EScene:
@@ -196,6 +199,7 @@ void ParserXMLFile(const std::string & filename) {
 			}
 			case ETransform: {
 				list.setTransform(node.attribute("name").value(), m_transform);
+				RainbowTransform(m_transform);
 				break;
 			}
 			case ELookAt: {

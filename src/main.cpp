@@ -12,6 +12,11 @@
 using namespace rainbow;
 
 int main(int argc, char *argv[]) {
+
+	//Transform a = Scale(-1,1,1);
+	//Transform b = LookAt(Vector3f(0, 0.893051, 4.41198), Vector3f(0, 0.919769, 5.41159), Vector3f(0, 1, 0));
+	//cout << (a*b) << endl;
+
 	RainbowInit();
 	std::string filename = "C:/Users/del/Desktop/cbox-Rainbow/cbox-distributed_test.xml";
 	filesystem::path path(filename);

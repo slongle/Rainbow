@@ -16,6 +16,9 @@ void RainbowShape(const std::string& type, PropertyList& list);
 void RainbowMaterial(const std::string& type, PropertyList& list);
 void RainbowLight(const std::string& type, PropertyList& list);
 
+void InitialTransform();
+void RainbowTransform(const Transform& ObjectToWorld);
+
 
 RAINBOW_NAMESPACE_END
 

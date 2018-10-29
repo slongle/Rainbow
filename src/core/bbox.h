@@ -56,7 +56,9 @@ public:
 	
 	bool IntersectP(const Ray &ray) const;
 
+	Point3<T> Center() const { return (pMax + pMin)*0.5; }
 	Vector3<T> Diagonal() const { return pMax - pMin; }
+
 	T Area() const {
 		Vector3<T> det = Diagonal();
 		return 2 * (det.x * det.y + det.y * det.z + det.x * det.z);

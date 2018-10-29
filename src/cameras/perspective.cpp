@@ -16,20 +16,6 @@ PerspectiveCamera::PerspectiveCamera(const Transform& CameraToWorld, const Bound
 
 	RasterToScreen = Inverse(ScreenToRaster);
 	RasterToCamera = Inverse(CameraToScreen) * RasterToScreen;
-
-	//std::cout << RasterToCamera << std::endl;
-	//CameraToScreen = Scale(Float(_film->resolution.x), Float(_film->resolution.y) * _film->aspect, 1) * 
-	//	Perspective(fov, nearClip, farClip);	
-	//ScreenToRaster = Scale(1, -1, 1)*Translate(-(_film->resolution.x)*0.5f, -(_film->resolution.y)*0.5f, 0);
-	//RasterToScreen = Inverse(ScreenToRaster);
-	//RasterToCamera = Inverse(CameraToScreen)*RasterToScreen;	
-	//
-	//
-	//RasterToCamera = Inverse(Perspective(fov, nearClip, farClip))*
-	//	Inverse(Translate(-1, -1 / _film->aspect, 0))*Inverse(Scale(-0.5, -0.5*_film->aspect, 1));
-
-	//RasterToCamera = Inverse(Scale(-0.5, -0.5*_film->aspect, 1)*Translate(-1, -1 / _film->aspect, 0)*Perspective(fov, nearClip, farClip));
-	//std::cout << RasterToCamera << std::endl;
 }
 
 
@@ -41,8 +27,7 @@ RGBSpectrum PerspectiveCamera::GenerateRay(Ray* r, const Point2f & p) const {
 }
 
 
-PerspectiveCamera * CreatePerspectiveCamera(PropertyList & list, const std::shared_ptr<Film> film) {
-	Transform CameraToWorld = list.getTransform("toWorld", Transform());	
+PerspectiveCamera * CreatePerspectiveCamera(const Transform& CameraToWorld, PropertyList & list, const std::shared_ptr<Film> film) {
 	Float fov = list.getFloat("fov", 30.0);
 	Float nearClip = list.getFloat("nearClip", 1e-2f);
 	Float farClip = list.getFloat("farClip", 1000);

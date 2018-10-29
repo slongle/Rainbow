@@ -94,7 +94,7 @@ Matrix4x4 toMatrix(const std::string &str);
 
 class Transform {
 public:
-	Transform() { }
+	Transform() { Identify(); }
 	Transform(const Float mat[4][4]) {
 		m = Matrix4x4(mat[0][0], mat[0][1], mat[0][2], mat[0][3],
 			          mat[1][0], mat[1][1], mat[1][2], mat[1][3],

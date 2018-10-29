@@ -17,7 +17,7 @@ public:
 	Transform RasterToCamera;
 };
 
-PerspectiveCamera* CreatePerspectiveCamera(PropertyList &list, const std::shared_ptr<Film> film);
+PerspectiveCamera* CreatePerspectiveCamera(const Transform& CameraToWorld, PropertyList &list, const std::shared_ptr<Film> film);
 
 RAINBOW_NAMESPACE_END
 

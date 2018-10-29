@@ -60,8 +60,9 @@ Float Sphere::Area() const {
 	return 4 * M_PI * radius *radius;
 }
 
-Sphere* CreateSphere(const PropertyList &list) {
-	return nullptr;
+std::shared_ptr<Sphere> CreateSphere(const Transform* o2w, const Transform* w2o, PropertyList &list) {
+	Float radius = list.getFloat("radius", 1.0f);
+	return std::make_shared<Sphere>(o2w, w2o, radius);
 }
 
 

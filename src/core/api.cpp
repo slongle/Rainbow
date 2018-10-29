@@ -7,12 +7,28 @@
 #include "material.h"
 
 #include "../cameras/perspective.h"
+
+#include "../shapes/sphere.h"
 #include "../shapes/triangle.h"
+
 #include "../integrators/whitted.h"
 #include "../materials/matte.h"
 #include "../samplers/independent.h"
 
 RAINBOW_NAMESPACE_BEGIN
+
+class TransformPool {
+public:
+	TransformPool() {}
+
+	Transform* insert(const Transform& t) {
+		transforms.push_back(new Transform(t));
+		return transforms.back();
+	}
+
+private:
+	std::vector<Transform*> transforms;
+};
 
 struct RenderOptions {
 	Integrator* MakeIntegrator();
@@ -22,6 +38,8 @@ struct RenderOptions {
 	Film* MakeFilm();
 	Aggregate* MakeAggregate();	
 	
+	Transform CurrentTransform = Transform();
+
 	std::string IntegratorType;
 	PropertyList IntegratorProperty;
 	std::string CameraType;
@@ -38,13 +56,16 @@ struct RenderOptions {
 };
 
 static std::shared_ptr<RenderOptions> renderOptions;
+static std::shared_ptr<TransformPool> transformPool;
 
-std::vector<std::shared_ptr<Shape>> MakeShapes(const std::string & type, PropertyList & list);
+std::vector<std::shared_ptr<Shape>> MakeShapes(const std::string & type, 
+	const Transform* o2w, const Transform* w2o, PropertyList & list);
 std::shared_ptr<Material> MakeMaterial(const std::string & type, PropertyList & list);
 std::shared_ptr<AreaLight> MakeAreaLight(PropertyList & list, const std::shared_ptr<Shape> shape);
 
 void RainbowInit() {
 	renderOptions = std::make_shared<RenderOptions>();
+	transformPool = std::make_shared<TransformPool>();
 }
 
 void RainbowWorld() {
@@ -76,8 +97,11 @@ void RainbowFilm(const std::string & type, const PropertyList & list) {
 }
 
 void RainbowShape(const std::string & type, PropertyList & list) {
+	Transform* ObjectToWorld = transformPool->insert(renderOptions->CurrentTransform);
+	Transform* WorldToObject = transformPool->insert(Inverse(renderOptions->CurrentTransform));
+
 	std::vector<std::shared_ptr<Primitive>> prims;
-	std::vector<std::shared_ptr<Shape>> shapes = MakeShapes(type, list);
+	std::vector<std::shared_ptr<Shape>> shapes = MakeShapes(type, ObjectToWorld, WorldToObject, list);
 	std::vector<std::shared_ptr<Light>> lights;
 	std::shared_ptr<Material> mtl = renderOptions->CurrentMaterial;
 	if (shapes.empty()) return;
@@ -95,6 +119,7 @@ void RainbowShape(const std::string & type, PropertyList & list) {
 		renderOptions->lights.insert(renderOptions->lights.end(), lights.begin(), lights.end());
 		renderOptions->LightType = "";
 	}
+	renderOptions->CurrentTransform = Transform();
 }
 
 void RainbowMaterial(const std::string & type, PropertyList & list) {
@@ -105,6 +130,14 @@ void RainbowMaterial(const std::string & type, PropertyList & list) {
 void RainbowLight(const std::string & type, PropertyList & list) {
 	renderOptions->LightType = type;
 	renderOptions->LightProperty = list;
+}
+
+void InitialTransform() {
+	renderOptions->CurrentTransform = Transform();
+}
+
+void RainbowTransform(const Transform & ObjectToWorld) {
+	renderOptions->CurrentTransform = ObjectToWorld;
 }
 
 Aggregate* RenderOptions::MakeAggregate() {
@@ -137,10 +170,15 @@ Camera * RenderOptions::MakeCamera() {
 	Assert(film != nullptr, "Unable to create film!");
 
 	Camera *camera = nullptr;
+
+	Transform CameraToWorld = CameraProperty.getTransform("toWorld",Transform());
+
 	if (CameraType == "perspective") {
-		camera = CreatePerspectiveCamera(CameraProperty, film);
+		camera = CreatePerspectiveCamera(CameraToWorld, CameraProperty, film);
 	}
 	return camera;
+
+	renderOptions->CurrentTransform = Transform();
 }
 
 Sampler* RenderOptions::MakeSampler() {
@@ -168,10 +206,14 @@ Integrator* RenderOptions::MakeIntegrator() {
 	return integrator;
 }
 
-std::vector<std::shared_ptr<Shape>> MakeShapes(const std::string & type, PropertyList & list) {
+std::vector<std::shared_ptr<Shape>> MakeShapes(const std::string & type, 
+	const Transform* o2w, const Transform* w2o, PropertyList & list) {
 	std::vector<std::shared_ptr<Shape>> shapes;
 	if (type == "obj") {
-		shapes = CreateWavefrontOBJ(list);
+		shapes = CreateWavefrontOBJ(o2w, w2o, list);
+	}
+	else if (type == "sphere") {
+		shapes.push_back(CreateSphere(o2w, w2o, list));
 	}
 	return shapes;
 }
