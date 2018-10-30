@@ -115,18 +115,19 @@ void ParserXMLFile(const std::string & filename) {
 			node.append_attribute("type");
 			node.attribute("type").set_value("scene");
 		}
-		else if (tag == ETransform)
+		else if (tag == ETransform) {
 			m_transform.Identify();
-
-		
-		if (tag == EShape) {
-			int a = 1;
+		}
+		else if (tag == EShape) {
+			InitialTransform();
 		}
 
+		
+		/*if (tag == EShape) {
+			int a = 1;
+		}*/
 
-		bool isObject = tag < EBoolean;
 
-		if (isObject) InitialTransform();
 
 		PropertyList m_list;
 		for (pugi::xml_node &child : node.children()) {
@@ -135,6 +136,7 @@ void ParserXMLFile(const std::string & filename) {
 
 		
 
+		bool isObject = tag < EBoolean;
 
 		if (isObject) {
 			Assert(checkAttribute(node, "type"), "Missing attribute \"type\" in " +
@@ -212,9 +214,10 @@ void ParserXMLFile(const std::string & filename) {
 			case ETranslate: {
 				Vector3f delta;
 				for (pugi::xml_attribute &attribute : node.attributes()) {
-					if (attribute.name() == "x") delta.x = toFloat(attribute.value());
-					if (attribute.name() == "y") delta.y = toFloat(attribute.value());
-					if (attribute.name() == "z") delta.z = toFloat(attribute.value());
+					//cout << attribute.name() << ' ' << attribute.value() << endl;
+					if (strcmp(attribute.name(), "x") == 0) delta.x = toFloat(attribute.value());
+					if (strcmp(attribute.name(), "y") == 0) delta.y = toFloat(attribute.value());
+					if (strcmp(attribute.name(), "z") == 0) delta.z = toFloat(attribute.value());
 				}
 				m_transform *= Translate(delta);
 				break;
@@ -230,10 +233,10 @@ void ParserXMLFile(const std::string & filename) {
 				Vector3f axis;
 				Float angle;
 				for (pugi::xml_attribute &attribute : node.attributes()) {
-					if (attribute.name() == "x") axis.x = toFloat(attribute.value());
-					if (attribute.name() == "y") axis.y = toFloat(attribute.value());
-					if (attribute.name() == "z") axis.z = toFloat(attribute.value());
-					if (attribute.name() == "angle") angle = toFloat(attribute.value());
+					if (strcmp(attribute.name(), "x") == 0) axis.x = toFloat(attribute.value());
+					if (strcmp(attribute.name(), "y") == 0) axis.y = toFloat(attribute.value());
+					if (strcmp(attribute.name(), "z") == 0) axis.z = toFloat(attribute.value());
+					if (strcmp(attribute.name(), "angle") == 0) angle = toFloat(attribute.value());
 				}
 				m_transform *= Rotate(angle, axis);
 				break;

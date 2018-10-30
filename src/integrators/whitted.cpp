@@ -6,7 +6,7 @@ void WhittedIntegrator::Render(const Scene & scene) {
 	std::shared_ptr<Film> film = camera->film;
 	Ray ray;
 	
-	//std::cout << scene.aggregate->primitives.size() << std::endl;
+	std::cout << scene.aggregate->primitives.size() << std::endl;	
 	//cout << scene.lights.size() << endl;
 	
 	//cout << camera->CameraToWorld << endl;
@@ -25,6 +25,19 @@ void WhittedIntegrator::Render(const Scene & scene) {
 
 	for (int y = 0; y < film->resolution.y; y++) {
 		for (int x = 0; x < film->resolution.x; x++) {
+
+			/*
+			camera->GenerateRay(&ray,
+				Point2f(x - film->resolution.x *0.5, y - film->resolution.y *0.5) + sampler->Get2D());
+			if (scene.IntersectP(ray)) {
+				film->SetPixel(Point2i(x, y), RGBSpectrum(1, 1, 1));
+			}
+			else
+				film->SetPixel(Point2i(x, y), RGBSpectrum(0, 0, 0));
+
+			continue;
+			*/
+			
 			RGBSpectrum L(0.0);
 			int SampleNum = 50;
 			for (int i = 0; i < SampleNum; i++) {
@@ -108,6 +121,9 @@ RGBSpectrum WhittedIntegrator::SpecularReflect
 
 	RGBSpectrum f = intersection.bxdf->sampleF(wo, &wi, sampler->Get2D(), &pdf);
 	Normal3f n = intersection.n;	
+
+	//return f;
+
 	if (pdf > 0.f && !f.IsBlack() && Dot(n, wi) != 0.f) {
 		Ray r = intersection.SpawnRay(wi);
 	

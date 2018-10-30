@@ -12,8 +12,8 @@ bool Sphere::Intersect(const Ray & ray, Float * tHit, SurfaceInteraction* inter)
 	Float dx = r.d.x, dy = r.d.y, dz = r.d.z;
 	
 	Float a = dx * dx + dy * dy + dz * dz;
-	Float b = 2 * (ox*dx + oy * dy + oz * dz);
-	Float c = ox * ox + oy * oy + oz * oz;
+	Float b = 2 * (ox * dx + oy * dy + oz * dz);
+	Float c = ox * ox + oy * oy + oz * oz - radius * radius;
 	
 	Float t0, t1;
 	if (!Quadratic(a, b, c, &t0, &t1)) return false;
@@ -40,8 +40,8 @@ bool Sphere::IntersectP(const Ray & ray) const {
 	Float dx = r.d.x, dy = r.d.y, dz = r.d.z;
 
 	Float a = dx * dx + dy * dy + dz * dz;
-	Float b = 2 * (ox*dx + oy * dy + oz * dz);
-	Float c = ox * ox + oy * oy + oz * oz;
+	Float b = 2 * (ox * dx + oy * dy + oz * dz);
+	Float c = ox * ox + oy * oy + oz * oz - radius * radius;
 
 	Float t0, t1;
 	if (!Quadratic(a, b, c, &t0, &t1)) return false;
