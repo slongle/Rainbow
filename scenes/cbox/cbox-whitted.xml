@@ -18,35 +18,44 @@
 		</film>		
 	</camera>	
 
-	<mesh type="obj">
+	<shape type="sphere">
+		<transform name="toWorld">
+			<translate x="-0.4219" y="0.3301" z="-0.2796"/>
+		</transform>
+		<float name="radius" value="0.3261"/>
+		
+		<bsdf type="diffuse"/>
+	</shape>
+	
+	<shape type="obj">
 		<string name="filename" value="meshes/walls.obj"/>
 
 		<bsdf type="diffuse">
 			<color name="albedo" value="0.725 0.71 0.68"/>
 		</bsdf>
-	</mesh>
+	</shape>
 
-	<mesh type="obj">
+	<shape type="obj">
 		<string name="filename" value="meshes/rightwall.obj"/>
 
 		<bsdf type="diffuse">
 			<color name="albedo" value="0.161 0.133 0.427"/>
 		</bsdf>
-	</mesh>
+	</shape>
 
-	<mesh type="obj">
+	<shape type="obj">
 		<string name="filename" value="meshes/leftwall.obj"/>
 
 		<bsdf type="diffuse">
 			<color name="albedo" value="0.630 0.065 0.05"/>
 		</bsdf>
-	</mesh>
+	</shape>
 
-	<mesh type="obj">
+	<shape type="obj">
 		<string name="filename" value="meshes/light.obj"/>
 
 		<emitter type="area">
 			<color name="radiance" value="40 40 40"/>
 		</emitter>
-	</mesh>
+	</shape>
 </scene>

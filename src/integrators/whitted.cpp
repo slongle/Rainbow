@@ -15,8 +15,8 @@ void WhittedIntegrator::Render(const Scene & scene) {
 		cout << prim->shape->Area() << endl;
 	}*/
 
-	/*
-	auto a = scene.aggregate;
+	
+	/*auto a = scene.aggregate;
 	Bounds3f bound = a->Bounds();
 	cout << bound << endl;
 	cout << bound.Center() << endl;
@@ -142,7 +142,7 @@ RGBSpectrum WhittedIntegrator::SpecularRefract
 }
 
 WhittedIntegrator* CreateWhittedIntegrator(const PropertyList &list) {
-	return new WhittedIntegrator(2);
+	return new WhittedIntegrator(1);
 }
 
 RAINBOW_NAMESPACE_END
