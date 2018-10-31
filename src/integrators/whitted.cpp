@@ -81,11 +81,12 @@ RGBSpectrum WhittedIntegrator::Li(const Ray & ray, const Scene & scene, int dept
 	for (auto light : scene.lights) {
 		Vector3f wi;
 		Float pdf;
-		RGBSpectrum Li = light->SampleLi(intersection, sampler->Get2D(), &wi, &pdf);
+		Visibility vis;
+		RGBSpectrum Li = light->SampleLi(intersection, sampler->Get2D(), &wi, &pdf, &vis);
 		if (Li.IsBlack() || pdf == 0) continue;		
 		RGBSpectrum f = intersection.bxdf->f(wo, wi);
 		//return f;
-		if (!f.IsBlack()) {
+		if (!f.IsBlack() && vis.Test(scene)) {
 			//cout << light << endl;
 			//cout << f << endl;
 			//cout << pdf << endl;
@@ -125,7 +126,7 @@ RGBSpectrum WhittedIntegrator::SpecularReflect
 	//return f;
 
 	if (pdf > 0.f && !f.IsBlack() && Dot(n, wi) != 0.f) {
-		Ray r = intersection.SpawnRay(wi);
+		Ray r = intersection.SpawnToRay(wi);
 	
 		//return f;
 		
@@ -141,7 +142,7 @@ RGBSpectrum WhittedIntegrator::SpecularRefract
 }
 
 WhittedIntegrator* CreateWhittedIntegrator(const PropertyList &list) {
-	return new WhittedIntegrator(1);
+	return new WhittedIntegrator(2);
 }
 
 RAINBOW_NAMESPACE_END

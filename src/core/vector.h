@@ -315,6 +315,7 @@ class Point3 {
 public:
 	Point3(const T _v = 0) { x = y = z = _v; Assert(!HasNaNs(), "Point3 has NaN"); }
 	Point3(const T _x, const T _y, const T _z) :x(_x), y(_y), z(_z) { Assert(!HasNaNs(), "Point3 has NaN"); }
+	explicit Point3(const Normal3<T> &n) :x(T(n.x)), y(T(n.y)), z(T(n.z)) { Assert(!HasNaNs(), "Point3 has NaN"); }
 	template<typename U> 
 	explicit Point3(const Point3<U> &v) :x(T(v.x)), y(T(v.y)), z(T(v.z)) { Assert(!HasNaNs(), "Point3 has NaN"); }
 	template<typename U> 

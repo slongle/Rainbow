@@ -1,14 +1,18 @@
 #include "light.h"
+#include "scene.h"
 
 RAINBOW_NAMESPACE_BEGIN
 
+bool Visibility::Test(const Scene & scene) const {
+	return !scene.IntersectP(p0.SpawnToRay(p1));
+}
 
 RGBSpectrum AreaLight::L(const Interaction& interaction, const Vector3f & w) const {
 	return (Dot(interaction.n, w) > 0) ? Lemit : RGBSpectrum(0.0);
 }
 
 RGBSpectrum AreaLight::SampleLi(const Interaction& ref, const Point2f& sample, 
-	Vector3f* wi, Float* pdf) const {
+	Vector3f* wi, Float* pdf, Visibility* vis) const {
 
 	Interaction pShape = shape->Sample(ref, sample, pdf);
 	
@@ -17,7 +21,8 @@ RGBSpectrum AreaLight::SampleLi(const Interaction& ref, const Point2f& sample,
 		return 0.f;
 	}
 	
-	*wi = Normalize(pShape.p - ref.p);	
+	*wi = Normalize(pShape.p - ref.p);
+	*vis = Visibility(ref, pShape);
 	return L(pShape, -*wi);
 }
 
