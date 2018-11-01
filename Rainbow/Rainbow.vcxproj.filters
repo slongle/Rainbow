@@ -49,6 +49,9 @@
     <Filter Include="Source Files\samplers">
       <UniqueIdentifier>{af784d53-f15b-4026-bbe9-c486296345a2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Extend Files\tinyformat">
+      <UniqueIdentifier>{3f0cecd0-8cc2-4fce-b0b7-061770832a7a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\core\bbox.cpp">
@@ -188,9 +191,6 @@
     <ClInclude Include="..\src\core\vector.h">
       <Filter>Source Files\core</Filter>
     </ClInclude>
-    <ClInclude Include="..\ext\tinyformat.h">
-      <Filter>Extend Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\core\shape.h">
       <Filter>Source Files\core</Filter>
     </ClInclude>
@@ -295,6 +295,9 @@
     </ClInclude>
     <ClInclude Include="..\src\core\sampling.h">
       <Filter>Source Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ext\tinyformat.h">
+      <Filter>Extend Files\tinyformat</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
