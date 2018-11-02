@@ -210,7 +210,7 @@ Interaction Triangle::Sample(const Point3f &p, const Point2f & sample, Float * p
 		inter.n = FaceForward(inter.n, ns);
 	}
 
-	Float a = Area();
+	//Float a = Area();
 	//cout << a << endl;
 	*pdf = 1 / Area();
 	return inter;

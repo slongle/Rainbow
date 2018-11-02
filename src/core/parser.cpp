@@ -223,8 +223,13 @@ void ParserXMLFile(const std::string & filename) {
 				break;
 			}
 			case EScale: {
-				Vector3f scale(1);
-				scale = toVector(node.attribute("value").value());
+				Vector3f scale;
+                for (pugi::xml_attribute &attribute : node.attributes()) {
+                    //cout << attribute.name() << ' ' << attribute.value() << endl;
+                    if (strcmp(attribute.name(), "x") == 0) scale.x = toFloat(attribute.value());
+                    if (strcmp(attribute.name(), "y") == 0) scale.y = toFloat(attribute.value());
+                    if (strcmp(attribute.name(), "z") == 0) scale.z = toFloat(attribute.value());
+                }
 				Transform s = Scale(scale);
 				m_transform *= Scale(scale);
 				break;

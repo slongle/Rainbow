@@ -7,7 +7,7 @@ void MatteMaterial::ComputeScatteringFunctions(SurfaceInteraction * intersection
 }
 
 MatteMaterial* CreateMatteMaterial(PropertyList & list) {
-	RGBSpectrum R = list.getColor("albedo", RGBSpectrum(0.5));
+	RGBSpectrum R = list.getColor("reflectance", RGBSpectrum(0.5));
 	return new MatteMaterial(R);
 }
 
