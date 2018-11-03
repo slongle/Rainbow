@@ -21,7 +21,8 @@ void WhittedIntegrator::Render(const Scene & scene) {
 	cout << bound << endl;
 	cout << bound.Center() << endl;
 	cout << bound.Diagonal() << endl;
-	exit(0);*/
+	exit(0);
+    */
 
 	for (int y = 0; y < film->resolution.y; y++) {
 		for (int x = 0; x < film->resolution.x; x++) {
@@ -39,7 +40,7 @@ void WhittedIntegrator::Render(const Scene & scene) {
 			*/
 			
 			RGBSpectrum L(0.0);
-			int SampleNum = 50;
+			int SampleNum = 500;
 			for (int i = 0; i < SampleNum; i++) {
 				camera->GenerateRay(&ray,
 					Point2f(x - film->resolution.x *0.5, y - film->resolution.y *0.5) + sampler->Get2D());
@@ -60,11 +61,6 @@ RGBSpectrum WhittedIntegrator::Li(const Ray & ray, const Scene & scene, int dept
 		return L;
 	}
 
-	//if (((scene.aggregate->primitives[5]).get() != intersection.primitive) && ((scene.aggregate->primitives[4]).get() != intersection.primitive)){
-	//	return L;
-	//}
-
-
 	//std::cout << "Hit!" << std::endl;
 	Vector3f wo = intersection.wo;
 	Normal3f n = intersection.n;
@@ -74,9 +70,10 @@ RGBSpectrum WhittedIntegrator::Li(const Ray & ray, const Scene & scene, int dept
 	
 	intersection.ComputeScatteringFunctions();
 	if (!intersection.bxdf) {
-		//cout << "HH!" << endl;
 		return L;
 	}
+
+    int LightNum = 0;
 
 	for (auto light : scene.lights) {
 		Vector3f wi;
@@ -86,25 +83,19 @@ RGBSpectrum WhittedIntegrator::Li(const Ray & ray, const Scene & scene, int dept
 		if (Li.IsBlack() || pdf == 0) continue;		
 		RGBSpectrum f = intersection.bxdf->f(wo, wi);
 		//return f;
-		if (!f.IsBlack() && vis.Test(scene)) {
-			//cout << light << endl;
-			//cout << f << endl;
-			//cout << pdf << endl;
-			//cout << (f * Li*AbsDot(wi, n) / pdf) << endl;
-			
-			//cout << AbsDot(wi, n) << endl;
-
-			L += f * Li * AbsDot(wi, n) / pdf;			
+		if (!f.IsBlack() && vis.Test(scene)) {			
+			L += f * Li * AbsDot(wi, n) / pdf;
 		}
+        LightNum++;
 	}
-
-	//exit(0);
-
 
 	if (depth + 1 < maxDep) {
 		L += SpecularReflect(ray, scene, depth, intersection);
+        LightNum++;
 		//L += SpecularRefract(ray, scene, depth, intersection);
 	}
+
+    L /= LightNum;
 
 	
 
@@ -123,14 +114,9 @@ RGBSpectrum WhittedIntegrator::SpecularReflect
 	RGBSpectrum f = intersection.bxdf->sampleF(wo, &wi, sampler->Get2D(), &pdf);
 	Normal3f n = intersection.n;	
 
-	//return f;
-
 	if (pdf > 0.f && !f.IsBlack() && Dot(n, wi) != 0.f) {
-		Ray r = intersection.SpawnToRay(wi);
-	
-		//return f;
-		
-		return f * Li(r, scene, depth + 1)*AbsDot(wi,n) / pdf;
+		Ray r = intersection.SpawnToRay(wi);	
+		return f * Li(r, scene, depth + 1) * AbsDot(wi,n) / pdf;
 	}
 	else
 		return RGBSpectrum(0.f);
@@ -142,7 +128,8 @@ RGBSpectrum WhittedIntegrator::SpecularRefract
 }
 
 WhittedIntegrator* CreateWhittedIntegrator(const PropertyList &list) {
-	return new WhittedIntegrator(1);
+
+	return new WhittedIntegrator(10);
 }
 
 RAINBOW_NAMESPACE_END

@@ -49,8 +49,11 @@
     <Filter Include="Source Files\samplers">
       <UniqueIdentifier>{af784d53-f15b-4026-bbe9-c486296345a2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Extend Files\tinyformat">
-      <UniqueIdentifier>{3f0cecd0-8cc2-4fce-b0b7-061770832a7a}</UniqueIdentifier>
+    <Filter Include="Resource Files\scenes">
+      <UniqueIdentifier>{ee890398-3b13-4857-b156-3e54b36a63ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\scenes\cbox">
+      <UniqueIdentifier>{dafc31ce-b17f-4bea-9e8c-7031df2837a7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -191,6 +194,9 @@
     <ClInclude Include="..\src\core\vector.h">
       <Filter>Source Files\core</Filter>
     </ClInclude>
+    <ClInclude Include="..\ext\tinyformat.h">
+      <Filter>Extend Files</Filter>
+    </ClInclude>
     <ClInclude Include="..\src\core\shape.h">
       <Filter>Source Files\core</Filter>
     </ClInclude>
@@ -296,9 +302,6 @@
     <ClInclude Include="..\src\core\sampling.h">
       <Filter>Source Files\core</Filter>
     </ClInclude>
-    <ClInclude Include="..\ext\tinyformat.h">
-      <Filter>Extend Files\tinyformat</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\log\20180811.md">
@@ -337,5 +340,16 @@
     <None Include="..\log\20181011.md">
       <Filter>Log Files</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\scenes\cbox\cbox-distributed.xml">
+      <Filter>Resource Files\scenes\cbox</Filter>
+    </Xml>
+    <Xml Include="..\scenes\cbox\cbox-whitted.xml">
+      <Filter>Resource Files\scenes\cbox</Filter>
+    </Xml>
+    <Xml Include="..\scenes\cbox\cbox-whitted-mirror.xml">
+      <Filter>Resource Files\scenes\cbox</Filter>
+    </Xml>
   </ItemGroup>
 </Project>
