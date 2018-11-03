@@ -40,7 +40,7 @@ void WhittedIntegrator::Render(const Scene & scene) {
 			*/
 			
 			RGBSpectrum L(0.0);
-			int SampleNum = 500;
+			int SampleNum = 5;
 			for (int i = 0; i < SampleNum; i++) {
 				camera->GenerateRay(&ray,
 					Point2f(x - film->resolution.x *0.5, y - film->resolution.y *0.5) + sampler->Get2D());
@@ -127,9 +127,10 @@ RGBSpectrum WhittedIntegrator::SpecularRefract
 	return RGBSpectrum();
 }
 
-WhittedIntegrator* CreateWhittedIntegrator(const PropertyList &list) {
-
-	return new WhittedIntegrator(10);
+WhittedIntegrator* CreateWhittedIntegrator(PropertyList &list) {
+    int maxDepth = list.getInteger("maxDepth", 1);
+    cout << maxDepth << endl;
+    return new WhittedIntegrator(maxDepth);
 }
 
 RAINBOW_NAMESPACE_END

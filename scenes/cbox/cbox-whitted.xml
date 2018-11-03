@@ -1,5 +1,7 @@
 <scene>
-	<integrator type="whitted"/>
+  <integrator type="whitted">
+    <integer name="maxDepth" value="5"/>
+  </integrator>
 
 	<camera type="perspective">
 		<float name="fov" value="27.7856"/>

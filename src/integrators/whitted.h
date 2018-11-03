@@ -24,7 +24,7 @@ public:
 	int maxDep;
 };
 
-WhittedIntegrator* CreateWhittedIntegrator(const PropertyList &list);
+WhittedIntegrator* CreateWhittedIntegrator(PropertyList &list);
 
 RAINBOW_NAMESPACE_END
 
