@@ -12,6 +12,8 @@
 #include "../shapes/triangle.h"
 
 #include "../integrators/whitted.h"
+#include "../integrators/pt.h"
+
 #include "../materials/matte.h"
 #include "../samplers/independent.h"
 
@@ -201,6 +203,9 @@ Integrator* RenderOptions::MakeIntegrator() {
 	if (IntegratorType == "whitted") {
 		integrator = CreateWhittedIntegrator(IntegratorProperty);
 	}
+    else if (IntegratorType == "path") {
+        integrator = CreatePathIntegrator(IntegratorProperty);
+    }
 	integrator->camera = camera;
 	integrator->sampler = sampler;
 	return integrator;

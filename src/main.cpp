@@ -15,10 +15,10 @@ using namespace rainbow;
 
 int main(int argc, char *argv[]) {
 	RainbowInit();	
-    // Position at Home
-    //std::string filename = "F:/Document/Graphics/code/Rainbow/scenes/cbox/cbox-whitted.xml";
     // Position at School
-    std::string filename = "C:/Users/Administrator/Desktop/Rainbow/Rainbow/scenes/cbox/cbox-whitted.xml";
+    std::string filename = "F:/Document/Graphics/code/Rainbow/scenes/cbox/cbox-whitted.xml";
+    // Position at Home
+    //std::string filename = "C:/Users/Administrator/Desktop/Rainbow/Rainbow/scenes/cbox/cbox-whitted.xml";
 	filesystem::path path(filename);
 	getFileResolver()->prepend(path.parent_path());
 	ParserXMLFile(filename);

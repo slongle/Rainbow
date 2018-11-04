@@ -22,7 +22,7 @@ RGBSpectrum WhittedIntegrator::Li(const Ray & ray, const Scene & scene, int dept
 
     int LightNum = 0;
 
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 20; i++) {
 	    for (auto light : scene.lights) {
 	    	Vector3f wi;
 	    	Float pdf;
@@ -73,7 +73,6 @@ RGBSpectrum WhittedIntegrator::SpecularRefract
 
 WhittedIntegrator* CreateWhittedIntegrator(PropertyList &list) {
     int maxDepth = list.getInteger("maxDepth", 5);
-    cout << maxDepth << endl;
     return new WhittedIntegrator(maxDepth);
 }
 

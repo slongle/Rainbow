@@ -8,7 +8,7 @@ void SamplerIntegrator::Render(const Scene &scene) {
 
     std::cout << scene.aggregate->primitives.size() << std::endl;
 
-    int SampleNum = 5;
+    int SampleNum = 50;
     for (int y = 0; y < film->resolution.y; y++) {
         fprintf(stderr, "\rRendering (%d spp) %5.2f%%", SampleNum, 100.*(y + 1) / film->resolution.y);
         for (int x = 0; x < film->resolution.x; x++) {
