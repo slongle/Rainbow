@@ -2,58 +2,6 @@
 
 RAINBOW_NAMESPACE_BEGIN	
 
-void WhittedIntegrator::Render(const Scene & scene) {	
-	std::shared_ptr<Film> film = camera->film;
-	Ray ray;
-	
-	std::cout << scene.aggregate->primitives.size() << std::endl;	
-	//cout << scene.lights.size() << endl;
-	
-	//cout << camera->CameraToWorld << endl;
-
-	/*for (auto prim : scene.aggregate->primitives) {
-		cout << prim->shape->Area() << endl;
-	}*/
-
-	
-	/*auto a = scene.aggregate;
-	Bounds3f bound = a->Bounds();
-	cout << bound << endl;
-	cout << bound.Center() << endl;
-	cout << bound.Diagonal() << endl;
-	exit(0);
-    */
-
-	for (int y = 0; y < film->resolution.y; y++) {
-		for (int x = 0; x < film->resolution.x; x++) {
-
-			/*
-			camera->GenerateRay(&ray,
-				Point2f(x - film->resolution.x *0.5, y - film->resolution.y *0.5) + sampler->Get2D());
-			if (scene.IntersectP(ray)) {
-				film->SetPixel(Point2i(x, y), RGBSpectrum(1, 1, 1));
-			}
-			else
-				film->SetPixel(Point2i(x, y), RGBSpectrum(0, 0, 0));
-
-			continue;
-			*/
-			
-			RGBSpectrum L(0.0);
-			int SampleNum = 5;
-			for (int i = 0; i < SampleNum; i++) {
-				camera->GenerateRay(&ray,
-					Point2f(x - film->resolution.x *0.5, y - film->resolution.y *0.5) + sampler->Get2D());
-				L += Li(ray, scene, 0);
-			}
-			L /= SampleNum;
-			film->SetPixel(Point2i(x, y), L);
-		}
-		std::cout << y << std::endl;
-	}
-	film->SaveImage();
-}
-
 RGBSpectrum WhittedIntegrator::Li(const Ray & ray, const Scene & scene, int depth) {
 	RGBSpectrum L(0.0);
 	SurfaceInteraction intersection;
@@ -61,7 +9,6 @@ RGBSpectrum WhittedIntegrator::Li(const Ray & ray, const Scene & scene, int dept
 		return L;
 	}
 
-	//std::cout << "Hit!" << std::endl;
 	Vector3f wo = intersection.wo;
 	Normal3f n = intersection.n;
 
@@ -82,7 +29,6 @@ RGBSpectrum WhittedIntegrator::Li(const Ray & ray, const Scene & scene, int dept
 		RGBSpectrum Li = light->SampleLi(intersection, sampler->Get2D(), &wi, &pdf, &vis);
 		if (Li.IsBlack() || pdf == 0) continue;		
 		RGBSpectrum f = intersection.bxdf->f(wo, wi);
-		//return f;
 		if (!f.IsBlack() && vis.Test(scene)) {			
 			L += f * Li * AbsDot(wi, n) / pdf;
 		}
@@ -97,11 +43,7 @@ RGBSpectrum WhittedIntegrator::Li(const Ray & ray, const Scene & scene, int dept
 
     L /= LightNum;
 
-	
-
-	delete(intersection.bxdf);
-	
-	//cout << L << endl;
+	delete(intersection.bxdf);	
 	
 	return L;
 }
@@ -129,7 +71,6 @@ RGBSpectrum WhittedIntegrator::SpecularRefract
 
 WhittedIntegrator* CreateWhittedIntegrator(PropertyList &list) {
     int maxDepth = list.getInteger("maxDepth", 1);
-    cout << maxDepth << endl;
     return new WhittedIntegrator(maxDepth);
 }
 

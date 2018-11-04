@@ -1,6 +1,6 @@
 <scene>
   <integrator type="whitted">
-    <integer name="maxDepth" value="5"/>
+    <integer name="maxDepth" value="1"/>
   </integrator>
 
 	<camera type="perspective">

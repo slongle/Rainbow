@@ -30,7 +30,7 @@ RGBSpectrum PerspectiveCamera::GenerateRay(Ray* r, const Point2f & p) const {
 PerspectiveCamera * CreatePerspectiveCamera(const Transform& CameraToWorld, PropertyList & list, const std::shared_ptr<Film> film) {
 	Float fov = list.getFloat("fov", 30.0);
 	Float nearClip = list.getFloat("nearClip", 1e-2f);
-	Float farClip = list.getFloat("farClip", 1000);
+	Float farClip = list.getFloat("farClip", 10000);
 	Float frame = film->aspect;
 	Bounds2f screen;
 	screen.pMin.x = -frame;

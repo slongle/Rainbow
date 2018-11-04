@@ -17,13 +17,12 @@ public:
 	std::shared_ptr<Sampler> sampler;
 };
 
-//class SamplerIntegrator :public Integrator {
-//public:
-//	SamplerIntegrator() {}
-//	void Render (const Scene &scene) override;
-//};
-//
-//SamplerIntegrator* CreateSampleIntegrator(PropertyList &list);
+class SamplerIntegrator :public Integrator {
+public:
+	SamplerIntegrator() {}
+	void Render (const Scene &scene);
+    virtual RGBSpectrum Li(const Ray &ray, const Scene& scene, int depth) = 0;
+};
 
 RAINBOW_NAMESPACE_END
 
