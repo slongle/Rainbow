@@ -58,6 +58,10 @@ RGBSpectrum SpecularReflection::sampleF(const Vector3f & wo, Vector3f * wi, cons
 	return fresnel->Evaluate(CosTheta(*wi)) * R / AbsCosTheta(*wi);
 }
 
+Float SpecularReflection::Pdf(const Vector3f & wo, const Vector3f & wi) {
+    return 0;
+}
+
 RGBSpectrum SpecularTransmission::f(const Vector3f & wo, const Vector3f & wi) {
 	return RGBSpectrum(0.0);
 }
@@ -74,6 +78,10 @@ RGBSpectrum SpecularTransmission::sampleF(const Vector3f & wo, Vector3f * wi, co
 	return (etaI*etaI) / (etaT*etaT) * (RGBSpectrum(1.0) - fresnel.Evaluate(CosTheta(*wi))) * T / AbsCosTheta(*wi);
 }
 
+Float SpecularTransmission::Pdf(const Vector3f & wo, const Vector3f & wi) {
+    return 0;
+}
+
 
 RGBSpectrum LambertianReflection::f(const Vector3f & wo, const Vector3f & wi) {
 	return R * INV_PI;
@@ -85,6 +93,10 @@ RGBSpectrum LambertianReflection::sampleF(const Vector3f & wo, Vector3f * wi, co
 	if (wo.z < 0) wi->z *= -1;
 	*pdf = SameHemisphere(wo, *wi) ? AbsCosTheta(*wi) * INV_PI : 0;
 	return R * INV_PI;
+}
+
+Float LambertianReflection::Pdf(const Vector3f & wo, const Vector3f & wi) {
+    return INV_TWOPI;
 }
 
 RAINBOW_NAMESPACE_END

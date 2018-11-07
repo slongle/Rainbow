@@ -24,7 +24,8 @@ public:
 	Light(const RGBSpectrum& m_Lemit) :Lemit(m_Lemit) {}
 
 	virtual RGBSpectrum SampleLi(const Interaction& intersection, const Point2f& sample, 
-		Vector3f* wo, Float* pdf, Visibility* vis) const = 0;
+		Vector3f* wi, Float* pdf, Visibility* vis) const = 0;
+    virtual bool IsDeltaLight() const = 0;
 
 	RGBSpectrum Lemit;
 };
@@ -36,6 +37,8 @@ public:
 	RGBSpectrum L(const Interaction& intersection,const Vector3f &w) const ;	
 	RGBSpectrum SampleLi(const Interaction& intersection, const Point2f& sample, 
 		Vector3f* wi, Float* pdf, Visibility* vis) const;
+
+    bool IsDeltaLight() const { return false; }
 
 	std::shared_ptr<Shape> shape;
 };

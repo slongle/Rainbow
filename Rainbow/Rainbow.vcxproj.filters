@@ -177,6 +177,9 @@
     <ClCompile Include="..\src\integrators\pt.cpp">
       <Filter>Source Files\integrators</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\integrators\direct.cpp">
+      <Filter>Source Files\integrators</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\core\bbox.h">
@@ -306,6 +309,9 @@
       <Filter>Source Files\core</Filter>
     </ClInclude>
     <ClInclude Include="..\src\integrators\pt.h">
+      <Filter>Source Files\integrators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\integrators\direct.h">
       <Filter>Source Files\integrators</Filter>
     </ClInclude>
   </ItemGroup>

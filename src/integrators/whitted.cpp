@@ -50,27 +50,6 @@ RGBSpectrum WhittedIntegrator::Li(const Ray & ray, const Scene & scene, int dept
 	return L;
 }
 
-RGBSpectrum WhittedIntegrator::SpecularReflect
-(const Ray & ray, const Scene & scene, int depth, SurfaceInteraction intersection) {
-	Vector3f wo = intersection.wo, wi;
-	Float pdf;
-
-	RGBSpectrum f = intersection.bxdf->sampleF(wo, &wi, sampler->Get2D(), &pdf);
-	Normal3f n = intersection.n;	
-
-	if (pdf > 0.f && !f.IsBlack() && Dot(n, wi) != 0.f) {
-		Ray r = intersection.SpawnToRay(wi);	
-		return f * Li(r, scene, depth + 1) * AbsDot(wi,n) / pdf;
-	}
-	else
-		return RGBSpectrum(0.f);
-}
-
-RGBSpectrum WhittedIntegrator::SpecularRefract
-(const Ray & ray, const Scene & scene, int depth, SurfaceInteraction intersection) {
-	return RGBSpectrum();
-}
-
 WhittedIntegrator* CreateWhittedIntegrator(PropertyList &list) {
     int maxDepth = list.getInteger("maxDepth", 5);
     return new WhittedIntegrator(maxDepth);

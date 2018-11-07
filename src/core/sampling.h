@@ -36,6 +36,11 @@ inline Point2f UniformSampleTriangle(const Point2f &u) {
 	return Point2f(1 - su0, u[1] * su0);
 }
 
+inline Float PowerHeuristic(int nf, Float fPdf, int ng, Float gPdf) {
+    Float f = nf * fPdf, g = ng * gPdf;
+    return (f * f) / (f * f + g * g);
+}
+
 
 RAINBOW_NAMESPACE_END
 

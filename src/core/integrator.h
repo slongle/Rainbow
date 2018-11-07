@@ -20,6 +20,13 @@ public:
 class SamplerIntegrator :public Integrator {
 public:
 	SamplerIntegrator() {}
+
+    RGBSpectrum UniformSampleOneLight(const SurfaceInteraction& inter, const Scene& scene);
+    RGBSpectrum EstimateDirectLight(const SurfaceInteraction& inter, const Light& light, const Scene& scene);
+
+    RGBSpectrum SpecularReflect(const Ray&ray, const Scene& scene, int depth, SurfaceInteraction intersection);
+    RGBSpectrum SpecularRefract(const Ray&ray, const Scene& scene, int depth, SurfaceInteraction intersection);
+
 	void Render (const Scene &scene);
     virtual RGBSpectrum Li(const Ray &ray, const Scene& scene, int depth) = 0;
 };
