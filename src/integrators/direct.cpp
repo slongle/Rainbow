@@ -34,4 +34,10 @@ RGBSpectrum DirectLightIntegrator::Li(const Ray & ray, const Scene & scene, int 
     return L;
 }
 
+DirectLightIntegrator * CreateDirectLightIntegrator(PropertyList & list) {
+    int maxDep = list.getInteger("maxDepth", 3);
+    return new DirectLightIntegrator(maxDep);
+}
+
 RAINBOW_NAMESPACE_END
+

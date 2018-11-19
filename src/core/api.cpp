@@ -11,6 +11,7 @@
 #include "../shapes/sphere.h"
 #include "../shapes/triangle.h"
 
+#include "../integrators/direct.h"
 #include "../integrators/whitted.h"
 #include "../integrators/pt.h"
 
@@ -203,6 +204,9 @@ Integrator* RenderOptions::MakeIntegrator() {
 	if (IntegratorType == "whitted") {
 		integrator = CreateWhittedIntegrator(IntegratorProperty);
 	}
+    else if (IntegratorType == "direct") {
+        integrator = CreateDirectLightIntegrator(IntegratorProperty);
+    }
     else if (IntegratorType == "path") {
         integrator = CreatePathIntegrator(IntegratorProperty);
     }

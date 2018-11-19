@@ -5,14 +5,14 @@ RAINBOW_NAMESPACE_BEGIN
 RGBSpectrum SamplerIntegrator::UniformSampleOneLight(const SurfaceInteraction & inter, const Scene & scene) {
     int lightNum = scene.lights.size();
     if (lightNum == 0) return RGBSpectrum(0.0);
-    int lightID = std::min(int(sampler->Get1D()*lightNum), lightNum - 1);
+    int lightID = std::min(int(sampler->Get1D()*lightNum), lightNum - 1);    
     Float lightPdf = Float(1) / lightNum;
-    Light& light = *(scene.lights[lightID]);
+    std::shared_ptr<Light> light = scene.lights[lightID];
     return EstimateDirectLight(inter, light, scene);
 }
 
 RGBSpectrum SamplerIntegrator::EstimateDirectLight(const SurfaceInteraction & inter, 
-    const Light& light, const Scene & scene) {
+    std::shared_ptr<Light> light, const Scene & scene) {
     
     RGBSpectrum Ld(0.0);
     Float LightPdf = 0, BSDFPdf = 0;
@@ -20,17 +20,20 @@ RGBSpectrum SamplerIntegrator::EstimateDirectLight(const SurfaceInteraction & in
     Visibility visibility;
 
     // Sample Light with MSI
-    RGBSpectrum Li = light.SampleLi(inter, sampler->Get2D(), &wi, &LightPdf, &visibility);
+    RGBSpectrum Li = light->SampleLi(inter, sampler->Get2D(), &wi, &LightPdf, &visibility);
     if (LightPdf > 0 && !Li.IsBlack()) {
+
+        // Estimate BSDF * AbsDotTheta and PDF
         RGBSpectrum f;
         f = inter.bxdf->f(inter.wo, wi) * AbsDot(wi, inter.n);
         BSDFPdf = inter.bxdf->Pdf(inter.wo, wi);
+
         if (!f.IsBlack()) {
             if (!visibility.Test(scene))
-                Li = RGBSpectrum(1.0);
+                Li = RGBSpectrum(0.0);
 
             if (!Li.IsBlack()) {
-                if (light.IsDeltaLight()) {
+                if (light->IsDeltaLight()) {
                     Ld += Li * f / LightPdf;
                 }
                 else {
@@ -42,12 +45,21 @@ RGBSpectrum SamplerIntegrator::EstimateDirectLight(const SurfaceInteraction & in
     }
 
     // Sample BSDF with MSI
-    if (!light.IsDeltaLight()) {
-        RGBSpectrum f;
-        Float weight = 1;
-        f = inter.bxdf->sampleF(inter.wo, &wi, sampler->Get2D(), &BSDFPdf) * AbsDot(wi, inter.n);
+    if (!light->IsDeltaLight()) {
+
+        RGBSpectrum f;        
+        f = inter.bxdf->SampleF(inter.wo, &wi, sampler->Get2D(), &BSDFPdf) * AbsDot(wi, inter.n);
+
+        bool SampleSpecular = (inter.bxdf->type & BxDF::BSDF_SPECULAR) != 0;
+
         if (BSDFPdf > 0 && !f.IsBlack()) {
-            LightPdf = light.Pdf(wi);
+            Float weight = 1;
+            if (!SampleSpecular) {
+                LightPdf = light->PdfLi(inter, wi);
+                if (LightPdf == 0) return Ld;
+                weight = PowerHeuristic(1, BSDFPdf, 1, LightPdf);
+            }
+
 
             Ray ray = inter.SpawnToRay(wi);
             SurfaceInteraction LightIntersect;
@@ -56,11 +68,11 @@ RGBSpectrum SamplerIntegrator::EstimateDirectLight(const SurfaceInteraction & in
 
             RGBSpectrum Li(0.0);
             if (FoundIntersection) {
-                if (LightIntersect.primitive->getAreaLight() == &light)
+                if (LightIntersect.primitive->getAreaLight() == light.get())
                     Li = LightIntersect.Le(-wi);
             }
             else {
-                Li = light.Le(ray);
+                //Li = light.Le(ray);
             }
 
             if (!Li.IsBlack())
@@ -76,7 +88,7 @@ RGBSpectrum SamplerIntegrator::SpecularReflect
     Vector3f wo = intersection.wo, wi;
     Float pdf;
 
-    RGBSpectrum f = intersection.bxdf->sampleF(wo, &wi, sampler->Get2D(), &pdf);
+    RGBSpectrum f = intersection.bxdf->SampleF(wo, &wi, sampler->Get2D(), &pdf);
     Normal3f n = intersection.n;
 
     if (pdf > 0.f && !f.IsBlack() && Dot(n, wi) != 0.f) {

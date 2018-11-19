@@ -39,7 +39,7 @@ public:
 
 	BxDF(const BxDFType& m_type) :type(m_type) {}
 	virtual RGBSpectrum f(const Vector3f& wo, const Vector3f& wi) = 0;
-	virtual RGBSpectrum sampleF(const Vector3f& wo, Vector3f* wi, const Point2f &sample, Float *pdf) = 0;
+	virtual RGBSpectrum SampleF(const Vector3f& wo, Vector3f* wi, const Point2f &sample, Float *pdf) = 0;
     virtual Float Pdf(const Vector3f& wo, const Vector3f& wi) = 0;
 
 	bool MatchFlags(const BxDFType& t) const {
@@ -68,7 +68,7 @@ public:
 		BxDF(BxDFType(BSDF_REFLECTION | BSDF_SPECULAR)) {}
 
 	RGBSpectrum f(const Vector3f& wo, const Vector3f& wi);
-	RGBSpectrum sampleF(const Vector3f& wo, Vector3f* wi, const Point2f &sample, Float *pdf);
+	RGBSpectrum SampleF(const Vector3f& wo, Vector3f* wi, const Point2f &sample, Float *pdf);
     Float Pdf(const Vector3f& wo, const Vector3f& wi);
 
 	const RGBSpectrum R;
@@ -81,7 +81,7 @@ public:
 		T(m_T), etaA(m_etaA), etaB(m_etaB), fresnel(etaA, etaB),
 		BxDF(BxDFType(BSDF_TRANSMISSION | BSDF_SPECULAR)) {}
 	RGBSpectrum f(const Vector3f& wo, const Vector3f& wi);
-	RGBSpectrum sampleF(const Vector3f& wo, Vector3f* wi, const Point2f &sample, Float *pdf);
+	RGBSpectrum SampleF(const Vector3f& wo, Vector3f* wi, const Point2f &sample, Float *pdf);
     Float Pdf(const Vector3f& wo, const Vector3f& wi);
 
 	const RGBSpectrum T;
@@ -94,7 +94,7 @@ public:
 	LambertianReflection(const RGBSpectrum& m_R) :
 		BxDF(BxDFType(BSDF_REFLECTION | BSDF_DIFFUSE)), R(m_R) {}
 	RGBSpectrum f(const Vector3f& wo, const Vector3f& wi);
-	RGBSpectrum sampleF(const Vector3f& wo, Vector3f* wi, const Point2f &sample, Float *pdf);
+	RGBSpectrum SampleF(const Vector3f& wo, Vector3f* wi, const Point2f &sample, Float *pdf);
     Float Pdf(const Vector3f& wo, const Vector3f& wi);
 
 	const RGBSpectrum R;

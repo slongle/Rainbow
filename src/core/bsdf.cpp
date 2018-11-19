@@ -52,7 +52,7 @@ RGBSpectrum SpecularReflection::f(const Vector3f & wo, const Vector3f & wi) {
 	return RGBSpectrum(0.0);
 }
 
-RGBSpectrum SpecularReflection::sampleF(const Vector3f & wo, Vector3f * wi, const Point2f & sample, Float * pdf) {
+RGBSpectrum SpecularReflection::SampleF(const Vector3f & wo, Vector3f * wi, const Point2f & sample, Float * pdf) {
 	*pdf = 1;
 	*wi = Vector3f(-wo.x, -wo.y, wo.z);
 	return fresnel->Evaluate(CosTheta(*wi)) * R / AbsCosTheta(*wi);
@@ -66,7 +66,7 @@ RGBSpectrum SpecularTransmission::f(const Vector3f & wo, const Vector3f & wi) {
 	return RGBSpectrum(0.0);
 }
 
-RGBSpectrum SpecularTransmission::sampleF(const Vector3f & wo, Vector3f * wi, const Point2f & sample, Float * pdf) {
+RGBSpectrum SpecularTransmission::SampleF(const Vector3f & wo, Vector3f * wi, const Point2f & sample, Float * pdf) {
 	bool enter = CosTheta(wo) > 0;
 	Float etaI = enter ? etaA : etaB;	
 	Float etaT = enter ? etaB : etaA;
@@ -87,7 +87,7 @@ RGBSpectrum LambertianReflection::f(const Vector3f & wo, const Vector3f & wi) {
 	return R * INV_PI;
 }
 
-RGBSpectrum LambertianReflection::sampleF(const Vector3f & wo, Vector3f * wi, const Point2f & sample, Float * pdf) {
+RGBSpectrum LambertianReflection::SampleF(const Vector3f & wo, Vector3f * wi, const Point2f & sample, Float * pdf) {
 	//Assert(false,"No Implement!");
 	*wi = CosineSampleHemisphere(sample);
 	if (wo.z < 0) wi->z *= -1;

@@ -22,7 +22,7 @@ public:
 	SamplerIntegrator() {}
 
     RGBSpectrum UniformSampleOneLight(const SurfaceInteraction& inter, const Scene& scene);
-    RGBSpectrum EstimateDirectLight(const SurfaceInteraction& inter, const Light& light, const Scene& scene);
+    RGBSpectrum EstimateDirectLight(const SurfaceInteraction& inter, std::shared_ptr<Light> light, const Scene& scene);
 
     RGBSpectrum SpecularReflect(const Ray&ray, const Scene& scene, int depth, SurfaceInteraction intersection);
     RGBSpectrum SpecularRefract(const Ray&ray, const Scene& scene, int depth, SurfaceInteraction intersection);

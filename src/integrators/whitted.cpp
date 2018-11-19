@@ -21,20 +21,18 @@ RGBSpectrum WhittedIntegrator::Li(const Ray & ray, const Scene & scene, int dept
 	}
 
     int LightNum = 0;
-
-    for (int i = 0; i < 20; i++) {
-	    for (auto light : scene.lights) {
-	    	Vector3f wi;
-	    	Float pdf;
-	    	Visibility vis;
-	    	RGBSpectrum Li = light->SampleLi(intersection, sampler->Get2D(), &wi, &pdf, &vis);
-	    	if (Li.IsBlack() || pdf == 0) continue;		
-	    	RGBSpectrum f = intersection.bxdf->f(wo, wi);
-	    	if (!f.IsBlack() && vis.Test(scene)) {			
-	    		L += f * Li * AbsDot(wi, n) / pdf;
-	    	}
-            LightNum++;
+	
+    for (auto light : scene.lights) {
+	    Vector3f wi;
+	    Float pdf;
+	    Visibility vis;
+	    RGBSpectrum Li = light->SampleLi(intersection, sampler->Get2D(), &wi, &pdf, &vis);
+	    if (Li.IsBlack() || pdf == 0) continue;		
+	    RGBSpectrum f = intersection.bxdf->f(wo, wi);
+	    if (!f.IsBlack() && vis.Test(scene)) {			
+	    	L += f * Li * AbsDot(wi, n) / pdf;
 	    }
+        LightNum++;	    
     }
 
 	if (depth + 1 < maxDep) {
@@ -51,7 +49,7 @@ RGBSpectrum WhittedIntegrator::Li(const Ray & ray, const Scene & scene, int dept
 }
 
 WhittedIntegrator* CreateWhittedIntegrator(PropertyList &list) {
-    int maxDepth = list.getInteger("maxDepth", 5);
+    int maxDepth = list.getInteger("maxDepth", 1);
     return new WhittedIntegrator(maxDepth);
 }
 

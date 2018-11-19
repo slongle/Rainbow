@@ -12,6 +12,18 @@ RGBSpectrum AreaLight::L(const Interaction& interaction, const Vector3f & w) con
 	return (Dot(interaction.n, w) > 0) ? Lemit : RGBSpectrum(0.0);
 }
 
+Float AreaLight::PdfLi(const SurfaceInteraction & ref, const Vector3f & wi) const {
+    Ray ray = ref.SpawnToRay(wi);
+    Float tHit;
+    SurfaceInteraction inter;
+    if (!shape->Intersect(ray, &tHit, &inter))
+        return 0;
+    Float Pdf = DistanceSquare(ref.p, inter.p) / (AbsDot(-ray.d, inter.n) * shape->Area());
+    if (std::isinf(Pdf)) 
+        Pdf = 0;
+    return Pdf;
+}
+
 RGBSpectrum AreaLight::SampleLi(const Interaction& ref, const Point2f& sample, 
 	Vector3f* wi, Float* pdf, Visibility* vis) const {
 
