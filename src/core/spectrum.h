@@ -48,6 +48,14 @@ public:
 		return (*this) *= inv;
 	}
 
+    Float MaxComponent() const {
+        return std::max(std::max(r, g), b);
+    }
+
+    Float MinComponent() const {
+        return std::min(std::min(r, g), b);
+    }
+
 	std::string toString(const int &spaceNum = 0) const {
 		return indent(tfm::format("%.3f, %.3f, %.3f", r, g, b), spaceNum);
 	}

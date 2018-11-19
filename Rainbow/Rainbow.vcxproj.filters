@@ -174,10 +174,10 @@
     <ClCompile Include="..\src\core\sampling.cpp">
       <Filter>Source Files\core</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\integrators\pt.cpp">
+    <ClCompile Include="..\src\integrators\direct.cpp">
       <Filter>Source Files\integrators</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\integrators\direct.cpp">
+    <ClCompile Include="..\src\integrators\path.cpp">
       <Filter>Source Files\integrators</Filter>
     </ClCompile>
   </ItemGroup>
@@ -308,10 +308,10 @@
     <ClInclude Include="..\src\core\sampling.h">
       <Filter>Source Files\core</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\integrators\pt.h">
+    <ClInclude Include="..\src\integrators\direct.h">
       <Filter>Source Files\integrators</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\integrators\direct.h">
+    <ClInclude Include="..\src\integrators\path.h">
       <Filter>Source Files\integrators</Filter>
     </ClInclude>
   </ItemGroup>

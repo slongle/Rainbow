@@ -12,10 +12,9 @@ class Interaction {
 public:
 	Interaction() {}
 	Interaction(const Point3f &m_p, const Normal3f & m_n,const Vector3f& m_wo);
-		
-	Ray SpawnToRay(const Vector3f& d) const {
-		// TODO: Implement Offset P to Avoid Intersection at Oneself
-		Point3f o = p;
+	
+    Ray SpawnToRay(const Vector3f& d) const {
+        Point3f o = p + Point3f(n * Epsilon);
 		return Ray(o, d);
 	}
 

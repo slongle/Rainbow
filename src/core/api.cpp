@@ -13,7 +13,7 @@
 
 #include "../integrators/direct.h"
 #include "../integrators/whitted.h"
-#include "../integrators/pt.h"
+#include "../integrators/path.h"
 
 #include "../materials/matte.h"
 #include "../samplers/independent.h"
