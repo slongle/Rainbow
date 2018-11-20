@@ -10,8 +10,8 @@ RGBSpectrum PathIntegrator::Li(const Ray & r, const Scene & scene, int depth) {
     Ray ray(r);
 
     int goal = 2;
-
-    for (int bounce = 0;; bounce++) {
+    int bounce = 0;
+    for (bounce = 0;; bounce++) {
         //RGBSpectrum StoreL = L;
         bool FoundIntersect = scene.Intersect(ray, &inter);
 
@@ -39,11 +39,14 @@ RGBSpectrum PathIntegrator::Li(const Ray & r, const Scene & scene, int depth) {
         Float pdf;
         RGBSpectrum f = inter.bxdf->SampleF(wo, &wi, sampler->Get2D(), &pdf);
 
-        if (pdf == 0 || f.IsBlack()) break;
-        beta *= f * AbsDot(wi, inter.n) / pdf;        
+        delete inter.bxdf;
 
         // FIX:
         SpecularBounce = (inter.bxdf->type & BxDF::BSDF_SPECULAR) != 0;
+
+        if (pdf == 0 || f.IsBlack()) break;
+        beta *= f * AbsDot(wi, inter.n) / pdf;        
+
 
         ray = inter.SpawnToRay(wi);
 
@@ -57,7 +60,8 @@ RGBSpectrum PathIntegrator::Li(const Ray & r, const Scene & scene, int depth) {
         //if (bounce != goal) L = StoreL;
     }
 
-    return L;
+    if (bounce == 0) return L;
+    else return L / bounce/2;
 }
 
 
