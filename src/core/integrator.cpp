@@ -8,7 +8,7 @@ RGBSpectrum SamplerIntegrator::UniformSampleOneLight(const SurfaceInteraction & 
     int lightID = std::min(int(sampler->Get1D()*lightNum), lightNum - 1);    
     Float lightPdf = Float(1) / lightNum;
     std::shared_ptr<Light> light = scene.lights[lightID];
-    return EstimateDirectLight(inter, light, scene);
+    return EstimateDirectLight(inter, light, scene) / lightPdf;
 }
 
 RGBSpectrum SamplerIntegrator::EstimateDirectLight(const SurfaceInteraction & inter, 
@@ -43,6 +43,8 @@ RGBSpectrum SamplerIntegrator::EstimateDirectLight(const SurfaceInteraction & in
             }
         }
     }
+
+    return Ld;
 
     // Sample BSDF with MSI
     if (!light->IsDeltaLight()) {

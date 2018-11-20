@@ -9,7 +9,10 @@ RGBSpectrum PathIntegrator::Li(const Ray & r, const Scene & scene, int depth) {
     bool SpecularBounce = false;
     Ray ray(r);
 
+    int goal = 2;
+
     for (int bounce = 0;; bounce++) {
+        //RGBSpectrum StoreL = L;
         bool FoundIntersect = scene.Intersect(ray, &inter);
 
         if (bounce == 0 || SpecularBounce) {
@@ -18,7 +21,7 @@ RGBSpectrum PathIntegrator::Li(const Ray & r, const Scene & scene, int depth) {
             }
         }
 
-        if (!FoundIntersect || bounce >= maxDep) break;        
+        if (!FoundIntersect || bounce >= maxDep) break;                
 
         inter.ComputeScatteringFunctions();
         if (!inter.bxdf) {
@@ -28,7 +31,7 @@ RGBSpectrum PathIntegrator::Li(const Ray & r, const Scene & scene, int depth) {
             //ray = inter.SpawnToRay(ray.d);
             //bounce--;
             //continue;
-        }
+        }        
 
         L += beta * UniformSampleOneLight(inter, scene);
 
@@ -37,7 +40,7 @@ RGBSpectrum PathIntegrator::Li(const Ray & r, const Scene & scene, int depth) {
         RGBSpectrum f = inter.bxdf->SampleF(wo, &wi, sampler->Get2D(), &pdf);
 
         if (pdf == 0 || f.IsBlack()) break;
-        beta *= f * AbsDot(wi, inter.n) / pdf;
+        beta *= f * AbsDot(wi, inter.n) / pdf;        
 
         // FIX:
         SpecularBounce = (inter.bxdf->type & BxDF::BSDF_SPECULAR) != 0;
@@ -45,11 +48,13 @@ RGBSpectrum PathIntegrator::Li(const Ray & r, const Scene & scene, int depth) {
         ray = inter.SpawnToRay(wi);
 
         if (bounce > 3) {
-            Float q = std::max(0.05, 1.0 - beta.g);
-            if (sampler->Get1D() < q)
+            Float q = std::min(0.95f, beta.MaxComponent());
+            if (sampler->Get1D() >= q)
                 break;
-            beta /= 1 - q;  
+            beta /= q;  
         }
+
+        //if (bounce != goal) L = StoreL;
     }
 
     return L;

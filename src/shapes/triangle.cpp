@@ -107,46 +107,6 @@ bool Triangle::Intersect(const Ray & ray, Float * tHit, SurfaceInteraction* inte
 }
 
 bool Triangle::IntersectP(const Ray & ray) const {
-	/* Get Triangle's Vertices p0, p1, p2*/
-	/*const Point3f p0 = mesh->Position[index[0]];
-	const Point3f p1 = mesh->Position[index[1]];
-	const Point3f p2 = mesh->Position[index[2]];
-
-
-	// Find vectors for two edges sharing v[0]
-	Vector3f edge1 = p1 - p0, edge2 = p2 - p0;
-
-	// Begin calculating determinant - also used to calculate U parameter
-	Vector3f pvec = Cross(ray.d,edge2);
-
-	// If determinant is near zero, ray lies in plane of triangle 
-	float det = Dot(edge1,pvec);
-
-	if (det > -1e-8f && det < 1e-8f)
-		return false;
-	float inv_det = 1.0f / det;
-
-	// Calculate distance from v[0] to ray origin 
-	Vector3f tvec = ray.o - p0;
-
-	// Calculate U parameter and test bounds
-	Float u = Dot(tvec,pvec) * inv_det;
-	if (u < 0.0 || u > 1.0)
-		return false;
-
-	//  Prepare to test V parameter 
-	Vector3f qvec = Cross(tvec,edge1);
-
-	// Calculate V parameter and test bounds 
-	Float v = Dot(ray.d,qvec) * inv_det;
-	if (v < 0.0 || u + v > 1.0)
-		return false;
-
-	// Ray intersects triangle -> compute t 
-	Float t = Dot(edge2,qvec) * inv_det;
-
-	return t >= 0 && t <= ray.tMax;*/
-
 	const Point3f &p0 = mesh->Position[index[0]];
 	const Point3f &p1 = mesh->Position[index[1]];
 	const Point3f &p2 = mesh->Position[index[2]];

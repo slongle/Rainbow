@@ -1,15 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
-
-<scene version="0.5.0">
+<scene>
 	<integrator type="path">
-		<integer name="maxDepth" value="3"/>
+		<integer name="maxDepth" value="2"/>
 	</integrator>
 
 	<sensor type="perspective">
-		<string name="fovAxis" value="smaller"/>
 		<float name="fov" value="27.7856"/>
 		<transform name="toWorld">
-			<scale x="-1"/>
 			<scale x="-1" y="1" z="1"/>
 
 			<lookat target="0, 0.893051, 4.41198" origin="0, 0.919769, 5.41159" up="0, 1, 0"/>
@@ -40,7 +36,6 @@
 		<bsdf type="diffuse">
 			<rgb name="reflectance" value="0.725 0.71 0.68"/>
 		</bsdf>
-		<boolean name="flipTexCoords" value="false"/>
 	</shape>
 
 	<shape type="obj">
@@ -49,7 +44,6 @@
 		<bsdf type="diffuse">
 			<rgb name="reflectance" value="0.161 0.133 0.427"/>
 		</bsdf>
-		<boolean name="flipTexCoords" value="false"/>
 	</shape>
 
 	<shape type="obj">
@@ -58,7 +52,6 @@
 		<bsdf type="diffuse">
 			<rgb name="reflectance" value="0.630 0.065 0.05"/>
 		</bsdf>
-		<boolean name="flipTexCoords" value="false"/>
 	</shape>
 
 	<shape type="obj">
@@ -70,8 +63,6 @@
 		<emitter type="area">
 			<rgb name="radiance" value="40 40 40"/>
 		</emitter>
-		<boolean name="flipTexCoords" value="false"/>
 
-		<bsdf type="diffuse"/>
 	</shape>
 </scene>

@@ -87,11 +87,12 @@ RGBSpectrum LambertianReflection::f(const Vector3f & wo, const Vector3f & wi) {
 	return R * INV_PI;
 }
 
-RGBSpectrum LambertianReflection::SampleF(const Vector3f & wo, Vector3f * wi, const Point2f & sample, Float * pdf) {
-	//Assert(false,"No Implement!");
-	*wi = CosineSampleHemisphere(sample);
-	if (wo.z < 0) wi->z *= -1;
-	*pdf = SameHemisphere(wo, *wi) ? AbsCosTheta(*wi) * INV_PI : 0;
+RGBSpectrum LambertianReflection::SampleF(const Vector3f & woWorld, Vector3f * wiWorld, const Point2f & sample, Float * pdf) {	
+    Vector3f wo=woWorld, wi;
+	wi = CosineSampleHemisphere(sample);
+	if (wo.z < 0) wi.z *= -1;
+	*pdf = SameHemisphere(wo, wi) ? AbsCosTheta(wi) * INV_PI : 0;
+    *wiWorld = wi;
 	return R * INV_PI;
 }
 
