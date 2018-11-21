@@ -19,7 +19,7 @@ public:
 
 class SamplerIntegrator :public Integrator {
 public:
-	SamplerIntegrator() {}
+    SamplerIntegrator(const int& m_sampleNum) :sampleNum(m_sampleNum) {}
 
     RGBSpectrum UniformSampleOneLight(const SurfaceInteraction& inter, const Scene& scene);
     RGBSpectrum EstimateDirectLight(const SurfaceInteraction& inter, std::shared_ptr<Light> light, const Scene& scene);
@@ -29,6 +29,8 @@ public:
 
 	void Render (const Scene &scene);
     virtual RGBSpectrum Li(const Ray &ray, const Scene& scene, int depth) = 0;
+
+    int sampleNum;
 };
 
 RAINBOW_NAMESPACE_END

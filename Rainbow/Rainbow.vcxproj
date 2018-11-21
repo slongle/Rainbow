@@ -153,6 +153,7 @@
     <ClCompile Include="..\src\core\scene.cpp" />
     <ClCompile Include="..\src\core\shape.cpp" />
     <ClCompile Include="..\src\core\spectrum.cpp" />
+    <ClCompile Include="..\src\core\timer.cpp" />
     <ClCompile Include="..\src\core\transform.cpp" />
     <ClCompile Include="..\src\core\vector.cpp" />
     <ClCompile Include="..\src\filters\box.cpp" />
@@ -200,6 +201,7 @@
     <ClInclude Include="..\src\core\scene.h" />
     <ClInclude Include="..\src\core\shape.h" />
     <ClInclude Include="..\src\core\spectrum.h" />
+    <ClInclude Include="..\src\core\timer.h" />
     <ClInclude Include="..\src\core\transform.h" />
     <ClInclude Include="..\src\core\vector.h" />
     <ClInclude Include="..\src\filters\box.h" />
@@ -226,6 +228,7 @@
     <None Include="..\log\20180922.md" />
     <None Include="..\log\20180924.md" />
     <None Include="..\log\20181011.md" />
+    <None Include="..\log\20181120.md" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\scenes\cbox\cbox-distributed.xml" />

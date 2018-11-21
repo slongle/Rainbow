@@ -9,9 +9,9 @@ RGBSpectrum PathIntegrator::Li(const Ray & r, const Scene & scene, int depth) {
     bool SpecularBounce = false;
     Ray ray(r);
 
-    int goal = 2;
-    int bounce = 0;
-    for (bounce = 0;; bounce++) {
+    //int goal = 2;
+
+    for (int bounce = 0;; bounce++) {
         //RGBSpectrum StoreL = L;
         bool FoundIntersect = scene.Intersect(ray, &inter);
 
@@ -21,7 +21,7 @@ RGBSpectrum PathIntegrator::Li(const Ray & r, const Scene & scene, int depth) {
             }
         }
 
-        if (!FoundIntersect || bounce >= maxDep) break;                
+        if (!FoundIntersect || bounce >= maxDepth) break;                
 
         inter.ComputeScatteringFunctions();
         if (!inter.bxdf) {
@@ -34,24 +34,23 @@ RGBSpectrum PathIntegrator::Li(const Ray & r, const Scene & scene, int depth) {
         }        
 
         L += beta * UniformSampleOneLight(inter, scene);
-
-        Vector3f wo(-ray.d), wi;
-        Float pdf;
-        RGBSpectrum f = inter.bxdf->SampleF(wo, &wi, sampler->Get2D(), &pdf);
+        Vector3f wo=Normalize(-ray.d), wi;
+        Float BSDFPdf;
+        RGBSpectrum f = inter.bxdf->SampleF(wo, &wi, sampler->Get2D(), &BSDFPdf);
 
         delete inter.bxdf;
 
         // FIX:
         SpecularBounce = (inter.bxdf->type & BxDF::BSDF_SPECULAR) != 0;
 
-        if (pdf == 0 || f.IsBlack()) break;
-        beta *= f * AbsDot(wi, inter.n) / pdf;        
+        if (BSDFPdf == 0 || f.IsBlack()) break;
+        beta *= f * AbsDot(wi, inter.n) / BSDFPdf;
 
 
         ray = inter.SpawnToRay(wi);
 
         if (bounce > 3) {
-            Float q = std::min(0.95f, beta.MaxComponent());
+            Float q = std::min(1.0f, beta.MaxComponent());
             if (sampler->Get1D() >= q)
                 break;
             beta /= q;  
@@ -59,15 +58,14 @@ RGBSpectrum PathIntegrator::Li(const Ray & r, const Scene & scene, int depth) {
 
         //if (bounce != goal) L = StoreL;
     }
-
-    if (bounce == 0) return L;
-    else return L / bounce/2;
+    return L;
 }
 
 
 PathIntegrator * CreatePathIntegrator(PropertyList & list) {
-    int maxDep = list.getInteger("maxDepth", 10);
-    return new PathIntegrator(maxDep);
+    int maxDepth = list.getInteger("maxDepth", 10);
+    int sampleNum = list.getInteger("sampleNum", 10);
+    return new PathIntegrator(maxDepth, sampleNum);
 }
 
 RAINBOW_NAMESPACE_END

@@ -1,6 +1,7 @@
 <scene>
 	<integrator type="path">
-		<integer name="maxDepth" value="5"/>
+		<integer name="maxDepth" value="50"/>
+    <integer name="sampleNum" value="200"/>
 	</integrator>
 
 	<sensor type="perspective">

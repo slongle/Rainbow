@@ -7,10 +7,11 @@ RAINBOW_NAMESPACE_BEGIN
 
 class PathIntegrator :public SamplerIntegrator {
 public:
-    PathIntegrator(int m_maxDep) :maxDep(m_maxDep) {}
+    PathIntegrator(const int& m_maxDepth, const int& m_sampleNum) :
+        maxDepth(m_maxDepth), SamplerIntegrator(m_sampleNum) {}
     RGBSpectrum Li(const Ray &ray, const Scene& scene, int depth);
 
-    int maxDep;
+    int maxDepth;
 };
 
 PathIntegrator* CreatePathIntegrator(PropertyList& list);

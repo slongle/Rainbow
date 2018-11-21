@@ -24,7 +24,7 @@ RGBSpectrum DirectLightIntegrator::Li(const Ray & ray, const Scene & scene, int 
         L += UniformSampleOneLight(intersection, scene);
     }
 
-    if (depth + 1 < maxDep) {
+    if (depth + 1 < maxDepth) {
         L += SpecularReflect(ray, scene, depth, intersection);        
         //L += SpecularRefract(ray, scene, depth, intersection);
     }    
@@ -35,8 +35,9 @@ RGBSpectrum DirectLightIntegrator::Li(const Ray & ray, const Scene & scene, int 
 }
 
 DirectLightIntegrator * CreateDirectLightIntegrator(PropertyList & list) {
-    int maxDep = list.getInteger("maxDepth", 3);
-    return new DirectLightIntegrator(maxDep);
+    int maxDepth = list.getInteger("maxDepth", 3);
+    int sampleNum = list.getInteger("sampleNum", 10);
+    return new DirectLightIntegrator(maxDepth, sampleNum);
 }
 
 RAINBOW_NAMESPACE_END

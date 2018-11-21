@@ -15,13 +15,13 @@ RGBSpectrum SamplerIntegrator::EstimateDirectLight(const SurfaceInteraction & in
     std::shared_ptr<Light> light, const Scene & scene) {
     
     RGBSpectrum Ld(0.0);
-    Float LightPdf = 0, BSDFPdf = 0;
+    Float lightPdf = 0, BSDFPdf = 0;
     Vector3f wi;
     Visibility visibility;
 
     // Sample Light with MSI
-    RGBSpectrum Li = light->SampleLi(inter, sampler->Get2D(), &wi, &LightPdf, &visibility);
-    if (LightPdf > 0 && !Li.IsBlack()) {
+    RGBSpectrum Li = light->SampleLi(inter, sampler->Get2D(), &wi, &lightPdf, &visibility);
+    if (lightPdf > 0 && !Li.IsBlack()) {
 
         // Estimate BSDF * AbsDotTheta and PDF
         RGBSpectrum f;
@@ -34,17 +34,15 @@ RGBSpectrum SamplerIntegrator::EstimateDirectLight(const SurfaceInteraction & in
 
             if (!Li.IsBlack()) {
                 if (light->IsDeltaLight()) {
-                    Ld += Li * f / LightPdf;
+                    Ld += Li * f / lightPdf;
                 }
                 else {
-                    Float weight = PowerHeuristic(1, LightPdf, 1, BSDFPdf);
-                    Ld += Li * f * weight / LightPdf;
+                    Float weight = PowerHeuristic(1, lightPdf, 1, BSDFPdf);
+                    Ld += Li * f * weight / lightPdf;
                 }
             }
         }
     }
-
-    return Ld;
 
     // Sample BSDF with MSI
     if (!light->IsDeltaLight()) {
@@ -57,9 +55,9 @@ RGBSpectrum SamplerIntegrator::EstimateDirectLight(const SurfaceInteraction & in
         if (BSDFPdf > 0 && !f.IsBlack()) {
             Float weight = 1;
             if (!SampleSpecular) {
-                LightPdf = light->PdfLi(inter, wi);
-                if (LightPdf == 0) return Ld;
-                weight = PowerHeuristic(1, BSDFPdf, 1, LightPdf);
+                lightPdf = light->PdfLi(inter, wi);
+                if (lightPdf == 0) return Ld;
+                weight = PowerHeuristic(1, BSDFPdf, 1, lightPdf);
             }
 
 
@@ -112,9 +110,9 @@ void SamplerIntegrator::Render(const Scene &scene) {
 
     std::cout << scene.aggregate->primitives.size() << std::endl;
 
-    int SampleNum = 50;
+    //int SampleNum = 50;
     for (int y = 0; y < film->resolution.y; y++) {
-        fprintf(stderr, "\rRendering (%d spp) %5.2f%%", SampleNum, 100.*(y + 1) / film->resolution.y);
+        fprintf(stderr, "\rRendering (%d spp) %5.2f%%", sampleNum, 100.*(y + 1) / film->resolution.y);
         for (int x = 0; x < film->resolution.x; x++) {
 
             /*
@@ -130,16 +128,17 @@ void SamplerIntegrator::Render(const Scene &scene) {
             */
 
             RGBSpectrum L(0.0);            
-            for (int i = 0; i < SampleNum; i++) {
+            for (int i = 0; i < sampleNum; i++) {
                 camera->GenerateRay(&ray,
                     Point2f(x - film->resolution.x *0.5, y - film->resolution.y *0.5) + sampler->Get2D());
                 L += Li(ray, scene, 0);
             }
-            L /= SampleNum;
+            L /= sampleNum;
             film->SetPixel(Point2i(x, y), L);
         }
     }
     film->SaveImage();
+    cout << "\n";
 }
 
 RAINBOW_NAMESPACE_END

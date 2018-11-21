@@ -101,6 +101,7 @@ bool Triangle::Intersect(const Ray & ray, Float * tHit, SurfaceInteraction* inte
 		nHit = static_cast<Normal3f>(Cross(p1 - p0, p2 - p0));
 		nHit = -FaceForward(nHit, ray.d);
 	}
+    nHit = Normalize(nHit);
 	*inter = SurfaceInteraction(pHit, nHit, -ray.d, this);
 
 	return true;
@@ -170,8 +171,6 @@ Interaction Triangle::Sample(const Point3f &p, const Point2f & sample, Float * p
 		inter.n = FaceForward(inter.n, ns);
 	}
 
-	//Float a = Area();
-	//cout << a << endl;
 	*pdf = 1 / Area();
 	return inter;
 }

@@ -180,6 +180,9 @@
     <ClCompile Include="..\src\integrators\path.cpp">
       <Filter>Source Files\integrators</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\core\timer.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\core\bbox.h">
@@ -314,6 +317,9 @@
     <ClInclude Include="..\src\integrators\path.h">
       <Filter>Source Files\integrators</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\core\timer.h">
+      <Filter>Source Files\core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\log\20180811.md">
@@ -350,6 +356,9 @@
       <Filter>Log Files</Filter>
     </None>
     <None Include="..\log\20181011.md">
+      <Filter>Log Files</Filter>
+    </None>
+    <None Include="..\log\20181120.md">
       <Filter>Log Files</Filter>
     </None>
   </ItemGroup>

@@ -14,7 +14,8 @@ using std::cin;
 using std::cout;
 using std::endl;
 
-#include"logger.h"
+#include "timer.h"
+#include "logger.h"
 
 #define Log(message) do { \
 		(tfm::format)(std::cerr,"%s", message); \

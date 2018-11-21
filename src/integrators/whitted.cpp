@@ -35,7 +35,7 @@ RGBSpectrum WhittedIntegrator::Li(const Ray & ray, const Scene & scene, int dept
         LightNum++;	    
     }
 
-	if (depth + 1 < maxDep) {
+	if (depth + 1 < maxDepth) {
 		L += SpecularReflect(ray, scene, depth, intersection);
         LightNum++;
 		//L += SpecularRefract(ray, scene, depth, intersection);
@@ -50,7 +50,8 @@ RGBSpectrum WhittedIntegrator::Li(const Ray & ray, const Scene & scene, int dept
 
 WhittedIntegrator* CreateWhittedIntegrator(PropertyList &list) {
     int maxDepth = list.getInteger("maxDepth", 1);
-    return new WhittedIntegrator(maxDepth);
+    int sampleNum = list.getInteger("sampleNum", 10);
+    return new WhittedIntegrator(maxDepth, sampleNum);
 }
 
 RAINBOW_NAMESPACE_END
