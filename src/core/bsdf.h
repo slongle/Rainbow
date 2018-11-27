@@ -26,6 +26,27 @@ inline bool SameHemisphere(const Vector3f &w, const Vector3f &wp) {
 	return w.z * wp.z > 0;
 }
 
+class Frame {
+public:
+    // Guarantee n is Normalized
+    Frame(const Normal3f& m_n) :n(m_n) {
+        s = Normalize(Vector3f(-n.z, 0, n.x));
+        t = Cross(s, n);
+    }
+
+    Vector3f toLocal(const Vector3f &v) {
+        return Vector3f(Dot(v, s), Dot(v, t), Dot(v, n));
+    }
+
+    Vector3f toWorld(const Vector3f v) {
+        return v.x * s + v.y * t + v.z * n;
+    }
+
+private:
+    Normal3f n;
+    Vector3f s, t;    
+};
+
 class BxDF{
 public:
 	enum BxDFType {

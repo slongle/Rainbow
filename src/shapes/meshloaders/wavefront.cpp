@@ -54,16 +54,13 @@ void ParseWavefrontOBJ(const std::string& name, int* VertexNum, int* TriangleNum
             Indices->push_back(id1);
             Indices->push_back(id2);
             Indices->push_back(id3);
+
+            // Vertices are stored in a counter-clockwise order by default in Wavefront .obj file
+            // making explicit declaration of face normals unnecessary.
             Normal3f n(Cross((*Position)[id2] - (*Position)[id1], (*Position)[id3] - (*Position)[id1]));
             Normal->push_back(Normalize(n));
         }
     }
-    /*
-    std::cout << filename << std::endl;
-    for (const auto& a : *Indices) {
-    std::cout << a << std::endl;
-    }
-    puts("");*/
 }
 
 RAINBOW_NAMESPACE_END

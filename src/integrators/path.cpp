@@ -3,16 +3,12 @@
 RAINBOW_NAMESPACE_BEGIN
 
 RGBSpectrum PathIntegrator::Li(const Ray & r, const Scene & scene, int depth) {
-
     RGBSpectrum L(0.f), beta(1);
     SurfaceInteraction inter;
     bool SpecularBounce = false;
     Ray ray(r);
 
-    //int goal = 2;
-
-    for (int bounce = 0;; bounce++) {
-        //RGBSpectrum StoreL = L;
+    for (int bounce = 0;; bounce++) {        
         bool FoundIntersect = scene.Intersect(ray, &inter);
 
         if (bounce == 0 || SpecularBounce) {
@@ -34,7 +30,7 @@ RGBSpectrum PathIntegrator::Li(const Ray & r, const Scene & scene, int depth) {
         }        
 
         L += beta * UniformSampleOneLight(inter, scene);
-        Vector3f wo=Normalize(-ray.d), wi;
+        Vector3f wo = Normalize(-ray.d), wi;
         Float BSDFPdf;
         RGBSpectrum f = inter.bxdf->SampleF(wo, &wi, sampler->Get2D(), &BSDFPdf);
 
@@ -55,8 +51,6 @@ RGBSpectrum PathIntegrator::Li(const Ray & r, const Scene & scene, int depth) {
                 break;
             beta /= q;  
         }
-
-        //if (bounce != goal) L = StoreL;
     }
     return L;
 }
