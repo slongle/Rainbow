@@ -55,6 +55,9 @@
     <Filter Include="Resource Files\scenes\cbox">
       <UniqueIdentifier>{dafc31ce-b17f-4bea-9e8c-7031df2837a7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\shapes\meshloaders">
+      <UniqueIdentifier>{d298582f-a703-4a3b-bc24-781fdba1cffd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\core\bbox.cpp">
@@ -182,6 +185,9 @@
     </ClCompile>
     <ClCompile Include="..\src\core\timer.cpp">
       <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\shapes\meshloaders\wavefront.cpp">
+      <Filter>Source Files\shapes\meshloaders</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -319,6 +325,9 @@
     </ClInclude>
     <ClInclude Include="..\src\core\timer.h">
       <Filter>Source Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\shapes\meshloaders\wavefront.h">
+      <Filter>Source Files\shapes\meshloaders</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,21 +1,20 @@
 #include "triangle.h"
+#include "meshloaders/wavefront.h"
 
 RAINBOW_NAMESPACE_BEGIN
 
-TriangleMesh::TriangleMesh(const Transform * ObjectToWorld,
-	const int & _VertexNum, const int & _TriangleNum,
-	const std::vector<Point3f>& _Position, const std::vector<int>& _VertexIndices, const Normal3f * _n = nullptr) :
-	TriangleNum(_TriangleNum), VertexNum(_VertexNum), VertexIndices(_VertexIndices) {
-	
-	Position.resize(VertexNum);
-	for (int i = 0; i < VertexNum; i++)
-		Position[i] = (*ObjectToWorld)(_Position[i]);
-
-	if (_n) {
-		n.reset(new Normal3f[TriangleNum]);
-		for (int i = 0; i < TriangleNum; i++)
-			n[i] = (*ObjectToWorld)(_n[i]);
-	}
+TriangleMesh::TriangleMesh(const Transform * ObjectToWorld, const int & m_VertexNum, const int & m_TriangleNum, 
+    const std::vector<Point3f>& m_Position, const std::vector<int>& m_VertexIndices, 
+    const std::vector<Normal3f>& m_Normal):
+    TriangleNum(m_TriangleNum), VertexNum(m_VertexNum), VertexIndices(m_VertexIndices) {
+    
+    Position.resize(VertexNum);
+    for (int i = 0; i < VertexNum; i++)
+        Position[i] = (*ObjectToWorld)(m_Position[i]);
+    
+    Normal.resize(TriangleNum);
+    for (int i = 0; i < TriangleNum; i++)
+        Normal[i] = (*ObjectToWorld)(m_Normal[i]);
 }
 
 Triangle::Triangle(const std::shared_ptr<TriangleMesh>& _mesh, int _triNumber):
@@ -96,11 +95,14 @@ bool Triangle::Intersect(const Ray & ray, Float * tHit, SurfaceInteraction* inte
 	*tHit = sum * invDet;
 	Point3f pHit = ray(*tHit);
 	Normal3f nHit;
-	if (mesh->n) nHit = mesh->n[triNumber];
-	else {
-		nHit = static_cast<Normal3f>(Cross(p1 - p0, p2 - p0));
-		nHit = -FaceForward(nHit, ray.d);
-	}
+
+    nHit = mesh->Normal[triNumber];
+	//if (mesh->n) nHit = mesh->n[triNumber];
+	//else {
+	//	nHit = static_cast<Normal3f>(Cross(p1 - p0, p2 - p0));
+	//	nHit = -FaceForward(nHit, ray.d);
+	//}
+
     nHit = Normalize(nHit);
 	*inter = SurfaceInteraction(pHit, nHit, -ray.d, this);
 
@@ -165,11 +167,11 @@ Interaction Triangle::Sample(const Point3f &p, const Point2f & sample, Float * p
 	inter.n = Normalize(Normal3f(Cross(p1 - p0, p2 - p0)));
 	inter.n = FaceForward(inter.n, p - inter.p);
 
-	if (mesh->n) {
-		Normal3f ns(q[0] * mesh->n[index[0]] + q[1] * mesh->n[index[1]] +
-			(1 - q[0] - q[1]) * mesh->n[index[2]]);
-		inter.n = FaceForward(inter.n, ns);
-	}
+	//if (mesh->n) {
+	//	Normal3f ns(q[0] * mesh->n[index[0]] + q[1] * mesh->n[index[1]] +
+	//		(1 - q[0] - q[1]) * mesh->n[index[2]]);
+	//	inter.n = FaceForward(inter.n, ns);
+	//}
 
 	*pdf = 1 / Area();
 	return inter;
@@ -182,51 +184,6 @@ Float Triangle::Area() const {
  	return static_cast<Float>(0.5) * Cross(p1-p0,p2-p0).Length();
 }
 
-int ParseOBJVertex(const std::string& s) {
-	std::string ret;
-	for (char i : s) {
-		if (i == '/') break;
-		else ret += i;
-	}
-	return toInteger(ret);
-}
-
-void ParseWavefrontOBJ(const std::string& name, int* VertexNum, int* TriangleNum,
-	std::vector<Point3f>* Position, std::vector<int>* Indices) {
-	
-	filesystem::path filename = getFileResolver()->resolve(name);
-	std::ifstream is(filename.str());
-	Assert(is.fail() == false, "Parsing OBJ File " + name + " fail!");
-	std::vector<std::string> v;
-	std::string line_str;
-	while (std::getline(is, line_str)) {
-		std::istringstream line(line_str);
-		std::string prefix;
-		line >> prefix;
-
-		if (prefix == "v") {
-			Point3f p;
-			line >> p.x >> p.y >> p.z;
-			(*VertexNum)++;
-			Position->push_back(p);
-		} else if (prefix == "f") {
-			std::string v1, v2, v3, v4;
-			line >> v1 >> v2 >> v3 >> v4;
-			Assert(v4.empty() == true, "Quad?");
-			(*TriangleNum)++;
-			Indices->push_back(ParseOBJVertex(v1) - 1);
-			Indices->push_back(ParseOBJVertex(v2) - 1);
-			Indices->push_back(ParseOBJVertex(v3) - 1);
-		}		
-	}
-	/*
-	std::cout << filename << std::endl;
-	for (const auto& a : *Indices) {
-		std::cout << a << std::endl;
-	}
-	puts("");*/
-}
-
 std::vector<std::shared_ptr<Shape>> CreateWavefrontOBJ(const Transform* o2w, const Transform* w2o, 
 	PropertyList & list) {
 	
@@ -234,10 +191,11 @@ std::vector<std::shared_ptr<Shape>> CreateWavefrontOBJ(const Transform* o2w, con
 	int VertexNum = 0, TriangleNum = 0;
 	std::vector<Point3f> Position;
 	std::vector<int> Indices;
-	ParseWavefrontOBJ(name, &VertexNum, &TriangleNum, &Position, &Indices);
+    std::vector<Normal3f> Normal;
+    ParseWavefrontOBJ(name, &VertexNum, &TriangleNum, &Position, &Indices, &Normal);
 
-	std::shared_ptr<TriangleMesh> mesh =
-		std::make_shared<TriangleMesh>(o2w, VertexNum, TriangleNum, Position, Indices);
+    std::shared_ptr<TriangleMesh> mesh =
+        std::make_shared<TriangleMesh>(o2w, VertexNum, TriangleNum, Position, Indices, Normal);
 	std::vector<std::shared_ptr<Shape>> tris;
 	tris.reserve(TriangleNum);
 	for (int i = 0; i < mesh->TriangleNum; i++) {

@@ -165,6 +165,7 @@
     <ClCompile Include="..\src\materials\matte.cpp" />
     <ClCompile Include="..\src\samplers\independent.cpp" />
     <ClCompile Include="..\src\shapes\cube.cpp" />
+    <ClCompile Include="..\src\shapes\meshloaders\wavefront.cpp" />
     <ClCompile Include="..\src\shapes\sphere.cpp" />
     <ClCompile Include="..\src\shapes\triangle.cpp" />
   </ItemGroup>
@@ -212,6 +213,7 @@
     <ClInclude Include="..\src\materials\matte.h" />
     <ClInclude Include="..\src\samplers\independent.h" />
     <ClInclude Include="..\src\shapes\cube.h" />
+    <ClInclude Include="..\src\shapes\meshloaders\wavefront.h" />
     <ClInclude Include="..\src\shapes\sphere.h" />
     <ClInclude Include="..\src\shapes\triangle.h" />
   </ItemGroup>

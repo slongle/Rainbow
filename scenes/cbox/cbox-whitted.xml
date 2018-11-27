@@ -1,7 +1,7 @@
 <scene>
 	<integrator type="path">
 		<integer name="maxDepth" value="50"/>
-    <integer name="sampleNum" value="2000"/>
+    <integer name="sampleNum" value="100"/>
 	</integrator>
 
 	<sensor type="perspective">
@@ -17,7 +17,7 @@
 		</sampler>
 
 		<film type="hdrfilm">
-      <string name="filename" value="pt_2000spp_50b.png"/>
+      <string name="filename" value="pt_100spp_50b.png"/>
 			<integer name="height" value="600"/>
 			<integer name="width" value="800"/>
 		</film>
