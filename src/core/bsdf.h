@@ -9,13 +9,6 @@ RAINBOW_NAMESPACE_BEGIN
 
 inline Float FrDielectric(Float cosTheta, Float etaI, Float etaT);
 
-inline Float CosTheta(const Vector3f& v) { return v.z; }
-inline Float Cos2Theta(const Vector3f& v) { return v.z*v.z; }
-inline Float AbsCosTheta(const Vector3f& v) { return std::abs(v.z); }
-inline Float Sin2Theta(const Vector3f& v) { return std::max(Float(0), 1 - Cos2Theta(v)); }
-inline Float SinTheta(const Vector3f& v) { return std::sqrt(Sin2Theta(v)); }
-
-
 inline Vector3f Reflect(const Vector3f& wi, const Normal3f& n) {
 	return 2 * Dot(wi, n) * n - wi;
 }
@@ -30,7 +23,14 @@ class Frame {
 public:
     // Guarantee n is Normalized
     Frame(const Normal3f& m_n) :n(m_n) {
-        s = Normalize(Vector3f(-n.z, 0, n.x));
+        if (std::abs(n.x) > std::abs(n.y)) {
+            Float invLen = Float(1) / std::sqrt(n.x*n.x + n.z*n.z);
+            s = Vector3f(n.z*invLen, 0, -n.x*invLen);
+        }
+        else {
+            Float invLen = Float(1) / std::sqrt(n.y*n.y + n.z*n.z);
+            s = Vector3f(0, n.z*invLen, -n.y*invLen);
+        }        
         t = Cross(s, n);
     }
 
@@ -41,6 +41,13 @@ public:
     Vector3f toWorld(const Vector3f v) {
         return v.x * s + v.y * t + v.z * n;
     }
+
+    inline static Float CosTheta(const Vector3f& v) { return v.z; }
+    inline static Float Cos2Theta(const Vector3f& v) { return v.z*v.z; }
+    inline static Float AbsCosTheta(const Vector3f& v) { return std::abs(v.z); }
+    inline static Float Sin2Theta(const Vector3f& v) { return std::max(Float(0), 1 - Cos2Theta(v)); }
+    inline static Float SinTheta(const Vector3f& v) { return std::sqrt(Sin2Theta(v)); }
+
 
 private:
     Normal3f n;

@@ -230,6 +230,13 @@ inline Vector3<T> Abs(const Vector3<T> &v) {
 }
 
 template<typename T>
+inline int MinDimension(const Vector3<T> &v) {
+    if (v.x < v.y && v.x < v.z) return 0;
+    if (v.y < v.z) return 1;
+    return 2;
+}
+
+template<typename T>
 inline int MaxDimension(const Vector3<T> &v) {
 	if (v.x > v.y && v.x > v.z) return 0;
 	if (v.y > v.z) return 1;
@@ -506,6 +513,25 @@ inline Vector3<T> Cross(const Vector3<T> &u, const Normal3<T> &v) {
 template<typename T>
 inline Normal3<T> Normalize(const Normal3<T>& n) {
 	return n / n.Length();
+}
+
+template<typename T>
+inline Normal3<T> Abs(const Normal3<T> &v) {
+    return Normal3<T>(std::abs(v.x), std::abs(v.y), std::abs(v.z));
+}
+
+template<typename T>
+inline int MinDimension(const Normal3<T> &v) {
+    if (v.x < v.y && v.x < v.z) return 0;
+    if (v.y < v.z) return 1;
+    return 2;
+}
+
+template<typename T>
+inline int MaxDimension(const Normal3<T> &v) {
+    if (v.x > v.y && v.x > v.z) return 0;
+    if (v.y > v.z) return 1;
+    return 2;
 }
 
 template<typename T>
