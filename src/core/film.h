@@ -22,7 +22,7 @@ public:
 
 
 	void SetPixel(const Point2i& p, const RGBSpectrum& L) const;
-	void SaveImage();
+    void SaveImage() const;
 
 	const std::string filename;
 	const Point2i resolution;

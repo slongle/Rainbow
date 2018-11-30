@@ -40,7 +40,7 @@ Float Cube::Area() const {
 	return bound.Area(); 
 }
 
-Cube * CreateCube(const PropertyList & list) {
+std::shared_ptr<Cube> CreateCube(const PropertyList & list) {
 	return nullptr;
 }
 

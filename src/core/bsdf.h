@@ -15,10 +15,6 @@ inline Vector3f Reflect(const Vector3f& wi, const Normal3f& n) {
 
 inline bool Refract(const Vector3f & wi, const Normal3f & n, Float eta, Vector3f* wt);
 
-inline bool SameHemisphere(const Vector3f &w, const Vector3f &wp) {
-	return w.z * wp.z > 0;
-}
-
 class Frame {
 public:
     // Guarantee n is Normalized
@@ -34,19 +30,23 @@ public:
         t = Cross(s, n);
     }
 
-    Vector3f toLocal(const Vector3f &v) {
+    Vector3f toLocal(const Vector3f &v) const {
         return Vector3f(Dot(v, s), Dot(v, t), Dot(v, n));
     }
 
-    Vector3f toWorld(const Vector3f v) {
+    Vector3f toWorld(const Vector3f v) const {
         return v.x * s + v.y * t + v.z * n;
     }
 
     inline static Float CosTheta(const Vector3f& v) { return v.z; }
     inline static Float Cos2Theta(const Vector3f& v) { return v.z*v.z; }
     inline static Float AbsCosTheta(const Vector3f& v) { return std::abs(v.z); }
-    inline static Float Sin2Theta(const Vector3f& v) { return std::max(Float(0), 1 - Cos2Theta(v)); }
-    inline static Float SinTheta(const Vector3f& v) { return std::sqrt(Sin2Theta(v)); }
+    inline static Float Sin2Theta(const Vector3f& v) { return std::max(Float(0), 1 - Frame::Cos2Theta(v)); }
+    inline static Float SinTheta(const Vector3f& v) { return std::sqrt(Frame::Sin2Theta(v)); }
+
+    inline static bool SameHemisphere(const Vector3f &w, const Vector3f &wp) {
+        return w.z * wp.z > 0;
+    }
 
 
 private:

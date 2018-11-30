@@ -7,9 +7,9 @@
 
 RAINBOW_NAMESPACE_BEGIN
 
-class Shape{
+class Shape {
 public:
-	Shape() {}
+    Shape() {}
 	Shape(const Transform *_ObjectToWorld, const Transform *_WorldToObject);
 	virtual ~Shape() = default;
 
@@ -20,14 +20,8 @@ public:
 	virtual bool IntersectP(const Ray & ray) const;
 
 	virtual Interaction Sample(const Point3f &p, const Point2f& sample, Float* pdf) const = 0;
-	virtual Interaction Sample(const Interaction &ref, const Point2f& samplse, Float* pdf) const;
+	virtual Interaction Sample(const Interaction &ref, const Point2f& sample, Float* pdf) const;
 	virtual Float Area() const = 0;
-
-	enum EShapeType {
-		EShapeMesh,
-		EShapeOthers
-	};
-	virtual EShapeType getShapeType() const { return EShapeOthers; }
 
 	const Transform *ObjectToWorld, *WorldToObject;
 };

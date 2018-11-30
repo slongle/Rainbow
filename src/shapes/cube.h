@@ -22,7 +22,7 @@ private:
 	Bounds3f bound;
 };
 
-Cube* CreateCube(const PropertyList &list);
+std::shared_ptr<Cube> CreateCube(const PropertyList &list);
 
 RAINBOW_NAMESPACE_END
 

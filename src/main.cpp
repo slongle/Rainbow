@@ -1,26 +1,15 @@
 #include "core/common.h"
-//#include "core/vector.h"
-//#include "core/bbox.h"
-//#include "core/ray.h"
-//#include "core/transform.h"
-//#include "core/film.h"
 #include "core/parser.h"
-//#include "core/object.h"
-//#include "shapes/sphere.h"
-#include "core/spectrum.h"
-
-//#include"shapes/sphere.h"
 
 using namespace rainbow;
 
 int main(int argc, char *argv[]) {
     Timer timer;
-
 	RainbowInit();	
     // Position at School
-    std::string filename = "F:/Document/Graphics/code/Rainbow/scenes/cbox/cbox-whitted.xml";
+    const std::string filename = "F:/Document/Graphics/code/Rainbow/scenes/cbox/cbox-whitted.xml";
     // Position at Home
-    //std::string filename = "C:/Users/Administrator/Desktop/Rainbow/Rainbow/scenes/cbox/cbox-whitted.xml";
+    // const std::string filename = "C:/Users/Administrator/Desktop/Rainbow/Rainbow/scenes/cbox/cbox-whitted.xml";
 	filesystem::path path(filename);
 	getFileResolver()->prepend(path.parent_path());
 	ParserXMLFile(filename);

@@ -3,7 +3,8 @@
 RAINBOW_NAMESPACE_BEGIN
 
 Film::Film(const std::string & _filename, const Point2i & _resolution) :
-	resolution(_resolution), filename(_filename), aspect(static_cast<Float>(resolution.x) / resolution.y) {
+    filename(_filename), resolution(_resolution), 
+    aspect(static_cast<Float>(resolution.x) / resolution.y) {
 	pixels = std::unique_ptr<Pixel[]>(new Pixel[resolution.x * resolution.y]);
 }
 
@@ -13,7 +14,7 @@ void Film::SetPixel(const Point2i & p, const RGBSpectrum & L) const {
 		pixel.rgb[i] = L[i];
 }
 
-void Film::SaveImage() {
+void Film::SaveImage() const {
 	Float *rgb = new Float[3 * resolution.x * resolution.y];
 	Float *pos = rgb;
 
