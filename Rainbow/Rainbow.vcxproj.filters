@@ -58,6 +58,33 @@
     <Filter Include="Source Files\shapes\meshloaders">
       <UniqueIdentifier>{d298582f-a703-4a3b-bc24-781fdba1cffd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Extend Files\tinyformat">
+      <UniqueIdentifier>{87416d62-6b67-4ce1-aa9f-dab1b2b73657}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Extend Files\imgui">
+      <UniqueIdentifier>{12ed7130-bd71-4b62-9245-646f4729d1af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Extend Files\imgui\libs">
+      <UniqueIdentifier>{947bffd4-c0dd-4431-a1f4-8f57d1dcd0b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Extend Files\imgui\libs\glfw">
+      <UniqueIdentifier>{77e0d056-9a84-48c1-8a75-c1c2fb8766c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Extend Files\imgui\libs\glfw\include">
+      <UniqueIdentifier>{2e8fce06-3d71-4124-af88-601f9a1143b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Extend Files\imgui\libs\glfw\include\GLFW">
+      <UniqueIdentifier>{cb2b9e1b-c6e3-4a4a-91f4-9522eab268fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Extend Files\imgui\libs\gl3w">
+      <UniqueIdentifier>{75bc31f9-980c-44e3-a16b-62889e2ae635}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Extend Files\imgui\libs\gl3w\GL">
+      <UniqueIdentifier>{3d06908d-0898-4467-b071-ab8d1ffd8781}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Extend Files\stb_images">
+      <UniqueIdentifier>{8a6fb0d2-58b4-4d6a-a7e7-c477dc6c0516}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\core\bbox.cpp">
@@ -189,6 +216,30 @@
     <ClCompile Include="..\src\shapes\meshloaders\wavefront.cpp">
       <Filter>Source Files\shapes\meshloaders</Filter>
     </ClCompile>
+    <ClCompile Include="..\ext\imgui\imgui.cpp">
+      <Filter>Extend Files\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ext\imgui\imgui_demo.cpp">
+      <Filter>Extend Files\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ext\imgui\imgui_draw.cpp">
+      <Filter>Extend Files\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ext\imgui\imgui_widgets.cpp">
+      <Filter>Extend Files\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\core\gui.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ext\imgui\examples\imgui_impl_glfw.cpp">
+      <Filter>Extend Files\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ext\imgui\examples\imgui_impl_opengl3.cpp">
+      <Filter>Extend Files\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ext\imgui\examples\libs\gl3w\GL\gl3w.c">
+      <Filter>Extend Files\imgui\libs\gl3w\GL</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\core\bbox.h">
@@ -208,9 +259,6 @@
     </ClInclude>
     <ClInclude Include="..\src\core\vector.h">
       <Filter>Source Files\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\ext\tinyformat.h">
-      <Filter>Extend Files</Filter>
     </ClInclude>
     <ClInclude Include="..\src\core\shape.h">
       <Filter>Source Files\core</Filter>
@@ -329,6 +377,54 @@
     <ClInclude Include="..\src\shapes\meshloaders\wavefront.h">
       <Filter>Source Files\shapes\meshloaders</Filter>
     </ClInclude>
+    <ClInclude Include="..\ext\tinyformat.h">
+      <Filter>Extend Files\tinyformat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ext\imgui\imconfig.h">
+      <Filter>Extend Files\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ext\imgui\imgui.h">
+      <Filter>Extend Files\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ext\imgui\imgui_internal.h">
+      <Filter>Extend Files\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ext\imgui\imstb_rectpack.h">
+      <Filter>Extend Files\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ext\imgui\imstb_textedit.h">
+      <Filter>Extend Files\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ext\imgui\imstb_truetype.h">
+      <Filter>Extend Files\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\core\gui.h">
+      <Filter>Source Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ext\imgui\examples\imgui_impl_glfw.h">
+      <Filter>Extend Files\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ext\imgui\examples\imgui_impl_opengl3.h">
+      <Filter>Extend Files\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ext\imgui\examples\libs\glfw\include\GLFW\glfw3.h">
+      <Filter>Extend Files\imgui\libs\glfw\include\GLFW</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ext\imgui\examples\libs\glfw\include\GLFW\glfw3native.h">
+      <Filter>Extend Files\imgui\libs\glfw\include\GLFW</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ext\imgui\examples\libs\gl3w\GL\gl3w.h">
+      <Filter>Extend Files\imgui\libs\gl3w\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ext\imgui\examples\libs\gl3w\GL\glcorearb.h">
+      <Filter>Extend Files\imgui\libs\gl3w\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ext\stb_images\stb_image.h">
+      <Filter>Extend Files\stb_images</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ext\stb_images\stb_image_write.h">
+      <Filter>Extend Files\stb_images</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\log\20180811.md">
@@ -370,6 +466,9 @@
     <None Include="..\log\20181120.md">
       <Filter>Log Files</Filter>
     </None>
+    <None Include="..\ext\imgui\.travis.yml">
+      <Filter>Extend Files\imgui</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\scenes\cbox\cbox-distributed.xml">
@@ -381,5 +480,10 @@
     <Xml Include="..\scenes\cbox\cbox-whitted-mirror.xml">
       <Filter>Resource Files\scenes\cbox</Filter>
     </Xml>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\ext\imgui\LICENSE.txt">
+      <Filter>Extend Files\imgui</Filter>
+    </Text>
   </ItemGroup>
 </Project>

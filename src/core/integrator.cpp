@@ -104,6 +104,30 @@ RGBSpectrum SamplerIntegrator::SpecularRefract
     return RGBSpectrum();
 }
 
+void SamplerIntegrator::ProgressiveRender(const Scene &scene,const int& x,const int & y) {
+    //Timer time;
+    std::shared_ptr<Film> film = camera->film;
+    Ray ray;
+
+    //std::cout << scene.aggregate->primitives.size() << std::endl;
+
+    //int SampleNum = 50;
+    //for (int y = 0; y < film->resolution.y; y++) {
+        //fprintf(stderr, "\rRendering (%d spp) %5.2f%%", sampleNum, 100.*(y + 1) / film->resolution.y);
+        //for (int x = 0; x < film->resolution.x; x++) {
+            RGBSpectrum L(0.0);            
+            camera->GenerateRay(&ray,
+                Point2f(x - film->resolution.x *0.5, y - film->resolution.y *0.5) + sampler->Get2D());
+            L = Li(ray, scene, 0);
+            
+            film->AddPixel(Point2i(x, y), L);
+        //}
+    //}
+    //time.ShowTime();
+}
+
+
+
 void SamplerIntegrator::Render(const Scene &scene) {
     std::shared_ptr<Film> film = camera->film;
     Ray ray;

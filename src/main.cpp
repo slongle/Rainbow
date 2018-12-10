@@ -1,9 +1,13 @@
 #include "core/common.h"
 #include "core/parser.h"
 
+//#include "core/gui.h"
+
 using namespace rainbow;
 
 int main(int argc, char *argv[]) {
+
+
     Timer timer;
 	RainbowInit();	
     // Position at School

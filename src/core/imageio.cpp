@@ -1,8 +1,18 @@
 #include "imageio.h"
 
+#include "vector.h"
+
+#include "../../ext/lodepng/lodepng.h"
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "ext/stb_images/stb_image.h"
+
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include "ext/stb_images/stb_image_write.h" 
+
 RAINBOW_NAMESPACE_BEGIN
 
-void WriteImage(const std::string & filename, const Float * rgb, const Point2i & resolution) {
+/*void ExportToPNG(const std::string & filename, const Float * rgb, const Point2i & resolution) {
 	std::vector<uint8_t> data;
 	for (int y = 0; y < resolution.y; y++) {
 		for (int x = 0; x < resolution.x; x++) {
@@ -16,7 +26,12 @@ void WriteImage(const std::string & filename, const Float * rgb, const Point2i &
 	}	
 	unsigned error = lodepng::encode(filename, data, resolution.x, resolution.y);
 	Assert(!error, "Encode Error as Saving PNG");
+}*/
+
+void ExportToPNG(const std::string& filename, const unsigned char* rgba, const int& width, const int& height) {
+    stbi_write_png(filename.c_str(), width, height, 4, rgba, 0);
 }
+
 
 
 RAINBOW_NAMESPACE_END

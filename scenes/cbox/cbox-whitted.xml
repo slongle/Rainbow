@@ -1,6 +1,6 @@
 <scene>
 	<integrator type="path">
-		<integer name="maxDepth" value="50"/>
+		<integer name="maxDepth" value="3"/>
     <integer name="sampleNum" value="100"/>
 	</integrator>
 

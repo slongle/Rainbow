@@ -13,6 +13,11 @@ public:
 	Integrator() {}
 	virtual void Render(const Scene &scene) = 0;
 
+    virtual void ProgressiveRender(const Scene &scene, const int& x, const int & y)
+    {
+        Assert(false, "No Implement!");
+    }
+
 	std::shared_ptr<Camera> camera;
 	std::shared_ptr<Sampler> sampler;
 };
@@ -28,6 +33,7 @@ public:
     RGBSpectrum SpecularRefract(const Ray&ray, const Scene& scene, int depth, SurfaceInteraction intersection);
 
 	void Render (const Scene &scene);
+    void ProgressiveRender(const Scene &scene, const int& x, const int & y);
     virtual RGBSpectrum Li(const Ray &ray, const Scene& scene, int depth) = 0;
 
     int sampleNum;

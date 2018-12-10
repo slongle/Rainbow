@@ -1,5 +1,7 @@
 #include <memory>
 
+#include "gui.h"
+
 #include "api.h"
 #include "film.h"
 #include "scene.h"
@@ -72,11 +74,17 @@ void RainbowInit() {
 }
 
 void RainbowWorld() {
-	std::unique_ptr<Integrator> integrator(renderOptions->MakeIntegrator());
-	std::unique_ptr<Scene> scene(renderOptions->MakeScene());
+	//std::shared_ptr<Integrator> integrator(renderOptions->MakeIntegrator());
+	//std::shared_ptr<Scene> scene(renderOptions->MakeScene());
 
-	if (scene && integrator)
-		integrator->Render(*scene);
+    Integrator* integrator = renderOptions->MakeIntegrator();
+    Scene* scene = renderOptions->MakeScene();
+
+    Assert(scene && integrator, "No Scene or Integrator!");
+
+    show(integrator, scene);
+
+    //integrator->Render(*scene);
 }
 
 void RainbowIntegrator(const std::string& type,const PropertyList& list) {

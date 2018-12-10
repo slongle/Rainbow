@@ -20,9 +20,11 @@ class Film{
 public:	
 	Film(const std::string & _filename, const Point2i & _resolution);
 
-
+    void AddPixel(const Point2i& p, const RGBSpectrum& L) const;
 	void SetPixel(const Point2i& p, const RGBSpectrum& L) const;
     void SaveImage() const;
+    void ExportToUnsignedCharPointer(unsigned char* data) const;
+    void UpdateToUnsignedCharPointer(unsigned char* data, const int &x, const int &y) const;
 
 	const std::string filename;
 	const Point2i resolution;
@@ -31,9 +33,9 @@ public:
 
 private:
 	struct Pixel {
-		Pixel() { rgb[0] = rgb[1] = rgb[2] = 0; }// filterSum;	
+        Pixel() { rgb[0] = rgb[1] = rgb[2] = sampleNum = 0; }
 		Float rgb[3];
-		//Float filterSum;
+		Float sampleNum;
 	};
 	std::unique_ptr<Pixel[]> pixels;
 

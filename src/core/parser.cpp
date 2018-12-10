@@ -258,8 +258,6 @@ void ParserXMLFile(const std::string & filename) {
 	PropertyList prop;
 	ParserTag(*doc.begin(), prop, 0);
 
-    //exit(0);
-
 	RainbowWorld();
 }
 

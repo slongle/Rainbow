@@ -20,11 +20,14 @@ public:
 
     void ShowTime() {
         Finish();
-        int seconds = std::chrono::duration_cast<std::chrono::seconds>(FinishTime - StartTime).count();
-        int minutes = (seconds / 60) % 60;
-        int hours = seconds / 60 / 60;
-        seconds %= 60;
+        int milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(FinishTime - StartTime).count();
+        int seconds = (milliseconds / 1000) % 60;
+        int minutes = (milliseconds / 60000) % 60;
+        int hours = milliseconds / 3600000;
+        milliseconds %= 1000;
 
+        std::cout << hours << " hours, " << minutes << " minutes, " << seconds << " seconds, "<<milliseconds<<" milliseconds\n";
+        /* 
         if (hours != 0) {
             std::cout << hours << " hours, " << minutes << " minutes, " << seconds << " seconds\n";
         }
@@ -33,7 +36,7 @@ public:
         }
         else if (seconds != 0) {
             std::cout << seconds << " seconds\n";
-        }
+        }*/
     }
 
 private:

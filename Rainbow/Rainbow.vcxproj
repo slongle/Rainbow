@@ -69,7 +69,12 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>F:\Document\Graphics\code\Rainbow\ext\imgui;F:\Document\Graphics\code\Rainbow\ext\imgui\examples\libs\gl3w;F:\Document\Graphics\code\Rainbow\ext\imgui\examples\libs\glfw\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>F:\Document\Graphics\code\Rainbow\ext\imgui\examples\libs\gl3w;F:\Document\Graphics\code\Rainbow\ext\imgui\examples\libs\glfw\include;F:\Document\Graphics\code\Rainbow\ext\imgui;$(IncludePath)</IncludePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -91,6 +96,9 @@
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
+      <AdditionalLibraryDirectories>F:\Document\Graphics\code\Rainbow\ext\imgui\examples\libs\glfw\lib-vc2010-64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>msvcrt.lib</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -117,14 +125,26 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <AdditionalIncludeDirectories>F:\Document\Graphics\code\Rainbow;F:\Document\Graphics\code\Rainbow\ext\imgui\examples\libs\gl3w;F:\Document\Graphics\code\Rainbow\ext\imgui\examples\libs\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <SubSystem>Console</SubSystem>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
+      <AdditionalLibraryDirectories>F:\Document\Graphics\code\Rainbow\ext\imgui\examples\libs\glfw\lib-vc2010-64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\ext\imgui\examples\imgui_impl_glfw.cpp" />
+    <ClCompile Include="..\ext\imgui\examples\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="..\ext\imgui\examples\libs\gl3w\GL\gl3w.c" />
+    <ClCompile Include="..\ext\imgui\imgui.cpp" />
+    <ClCompile Include="..\ext\imgui\imgui_demo.cpp" />
+    <ClCompile Include="..\ext\imgui\imgui_draw.cpp" />
+    <ClCompile Include="..\ext\imgui\imgui_widgets.cpp" />
     <ClCompile Include="..\ext\lodepng\lodepng.cpp" />
     <ClCompile Include="..\ext\pugixml\pugixml.cpp" />
     <ClCompile Include="..\src\accelerators\bvh.cpp" />
@@ -135,6 +155,7 @@
     <ClCompile Include="..\src\core\camera.cpp" />
     <ClCompile Include="..\src\core\common.cpp" />
     <ClCompile Include="..\src\core\filter.cpp" />
+    <ClCompile Include="..\src\core\gui.cpp" />
     <ClCompile Include="..\src\core\imageio.cpp" />
     <ClCompile Include="..\src\core\light.cpp" />
     <ClCompile Include="..\src\core\logger.cpp" />
@@ -170,10 +191,24 @@
     <ClCompile Include="..\src\shapes\triangle.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\ext\imgui\examples\imgui_impl_glfw.h" />
+    <ClInclude Include="..\ext\imgui\examples\imgui_impl_opengl3.h" />
+    <ClInclude Include="..\ext\imgui\examples\libs\gl3w\GL\gl3w.h" />
+    <ClInclude Include="..\ext\imgui\examples\libs\gl3w\GL\glcorearb.h" />
+    <ClInclude Include="..\ext\imgui\examples\libs\glfw\include\GLFW\glfw3.h" />
+    <ClInclude Include="..\ext\imgui\examples\libs\glfw\include\GLFW\glfw3native.h" />
+    <ClInclude Include="..\ext\imgui\imconfig.h" />
+    <ClInclude Include="..\ext\imgui\imgui.h" />
+    <ClInclude Include="..\ext\imgui\imgui_internal.h" />
+    <ClInclude Include="..\ext\imgui\imstb_rectpack.h" />
+    <ClInclude Include="..\ext\imgui\imstb_textedit.h" />
+    <ClInclude Include="..\ext\imgui\imstb_truetype.h" />
     <ClInclude Include="..\ext\lodepng\lodepng.h" />
     <ClInclude Include="..\ext\pcg32\pcg32.h" />
     <ClInclude Include="..\ext\pugixml\pugiconfig.hpp" />
     <ClInclude Include="..\ext\pugixml\pugixml.hpp" />
+    <ClInclude Include="..\ext\stb_images\stb_image.h" />
+    <ClInclude Include="..\ext\stb_images\stb_image_write.h" />
     <ClInclude Include="..\ext\tinyformat.h" />
     <ClInclude Include="..\src\accelerators\bvh.h" />
     <ClInclude Include="..\src\cameras\perspective.h" />
@@ -183,6 +218,7 @@
     <ClInclude Include="..\src\core\camera.h" />
     <ClInclude Include="..\src\core\common.h" />
     <ClInclude Include="..\src\core\filter.h" />
+    <ClInclude Include="..\src\core\gui.h" />
     <ClInclude Include="..\src\core\imageio.h" />
     <ClInclude Include="..\src\core\light.h" />
     <ClInclude Include="..\src\core\logger.h" />
@@ -218,6 +254,7 @@
     <ClInclude Include="..\src\shapes\triangle.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\ext\imgui\.travis.yml" />
     <None Include="..\log\20180811.md" />
     <None Include="..\log\20180813.md" />
     <None Include="..\log\20180814.md" />
@@ -238,6 +275,9 @@
     <Xml Include="..\scenes\cbox\cbox-whitted.xml">
       <SubType>Designer</SubType>
     </Xml>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\ext\imgui\LICENSE.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
