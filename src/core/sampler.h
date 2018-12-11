@@ -1,7 +1,7 @@
 #ifndef __SAMPLER_H
 #define __SAMPLER_H
 
-#include "../../ext/pcg32/pcg32.h"
+#include "ext/pcg32/pcg32.h"
 
 #include "vector.h"
 #include "propertylist.h"

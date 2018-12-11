@@ -13,7 +13,7 @@
 #endif
 
 #include "rainbow.h"
-#include "../../ext/filesystem/filesystem/resolver.h"
+#include "ext/filesystem/filesystem/resolver.h"
 
 /* Convenience definitions */
 #define RAINBOW_NAMESPACE_BEGIN namespace rainbow {

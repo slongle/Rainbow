@@ -4,9 +4,13 @@
 #include <iostream>
 #include <chrono>
 
+#include "ext/tinyformat/tinyformat.h"
+
 class Timer {
 public:
     Timer() {
+        pauseTime = 0;
+        pause = false;
         Start();
     }
 
@@ -18,15 +22,16 @@ public:
         FinishTime = std::chrono::system_clock::now();
     }
 
-    void ShowTime() {
-        Finish();
-        int milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(FinishTime - StartTime).count();
-        int seconds = (milliseconds / 1000) % 60;
-        int minutes = (milliseconds / 60000) % 60;
-        int hours = milliseconds / 3600000;
+    std::string LastTime() {
+        if (!pause)
+            Finish();
+        milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(FinishTime - StartTime).count() - pauseTime;
+        seconds = (milliseconds / 1000) % 60;
+        minutes = (milliseconds / 60000) % 60;
+        hours = milliseconds / 3600000;
         milliseconds %= 1000;
 
-        std::cout << hours << " hours, " << minutes << " minutes, " << seconds << " seconds, "<<milliseconds<<" milliseconds\n";
+        return toString();        
         /* 
         if (hours != 0) {
             std::cout << hours << " hours, " << minutes << " minutes, " << seconds << " seconds\n";
@@ -39,8 +44,30 @@ public:
         }*/
     }
 
+
+
+    std::string toString() {        
+        return tfm::format("%dh %dm %ds", hours, minutes, seconds);
+        return tfm::format("%dh %dm %ds %dms", hours, minutes, seconds, milliseconds);
+    }
+
+    void Stop() {
+        Finish();
+        pause = true;
+    }
+
+    void Continue() {
+        pause = false;
+        std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
+        pauseTime += milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(now - FinishTime).count();
+    }
+
 private:
     std::chrono::system_clock::time_point StartTime, FinishTime;
+    int hours, minutes, seconds, milliseconds;
+    
+    int pauseTime;
+    bool pause;
 };
 
 #endif // !__TIMER_H

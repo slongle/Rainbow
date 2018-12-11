@@ -7,7 +7,10 @@ RAINBOW_NAMESPACE_BEGIN
 
 class Independent :public Sampler {
 public:
-	Independent(int m_SamplerCount) :SamplerCount(m_SamplerCount) {}
+	Independent(int m_SamplerCount) :SamplerCount(m_SamplerCount)
+	{
+        rng.seed(time(0));
+	}
 
 	Float Get1D();
 	Point2f Get2D();

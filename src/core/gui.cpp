@@ -5,9 +5,9 @@
 // If you are new to dear imgui, see examples/README.txt and documentation at the top of imgui.cpp.
 // (GLFW is a cross-platform general purpose library for handling windows, inputs, OpenGL/Vulkan graphics context creation, etc.)
 
-#include "../../ext/imgui/imgui.h"
-#include "../../ext/imgui/examples/imgui_impl_glfw.h"
-#include "../../ext/imgui/examples/imgui_impl_opengl3.h"
+#include "ext/imgui/imgui.h"
+#include "ext/imgui/examples/imgui_impl_glfw.h"
+#include "ext/imgui/examples/imgui_impl_opengl3.h"
 #include <stdio.h>
 
 // About OpenGL function loaders: modern OpenGL doesn't have a standard header file and requires individual function pointers to be loaded manually. 
@@ -126,9 +126,6 @@ int show(Integrator* integrator, Scene* scene)
 
     int image_width, image_height;
 
-    //std::string filename("F:/Document/Graphics/code/Rainbow/Rainbow/pt_200spp_50b_15m42s.png");
-    //unsigned char* image_data = stbi_load(filename.c_str(), &image_width, &image_height, NULL, 4);
-
     image_width = integrator->camera->film->resolution.x;
     image_height = integrator->camera->film->resolution.y;
     
@@ -141,14 +138,25 @@ int show(Integrator* integrator, Scene* scene)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
 
+    Timer timer;
+    bool render = true;
+
     // Main loop
     while (!glfwWindowShouldClose(window))
     {        
         static int counter = 0;
-        for (int y = 0; y < integrator->camera->film->resolution.y; y++) {            
-            for (int x = 0; x < integrator->camera->film->resolution.x; x++) {
-                integrator->ProgressiveRender(*scene, x, y);
-                integrator->camera->film->UpdateToUnsignedCharPointer(image_data, x, y);
+        for (int y = 0; y < integrator->camera->film->resolution.y; y++) {
+            if (render)
+            {                
+                for (int x = 0; x < integrator->camera->film->resolution.x; x++) {
+                    integrator->ProgressiveRender(*scene, x, y);
+                    integrator->camera->film->UpdateToUnsignedCharPointer(image_data, x, y);
+                }
+                if (counter >= 20 && 100.*(y + 1) / integrator->camera->film->resolution.y >= 30) break;
+            }
+            else
+            {
+                y--;
             }
 
             // Poll and handle events (inputs, window resize, etc.)
@@ -162,60 +170,53 @@ int show(Integrator* integrator, Scene* scene)
             ImGui_ImplGlfw_NewFrame();
             ImGui::NewFrame();
 
-
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image_width, image_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image_data);
             ImGui::Begin("Image Test");
             ImGui::Image((void*)(intptr_t)my_opengl_texture, ImVec2(image_width, image_height));
             ImGui::End();
-
-            // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-            //if (show_demo_window)
-            //    ImGui::ShowDemoWindow(&show_demo_window);
-
+            
             // 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
             {
                 static float f = 0.0f;
                 //static int counter = 0;
-                static char a[105] = "filename.png";
+                static char a[35] = "filename.png";
 
-                ImGui::Begin("Infomation");                          // Create a window called "Hello, world!" and append into it.
+                // Create a window called "Information" and append into it.
+                ImGui::Begin("Information");                          
 
-                //ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-                //ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
-                //ImGui::Checkbox("Another Window", &show_another_window);
-                //
-                //ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-                //ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
-
-                //if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-                //    counter++;
-                //ImGui::SameLine();
-                //ImGui::Text("counter = %d", counter);
+                // Stop / Continue Rendering
+                if (render)
+                {
+                    if (ImGui::Button("Stop Rendering"))
+                    {
+                        render = false;
+                        timer.Stop();
+                    }
+                }
+                else
+                {
+                    if (ImGui::Button("Continue Rendering"))
+                    {
+                        render = true;
+                        timer.Continue();
+                    }
+                }
 
                 // Progressive Render Counter
-                ImGui::Text("counter = %d", counter);
+                ImGui::Text("Counter = %d", counter);
 
                 // Save as Button                
-                ImGui::InputText("filename", a, 105);
+                ImGui::InputText("Filename", a, 35);
                 ImGui::SameLine();
                 if (ImGui::Button("Save as")) {
                     ExportToPNG(std::string(a), image_data, image_width, image_height);
                 }
 
-                ImGui::Text("Rendering %5.2f%%", 100.*(y + 1) / integrator->camera->film->resolution.y);
+                ImGui::Text("Rendering %5.2f%%", 100.*(y + 1) / integrator->camera->film->resolution.y);                
+                ImGui::Text("Time %s", timer.LastTime());
                 ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
                 ImGui::End();
             }
-
-            // 3. Show another simple window.
-            /*if (show_another_window)
-            {
-                ImGui::Begin("Another Window", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-                ImGui::Text("Hello from another window!");
-                if (ImGui::Button("Close Me"))
-                    show_another_window = false;
-                ImGui::End();
-            }*/
 
             // Rendering
             ImGui::Render();

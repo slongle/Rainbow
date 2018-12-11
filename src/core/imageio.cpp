@@ -32,7 +32,5 @@ void ExportToPNG(const std::string& filename, const unsigned char* rgba, const i
     stbi_write_png(filename.c_str(), width, height, 4, rgba, 0);
 }
 
-
-
 RAINBOW_NAMESPACE_END
 
