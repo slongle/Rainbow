@@ -140,22 +140,20 @@ int show(Integrator* integrator, Scene* scene)
 
     Timer timer;
     bool render = true;
+    bool halt = false;
 
     // Main loop
-    while (!glfwWindowShouldClose(window))
-    {        
+    while (!glfwWindowShouldClose(window)) {        
         static int counter = 0;
         for (int y = 0; y < integrator->camera->film->resolution.y; y++) {
-            if (render)
-            {                
+            if (render) {                
                 for (int x = 0; x < integrator->camera->film->resolution.x; x++) {
                     integrator->ProgressiveRender(*scene, x, y);
                     integrator->camera->film->UpdateToUnsignedCharPointer(image_data, x, y);
                 }
                 if (counter >= 20 && 100.*(y + 1) / integrator->camera->film->resolution.y >= 30) break;
             }
-            else
-            {
+            else {
                 y--;
             }
 
@@ -185,21 +183,23 @@ int show(Integrator* integrator, Scene* scene)
                 ImGui::Begin("Information");                          
 
                 // Stop / Continue Rendering
-                if (render)
-                {
-                    if (ImGui::Button("Stop Rendering"))
-                    {
+                if (render) {
+                    if (ImGui::Button("Stop Rendering")) {
                         render = false;
                         timer.Stop();
                     }
                 }
-                else
-                {
-                    if (ImGui::Button("Continue Rendering"))
-                    {
+                else {
+                    if (ImGui::Button("Continue Rendering")) {
                         render = true;
                         timer.Continue();
                     }
+                }
+                // Halt Button
+                ImGui::SameLine(); // SameLine with Stop/Continue Rendering button
+                if (ImGui::Button("Halt")) {
+                    halt = true;
+                    break;
                 }
 
                 // Progressive Render Counter
@@ -232,6 +232,9 @@ int show(Integrator* integrator, Scene* scene)
             glfwSwapBuffers(window);            
         }
         counter++;
+        if (halt) {
+            break;
+        }
     }
 
     // Cleanup

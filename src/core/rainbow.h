@@ -17,6 +17,8 @@ using std::endl;
 #include "timer.h"
 #include "logger.h"
 
+#ifndef NDEBUG
+
 #define Log(message) do { \
 		(tfm::format)(std::cerr,"%s", message); \
 	} while(0)
@@ -24,5 +26,7 @@ using std::endl;
 #define Assert(cond, explanation) do { \
 		if (!(cond)) std::cerr<<"Assertion occoured at "<<__FILE__<<" "<<__LINE__<<" ( "<<explanation<<" )", throw std::runtime_error(explanation); \
 	} while (0)
+
+#endif // NDEBUG
 
 #endif // !__RAINBOW_H

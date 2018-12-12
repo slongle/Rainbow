@@ -43,7 +43,14 @@ inline bool Refract(const Vector3f & wi, const Normal3f & n, Float eta, Vector3f
 	return true;
 }
 
-RGBSpectrum FresnelDielectric::Evaluate(Float cosThetaI) const {
+RGBSpectrum BxDF::SampleF(const Vector3f& woWorld, Vector3f* wiWorld, const Point2f& sample, Float* pdf) {
+    Vector3f woLocal = frame.toLocal(woWorld), wiLocal;
+    RGBSpectrum f = SampleF(woLocal, &wiLocal, sample, pdf);
+    *wiWorld = frame.toWorld(wiLocal);
+    return f;
+}
+
+    RGBSpectrum FresnelDielectric::Evaluate(Float cosThetaI) const {
 	return FrDielectric(cosThetaI, etaI, etaT);
 }
 
