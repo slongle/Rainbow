@@ -1,5 +1,6 @@
 #include "core/common.h"
 #include "core/parser.h"
+#include "core/imageio.h"
 
 using namespace rainbow;
 
