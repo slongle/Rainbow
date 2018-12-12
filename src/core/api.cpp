@@ -18,6 +18,8 @@
 #include "../integrators/path.h"
 
 #include "../materials/matte.h"
+#include "../materials/mirror.h"
+
 #include "../samplers/independent.h"
 
 RAINBOW_NAMESPACE_BEGIN
@@ -42,7 +44,9 @@ struct RenderOptions {
 	Camera* MakeCamera();
 	Film* MakeFilm();
 	Aggregate* MakeAggregate();	
-	
+
+    std::string RenderMode;
+
 	Transform CurrentTransform = Transform();
 
 	std::string IntegratorType;
@@ -82,9 +86,17 @@ void RainbowWorld() {
 
     Assert(scene && integrator, "No Scene or Integrator!");
 
-    show(integrator, scene);
+    if (renderOptions->RenderMode == "progressive") {
+        show(integrator, scene);        
+    }
+    else {
+        integrator->Render(*scene);        
+    }
 
-    //integrator->Render(*scene);
+}
+
+void RainbowRenderMode(const std::string& type) {
+    renderOptions->RenderMode = type;
 }
 
 void RainbowIntegrator(const std::string& type,const PropertyList& list) {
@@ -240,6 +252,9 @@ std::shared_ptr<Material> MakeMaterial(const std::string & type, PropertyList & 
 	if (type == "diffuse" || type == "matte") {
 		material = CreateMatteMaterial(list);
 	}
+    else if (type == "mirror") {
+        material = CreateMirrorMaterial(list);
+    }
 	return std::shared_ptr<Material>(material);
 }
 

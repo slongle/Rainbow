@@ -39,6 +39,8 @@ void ParserXMLFile(const std::string & filename) {
 	};
 
 	enum ETag {
+        EMode,
+
 		EScene      	 ,
 		ECamera     	 ,
 		EBSDF            ,
@@ -65,6 +67,8 @@ void ParserXMLFile(const std::string & filename) {
 	};
 
 	std::map<std::string, ETag> tags;
+    tags["mode"]        = EMode;
+
 	tags["scene"]       = EScene;
 	tags["integrator"]  = EIntegrator;
 	tags["sensor"]      = ECamera;
@@ -99,9 +103,7 @@ void ParserXMLFile(const std::string & filename) {
 
 	std::function<void (pugi::xml_node, PropertyList&, int)> ParserTag =
 		[&](pugi::xml_node node, PropertyList &list, int num) -> void {
-		//std::cout << node.find_attribute("id").value() << std::endl;
-		//std::cout << node.name() << std::endl;
-
+		
 		if (node.type() == pugi::node_comment || node.type() == pugi::node_declaration) 
 			return;
 
@@ -110,7 +112,6 @@ void ParserXMLFile(const std::string & filename) {
 
 
 		ETag tag = tags[node.name()];
-		//std::cout << tag << std::endl;
 		if (tag == EScene) {
 			node.append_attribute("type");
 			node.attribute("type").set_value("scene");
@@ -121,13 +122,6 @@ void ParserXMLFile(const std::string & filename) {
 		else if (tag == EShape) {
 			InitialTransform();
 		}
-
-		
-		/*if (tag == EShape) {
-			int a = 1;
-		}*/
-
-
 
 		PropertyList m_list;
 		for (pugi::xml_node &child : node.children()) {
@@ -143,6 +137,9 @@ void ParserXMLFile(const std::string & filename) {
 				static_cast<std::string>(node.name()));
 			std::string name = static_cast<std::string>(node.attribute("type").value());
 			switch (tag) {
+                case EMode:
+                    RainbowRenderMode(name);
+                    break;
 				case EScene:
 					break;
 				case EIntegrator:
@@ -170,87 +167,87 @@ void ParserXMLFile(const std::string & filename) {
 		}
 		else {
 			switch (tag) {
-			case EBoolean: {
-				list.setBoolean(node.attribute("name").value(), toBoolean(node.attribute("value").value()));
-				break;
-			}
-			case EInteger: {
-				list.setInteger(node.attribute("name").value(), toInteger(node.attribute("value").value()));
-				break;
-			}
-			case EFloat: {
-				list.setFloat(node.attribute("name").value(), toFloat(node.attribute("value").value()));
-				break;
-			}
-			case EString: {
-				list.setString(node.attribute("name").value(), node.attribute("value").value());
-				break;
-			}
-			case EVector: {
-				list.setVector(node.attribute("name").value(), toVector(node.attribute("value").value()));
-				break;
-			}
-			case EColor: {
-				if (strcmp(node.name(), "spectrum") == 0) {
-					// TODO: Fix Spectrum declared with wavelength
-				}
-				else if (strcmp(node.name(), "rgb") == 0 || strcmp(node.name(), "color") == 0) {
-					list.setColor(node.attribute("name").value(), toColor(node.attribute("value").value()));
-				}
-				break;
-			}
-			case ETransform: {
-				list.setTransform(node.attribute("name").value(), m_transform);
-				RainbowTransform(m_transform);
-				break;
-			}
-			case ELookAt: {
-				Vector3f target = toVector(node.attribute("target").value());
-				Vector3f origin = toVector(node.attribute("origin").value());
-				Vector3f up = toVector(node.attribute("up").value());
-				m_transform *= LookAt(target, origin, up);
-				break;
-			}
-			case ETranslate: {
-				Vector3f delta;
-				for (pugi::xml_attribute &attribute : node.attributes()) {
-					//cout << attribute.name() << ' ' << attribute.value() << endl;
-					if (strcmp(attribute.name(), "x") == 0) delta.x = toFloat(attribute.value());
-					if (strcmp(attribute.name(), "y") == 0) delta.y = toFloat(attribute.value());
-					if (strcmp(attribute.name(), "z") == 0) delta.z = toFloat(attribute.value());
-				}
-				m_transform *= Translate(delta);
-				break;
-			}
-			case EScale: {
-				Vector3f scale;
-                for (pugi::xml_attribute &attribute : node.attributes()) {
-                    //cout << attribute.name() << ' ' << attribute.value() << endl;
-                    if (strcmp(attribute.name(), "x") == 0) scale.x = toFloat(attribute.value());
-                    if (strcmp(attribute.name(), "y") == 0) scale.y = toFloat(attribute.value());
-                    if (strcmp(attribute.name(), "z") == 0) scale.z = toFloat(attribute.value());
-                }
-				Transform s = Scale(scale);
-				m_transform *= Scale(scale);
-				break;
-			}
-			case ERotate: {
-				Vector3f axis;
-				Float angle;
-				for (pugi::xml_attribute &attribute : node.attributes()) {
-					if (strcmp(attribute.name(), "x") == 0) axis.x = toFloat(attribute.value());
-					if (strcmp(attribute.name(), "y") == 0) axis.y = toFloat(attribute.value());
-					if (strcmp(attribute.name(), "z") == 0) axis.z = toFloat(attribute.value());
-					if (strcmp(attribute.name(), "angle") == 0) angle = toFloat(attribute.value());
-				}
-				m_transform *= Rotate(angle, axis);
-				break;
-			}
-			case EMatrix: {
-				Matrix4x4 mat = toMatrix(node.attribute("value").value());
-				m_transform *= Transform(mat);
-				break;
-			}
+			    case EBoolean: {
+			    	list.setBoolean(node.attribute("name").value(), toBoolean(node.attribute("value").value()));
+			    	break;
+			    }
+			    case EInteger: {
+			    	list.setInteger(node.attribute("name").value(), toInteger(node.attribute("value").value()));
+			    	break;
+			    }
+			    case EFloat: {
+			    	list.setFloat(node.attribute("name").value(), toFloat(node.attribute("value").value()));
+			    	break;
+			    }
+			    case EString: {
+			    	list.setString(node.attribute("name").value(), node.attribute("value").value());
+			    	break;
+			    }
+			    case EVector: {
+			    	list.setVector(node.attribute("name").value(), toVector(node.attribute("value").value()));
+			    	break;
+			    }
+			    case EColor: {
+			    	if (strcmp(node.name(), "spectrum") == 0) {
+			    		// TODO: Fix Spectrum declared with wavelength
+			    	}
+			    	else if (strcmp(node.name(), "rgb") == 0 || strcmp(node.name(), "color") == 0) {
+			    		list.setColor(node.attribute("name").value(), toColor(node.attribute("value").value()));
+			    	}
+			    	break;
+			    }
+			    case ETransform: {
+			    	list.setTransform(node.attribute("name").value(), m_transform);
+			    	RainbowTransform(m_transform);
+			    	break;
+			    }
+			    case ELookAt: {
+			    	Vector3f target = toVector(node.attribute("target").value());
+			    	Vector3f origin = toVector(node.attribute("origin").value());
+			    	Vector3f up = toVector(node.attribute("up").value());
+			    	m_transform *= LookAt(target, origin, up);
+			    	break;
+			    }
+			    case ETranslate: {
+			    	Vector3f delta;
+			    	for (pugi::xml_attribute &attribute : node.attributes()) {
+			    		//cout << attribute.name() << ' ' << attribute.value() << endl;
+			    		if (strcmp(attribute.name(), "x") == 0) delta.x = toFloat(attribute.value());
+			    		if (strcmp(attribute.name(), "y") == 0) delta.y = toFloat(attribute.value());
+			    		if (strcmp(attribute.name(), "z") == 0) delta.z = toFloat(attribute.value());
+			    	}
+			    	m_transform *= Translate(delta);
+			    	break;
+			    }
+			    case EScale: {
+			    	Vector3f scale;
+                    for (pugi::xml_attribute &attribute : node.attributes()) {
+                        //cout << attribute.name() << ' ' << attribute.value() << endl;
+                        if (strcmp(attribute.name(), "x") == 0) scale.x = toFloat(attribute.value());
+                        if (strcmp(attribute.name(), "y") == 0) scale.y = toFloat(attribute.value());
+                        if (strcmp(attribute.name(), "z") == 0) scale.z = toFloat(attribute.value());
+                    }
+			    	Transform s = Scale(scale);
+			    	m_transform *= Scale(scale);
+			    	break;
+			    }
+			    case ERotate: {
+			    	Vector3f axis;
+			    	Float angle;
+			    	for (pugi::xml_attribute &attribute : node.attributes()) {
+			    		if (strcmp(attribute.name(), "x") == 0) axis.x = toFloat(attribute.value());
+			    		if (strcmp(attribute.name(), "y") == 0) axis.y = toFloat(attribute.value());
+			    		if (strcmp(attribute.name(), "z") == 0) axis.z = toFloat(attribute.value());
+			    		if (strcmp(attribute.name(), "angle") == 0) angle = toFloat(attribute.value());
+			    	}
+			    	m_transform *= Rotate(angle, axis);
+			    	break;
+			    }
+			    case EMatrix: {
+			    	Matrix4x4 mat = toMatrix(node.attribute("value").value());
+			    	m_transform *= Transform(mat);
+			    	break;
+			    }
 			}
 		}
 	};

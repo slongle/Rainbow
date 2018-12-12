@@ -80,7 +80,8 @@ public:
 
 class Fresnel {
 public:
-	virtual RGBSpectrum Evaluate(Float cosThetaI) const = 0;
+    virtual ~Fresnel() = default;
+    virtual RGBSpectrum Evaluate(Float cosThetaI) const = 0;
 };
 
 class FresnelDielectric :public Fresnel {
@@ -88,6 +89,11 @@ public:
 	FresnelDielectric(const Float& m_etaI, const Float& m_etaT) :etaI(m_etaI), etaT(m_etaT) {}
 	RGBSpectrum Evaluate(Float cosThetaI) const;
 	Float etaI, etaT;
+};
+
+class FresnelNoOp:public Fresnel {
+public:
+    RGBSpectrum Evaluate(Float) const { return RGBSpectrum(1.); }
 };
 
 class SpecularReflection :public BxDF {

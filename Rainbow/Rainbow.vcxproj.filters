@@ -240,6 +240,12 @@
     <ClCompile Include="..\ext\imgui\examples\libs\gl3w\GL\gl3w.c">
       <Filter>Extend Files\imgui\libs\gl3w\GL</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\materials\metal.cpp">
+      <Filter>Source Files\materials</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\materials\mirror.cpp">
+      <Filter>Source Files\materials</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\core\bbox.h">
@@ -424,6 +430,12 @@
     </ClInclude>
     <ClInclude Include="..\ext\stb_images\stb_image_write.h">
       <Filter>Extend Files\stb_images</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\materials\metal.h">
+      <Filter>Source Files\materials</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\materials\mirror.h">
+      <Filter>Source Files\materials</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

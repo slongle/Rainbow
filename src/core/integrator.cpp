@@ -47,7 +47,12 @@ RGBSpectrum SamplerIntegrator::EstimateDirectLight(const SurfaceInteraction & in
     // Sample BSDF with MSI
     if (!light->IsDeltaLight()) {
 
-        RGBSpectrum f;        
+        RGBSpectrum f;
+        int a = 1;
+        if (inter.bxdf->type>8)
+        {
+            a++;
+        }
         f = inter.bxdf->SampleF(inter.wo, &wi, sampler->Get2D(), &BSDFPdf) * AbsDot(wi, inter.n);
 
         bool SampleSpecular = (inter.bxdf->type & BxDF::BSDF_SPECULAR) != 0;

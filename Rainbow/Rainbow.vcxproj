@@ -70,7 +70,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>F:\Document\Graphics\code\Rainbow\ext\imgui;F:\Document\Graphics\code\Rainbow\ext\imgui\examples\libs\gl3w;F:\Document\Graphics\code\Rainbow\ext\imgui\examples\libs\glfw\include;$(IncludePath)</IncludePath>
+    <IncludePath>F:\Document\Graphics\code\Rainbow\;F:\Document\Graphics\code\Rainbow\ext\imgui;F:\Document\Graphics\code\Rainbow\ext\imgui\examples\libs\gl3w;F:\Document\Graphics\code\Rainbow\ext\imgui\examples\libs\glfw\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>F:\Document\Graphics\code\Rainbow\ext\imgui\examples\libs\gl3w;F:\Document\Graphics\code\Rainbow\ext\imgui\examples\libs\glfw\include;F:\Document\Graphics\code\Rainbow\ext\imgui;$(IncludePath)</IncludePath>
@@ -184,6 +184,8 @@
     <ClCompile Include="..\src\integrators\whitted.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\materials\matte.cpp" />
+    <ClCompile Include="..\src\materials\metal.cpp" />
+    <ClCompile Include="..\src\materials\mirror.cpp" />
     <ClCompile Include="..\src\samplers\independent.cpp" />
     <ClCompile Include="..\src\shapes\cube.cpp" />
     <ClCompile Include="..\src\shapes\meshloaders\wavefront.cpp" />
@@ -247,6 +249,8 @@
     <ClInclude Include="..\src\integrators\path.h" />
     <ClInclude Include="..\src\integrators\whitted.h" />
     <ClInclude Include="..\src\materials\matte.h" />
+    <ClInclude Include="..\src\materials\metal.h" />
+    <ClInclude Include="..\src\materials\mirror.h" />
     <ClInclude Include="..\src\samplers\independent.h" />
     <ClInclude Include="..\src\shapes\cube.h" />
     <ClInclude Include="..\src\shapes\meshloaders\wavefront.h" />
