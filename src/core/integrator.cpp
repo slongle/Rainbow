@@ -25,8 +25,8 @@ RGBSpectrum SamplerIntegrator::EstimateDirectLight(const SurfaceInteraction & in
 
         // Estimate BSDF * AbsDotTheta and PDF
         RGBSpectrum f;
-        f = inter.bxdf->f(inter.wo, wi) * AbsDot(wi, inter.n);
-        BSDFPdf = inter.bxdf->Pdf(inter.wo, wi);
+        f = inter.bsdf->f(inter.wo, wi) * AbsDot(wi, inter.n);
+        BSDFPdf = inter.bsdf->Pdf(inter.wo, wi);
 
         if (!f.IsBlack()) {
             if (!visibility.Test(scene))
@@ -48,14 +48,9 @@ RGBSpectrum SamplerIntegrator::EstimateDirectLight(const SurfaceInteraction & in
     if (!light->IsDeltaLight()) {
 
         RGBSpectrum f;
-        int a = 1;
-        if (inter.bxdf->type>8)
-        {
-            a++;
-        }
-        f = inter.bxdf->SampleF(inter.wo, &wi, sampler->Get2D(), &BSDFPdf) * AbsDot(wi, inter.n);
+        f = inter.bsdf->sample_f(inter.wo, &wi, sampler->Get2D(), &BSDFPdf) * AbsDot(wi, inter.n);
 
-        bool SampleSpecular = (inter.bxdf->type & BxDF::BSDF_SPECULAR) != 0;
+        bool SampleSpecular = (inter.bsdf->type & BSDF_SPECULAR) != 0;
 
         if (BSDFPdf > 0 && !f.IsBlack()) {
             Float weight = 1;

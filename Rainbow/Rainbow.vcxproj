@@ -164,6 +164,7 @@
     <ClCompile Include="..\src\core\integrator.cpp" />
     <ClCompile Include="..\src\core\interaction.cpp" />
     <ClCompile Include="..\src\core\material.cpp" />
+    <ClCompile Include="..\src\core\memory.cpp" />
     <ClCompile Include="..\src\core\object.cpp" />
     <ClCompile Include="..\src\core\parser.cpp" />
     <ClCompile Include="..\src\core\primitive.cpp" />
@@ -229,6 +230,7 @@
     <ClInclude Include="..\src\core\integrator.h" />
     <ClInclude Include="..\src\core\interaction.h" />
     <ClInclude Include="..\src\core\material.h" />
+    <ClInclude Include="..\src\core\memory.h" />
     <ClInclude Include="..\src\core\object.h" />
     <ClInclude Include="..\src\core\parser.h" />
     <ClInclude Include="..\src\core\primitive.h" />

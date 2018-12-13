@@ -54,20 +54,43 @@ private:
     Vector3f s, t;    
 };
 
-class BxDF{
-public:
-	enum BxDFType {
-		BSDF_REFLECTION = 1 << 0,
-		BSDF_TRANSMISSION = 1 << 1,
-		BSDF_DIFFUSE = 1 << 2,
-		BSDF_GLOSSY = 1 << 3,
-		BSDF_SPECULAR = 1 << 4,
-		BSDF_ALL = (1 << 5) - 1,
-	};
+enum BxDFType {
+    BSDF_REFLECTION = 1 << 0,
+    BSDF_TRANSMISSION = 1 << 1,
+    BSDF_DIFFUSE = 1 << 2,
+    BSDF_GLOSSY = 1 << 3,
+    BSDF_SPECULAR = 1 << 4,
+    BSDF_ALL = (1 << 5) - 1,
+};
 
-    BxDF(const Normal3f& m_n, const BxDFType& m_type) :type(m_type), frame(m_n) {}
+class BSDF {
+public:
+    BSDF(const Normal3f& m_n) :nBxDFs(0), frame(m_n) {}
+
+    void Add(BxDF* bxdf) {
+        Assert(nBxDFs < MaxBxDFs, "Too many BxDFs!");
+        bxdfs[++nBxDFs] = bxdf;
+    }
+
+    int NumComponents(const BxDFType &flags = BSDF_ALL) const;
+
+    RGBSpectrum f(const Vector3f& woWorld, const Vector3f& wiWorld, const BxDFType& type);
+    RGBSpectrum SampleF(const Vector3f& woWorld, const Vector3f* wiWorld, const Point2f &sample, 
+        Float *pdf, const BxDFType& type, BxDFType* sampleType);
+    Float Pdf(const Vector3f& woWorld, const Vector3f& wiWorld, const BxDFType& type);
+
+private:
+    static constexpr int MaxBxDFs = 8;
+    int nBxDFs;
+    BxDF *bxdfs[MaxBxDFs];
+    Frame frame;
+};
+
+class BxDF{
+public:	
+    BxDF(const BxDFType& m_type) :type(m_type) {}
 	virtual RGBSpectrum f(const Vector3f& wo, const Vector3f& wi) = 0;
-    virtual RGBSpectrum SampleF(const Vector3f& woWorld, Vector3f* wiWorld, const Point2f &sample, Float *pdf);
+    virtual RGBSpectrum SampleF(const Vector3f& woWorld, Vector3f* wiWorld, const Point2f &sample, Float *pdf) = 0;
     virtual Float Pdf(const Vector3f& wo, const Vector3f& wi) = 0;
 
 	bool MatchFlags(const BxDFType& t) const {
@@ -75,7 +98,6 @@ public:
 	}	
 
 	const BxDFType type;
-    Frame frame;
 };
 
 class Fresnel {
@@ -98,9 +120,9 @@ public:
 
 class SpecularReflection :public BxDF {
 public:
-	SpecularReflection(const RGBSpectrum& m_R, Fresnel* m_fresnel, const Normal3f& m_n) :
+	SpecularReflection(const RGBSpectrum& m_R, Fresnel* m_fresnel) :
 		R(m_R), fresnel(m_fresnel),
-		BxDF(m_n, BxDFType(BSDF_REFLECTION | BSDF_SPECULAR)) {}
+		BxDF(BxDFType(BSDF_REFLECTION | BSDF_SPECULAR)) {}
 
 	RGBSpectrum f(const Vector3f& wo, const Vector3f& wi);
 	RGBSpectrum SampleF(const Vector3f& wo, Vector3f* wi, const Point2f &sample, Float *pdf);
@@ -112,9 +134,9 @@ public:
 
 class SpecularTransmission :public BxDF {
 public:
-	SpecularTransmission(const RGBSpectrum& m_T, const Float& m_etaA, const Float& m_etaB, const Normal3f& m_n) :
+	SpecularTransmission(const RGBSpectrum& m_T, const Float& m_etaA, const Float& m_etaB) :
 		T(m_T), etaA(m_etaA), etaB(m_etaB), fresnel(etaA, etaB),
-		BxDF(m_n, BxDFType(BSDF_TRANSMISSION | BSDF_SPECULAR)) {}
+		BxDF(BxDFType(BSDF_TRANSMISSION | BSDF_SPECULAR)) {}
 	RGBSpectrum f(const Vector3f& wo, const Vector3f& wi);
 	RGBSpectrum SampleF(const Vector3f& wo, Vector3f* wi, const Point2f &sample, Float *pdf);
     Float Pdf(const Vector3f& wo, const Vector3f& wi);
@@ -126,8 +148,8 @@ public:
 
 class LambertianReflection :public BxDF {
 public:
-	LambertianReflection(const RGBSpectrum& m_R,const Normal3f& m_n) :
-		BxDF(m_n, BxDFType(BSDF_REFLECTION | BSDF_DIFFUSE)), R(m_R) {}
+	LambertianReflection(const RGBSpectrum& m_R) :
+		BxDF(BxDFType(BSDF_REFLECTION | BSDF_DIFFUSE)), R(m_R) {}
 	RGBSpectrum f(const Vector3f& wo, const Vector3f& wi);
 	RGBSpectrum SampleF(const Vector3f& wo, Vector3f* wi, const Point2f &sample, Float *pdf);
     Float Pdf(const Vector3f& wo, const Vector3f& wi);

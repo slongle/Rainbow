@@ -3,7 +3,7 @@
 RAINBOW_NAMESPACE_BEGIN
 
 void MatteMaterial::ComputeScatteringFunctions(SurfaceInteraction * intersection) {
-    intersection->bxdf = new LambertianReflection(R, intersection->n);
+    intersection->bsdf->Add(new LambertianReflection(R));
 }
 
 MatteMaterial* CreateMatteMaterial(PropertyList & list) {

@@ -40,7 +40,7 @@ public:
 
 	const Shape *shape = nullptr;
 	const Primitive *primitive = nullptr;
-	BxDF* bxdf = nullptr;
+	BSDF* bsdf = nullptr;
 };
 
 RAINBOW_NAMESPACE_END

@@ -246,6 +246,9 @@
     <ClCompile Include="..\src\materials\mirror.cpp">
       <Filter>Source Files\materials</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\core\memory.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\core\bbox.h">
@@ -436,6 +439,9 @@
     </ClInclude>
     <ClInclude Include="..\src\materials\mirror.h">
       <Filter>Source Files\materials</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\core\memory.h">
+      <Filter>Source Files\core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

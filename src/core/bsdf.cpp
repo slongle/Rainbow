@@ -43,14 +43,47 @@ inline bool Refract(const Vector3f & wi, const Normal3f & n, Float eta, Vector3f
 	return true;
 }
 
-RGBSpectrum BxDF::SampleF(const Vector3f& woWorld, Vector3f* wiWorld, const Point2f& sample, Float* pdf) {
-    Vector3f woLocal = frame.toLocal(woWorld), wiLocal;
-    RGBSpectrum f = SampleF(woLocal, &wiLocal, sample, pdf);
-    *wiWorld = frame.toWorld(wiLocal);
+int BSDF::NumComponents(const BxDFType& flags) const {
+    int num = 0;
+    for(int i=0;i<nBxDFs;i++) {
+        if (bxdfs[i]->MatchFlags(flags)) {
+            num++;
+        }
+    }
+    return num;
+}
+
+RGBSpectrum BSDF::f(const Vector3f& woWorld, const Vector3f& wiWorld, const BxDFType& type) {
+    Vector3f woLocal = frame.toLocal(woWorld), wiLocal= frame.toLocal(wiWorld);
+    RGBSpectrum f(0.);
+    for (int i = 0; i < nBxDFs; i++) {
+        if (bxdfs[i]->MatchFlags(type)) {
+            f += bxdfs[i]->f(woLocal, wiLocal);
+        }
+    }
     return f;
 }
 
-    RGBSpectrum FresnelDielectric::Evaluate(Float cosThetaI) const {
+Float BSDF::Pdf(const Vector3f& woWorld, const Vector3f& wiWorld, const BxDFType& type) {
+    Vector3f woLocal = frame.toLocal(woWorld), wiLocal = frame.toLocal(wiWorld);
+    Float pdf = 0;
+    int matchComp = 0;
+    for (int i = 0; i < nBxDFs; i++) {
+        if  (bxdfs[i]->MatchFlags(type)) {
+            pdf += bxdfs[i]->Pdf(woLocal, wiLocal);
+            matchComp++;
+        }
+    }
+    return matchComp > 0 ? pdf / matchComp : 0;
+}
+
+RGBSpectrum BSDF::SampleF(const Vector3f& woWorld, const Vector3f* wiWorld, const Point2f& sample, Float* pdf,
+    const BxDFType& type, BxDFType* sampleType) {
+
+}
+
+
+RGBSpectrum FresnelDielectric::Evaluate(Float cosThetaI) const {
 	return FrDielectric(cosThetaI, etaI, etaT);
 }
 

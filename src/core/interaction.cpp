@@ -7,9 +7,11 @@ RAINBOW_NAMESPACE_BEGIN
 Interaction::Interaction(const Point3f & m_p, const Normal3f & m_n, const Vector3f& m_wo) :
 	p(m_p), n(m_n), wo(m_wo) {}
 
-SurfaceInteraction::SurfaceInteraction(const Point3f & m_p, const Normal3f & m_n, 
-	const Vector3f & m_wo, const Shape * m_shape) :
-	Interaction(m_p, m_n, m_wo), shape(m_shape) {}
+SurfaceInteraction::SurfaceInteraction(const Point3f & m_p, const Normal3f & m_n,
+    const Vector3f & m_wo, const Shape * m_shape) :
+    Interaction(m_p, m_n, m_wo), shape(m_shape) {
+    bsdf = new BSDF(m_n);
+}
 
 void SurfaceInteraction::ComputeScatteringFunctions() {
 	if (primitive)

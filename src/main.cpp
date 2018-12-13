@@ -5,7 +5,6 @@
 using namespace rainbow;
 
 int main(int argc, char *argv[]) {
-
 	RainbowInit();	
     // Position at School
     const std::string filename = "F:/Document/Graphics/code/Rainbow/scenes/cbox/cbox-whitted.xml";

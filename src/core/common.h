@@ -73,6 +73,7 @@ class Primitive;
 class Light;
 class AreaLight;
 class Sampler;
+class BxDF;
 
 inline filesystem::resolver *getFileResolver() {
 	static filesystem::resolver *resolver = new filesystem::resolver();
