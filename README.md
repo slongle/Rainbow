@@ -1,7 +1,7 @@
 # Rainbow
 My renderer for learning  
 
-#　Feature  
+# Features  
 ## Integrators
 Whitted  
 Direct  
