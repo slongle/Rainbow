@@ -47,10 +47,11 @@ RGBSpectrum SamplerIntegrator::EstimateDirectLight(const SurfaceInteraction & in
     // Sample BSDF with MSI
     if (!light->IsDeltaLight()) {
 
+        BxDFType BSDFType;
         RGBSpectrum f;
-        f = inter.bsdf->sample_f(inter.wo, &wi, sampler->Get2D(), &BSDFPdf) * AbsDot(wi, inter.n);
+        f = inter.bsdf->SampleF(inter.wo, &wi, sampler->Get2D(), &BSDFPdf,BSDF_ALL,&BSDFType) * AbsDot(wi, inter.n);
 
-        bool SampleSpecular = (inter.bsdf->type & BSDF_SPECULAR) != 0;
+        bool SampleSpecular = (BSDFType & BSDF_SPECULAR) != 0;
 
         if (BSDFPdf > 0 && !f.IsBlack()) {
             Float weight = 1;
@@ -88,7 +89,7 @@ RGBSpectrum SamplerIntegrator::SpecularReflect
     Vector3f wo = intersection.wo, wi;
     Float pdf;
 
-    RGBSpectrum f = intersection.bxdf->SampleF(wo, &wi, sampler->Get2D(), &pdf);
+    RGBSpectrum f = intersection.bsdf->SampleF(wo, &wi, sampler->Get2D(), &pdf);
     Normal3f n = intersection.n;
 
     if (pdf > 0.f && !f.IsBlack() && Dot(n, wi) != 0.f) {

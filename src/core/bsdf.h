@@ -69,15 +69,15 @@ public:
 
     void Add(BxDF* bxdf) {
         Assert(nBxDFs < MaxBxDFs, "Too many BxDFs!");
-        bxdfs[++nBxDFs] = bxdf;
+        bxdfs[nBxDFs++] = bxdf;
     }
 
     int NumComponents(const BxDFType &flags = BSDF_ALL) const;
 
-    RGBSpectrum f(const Vector3f& woWorld, const Vector3f& wiWorld, const BxDFType& type);
-    RGBSpectrum SampleF(const Vector3f& woWorld, const Vector3f* wiWorld, const Point2f &sample, 
-        Float *pdf, const BxDFType& type, BxDFType* sampleType);
-    Float Pdf(const Vector3f& woWorld, const Vector3f& wiWorld, const BxDFType& type);
+    RGBSpectrum f(const Vector3f& woWorld, const Vector3f& wiWorld, const BxDFType& type = BSDF_ALL);
+    RGBSpectrum SampleF(const Vector3f& woWorld, Vector3f* wiWorld, const Point2f &sample, 
+        Float *pdf, const BxDFType& type = BSDF_ALL, BxDFType* sampleType = nullptr);
+    Float Pdf(const Vector3f& woWorld, const Vector3f& wiWorld, const BxDFType& type = BSDF_ALL);
 
 private:
     static constexpr int MaxBxDFs = 8;

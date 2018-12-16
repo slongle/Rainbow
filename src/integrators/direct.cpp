@@ -16,7 +16,7 @@ RGBSpectrum DirectLightIntegrator::Li(const Ray & ray, const Scene & scene, int 
     L += intersection.Le(wo);
 
     intersection.ComputeScatteringFunctions();
-    if (!intersection.bxdf) {
+    if (!intersection.bsdf) {
         return L;
     }
 
@@ -29,7 +29,7 @@ RGBSpectrum DirectLightIntegrator::Li(const Ray & ray, const Scene & scene, int 
         //L += SpecularRefract(ray, scene, depth, intersection);
     }    
 
-    delete(intersection.bxdf);
+    delete(intersection.bsdf);
 
     return L;
 }

@@ -16,7 +16,7 @@ RGBSpectrum WhittedIntegrator::Li(const Ray & ray, const Scene & scene, int dept
 	L += intersection.Le(wo);
 	
 	intersection.ComputeScatteringFunctions();
-	if (!intersection.bxdf) {
+	if (!intersection.bsdf) {
 		return L;
 	}
 
@@ -28,7 +28,7 @@ RGBSpectrum WhittedIntegrator::Li(const Ray & ray, const Scene & scene, int dept
 	    Visibility vis;
 	    RGBSpectrum Li = light->SampleLi(intersection, sampler->Get2D(), &wi, &pdf, &vis);
 	    if (Li.IsBlack() || pdf == 0) continue;		
-	    RGBSpectrum f = intersection.bxdf->f(wo, wi);
+	    RGBSpectrum f = intersection.bsdf->f(wo, wi);
 	    if (!f.IsBlack() && vis.Test(scene)) {			
 	    	L += f * Li * AbsDot(wi, n) / pdf;
 	    }
@@ -43,7 +43,7 @@ RGBSpectrum WhittedIntegrator::Li(const Ray & ray, const Scene & scene, int dept
 
     L /= LightNum;
 
-	delete(intersection.bxdf);	
+	delete(intersection.bsdf);	
 	
 	return L;
 }

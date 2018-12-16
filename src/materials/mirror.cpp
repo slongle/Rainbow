@@ -4,6 +4,7 @@ RAINBOW_NAMESPACE_BEGIN
 
 void MirrorMaterial::ComputeScatteringFunctions(SurfaceInteraction * intersection) {
     //FresnelNoOp *fresnel = new FresnelNoOp();
+    intersection->bsdf = new BSDF(intersection->n);
     intersection->bsdf->Add(new SpecularReflection(R, new FresnelNoOp()));
 }
 

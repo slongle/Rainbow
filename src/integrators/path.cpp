@@ -32,12 +32,11 @@ RGBSpectrum PathIntegrator::Li(const Ray & r, const Scene & scene, int depth) {
         L += beta * UniformSampleOneLight(inter, scene);
         Vector3f wo = Normalize(-ray.d), wi;
         Float BSDFPdf;
-        RGBSpectrum f = inter.bsdf->SampleF(wo, &wi, sampler->Get2D(), &BSDFPdf);
-
-        delete inter.bsdf;
+        BxDFType BSDFType;
+        RGBSpectrum f = inter.bsdf->SampleF(wo, &wi, sampler->Get2D(), &BSDFPdf,BSDF_ALL,&BSDFType);
 
         // FIX:
-        SpecularBounce = (inter.bsdf->type & BSDF_SPECULAR) != 0;
+        SpecularBounce = (BSDFType & BSDF_SPECULAR) != 0;
 
         if (BSDFPdf == 0 || f.IsBlack()) break;
         beta *= f * AbsDot(wi, inter.n) / BSDFPdf;

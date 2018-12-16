@@ -3,6 +3,9 @@
 RAINBOW_NAMESPACE_BEGIN
 
 void MatteMaterial::ComputeScatteringFunctions(SurfaceInteraction * intersection) {
+    //intersection->bsdf = (BSDF*)alloca(sizeof(BSDF));
+    //*(intersection->bsdf) = BSDF(intersection->n);
+    intersection->bsdf = new BSDF(intersection->n);
     intersection->bsdf->Add(new LambertianReflection(R));
 }
 

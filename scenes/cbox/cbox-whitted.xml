@@ -1,7 +1,7 @@
 <scene>
-  <mode type="final"/>
+  <mode type="progressive"/>
 	<integrator type="path">
-		<integer name="maxDepth" value="3"/>
+		<integer name="maxDepth" value="5"/>
     <integer name="sampleNum" value="1"/>
 	</integrator>
 

@@ -70,10 +70,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>F:\Document\Graphics\code\Rainbow\;F:\Document\Graphics\code\Rainbow\ext\imgui;F:\Document\Graphics\code\Rainbow\ext\imgui\examples\libs\gl3w;F:\Document\Graphics\code\Rainbow\ext\imgui\examples\libs\glfw\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir);$(SolutionDir)\ext\imgui;$(SolutionDir)\ext\imgui\examples\libs\gl3w;$(SolutionDir)\ext\imgui\examples\libs\glfw\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>F:\Document\Graphics\code\Rainbow\ext\imgui\examples\libs\gl3w;F:\Document\Graphics\code\Rainbow\ext\imgui\examples\libs\glfw\include;F:\Document\Graphics\code\Rainbow\ext\imgui;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\ext\imgui\examples\libs\gl3w;$(SolutionDir)\ext\imgui\examples\libs\glfw\include;$(SolutionDir);$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -96,7 +96,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalLibraryDirectories>F:\Document\Graphics\code\Rainbow\ext\imgui\examples\libs\glfw\lib-vc2010-64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)\ext\imgui\examples\libs\glfw\lib-vc2010-64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>msvcrt.lib</IgnoreSpecificDefaultLibraries>
     </Link>
@@ -118,14 +118,15 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <AdditionalIncludeDirectories>F:\Document\Graphics\code\Rainbow;F:\Document\Graphics\code\Rainbow\ext\imgui\examples\libs\gl3w;F:\Document\Graphics\code\Rainbow\ext\imgui\examples\libs\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)\ext\imgui\examples\libs\gl3w;$(SolutionDir)\ext\imgui\examples\libs\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -134,7 +135,7 @@
       <AdditionalDependencies>opengl32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
-      <AdditionalLibraryDirectories>F:\Document\Graphics\code\Rainbow\ext\imgui\examples\libs\glfw\lib-vc2010-64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)\ext\imgui\examples\libs\glfw\lib-vc2010-64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
