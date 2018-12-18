@@ -10,12 +10,11 @@ Interaction::Interaction(const Point3f & m_p, const Normal3f & m_n, const Vector
 SurfaceInteraction::SurfaceInteraction(const Point3f & m_p, const Normal3f & m_n,
     const Vector3f & m_wo, const Shape * m_shape) :
     Interaction(m_p, m_n, m_wo), shape(m_shape) {
-    bsdf = new BSDF(m_n);
 }
 
-void SurfaceInteraction::ComputeScatteringFunctions() {
+void SurfaceInteraction::ComputeScatteringFunctions(MemoryArena& arena) {
 	if (primitive)
-		primitive->ComputeScatteringFunctions(this);
+		primitive->ComputeScatteringFunctions(arena, this);
 }
 
 RGBSpectrum SurfaceInteraction::Le(const Vector3f & w) const {

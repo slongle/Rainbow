@@ -11,7 +11,7 @@ RAINBOW_NAMESPACE_BEGIN
 class Material {
 public:
 	Material() {}
-	virtual void ComputeScatteringFunctions(SurfaceInteraction* intersection);
+	virtual void ComputeScatteringFunctions(MemoryArena& arena, SurfaceInteraction* intersection);
 };
 
 RAINBOW_NAMESPACE_END

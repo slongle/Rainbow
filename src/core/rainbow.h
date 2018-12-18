@@ -16,6 +16,7 @@ using std::endl;
 
 #include "timer.h"
 #include "logger.h"
+#include "memory.h"
 
 #ifndef NDEBUG
 

@@ -113,7 +113,7 @@ int show(Integrator* integrator, Scene* scene)
     // - Read 'misc/fonts/README.txt' for more instructions and details.
     // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
     //ImFont* font = io.Fonts->AddFontDefault();
-    ImFont* font = io.Fonts->AddFontFromFileTTF("C:/Users/Administrator/Desktop/Rainbow/Rainbow/ext/imgui/misc/fonts/Roboto-Medium.ttf", 16.0f);
+    ImFont* font = io.Fonts->AddFontFromFileTTF("F:/Document/Graphics/code/Rainbow/ext/imgui/misc/fonts/Roboto-Medium.ttf", 16.0f);
     //ImFont* font = io.Fonts->AddFontFromFileTTF("F:/Document/Graphics/code/Rainbow/ext/imgui/misc/fonts/Cousine-Regular.ttf", 15.0f);
     //ImFont* font = io.Fonts->AddFontFromFileTTF("F:/Document/Graphics/code/Rainbow/ext/imgui/misc/fonts/DroidSans.ttf", 16.0f);
     //ImFont* font = io.Fonts->AddFontFromFileTTF("F:/Document/Graphics/code/Rainbow/ext/imgui/misc/fonts/ProggyTiny.ttf", 10.0f);
@@ -148,10 +148,11 @@ int show(Integrator* integrator, Scene* scene)
         for (int y = 0; y < integrator->camera->film->resolution.y; y++) {
             if (render) {                
                 for (int x = 0; x < integrator->camera->film->resolution.x; x++) {
-                    integrator->ProgressiveRender(*scene, x, y);
+                    if (y % 10 == 9 && x == 0) integrator->ProgressiveRender(*scene, x, y, true);
+                    else integrator->ProgressiveRender(*scene, x, y);
                     integrator->camera->film->UpdateToUnsignedCharPointer(image_data, x, y);
                 }
-                if (counter >= 20 && 100.*(y + 1) / integrator->camera->film->resolution.y >= 30) break;
+                //if (counter >= 20 && 100.*(y + 1) / integrator->camera->film->resolution.y >= 30) break;
             }
             else {
                 y--;

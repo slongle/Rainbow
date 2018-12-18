@@ -2,7 +2,7 @@
 
 RAINBOW_NAMESPACE_BEGIN	
 
-RGBSpectrum WhittedIntegrator::Li(const Ray & ray, const Scene & scene, int depth) {
+RGBSpectrum WhittedIntegrator::Li(MemoryArena& arena, const Ray & ray, const Scene & scene, int depth) {
 	RGBSpectrum L(0.0);
 	SurfaceInteraction intersection;
 	if (!scene.Intersect(ray, &intersection)) {
@@ -15,7 +15,7 @@ RGBSpectrum WhittedIntegrator::Li(const Ray & ray, const Scene & scene, int dept
 	/*Direct Light*/
 	L += intersection.Le(wo);
 	
-	intersection.ComputeScatteringFunctions();
+	intersection.ComputeScatteringFunctions(arena);
 	if (!intersection.bsdf) {
 		return L;
 	}
@@ -36,7 +36,7 @@ RGBSpectrum WhittedIntegrator::Li(const Ray & ray, const Scene & scene, int dept
     }
 
 	if (depth + 1 < maxDepth) {
-		L += SpecularReflect(ray, scene, depth, intersection);
+		L += SpecularReflect(arena, ray, scene, depth, intersection);
         LightNum++;
 		//L += SpecularRefract(ray, scene, depth, intersection);
 	}

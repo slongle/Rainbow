@@ -34,7 +34,7 @@ public:
 	SurfaceInteraction() {}
 	SurfaceInteraction(const Point3f &m_p, const Normal3f &m_n, const Vector3f& m_wo, const Shape * m_shape);
 
-	void ComputeScatteringFunctions();
+	void ComputeScatteringFunctions(MemoryArena& arena);
 	
 	RGBSpectrum Le(const Vector3f& w) const;
 

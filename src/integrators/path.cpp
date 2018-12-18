@@ -2,7 +2,7 @@
 
 RAINBOW_NAMESPACE_BEGIN
 
-RGBSpectrum PathIntegrator::Li(const Ray & r, const Scene & scene, int depth) {
+RGBSpectrum PathIntegrator::Li(MemoryArena& arena, const Ray & r, const Scene & scene, int depth) {
     RGBSpectrum L(0.f), beta(1);
     SurfaceInteraction inter;
     bool SpecularBounce = false;
@@ -19,7 +19,7 @@ RGBSpectrum PathIntegrator::Li(const Ray & r, const Scene & scene, int depth) {
 
         if (!FoundIntersect || bounce >= maxDepth) break;                
 
-        inter.ComputeScatteringFunctions();
+        inter.ComputeScatteringFunctions(arena);
         if (!inter.bsdf) {
             // TODO:
             break;
@@ -40,7 +40,6 @@ RGBSpectrum PathIntegrator::Li(const Ray & r, const Scene & scene, int depth) {
 
         if (BSDFPdf == 0 || f.IsBlack()) break;
         beta *= f * AbsDot(wi, inter.n) / BSDFPdf;
-
 
         ray = inter.SpawnToRay(wi);
 

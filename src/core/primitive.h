@@ -15,7 +15,7 @@ public:
 	bool Intersect(const Ray & ray, Float *tHit, SurfaceInteraction*inter) const;
 	bool IntersectP(const Ray & ray) const;
 
-	void ComputeScatteringFunctions(SurfaceInteraction* intersection) const;
+	void ComputeScatteringFunctions(MemoryArena& arena, SurfaceInteraction* intersection) const;
 
 	AreaLight* getAreaLight() const { return areaLight.get(); }
 

@@ -13,7 +13,7 @@ public:
 	Integrator() {}
 	virtual void Render(const Scene &scene) = 0;
 
-    virtual void ProgressiveRender(const Scene &scene, const int& x, const int & y)
+    virtual void ProgressiveRender(const Scene &scene, const int& x, const int & y, bool reset = false)
     {
         Assert(false, "No Implement!");
     }
@@ -24,19 +24,20 @@ public:
 
 class SamplerIntegrator :public Integrator {
 public:
-    SamplerIntegrator(const int& m_sampleNum) :sampleNum(m_sampleNum) {}
+    SamplerIntegrator(const int& m_sampleNum) :sampleNum(m_sampleNum),arena() {}
 
     RGBSpectrum UniformSampleOneLight(const SurfaceInteraction& inter, const Scene& scene);
     RGBSpectrum EstimateDirectLight(const SurfaceInteraction& inter, std::shared_ptr<Light> light, const Scene& scene);
 
-    RGBSpectrum SpecularReflect(const Ray&ray, const Scene& scene, int depth, SurfaceInteraction intersection);
-    RGBSpectrum SpecularRefract(const Ray&ray, const Scene& scene, int depth, SurfaceInteraction intersection);
+    RGBSpectrum SpecularReflect(MemoryArena& arena, const Ray&ray, const Scene& scene, int depth, SurfaceInteraction intersection);
+    RGBSpectrum SpecularRefract(MemoryArena& arena, const Ray&ray, const Scene& scene, int depth, SurfaceInteraction intersection);
 
 	void Render (const Scene &scene);
-    void ProgressiveRender(const Scene &scene, const int& x, const int & y);
-    virtual RGBSpectrum Li(const Ray &ray, const Scene& scene, int depth) = 0;
+    void ProgressiveRender(const Scene &scene, const int& x, const int & y, bool reset = false);
+    virtual RGBSpectrum Li(MemoryArena& arena, const Ray &ray, const Scene& scene, int depth) = 0;
 
     int sampleNum;
+    MemoryArena arena;
 };
 
 RAINBOW_NAMESPACE_END

@@ -9,7 +9,7 @@ class MetalMaterial :public Material {
 public:
     //MetalMaterial(const RGBSpectrum& m_R,const Float& etaI,) :R(m_R) {}
 
-    void ComputeScatteringFunctions(SurfaceInteraction* intersection);
+    void ComputeScatteringFunctions(MemoryArena& arena, SurfaceInteraction* intersection);
 
     RGBSpectrum R;
 };

@@ -2,7 +2,7 @@
 
 RAINBOW_NAMESPACE_BEGIN
 
-void Material::ComputeScatteringFunctions(SurfaceInteraction * intersection) {
+void Material::ComputeScatteringFunctions(MemoryArena& arena, SurfaceInteraction * intersection) {
 	Assert(false, "Didn't Implement ComputeScatteringFunctions Function");
 }
 

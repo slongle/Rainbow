@@ -85,7 +85,7 @@ RGBSpectrum SamplerIntegrator::EstimateDirectLight(const SurfaceInteraction & in
 }
 
 RGBSpectrum SamplerIntegrator::SpecularReflect
-(const Ray & ray, const Scene & scene, int depth, SurfaceInteraction intersection) {
+(MemoryArena& arena, const Ray & ray, const Scene & scene, int depth, SurfaceInteraction intersection) {
     Vector3f wo = intersection.wo, wi;
     Float pdf;
 
@@ -94,24 +94,27 @@ RGBSpectrum SamplerIntegrator::SpecularReflect
 
     if (pdf > 0.f && !f.IsBlack() && Dot(n, wi) != 0.f) {
         Ray r = intersection.SpawnToRay(wi);
-        return f * Li(r, scene, depth + 1) * AbsDot(wi, n) / pdf;
+        return f * Li(arena, r, scene, depth + 1) * AbsDot(wi, n) / pdf;
     }
     else
         return RGBSpectrum(0.f);
 }
 
 RGBSpectrum SamplerIntegrator::SpecularRefract
-(const Ray & ray, const Scene & scene, int depth, SurfaceInteraction intersection) {
+(MemoryArena& arena, const Ray & ray, const Scene & scene, int depth, SurfaceInteraction intersection) {
     return RGBSpectrum();
 }
 
-void SamplerIntegrator::ProgressiveRender(const Scene &scene,const int& x,const int & y) {    
+void SamplerIntegrator::ProgressiveRender(const Scene &scene,const int& x,const int & y, bool reset) {    
     std::shared_ptr<Film> film = camera->film;
     Ray ray;
     RGBSpectrum L(0.0);            
     camera->GenerateRay(&ray, Point2f(x - film->resolution.x *0.5, y - film->resolution.y *0.5) + sampler->Get2D());
-    L = Li(ray, scene, 0);    
+    L = Li(arena, ray, scene, 0);    
     film->AddPixel(Point2i(x, y), L);
+    if (reset) {
+        arena.Reset();
+    }
 }
 
 
@@ -119,6 +122,8 @@ void SamplerIntegrator::ProgressiveRender(const Scene &scene,const int& x,const 
 void SamplerIntegrator::Render(const Scene &scene) {
     std::shared_ptr<Film> film = camera->film;
     Ray ray;
+
+    Timer timer;
 
     std::cout << scene.aggregate->primitives.size() << std::endl;
 
@@ -143,14 +148,17 @@ void SamplerIntegrator::Render(const Scene &scene) {
             for (int i = 0; i < sampleNum; i++) {
                 camera->GenerateRay(&ray,
                     Point2f(x - film->resolution.x *0.5, y - film->resolution.y *0.5) + sampler->Get2D());
-                L += Li(ray, scene, 0);
+                L += Li(arena, ray, scene, 0);
             }
             L /= sampleNum;
             film->SetPixel(Point2i(x, y), L);
         }
+        if (y % 20 == 19) arena.Reset();
     }
     film->SaveImage();
+
     cout << "\n";
+    cout << timer.LastTime() << endl;
 }
 
 RAINBOW_NAMESPACE_END

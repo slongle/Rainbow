@@ -12,9 +12,9 @@ bool Primitive::IntersectP(const Ray & ray) const {
 	return shape->IntersectP(ray);
 }
 
-void Primitive::ComputeScatteringFunctions(SurfaceInteraction * intersection) const {
+void Primitive::ComputeScatteringFunctions(MemoryArena& arena, SurfaceInteraction * intersection) const {
 	if (material)
-		material->ComputeScatteringFunctions(intersection);
+		material->ComputeScatteringFunctions(arena, intersection);
 	//else Assert(material != nullptr, "No Material for Primitive");
 }
 

@@ -8,7 +8,7 @@ RAINBOW_NAMESPACE_BEGIN
 class MirrorMaterial :public Material {
 public:
     MirrorMaterial(const RGBSpectrum& m_R) :R(m_R) {}
-    void ComputeScatteringFunctions(SurfaceInteraction* intersection) override;
+    void ComputeScatteringFunctions(MemoryArena& arena, SurfaceInteraction* intersection) override;
 
 private:
     RGBSpectrum R;

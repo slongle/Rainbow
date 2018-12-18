@@ -9,7 +9,7 @@ class MatteMaterial :public Material {
 public:
 	MatteMaterial(const RGBSpectrum& m_R) :R(m_R) {}
 
-	void ComputeScatteringFunctions(SurfaceInteraction* intersection);
+	void ComputeScatteringFunctions(MemoryArena& arena, SurfaceInteraction* intersection);
 
 	RGBSpectrum R;
 };
