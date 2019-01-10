@@ -117,8 +117,6 @@ void SamplerIntegrator::ProgressiveRender(const Scene &scene,const int& x,const 
     }
 }
 
-
-
 void SamplerIntegrator::Render(const Scene &scene) {
     std::shared_ptr<Film> film = camera->film;
     Ray ray;
@@ -127,31 +125,22 @@ void SamplerIntegrator::Render(const Scene &scene) {
 
     std::cout << scene.aggregate->primitives.size() << std::endl;
 
-    //int SampleNum = 50;
     for (int y = 0; y < film->resolution.y; y++) {
         fprintf(stderr, "\rRendering (%d spp) %5.2f%%", sampleNum, 100.*(y + 1) / film->resolution.y);
         for (int x = 0; x < film->resolution.x; x++) {
-
-            /*
-            camera->GenerateRay(&ray,
-                Point2f(x - film->resolution.x *0.5, y - film->resolution.y *0.5) + sampler->Get2D());
-            if (scene.IntersectP(ray)) {
-                film->SetPixel(Point2i(x, y), RGBSpectrum(1, 1, 1));
-            }
-            else
-                film->SetPixel(Point2i(x, y), RGBSpectrum(0, 0, 0));
-
-            continue;
-            */
-
-            RGBSpectrum L(0.0);            
+            //RGBSpectrum L(0.0);            
             for (int i = 0; i < sampleNum; i++) {
                 camera->GenerateRay(&ray,
                     Point2f(x - film->resolution.x *0.5, y - film->resolution.y *0.5) + sampler->Get2D());
-                L += Li(arena, ray, scene, 0);
+                //L += Li(arena, ray, scene, 0);
+                RGBSpectrum L = Li(arena, ray, scene, 0);
+                if (!L.IsBlack())
+                    std:cout << L << std::endl;
+                film->AddPixel(Point2i(x, y), Li(arena, ray, scene, 0));
+                if (!L.IsBlack()) std::cout << std::endl;
             }
-            L /= sampleNum;
-            film->SetPixel(Point2i(x, y), L);
+            //L /= sampleNum;
+            //film->SetPixel(Point2i(x, y), L);
         }
         if (y % 20 == 19) arena.Reset();
     }

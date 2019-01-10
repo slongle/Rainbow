@@ -35,7 +35,7 @@ private:
 	struct Pixel {
         Pixel() { rgb[0] = rgb[1] = rgb[2] = sampleNum = 0; }
 		Float rgb[3];
-		Float sampleNum;
+		int sampleNum;
 	};
 	std::unique_ptr<Pixel[]> pixels;
 

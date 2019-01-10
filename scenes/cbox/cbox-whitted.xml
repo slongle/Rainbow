@@ -1,8 +1,8 @@
 <scene>
-  <mode type="progressive"/>
+  <mode type="final"/>
 	<integrator type="path">
 		<integer name="maxDepth" value="50"/>
-    <integer name="sampleNum" value="100"/>
+    <integer name="sampleNum" value="10"/>
 	</integrator>
 
 	<sensor type="perspective">
@@ -18,7 +18,7 @@
 		</sampler>
 
 		<film type="hdrfilm">
-      <string name="filename" value="diffuse_pt_100spp.png"/>
+      <string name="filename" value="final2_mirror_10spp.png"/>
 			<integer name="height" value="600"/>
 			<integer name="width" value="800"/>
 		</film>

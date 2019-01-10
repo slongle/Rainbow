@@ -10,9 +10,10 @@ Film::Film(const std::string & _filename, const Point2i & _resolution) :
 
 void Film::AddPixel(const Point2i & p, const RGBSpectrum & L) const {
     Pixel &pixel = GetPixel(p);
+    if (!L.IsBlack())std::cout << L << std::endl;
     for (int i = 0; i < 3; i++)
         pixel.rgb[i] += L[i];
-    pixel.sampleNum++;
+    pixel.sampleNum ++;
 }
 
 void Film::SetPixel(const Point2i & p, const RGBSpectrum & L) const {
