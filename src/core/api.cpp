@@ -89,8 +89,11 @@ void RainbowWorld() {
     if (renderOptions->RenderMode == "progressive") {
         show(integrator, scene);        
     }
-    else {
+    else if (renderOptions->RenderMode == "final") {
         integrator->Render(*scene);        
+    }
+    else if (renderOptions->RenderMode == "test") {
+        integrator->TestRender(*scene);
     }
 
 }

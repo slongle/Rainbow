@@ -21,9 +21,7 @@ RGBSpectrum PathIntegrator::Li(MemoryArena& arena, const Ray & r, const Scene & 
 
         inter.ComputeScatteringFunctions(arena);
         if (!inter.bsdf) {
-            // TODO:
             break;
-
             //ray = inter.SpawnToRay(ray.d);
             //bounce--;
             //continue;
@@ -33,13 +31,12 @@ RGBSpectrum PathIntegrator::Li(MemoryArena& arena, const Ray & r, const Scene & 
         Vector3f wo = Normalize(-ray.d), wi;
         Float BSDFPdf;
         BxDFType BSDFType;
-        RGBSpectrum f = inter.bsdf->SampleF(wo, &wi, sampler->Get2D(), &BSDFPdf,BSDF_ALL,&BSDFType);
-
-        // FIX:
-        SpecularBounce = (BSDFType & BSDF_SPECULAR) != 0;
-
+        RGBSpectrum f = inter.bsdf->SampleF(wo, &wi, sampler->Get2D(), &BSDFPdf, BSDF_ALL, &BSDFType);
+        
         if (BSDFPdf == 0 || f.IsBlack()) break;
         beta *= f * AbsDot(wi, inter.n) / BSDFPdf;
+
+        SpecularBounce = (BSDFType & BSDF_SPECULAR) != 0;
 
         ray = inter.SpawnToRay(wi);
 
@@ -57,7 +54,8 @@ RGBSpectrum PathIntegrator::Li(MemoryArena& arena, const Ray & r, const Scene & 
 PathIntegrator * CreatePathIntegrator(PropertyList & list) {
     int maxDepth = list.getInteger("maxDepth", 10);
     int sampleNum = list.getInteger("sampleNum", 10);
-    return new PathIntegrator(maxDepth, sampleNum);
+    int delta = list.getInteger("delta", 1);
+    return new PathIntegrator(maxDepth, sampleNum, delta); 
 }
 
 RAINBOW_NAMESPACE_END

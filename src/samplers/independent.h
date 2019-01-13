@@ -9,9 +9,9 @@ class Independent :public Sampler {
 public:
 	Independent(int m_SamplerCount) :SamplerCount(m_SamplerCount)
 	{
-        rng.seed(time(0));
 	}
 
+    void Prepare();
 	Float Get1D();
 	Point2f Get2D();
 

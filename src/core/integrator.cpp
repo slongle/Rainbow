@@ -1,4 +1,5 @@
 #include"Integrator.h"
+#include <stdio.h>
 
 RAINBOW_NAMESPACE_BEGIN
 
@@ -124,30 +125,57 @@ void SamplerIntegrator::Render(const Scene &scene) {
     Timer timer;
 
     std::cout << scene.aggregate->primitives.size() << std::endl;
-
+    puts("!!!!!");
     for (int y = 0; y < film->resolution.y; y++) {
         fprintf(stderr, "\rRendering (%d spp) %5.2f%%", sampleNum, 100.*(y + 1) / film->resolution.y);
         for (int x = 0; x < film->resolution.x; x++) {
-            //RGBSpectrum L(0.0);            
+            RGBSpectrum L(0.0);            
             for (int i = 0; i < sampleNum; i++) {
                 camera->GenerateRay(&ray,
                     Point2f(x - film->resolution.x *0.5, y - film->resolution.y *0.5) + sampler->Get2D());
-                //L += Li(arena, ray, scene, 0);
-                RGBSpectrum L = Li(arena, ray, scene, 0);
-                if (!L.IsBlack())
-                    std:cout << L << std::endl;
-                film->AddPixel(Point2i(x, y), Li(arena, ray, scene, 0));
-                if (!L.IsBlack()) std::cout << std::endl;
+                L += Li(arena, ray, scene, 0);
+                //RGBSpectrum L = Li(arena, ray, scene, 0);
+                //if (!L.IsBlack()) std:cout << L << std::endl;
+                //film->AddPixel(Point2i(x, y), Li(arena, ray, scene, 0));
+                //if (!L.IsBlack()) std::cout << std::endl;
             }
-            //L /= sampleNum;
-            //film->SetPixel(Point2i(x, y), L);
+            L /= sampleNum;
+            film->SetPixel(Point2i(x, y), L);
         }
-        if (y % 20 == 19) arena.Reset();
+        arena.Reset();
     }
     film->SaveImage();
 
     cout << "\n";
     cout << timer.LastTime() << endl;
+}
+
+
+void SamplerIntegrator::TestRender(const Scene &scene) {
+    std::shared_ptr<Film> film = camera->film;
+    Ray ray;
+
+    Timer timer;
+    std::string name = film->filename, tmpName;
+    for (int i = 1; i <= sampleNum / delta; i++) {  
+        tmpName = name;
+        for (int y = 0; y < film->resolution.y; y++) {
+            fprintf(stderr, "\rRendering (%d spp) %5.2f%%", sampleNum, 100.*(y + 1) / film->resolution.y);
+            for (int x = 0; x < film->resolution.x; x++) {
+                RGBSpectrum L(0.0);
+                for (int j = 0; j < delta; j++) {
+                    camera->GenerateRay(&ray,
+                        Point2f(x - film->resolution.x *0.5, y - film->resolution.y *0.5) + sampler->Get2D());
+                    L += Li(arena, ray, scene, 0);
+                }
+                film->AddPixel(Point2i(x, y), L, delta);
+            }
+            arena.Reset();
+        }
+        tmpName.insert(name.find_last_of('.'), "_" + std::to_string(i*delta) + "spp");
+        std::cout << tmpName << std::endl;
+        film->SaveImage(tmpName);
+    }
 }
 
 RAINBOW_NAMESPACE_END

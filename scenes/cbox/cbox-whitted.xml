@@ -1,8 +1,9 @@
 <scene>
-  <mode type="final"/>
+  <mode type="test"/>
 	<integrator type="path">
 		<integer name="maxDepth" value="50"/>
-    <integer name="sampleNum" value="10"/>
+    <integer name="sampleNum" value="500"/>
+    <integer name="delta" value="10"/>
 	</integrator>
 
 	<sensor type="perspective">
@@ -18,7 +19,7 @@
 		</sampler>
 
 		<film type="hdrfilm">
-      <string name="filename" value="final2_mirror_10spp.png"/>
+      <string name="filename" value="mirror.png"/>
 			<integer name="height" value="600"/>
 			<integer name="width" value="800"/>
 		</film>

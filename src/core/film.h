@@ -20,9 +20,11 @@ class Film{
 public:	
 	Film(const std::string & _filename, const Point2i & _resolution);
 
-    void AddPixel(const Point2i& p, const RGBSpectrum& L) const;
+    void AddPixel(const Point2i& p, const RGBSpectrum& L, const int &num = 1) const;
 	void SetPixel(const Point2i& p, const RGBSpectrum& L) const;
+    RGBSpectrum RetPixel(const Point2i & p) const;
     void SaveImage() const;
+    void SaveImage(const std::string &name) const;
     void ExportToUnsignedCharPointer(unsigned char* data) const;
     void UpdateToUnsignedCharPointer(unsigned char* data, const int &x, const int &y) const;
 

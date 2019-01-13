@@ -12,7 +12,7 @@ void MirrorMaterial::ComputeScatteringFunctions(MemoryArena& arena, SurfaceInter
 }
 
 MirrorMaterial* CreateMirrorMaterial(PropertyList& list) {
-    RGBSpectrum R = list.getColor("reflectance", RGBSpectrum(0.5));
+    RGBSpectrum R = list.getColor("reflectance", RGBSpectrum(1));
     return new MirrorMaterial(R);
 }
 

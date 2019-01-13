@@ -77,9 +77,17 @@ Float BSDF::Pdf(const Vector3f& woWorld, const Vector3f& wiWorld, const BxDFType
     return matchComp > 0 ? pdf / matchComp : 0;
 }
 
+/*
+ * SampleF
+ * 
+ * Param type
+ * the BxDF type wanted
+ * 
+ * Param sampleType
+ * the BxDF type gotten
+ */
 RGBSpectrum BSDF::SampleF(const Vector3f& woWorld, Vector3f* wiWorld, const Point2f& sample,
-    Float* pdf, const BxDFType& type, BxDFType* sampleType) {
-    Vector3f woLocal = frame.toLocal(woWorld), wiLocal;
+    Float* pdf, const BxDFType& type, BxDFType* sampleType) {    
 
     int matchComp = NumComponents(type);
     if (matchComp == 0) {
@@ -96,11 +104,13 @@ RGBSpectrum BSDF::SampleF(const Vector3f& woWorld, Vector3f* wiWorld, const Poin
     }
 
     Point2f remapSample(sample[0] * matchComp - chooseComp, sample[1]);
+
     RGBSpectrum f(0.);
+    Vector3f woLocal = frame.toLocal(woWorld), wiLocal;
+    if (sampleType) *sampleType = bxdfs[idx]->type;
     f = bxdfs[idx]->SampleF(woLocal, &wiLocal, remapSample, pdf);
 
     if (*pdf == 0) {
-        if (sampleType) *sampleType = BxDFType(0);
         return RGBSpectrum(0.);
     }
     *wiWorld = frame.toWorld(wiLocal);
@@ -114,9 +124,13 @@ RGBSpectrum BSDF::SampleF(const Vector3f& woWorld, Vector3f* wiWorld, const Poin
     }
     if (matchComp > 1) *pdf /= matchComp;
 
-    if (!(bxdfs[idx]->MatchFlags(BSDF_SPECULAR))) {
+    if (!(bxdfs[idx]->MatchFlags(BSDF_SPECULAR)) && matchComp > 1) {
+        bool reflect = Dot(frame.n, *wiWorld)*Dot(frame.n, woWorld) > 0;
+        f = RGBSpectrum(0.);
         for (int i = 0; i < nBxDFs; i++) {
-            if (i != idx && bxdfs[i]->MatchFlags(type)) {
+            if (i != idx && bxdfs[i]->MatchFlags(type)
+                &&(( reflect && (bxdfs[i]->type & BxDFType::BSDF_REFLECTION)) || 
+                  ((!reflect && (bxdfs[i]->type & BxDFType::BSDF_TRANSMISSION))))) {
                 f += bxdfs[i]->f(woLocal, wiLocal);
             }
         }

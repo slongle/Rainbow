@@ -8,12 +8,12 @@ Film::Film(const std::string & _filename, const Point2i & _resolution) :
 	pixels = std::unique_ptr<Pixel[]>(new Pixel[resolution.x * resolution.y]);
 }
 
-void Film::AddPixel(const Point2i & p, const RGBSpectrum & L) const {
+void Film::AddPixel(const Point2i & p, const RGBSpectrum & L, const int &num) const {
     Pixel &pixel = GetPixel(p);
-    if (!L.IsBlack())std::cout << L << std::endl;
+    //if (!L.IsBlack())std::cout << L << std::endl;
     for (int i = 0; i < 3; i++)
         pixel.rgb[i] += L[i];
-    pixel.sampleNum ++;
+    pixel.sampleNum += num;
 }
 
 void Film::SetPixel(const Point2i & p, const RGBSpectrum & L) const {
@@ -23,10 +23,26 @@ void Film::SetPixel(const Point2i & p, const RGBSpectrum & L) const {
     pixel.sampleNum = 1;
 }
 
+RGBSpectrum Film::RetPixel(const Point2i & p) const {
+    Pixel &pixel = GetPixel(p);
+    RGBSpectrum rgb;
+    Float invWeight = Float(1) / pixel.sampleNum;
+    for (int i = 0; i < 3; i++)
+        rgb[i] = pixel.rgb[i] * invWeight;
+    return rgb;
+}
+
 void Film::SaveImage() const {
-	unsigned char *rgba = new unsigned char[4 * resolution.x * resolution.y];
+    unsigned char *rgba = new unsigned char[4 * resolution.x * resolution.y];
     ExportToUnsignedCharPointer(rgba);
     ExportToPNG(filename, rgba, resolution.x, resolution.y);
+}
+
+
+void Film::SaveImage(const std::string &name) const {
+	unsigned char *rgba = new unsigned char[4 * resolution.x * resolution.y];
+    ExportToUnsignedCharPointer(rgba);
+    ExportToPNG(name, rgba, resolution.x, resolution.y);
 }
 
 void Film::ExportToUnsignedCharPointer(unsigned char* data) const {

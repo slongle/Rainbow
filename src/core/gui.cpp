@@ -112,8 +112,8 @@ int show(Integrator* integrator, Scene* scene)
     // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
     // - Read 'misc/fonts/README.txt' for more instructions and details.
     // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
-    //ImFont* font = io.Fonts->AddFontDefault();
-    ImFont* font = io.Fonts->AddFontFromFileTTF("F:/Document/Graphics/code/Rainbow/ext/imgui/misc/fonts/Roboto-Medium.ttf", 16.0f);
+    ImFont* font = io.Fonts->AddFontDefault();
+    //ImFont* font = io.Fonts->AddFontFromFileTTF("F:/Document/Graphics/code/Rainbow/ext/imgui/misc/fonts/Roboto-Medium.ttf", 16.0f);
     //ImFont* font = io.Fonts->AddFontFromFileTTF("F:/Document/Graphics/code/Rainbow/ext/imgui/misc/fonts/Cousine-Regular.ttf", 15.0f);
     //ImFont* font = io.Fonts->AddFontFromFileTTF("F:/Document/Graphics/code/Rainbow/ext/imgui/misc/fonts/DroidSans.ttf", 16.0f);
     //ImFont* font = io.Fonts->AddFontFromFileTTF("F:/Document/Graphics/code/Rainbow/ext/imgui/misc/fonts/ProggyTiny.ttf", 10.0f);

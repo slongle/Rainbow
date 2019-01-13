@@ -15,7 +15,11 @@ public:
 
     virtual void ProgressiveRender(const Scene &scene, const int& x, const int & y, bool reset = false)
     {
-        Assert(false, "No Implement!");
+        Assert(false, "Progressive Render No Implement!");
+    }
+
+    virtual void TestRender(const Scene &scene) {
+        Assert(false, "Test Render No Implement!");
     }
 
 	std::shared_ptr<Camera> camera;
@@ -24,7 +28,8 @@ public:
 
 class SamplerIntegrator :public Integrator {
 public:
-    SamplerIntegrator(const int& m_sampleNum) :sampleNum(m_sampleNum),arena() {}
+    SamplerIntegrator(const int& m_sampleNum, const int &m_delta = 1) :
+        sampleNum(m_sampleNum), arena(), delta(m_delta) {}
 
     RGBSpectrum UniformSampleOneLight(const SurfaceInteraction& inter, const Scene& scene);
     RGBSpectrum EstimateDirectLight(const SurfaceInteraction& inter, std::shared_ptr<Light> light, const Scene& scene);
@@ -34,9 +39,10 @@ public:
 
 	void Render (const Scene &scene);
     void ProgressiveRender(const Scene &scene, const int& x, const int & y, bool reset = false);
+    void TestRender(const Scene &scene);
     virtual RGBSpectrum Li(MemoryArena& arena, const Ray &ray, const Scene& scene, int depth) = 0;
 
-    int sampleNum;
+    int sampleNum, delta;
     MemoryArena arena;
 };
 

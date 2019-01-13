@@ -49,17 +49,19 @@ public:
     }
 
 
-private:
     Normal3f n;
+private:
     Vector3f s, t;    
 };
 
 enum BxDFType {
     BSDF_REFLECTION = 1 << 0,
     BSDF_TRANSMISSION = 1 << 1,
+
     BSDF_DIFFUSE = 1 << 2,
     BSDF_GLOSSY = 1 << 3,
     BSDF_SPECULAR = 1 << 4,
+
     BSDF_ALL = (1 << 5) - 1,
 };
 
@@ -94,6 +96,7 @@ public:
     virtual Float Pdf(const Vector3f& wo, const Vector3f& wi) = 0;
 
 	bool MatchFlags(const BxDFType& t) const {
+        // return true iff type is a subset of t
 		return (type & t) == type;
 	}	
 
