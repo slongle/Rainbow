@@ -27,8 +27,8 @@
 			<color name="albedo" value="0.725 0.71 0.68"/>
 		</bsdf>
 	</mesh>
-
-	<mesh type="obj">
+  
+  <mesh type="obj">
 		<string name="filename" value="meshes/rightwall.obj"/>
 
 		<bsdf type="diffuse">

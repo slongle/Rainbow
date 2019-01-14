@@ -3,7 +3,7 @@
 	<integrator type="path">
 		<integer name="maxDepth" value="50"/>
     <integer name="sampleNum" value="500"/>
-    <integer name="delta" value="10"/>
+    <integer name="delta" value="1"/>
 	</integrator>
 
 	<sensor type="perspective">
@@ -19,7 +19,7 @@
 		</sampler>
 
 		<film type="hdrfilm">
-      <string name="filename" value="mirror.png"/>
+      <string name="filename" value="glass.png"/>
 			<integer name="height" value="600"/>
 			<integer name="width" value="800"/>
 		</film>
@@ -31,8 +31,17 @@
 		</transform>
 		<float name="radius" value="0.3261"/>
 
-		<bsdf type="mirror"/>
+		<bsdf type="glass"/>
 	</shape>
+
+  <shape type="sphere">
+    <transform name="toWorld">
+      <translate x="0.4456" y="0.3301" z="0.3767"/>
+    </transform>
+    <float name="radius" value="0.3261"/>
+
+    <bsdf type="diffuse"/>
+  </shape>
 
 	<shape type="obj">
 		<string name="filename" value="meshes/walls.obj"/>

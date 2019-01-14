@@ -36,7 +36,7 @@ Float FrDielectric(Float cosThetaI, Float etaI, Float etaT) {
 inline bool Refract(const Vector3f & wi, const Normal3f & n, Float eta, Vector3f* wt) {
 	Float cosThetaI = Dot(wi, n);
 	Float sin2ThetaI = std::max(0.f, 1.f - cosThetaI * cosThetaI);
-	Float sin2ThetaT = eta * eta*sin2ThetaI;
+	Float sin2ThetaT = eta * eta * sin2ThetaI;
 	if (sin2ThetaT >= 1) return false;
 	Float cosThetaT = std::sqrt(1 - sin2ThetaT);
 	*wt = -eta * wi + (eta * cosThetaI - cosThetaT) * n;
@@ -171,7 +171,6 @@ RGBSpectrum SpecularTransmission::SampleF(const Vector3f & wo, Vector3f * wi, co
 	if (!Refract(wo, FaceForward(Normal3f(0, 0, 1), wo), etaI / etaT, wi))
 		return RGBSpectrum(0.0);
 	*pdf = 1;
-
 	return (etaI*etaI) / (etaT*etaT) * (RGBSpectrum(1.0) - fresnel.Evaluate(Frame::CosTheta(*wi))) * T / Frame::AbsCosTheta(*wi);
 }
 

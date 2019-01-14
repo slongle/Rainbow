@@ -19,6 +19,7 @@
 
 #include "../materials/matte.h"
 #include "../materials/mirror.h"
+#include "../materials/glass.h"
 
 #include "../samplers/independent.h"
 
@@ -257,6 +258,9 @@ std::shared_ptr<Material> MakeMaterial(const std::string & type, PropertyList & 
 	}
     else if (type == "mirror") {
         material = CreateMirrorMaterial(list);
+    }
+    else if (type == "glass") {
+        material = CreateGlassMaterial(list);
     }
 	return std::shared_ptr<Material>(material);
 }

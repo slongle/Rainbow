@@ -154,7 +154,6 @@ void SamplerIntegrator::Render(const Scene &scene) {
 void SamplerIntegrator::TestRender(const Scene &scene) {
     std::shared_ptr<Film> film = camera->film;
     Ray ray;
-
     Timer timer;
     std::string name = film->filename, tmpName;
     for (int i = 1; i <= sampleNum / delta; i++) {  

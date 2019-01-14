@@ -186,7 +186,7 @@
     <ClCompile Include="..\src\integrators\whitted.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\materials\matte.cpp" />
-    <ClCompile Include="..\src\materials\metal.cpp" />
+    <ClCompile Include="..\src\materials\glass.cpp" />
     <ClCompile Include="..\src\materials\mirror.cpp" />
     <ClCompile Include="..\src\samplers\independent.cpp" />
     <ClCompile Include="..\src\shapes\cube.cpp" />
@@ -252,7 +252,7 @@
     <ClInclude Include="..\src\integrators\path.h" />
     <ClInclude Include="..\src\integrators\whitted.h" />
     <ClInclude Include="..\src\materials\matte.h" />
-    <ClInclude Include="..\src\materials\metal.h" />
+    <ClInclude Include="..\src\materials\glass.h" />
     <ClInclude Include="..\src\materials\mirror.h" />
     <ClInclude Include="..\src\samplers\independent.h" />
     <ClInclude Include="..\src\shapes\cube.h" />
