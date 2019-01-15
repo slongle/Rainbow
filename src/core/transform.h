@@ -129,7 +129,11 @@ public:
 	Normal3<T> operator () (const Normal3<T> &n) const;
 	Ray operator() (const Ray &r) const;
 	Bounds3f operator () (const Bounds3f &b) const;
-	SurfaceInteraction operator() (const SurfaceInteraction &si) const;
+    template <typename T>
+    inline Point3<T> operator()(const Point3<T> &p, const Vector3<T> &pError,
+        Vector3<T> *pTransError) const;
+    SurfaceInteraction operator() (const SurfaceInteraction &si) const;
+
 
 	std::string toString(const int &spaceNum = 0) const {
 		return 
@@ -166,6 +170,38 @@ Transform RotateZ(Float theta);
 Transform Rotate(Float theta, const Vector3f &axis);
 Transform LookAt(const Vector3f &target, const Vector3f &origin, const Vector3f &up);
 Transform Perspective(const Float &fov, const Float& near, const Float& far);
+
+template <typename T>
+inline Point3<T> Transform::operator()(const Point3<T> &pt, const Vector3<T> &ptError, Vector3<T> *absError) const {
+    T x = pt.x, y = pt.y, z = pt.z;
+    T xp = m.m[0][0] * x + m.m[0][1] * y + m.m[0][2] * z + m.m[0][3];
+    T yp = m.m[1][0] * x + m.m[1][1] * y + m.m[1][2] * z + m.m[1][3];
+    T zp = m.m[2][0] * x + m.m[2][1] * y + m.m[2][2] * z + m.m[2][3];
+    T wp = m.m[3][0] * x + m.m[3][1] * y + m.m[3][2] * z + m.m[3][3];
+    absError->x =
+        (gamma(3) + (T)1) *
+        (std::abs(m.m[0][0]) * ptError.x + std::abs(m.m[0][1]) * ptError.y +
+            std::abs(m.m[0][2]) * ptError.z) +
+        gamma(3) * (std::abs(m.m[0][0] * x) + std::abs(m.m[0][1] * y) +
+            std::abs(m.m[0][2] * z) + std::abs(m.m[0][3]));
+    absError->y =
+        (gamma(3) + (T)1) *
+        (std::abs(m.m[1][0]) * ptError.x + std::abs(m.m[1][1]) * ptError.y +
+            std::abs(m.m[1][2]) * ptError.z) +
+        gamma(3) * (std::abs(m.m[1][0] * x) + std::abs(m.m[1][1] * y) +
+            std::abs(m.m[1][2] * z) + std::abs(m.m[1][3]));
+    absError->z =
+        (gamma(3) + (T)1) *
+        (std::abs(m.m[2][0]) * ptError.x + std::abs(m.m[2][1]) * ptError.y +
+            std::abs(m.m[2][2]) * ptError.z) +
+        gamma(3) * (std::abs(m.m[2][0] * x) + std::abs(m.m[2][1] * y) +
+            std::abs(m.m[2][2] * z) + std::abs(m.m[2][3]));
+    Assert(wp != 0, "F?!");
+    if (wp == 1.)
+        return Point3<T>(xp, yp, zp);
+    else
+        return Point3<T>(xp, yp, zp) / wp;
+}
 
 RAINBOW_NAMESPACE_END
 

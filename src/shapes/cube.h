@@ -5,7 +5,7 @@
 
 RAINBOW_NAMESPACE_BEGIN
 
-class Cube :public Shape {
+/*class Cube :public Shape {
 public:
 	Cube(const Transform *_ObjectToWorld, const Transform *_WorldToObject);
 
@@ -22,7 +22,7 @@ private:
 	Bounds3f bound;
 };
 
-std::shared_ptr<Cube> CreateCube(const PropertyList &list);
+std::shared_ptr<Cube> CreateCube(const PropertyList &list);*/
 
 RAINBOW_NAMESPACE_END
 

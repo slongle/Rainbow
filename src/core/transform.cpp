@@ -343,7 +343,7 @@ Bounds3f Transform::operator()(const Bounds3f & bounds) const {
 
 SurfaceInteraction Transform::operator()(const SurfaceInteraction & si) const {
 	SurfaceInteraction ret = si;
-	ret.p = (*this)(si.p);
+    ret.p = (*this)(si.p, si.pError, &ret.pError);
 	ret.n = (*this)(si.n);
 	ret.wo = (*this)(si.wo);
 	return ret;

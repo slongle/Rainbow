@@ -7,6 +7,7 @@ RGBSpectrum PathIntegrator::Li(MemoryArena& arena, const Ray & r, const Scene & 
     SurfaceInteraction inter;
     bool SpecularBounce = false;
     Ray ray(r);
+    bool Trans = false;
 
     for (int bounce = 0;; bounce++) {        
         bool FoundIntersect = scene.Intersect(ray, &inter);
@@ -32,8 +33,11 @@ RGBSpectrum PathIntegrator::Li(MemoryArena& arena, const Ray & r, const Scene & 
         Float BSDFPdf;
         BxDFType BSDFType;
         RGBSpectrum f = inter.bsdf->SampleF(wo, &wi, sampler->Get2D(), &BSDFPdf, BSDF_ALL, &BSDFType);
-        
         if (BSDFPdf == 0 || f.IsBlack()) break;
+        if (BSDFType == BSDF_SPECULAR + BSDF_TRANSMISSION) {
+            //puts("FFFFFFFFF");
+            Trans = true;
+        }
         beta *= f * AbsDot(wi, inter.n) / BSDFPdf;
 
         SpecularBounce = (BSDFType & BSDF_SPECULAR) != 0;

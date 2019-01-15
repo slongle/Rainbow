@@ -2,7 +2,7 @@
 
 RAINBOW_NAMESPACE_BEGIN
 
-Cube::Cube(const Transform * _ObjectToWorld, const Transform * _WorldToObject) :Shape(_ObjectToWorld, _WorldToObject) {
+/*Cube::Cube(const Transform * _ObjectToWorld, const Transform * _WorldToObject) :Shape(_ObjectToWorld, _WorldToObject) {
 
 }
 
@@ -43,5 +43,5 @@ Float Cube::Area() const {
 std::shared_ptr<Cube> CreateCube(const PropertyList & list) {
 	return nullptr;
 }
-
+*/
 RAINBOW_NAMESPACE_END

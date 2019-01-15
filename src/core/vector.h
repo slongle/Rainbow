@@ -114,6 +114,7 @@ class Vector3 {
 public:
 	Vector3(const T _v = 0) { x = y = z = _v; Assert(!HasNaNs(), "Vector3 has NaN"); }
 	Vector3(const T _x, const T _y, const T _z) { x = _x; y = _y; z = _z; Assert(!HasNaNs(), "Vector3 has NaN"); }
+    Vector3(const Normal3<T> n) { x = n.x; y = n.y; z = n.z; Assert(!HasNaNs(), "Vector3 has NaN"); }
 
 	bool HasNaNs() const {
 		return isNaN(x) || isNaN(y) || isNaN(z);
@@ -444,7 +445,7 @@ public:
 		return Normal3<T>(x*inv, y*inv, z*inv);
 	}
 
-	Float Length() const { return std::sqrt(x*x + y * y + z * z); }
+	Float Length() const { return std::sqrt(x * x + y * y + z * z); }
 
 	std::string toString(const int &spaceNum = 0) const {
 		return indent(tfm::format("[ %.4f, %.4f, %.4f ]", x, y, z), spaceNum);

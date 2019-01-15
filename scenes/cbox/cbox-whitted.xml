@@ -3,7 +3,7 @@
 	<integrator type="path">
 		<integer name="maxDepth" value="50"/>
     <integer name="sampleNum" value="500"/>
-    <integer name="delta" value="1"/>
+    <integer name="delta" value="10"/>
 	</integrator>
 
 	<sensor type="perspective">

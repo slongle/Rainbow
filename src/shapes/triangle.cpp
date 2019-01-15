@@ -103,8 +103,17 @@ bool Triangle::Intersect(const Ray & ray, Float * tHit, SurfaceInteraction* inte
 	//	nHit = -FaceForward(nHit, ray.d);
 	//}
 
+    // Compute error bounds for triangle intersection
+    Float xAbsSum =
+        (std::abs(b0 * p0.x) + std::abs(b1 * p1.x) + std::abs(b2 * p2.x));
+    Float yAbsSum =
+        (std::abs(b0 * p0.y) + std::abs(b1 * p1.y) + std::abs(b2 * p2.y));
+    Float zAbsSum =
+        (std::abs(b0 * p0.z) + std::abs(b1 * p1.z) + std::abs(b2 * p2.z));
+    Vector3f pError = gamma(7) * Vector3f(xAbsSum, yAbsSum, zAbsSum);
+
     nHit = Normalize(nHit);
-	*inter = SurfaceInteraction(pHit, nHit, -ray.d, this);
+	*inter = SurfaceInteraction(pHit, pError, nHit, -ray.d, this);
 
 	return true;
 }

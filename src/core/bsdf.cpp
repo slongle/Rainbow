@@ -165,6 +165,7 @@ RGBSpectrum SpecularTransmission::f(const Vector3f & wo, const Vector3f & wi) {
 
 RGBSpectrum SpecularTransmission::SampleF(const Vector3f & wo, Vector3f * wi, const Point2f & sample, Float * pdf) {
 	bool enter = Frame::CosTheta(wo) > 0;
+    //cout << enter << endl;
 	Float etaI = enter ? etaA : etaB;	
 	Float etaT = enter ? etaB : etaA;
 

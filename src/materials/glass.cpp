@@ -4,7 +4,7 @@ RAINBOW_NAMESPACE_BEGIN
 
 void GlassMaterial::ComputeScatteringFunctions(MemoryArena& arena, SurfaceInteraction * intersection) {
     intersection->bsdf = ARENA_ALLOCA(arena, BSDF)(intersection->n);
-    //intersection->bsdf->Add(ARENA_ALLOCA(arena, SpecularReflection)(R, ARENA_ALLOCA(arena, FresnelNoOp)()));
+    //intersection->bsdf->Add(ARENA_ALLOCA(arena, SpecularReflection)(T, ARENA_ALLOCA(arena, FresnelNoOp)()));
     intersection->bsdf->Add(ARENA_ALLOCA(arena, SpecularTransmission)(T, etaI, etaT));
 }
 
