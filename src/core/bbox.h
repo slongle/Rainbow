@@ -50,14 +50,46 @@ public:
 		pMin(std::min(u.x, v.x), std::min(u.y, v.y), std::min(u.z, v.z)),
 		pMax(std::max(u.x, v.x), std::max(u.y, v.y), std::max(u.z, v.z)) {}
 
+    Point3<T> operator[] (const int idx) const {
+        return idx == 0 ? pMin : pMax;
+	}
+
 	bool operator == (const Bounds3<T> & b) const {
 		return pMin == b.pMin && pMax == b.pMax;
 	}
 	
-	bool IntersectP(const Ray &ray) const;
+	bool IntersectP(const Ray &ray, Float* hitt0 = nullptr, Float* hitt1 = nullptr) const;
+    bool IntersectP(const Ray &ray, const Vector3f &invDir,
+        const int dirIsNeg[3]) const;
 
-	Point3<T> Center() const { return (pMax + pMin)*0.5; }
+    Vector3<T> Offset(const Point3<T> &p) const {
+        Vector3<T> ret = p - pMin;
+        if (pMax.x > pMin.x) ret.x /= pMax.x - pMin.x;
+        if (pMax.y > pMin.y) ret.y /= pMax.y - pMin.y;
+        if (pMax.z > pMin.z) ret.z /= pMax.z - pMin.z;
+        return ret;
+    }
+
+	Point3<T> Centroid() const { return (pMax + pMin)*0.5; }
 	Vector3<T> Diagonal() const { return pMax - pMin; }
+
+    int MaximumExtent() const {
+        Vector3<T> diag = Diagonal();
+        if (diag.x > diag.y && diag.x > diag.z)
+            return 0;
+        else if (diag.y > diag.z)
+            return 1;
+        else return 2;
+	}
+
+    int MinimumExtent() const {
+        Vector3<T> diag = Diagonal();
+        if (diag.x < diag.y && diag.x < diag.z)
+            return 0;
+        else if (diag.y < diag.z)
+            return 1;
+        else return 2;
+	}
 
 	T Area() const {
 		Vector3<T> det = Diagonal();
@@ -98,6 +130,53 @@ Bounds3<T> Union(const Bounds3<T> &b1, const Bounds3<T> &b2) {
 	ret.pMin = Min(b1.pMin, b2.pMin);
 	ret.pMax = Max(b1.pMax, b2.pMax);
 	return ret;
+}
+
+template<typename T>
+bool Bounds3<T>::IntersectP(const Ray & ray, Float* hitt0, Float* hitt1) const {
+    Float t0 = 0, t1 = ray.tMax;
+    for (int i = 0; i < 3; i++) {
+        Float invDir = 1 / ray.d[i];
+        Float tNear = (pMin[i] - ray.o[i]) * invDir;
+        Float tFar = (pMax[i] - ray.o[i]) * invDir;
+        if (tNear > tFar) std::swap(tNear, tFar);
+
+        t0 = std::max(t0, tNear);
+        t1 = std::min(t1, tFar);
+        if (t0 > t1) return false;
+    }
+    if (hitt0) *hitt0 = t0;
+    if (hitt1) *hitt1 = t1;
+    return true;
+}
+
+template <typename T>
+inline bool Bounds3<T>::IntersectP(const Ray &ray, const Vector3f &invDir,
+    const int dirIsNeg[3]) const {
+    const Bounds3f &bounds = *this;
+
+    // Check x and y slabs
+    Float tMin = (bounds[dirIsNeg[0]].x - ray.o.x) * invDir.x;
+    Float tMax = (bounds[1 - dirIsNeg[0]].x - ray.o.x) * invDir.x;
+    Float tyMin = (bounds[dirIsNeg[1]].y - ray.o.y) * invDir.y;
+    Float tyMax = (bounds[1 - dirIsNeg[1]].y - ray.o.y) * invDir.y;
+
+    // Update tMin and tMax
+    if (tMin > tyMax || tyMin > tMax) return false;
+    tMin = std::max(tMin, tyMin);
+    tMax = std::min(tMax, tyMax);
+
+    // Check z slabs
+    Float tzMin = (bounds[dirIsNeg[2]].z - ray.o.z) * invDir.z;
+    Float tzMax = (bounds[1 - dirIsNeg[2]].z - ray.o.z) * invDir.z;
+
+    // Update tMin and tMax
+    if (tMin > tzMax || tzMin > tMax) return false;
+    tMin = std::max(tMin, tzMin);
+    tMax = std::min(tMax, tzMax);
+
+    //Assert(tMax > 0, "Why!");
+    return (tMin < ray.tMax) && (tMax > 0);
 }
 
 RAINBOW_NAMESPACE_END

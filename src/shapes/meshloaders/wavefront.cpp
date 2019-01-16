@@ -8,7 +8,7 @@ int ParseOBJVertexIndex(const std::string& s) {
 
 int ParseOBJVertex(const std::string& s) {
     std::string ret;
-    int cnt = std::count(s.begin(), s.end(), '\\');
+    int cnt = std::count(s.begin(), s.end(), '//');
     if (cnt == 0) {
         // f v1 v2 v3
 

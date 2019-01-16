@@ -158,6 +158,7 @@ void SamplerIntegrator::TestRender(const Scene &scene) {
     std::string name = film->filename, tmpName;
     for (int i = 1; i <= sampleNum / delta; i++) {  
         tmpName = name;
+        timer.Start();
         for (int y = 0; y < film->resolution.y; y++) {
             fprintf(stderr, "\rRendering (%d spp) %5.2f%%", sampleNum, 100.*(y + 1) / film->resolution.y);
             for (int x = 0; x < film->resolution.x; x++) {
@@ -171,6 +172,8 @@ void SamplerIntegrator::TestRender(const Scene &scene) {
             }
             arena.Reset();
         }
+        fflush(stderr);
+        cout << timer.LastTime() << endl;
         tmpName.insert(name.find_last_of('.'), "_" + std::to_string(i*delta) + "spp");
         std::cout << tmpName << std::endl;
         film->SaveImage(tmpName);

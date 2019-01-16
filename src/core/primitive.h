@@ -12,7 +12,7 @@ public:
 		std::shared_ptr<AreaLight> m_areaLight = nullptr) :
 		shape(m_shape), material(m_material), areaLight(m_areaLight) {}
 
-	bool Intersect(const Ray & ray, Float *tHit, SurfaceInteraction*inter) const;
+	bool Intersect(const Ray & ray, SurfaceInteraction*inter) const;
 	bool IntersectP(const Ray & ray) const;
 
 	void ComputeScatteringFunctions(MemoryArena& arena, SurfaceInteraction* intersection) const;
@@ -26,7 +26,7 @@ public:
 
 class Aggregate{
 public:
-	Aggregate() {}
+	Aggregate(std::vector<std::shared_ptr<Primitive>>& m_primitives) : primitives(m_primitives) {}
 	virtual bool Intersect(const Ray & ray, SurfaceInteraction*inter) const;
 	virtual bool IntersectP(const Ray & ray) const;
 

@@ -2,9 +2,10 @@
 
 RAINBOW_NAMESPACE_BEGIN
 
-bool Primitive::Intersect(const Ray & ray, Float *tHit, SurfaceInteraction*inter) const {
-	if (!shape->Intersect(ray, tHit, inter)) return false;
-	ray.tMax = *tHit;
+bool Primitive::Intersect(const Ray & ray, SurfaceInteraction*inter) const {
+    Float tHit;
+	if (!shape->Intersect(ray, &tHit, inter)) return false;
+	ray.tMax = tHit;
 	inter->primitive = this;
 	return true;
 }
@@ -20,9 +21,8 @@ void Primitive::ComputeScatteringFunctions(MemoryArena& arena, SurfaceInteractio
 
 bool Aggregate::Intersect(const Ray & ray, SurfaceInteraction* inter) const {
 	bool hit = false;
-	Float tHit;
 	for (const auto& primitive : primitives) {
-		if (primitive->Intersect(ray, &tHit, inter)) {			
+		if (primitive->Intersect(ray, inter)) {			
 			hit = true;
 		}
 	}

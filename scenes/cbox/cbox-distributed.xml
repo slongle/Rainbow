@@ -1,66 +1,57 @@
-<?xml version='1.0' encoding='utf-8'?>
-
 <scene>
-  <integrator type="whitted">
-    <integer name="maxDepth" value="5"/>
+  <mode type="test"/>
+  <integrator type="path">
+    <integer name="maxDepth" value="50"/>
+    <integer name="sampleNum" value="500"/>
+    <integer name="delta" value="1"/>
   </integrator>
 
-	<camera type="perspective">
-		<float name="fov" value="27.7856"/>
-		<transform name="toWorld">
-			<scale value="-1,1,1"/>
-			<lookat target="0, 0.893051, 4.41198" origin="0, 0.919769, 5.41159" up="0, 1, 0"/>
-		</transform>
+  <sensor type="perspective">
+    <float name="fov" value="27.7856"/>
+    <transform name="toWorld">
+      <scale x="-1" y="1" z="1"/>
 
-		<integer name="height" value="600"/>
-		<integer name="width" value="800"/>
-	</camera>
+      <lookat target="0, 0.893051, 4.41198" origin="0, 0.919769, 5.41159" up="0, 1, 0"/>
+    </transform>
 
-	<sampler type="independent">
-		<integer name="sampleCount" value="512"/>
-	</sampler>
+    <sampler type="independent">
+      <integer name="sampleCount" value="512"/>
+    </sampler>
 
-	<mesh type="obj">
-		<string name="filename" value="meshes/walls.obj"/>
+    <film type="hdrfilm">
+      <string name="filename" value="bvh.png"/>
+      <integer name="height" value="600"/>
+      <integer name="width" value="800"/>
+    </film>
+  </sensor>
 
-		<bsdf type="diffuse">
-			<color name="albedo" value="0.725 0.71 0.68"/>
-		</bsdf>
-	</mesh>
-  
-  <mesh type="obj">
-		<string name="filename" value="meshes/rightwall.obj"/>
+  <shape type="sphere">
+    <transform name="toWorld">
+      <translate x="-0.4219" y="0.3301" z="-0.2796"/>
+    </transform>
+    <float name="radius" value="0.3261"/>
 
-		<bsdf type="diffuse">
-			<color name="albedo" value="0.161 0.133 0.427"/>
-		</bsdf>
-	</mesh>
+    <bsdf type="diffuse"/>
+  </shape>
 
-	<mesh type="obj">
-		<string name="filename" value="meshes/leftwall.obj"/>
+  <shape type="sphere">
+    <transform name="toWorld">
+      <translate x="0.4456" y="0.3301" z="0.3767"/>
+    </transform>
+    <float name="radius" value="0.3261"/>
 
-		<bsdf type="diffuse">
-			<color name="albedo" value="0.630 0.065 0.05"/>
-		</bsdf>
-	</mesh>
+    <bsdf type="diffuse"/>
+  </shape>
 
-	<mesh type="obj">
-		<string name="filename" value="meshes/sphere1.obj"/>
+  <shape type="obj">
+    <string name="filename" value="meshes/light.obj"/>
+    <transform name="toWorld">
+      <scale x="1" y="1" z="1"/>
+    </transform>
 
-		<bsdf type="diffuse"/>
-	</mesh>
+    <emitter type="area">
+      <rgb name="radiance" value="40 40 40"/>
+    </emitter>
 
-	<mesh type="obj">
-		<string name="filename" value="meshes/sphere2.obj"/>
-
-		<bsdf type="diffuse"/>
-	</mesh>
-
-	<mesh type="obj">
-		<string name="filename" value="meshes/light.obj"/>
-
-		<emitter type="area">
-			<color name="radiance" value="40 40 40"/>
-		</emitter>
-	</mesh>
+  </shape>
 </scene>

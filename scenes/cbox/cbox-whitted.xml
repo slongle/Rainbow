@@ -19,7 +19,7 @@
 		</sampler>
 
 		<film type="hdrfilm">
-      <string name="filename" value="glass.png"/>
+      <string name="filename" value="bvh.png"/>
 			<integer name="height" value="600"/>
 			<integer name="width" value="800"/>
 		</film>
@@ -31,7 +31,7 @@
 		</transform>
 		<float name="radius" value="0.3261"/>
 
-		<bsdf type="glass"/>
+		<bsdf type="diffuse"/>
 	</shape>
 
   <shape type="sphere">

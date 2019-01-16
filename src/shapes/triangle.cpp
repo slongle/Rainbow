@@ -97,11 +97,6 @@ bool Triangle::Intersect(const Ray & ray, Float * tHit, SurfaceInteraction* inte
 	Normal3f nHit;
 
     nHit = mesh->Normal[triNumber];
-	//if (mesh->n) nHit = mesh->n[triNumber];
-	//else {
-	//	nHit = static_cast<Normal3f>(Cross(p1 - p0, p2 - p0));
-	//	nHit = -FaceForward(nHit, ray.d);
-	//}
 
     // Compute error bounds for triangle intersection
     Float xAbsSum =

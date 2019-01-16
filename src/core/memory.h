@@ -14,6 +14,15 @@ public:
     MemoryArena(size_t m_blockSize = 1 << 18) :blockSize(m_blockSize) {}
 
     void *Alloc(size_t nBytes);
+    template<typename T>
+    T* Alloc(size_t n = 1, bool runConstructor = true) {
+        T* ret = (T*)Alloc(sizeof(T)*n);
+        if (runConstructor) {
+            for (size_t i = 0; i < n; i++)
+                new (&ret[i]) T();
+        }
+        return ret;
+    }
 
     void Reset();
 

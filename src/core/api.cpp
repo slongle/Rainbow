@@ -8,20 +8,21 @@
 #include "light.h"
 #include "material.h"
 
-#include "../cameras/perspective.h"
+#include "src/cameras/perspective.h"
 
-#include "../shapes/sphere.h"
-#include "../shapes/triangle.h"
+#include "src/shapes/sphere.h"
+#include "src/shapes/triangle.h"
 
-#include "../integrators/direct.h"
-#include "../integrators/whitted.h"
-#include "../integrators/path.h"
+#include "src/integrators/direct.h"
+#include "src/integrators/whitted.h"
+#include "src/integrators/path.h"
 
-#include "../materials/matte.h"
-#include "../materials/mirror.h"
-#include "../materials/glass.h"
+#include "src/materials/matte.h"
+#include "src/materials/mirror.h"
+#include "src/materials/glass.h"
 
-#include "../samplers/independent.h"
+#include "src/samplers/independent.h"
+#include "src/accelerators/bvh.h"
 
 RAINBOW_NAMESPACE_BEGIN
 
@@ -168,8 +169,8 @@ void RainbowTransform(const Transform & ObjectToWorld) {
 }
 
 Aggregate* RenderOptions::MakeAggregate() {
-	Aggregate* aggregate = new Aggregate();
-	aggregate->primitives = primitives;
+    Aggregate* aggregate = new BVHAccelerator(primitives);
+	//Aggregate* aggregate = new Aggregate(primitives);
 	primitives.clear();
 	return aggregate;
 }
