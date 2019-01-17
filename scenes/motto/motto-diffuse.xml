@@ -1,0 +1,58 @@
+<scene>
+    <mode type="test"/>
+   	<integrator type="path">
+		<integer name="maxDepth" value="50"/>
+        <integer name="sampleNum" value="500"/>
+        <integer name="delta" value="10"/>
+	</integrator>
+
+    <camera type="perspective">
+        <!-- Camera-to-world coordinate system transformation -->
+        <transform name="toWorld">
+          <scale x="-1" y="1" z="1"/>
+          <matrix value="-0.8990397887494896, -0.10195732585744223, -0.42583114253101817, 9.67120708926533, -0.014501815214377626, 0.9789123711002534, -0.20376522535105876, 2.701559486129863, 0.437626730902902, -0.17701772061259594, -0.8815597376175706, 12.558229946078217, -0.0, 0.0, -0.0, 1.0"/>
+        </transform>
+
+        <sampler type="independent">
+          <integer name="sampleCount" value="512"/>
+        </sampler>
+
+        <!-- Field of view: 35 degrees -->
+        <float name="fov" value="35"/>
+
+        <!-- 768 x 768 pixels -->        
+        <film type="hdrfilm">
+            <string name="filename" value="motto-diffuse.png"/>			
+            <integer name="height" value="384"/>
+            <integer name="width" value="768"/>			
+		</film>
+    </camera>
+
+    <shape type="obj">
+        <string name="filename" value="meshes/motto_2018.obj"/>
+        <bsdf type="diffuse">            
+            <color name="albedo" value="0.5, 0.5, 0.5"/>
+        </bsdf>
+    </shape>
+
+    <shape type="obj">
+        <string name="filename" value="meshes/floor.obj"/>
+        <bsdf type="diffuse">
+            <color name="albedo" value="0.5, 0.5, 0.5"/>
+        </bsdf>
+    </shape>
+
+    <shape type="obj">
+        <string name="filename" value="meshes/light1.obj"/>
+        <emitter type="area">
+            <color name="radiance" value="20, 80, 30"/>
+        </emitter>
+    </shape>
+
+    <shape type="obj">
+        <string name="filename" value="meshes/light2.obj"/>
+        <emitter type="area">
+            <color name="radiance" value="20, 20, 200"/>
+        </emitter>
+    </shape>
+</scene>

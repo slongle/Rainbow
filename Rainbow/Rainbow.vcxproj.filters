@@ -85,6 +85,9 @@
     <Filter Include="Extend Files\stb_images">
       <UniqueIdentifier>{8a6fb0d2-58b4-4d6a-a7e7-c477dc6c0516}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\scenes\motto">
+      <UniqueIdentifier>{239d3106-4ba5-4ad1-a1a7-062f0ef8e953}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\core\bbox.cpp">
@@ -497,6 +500,15 @@
     </Xml>
     <Xml Include="..\scenes\cbox\cbox-whitted-mirror.xml">
       <Filter>Resource Files\scenes\cbox</Filter>
+    </Xml>
+    <Xml Include="..\scenes\motto\motto-dielectric.xml">
+      <Filter>Resource Files\scenes\motto</Filter>
+    </Xml>
+    <Xml Include="..\scenes\motto\motto-diffuse.xml">
+      <Filter>Resource Files\scenes\motto</Filter>
+    </Xml>
+    <Xml Include="..\scenes\motto\motto-mirror.xml">
+      <Filter>Resource Files\scenes\motto</Filter>
     </Xml>
   </ItemGroup>
   <ItemGroup>
