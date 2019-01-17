@@ -32,6 +32,8 @@ public:
     LinearBVHNode* nodes = nullptr;
 };
 
+BVHAccelerator* CreateBVHAccelerator(std::vector<std::shared_ptr<Primitive>>& primitives);
+
 RAINBOW_NAMESPACE_END
 
 #endif // __BVHACCELERATOR_H

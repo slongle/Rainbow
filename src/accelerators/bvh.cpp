@@ -325,4 +325,9 @@ bool BVHAccelerator::IntersectP(const Ray & ray) const {
     return false;
 }
 
+BVHAccelerator* CreateBVHAccelerator(std::vector<std::shared_ptr<Primitive>>& primitives) {
+    BVHAccelerator::SplitMethod splitMethod = BVHAccelerator::SplitMethod::SAH;
+    return new BVHAccelerator(primitives, splitMethod);
+}
+
 RAINBOW_NAMESPACE_END

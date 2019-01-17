@@ -22,6 +22,7 @@
 #include "src/materials/glass.h"
 
 #include "src/samplers/independent.h"
+
 #include "src/accelerators/bvh.h"
 
 RAINBOW_NAMESPACE_BEGIN
@@ -169,8 +170,9 @@ void RainbowTransform(const Transform & ObjectToWorld) {
 }
 
 Aggregate* RenderOptions::MakeAggregate() {
-    Aggregate* aggregate = new BVHAccelerator(primitives);
+    //Aggregate* aggregate = new BVHAccelerator(primitives);
 	//Aggregate* aggregate = new Aggregate(primitives);
+    Aggregate* aggregate = CreateBVHAccelerator(primitives);
 	primitives.clear();
 	return aggregate;
 }
