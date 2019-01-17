@@ -445,6 +445,7 @@ public:
 		return Normal3<T>(x*inv, y*inv, z*inv);
 	}
 
+    Float SquareLength() const { return x * x + y * y + z * z; }
 	Float Length() const { return std::sqrt(x * x + y * y + z * z); }
 
 	std::string toString(const int &spaceNum = 0) const {

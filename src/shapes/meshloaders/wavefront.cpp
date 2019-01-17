@@ -27,6 +27,26 @@ int ParseOBJVertex(const std::string& s) {
 void ParseWavefrontOBJ(const std::string& name, int* VertexNum, int* TriangleNum,
     std::vector<Point3f>* Position, std::vector<int>* Indices, std::vector<Normal3f>* Normal) {
 
+    auto DealFace = [&](std::string& v1, std::string& v2, std::string& v3) {
+        (*TriangleNum)++;
+        int id1 = ParseOBJVertex(v1) - 1;
+        int id2 = ParseOBJVertex(v2) - 1;
+        int id3 = ParseOBJVertex(v3) - 1;
+        Indices->push_back(id1);
+        Indices->push_back(id2);
+        Indices->push_back(id3);
+
+        // Vertices are stored in a counter-clockwise order by default in Wavefront .obj file
+        // making explicit declaration of face normals unnecessary.
+        Point3f a = (*Position)[id1];
+        Point3f b = (*Position)[id2];
+        Point3f c = (*Position)[id3];
+        Normal3f n(Cross(b - a, c - a));
+        if (n.SquareLength() <= 0) Normal->push_back(n);
+        else Normal->push_back(Normalize(n));
+    };
+
+
     filesystem::path filename = getFileResolver()->resolve(name);
     std::ifstream is(filename.str());
     Assert(is.fail() == false, "Parsing OBJ File " + name + " fail!");
@@ -46,19 +66,12 @@ void ParseWavefrontOBJ(const std::string& name, int* VertexNum, int* TriangleNum
         else if (prefix == "f") {
             std::string v1, v2, v3, v4;
             line >> v1 >> v2 >> v3 >> v4;
-            Assert(v4.empty() == true, "Quad?");
-            (*TriangleNum)++;
-            int id1 = ParseOBJVertex(v1) - 1;
-            int id2 = ParseOBJVertex(v2) - 1;
-            int id3 = ParseOBJVertex(v3) - 1;
-            Indices->push_back(id1);
-            Indices->push_back(id2);
-            Indices->push_back(id3);
-
-            // Vertices are stored in a counter-clockwise order by default in Wavefront .obj file
-            // making explicit declaration of face normals unnecessary.
-            Normal3f n(Cross((*Position)[id2] - (*Position)[id1], (*Position)[id3] - (*Position)[id1]));
-            Normal->push_back(Normalize(n));
+            if (!v4.empty()) {
+                DealFace(v1, v2, v3);
+                DealFace(v4, v1, v2);
+            }
+            else
+                DealFace(v1, v2, v3);                        
         }
     }
 }

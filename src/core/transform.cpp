@@ -62,8 +62,8 @@ Matrix4x4 Inverse(const Matrix4x4 &m1) {
 		}
 		indxr[i] = irow;
 		indxc[i] = icol;		
-		
-		Assert(std::fabs(minv[icol][icol]) > Epsilon, "Singular matrix in MatrixInvert at Position 2");
+
+		Assert(minv[icol][icol] != 0.f, "Singular matrix in MatrixInvert at Position 2");
 
 		// Set $m[icol][icol]$ to one by scaling row _icol_ appropriately
 		Float pivinv = Float(1) / minv[icol][icol];
@@ -96,12 +96,16 @@ Matrix4x4 toMatrix(const std::string & str) {
 	char *endptr;
 #ifdef __FLOAT_TYPE
 	ret[0] = strtof(str.c_str(), &endptr);
-	for (int i = 1; i < 16; i++)
+	for (int i = 1; i < 16; i++) {	    
+        endptr++;
 		ret[i] = strtof(endptr, &endptr);
+	}
 #else
 	ret[0] = strtod(str.c_str(), &endptr);
-	for (int i = 1; i < 16; i++)
+	for (int i = 1; i < 16; i++) {
+        endptr++;
 		ret[i] = strtod(endptr, &endptr);
+	}
 #endif // __FLOAT_TYPE
 	//std::cout << ret << std::endl;
 	return ret;

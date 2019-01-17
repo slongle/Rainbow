@@ -152,6 +152,8 @@ void SamplerIntegrator::Render(const Scene &scene) {
 
 
 void SamplerIntegrator::TestRender(const Scene &scene) {
+    cout << scene.aggregate->primitives.size() << endl;
+
     std::shared_ptr<Film> film = camera->film;
     Ray ray;
     Timer timer;
