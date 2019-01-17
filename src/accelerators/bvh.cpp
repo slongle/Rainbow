@@ -204,7 +204,7 @@ BVHBuildNode * BVHAccelerator::RecursiveBuild(MemoryArena& arena, std::vector<BV
                             if (b == nBuckets) b = nBuckets - 1;
                             return b <= minCostSplitBucket;
                         });
-                        mid = midPtr - &primitiveInfo[begin];
+                        mid = midPtr - &primitiveInfo[0];
                     }
                     else {
                         // Create leaf node
