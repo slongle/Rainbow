@@ -25,7 +25,7 @@ using std::endl;
 	} while(0)
 
 #define Assert(cond, explanation) do { \
-		if (!(cond)) std::cerr<<"Assertion occoured at "<<__FILE__<<" "<<__LINE__<<" ( "<<explanation<<" )", throw std::runtime_error(explanation); \
+		if (!(cond)) std::cerr<<std::endl<<"Assertion occoured at "<<std::endl<<__FUNCTION__<<" "<<__FILE__<<" "<<__LINE__<<" ( "<<explanation<<" )", throw std::runtime_error(explanation); \
 	} while (0)
 
 #endif // NDEBUG
