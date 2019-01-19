@@ -209,24 +209,23 @@ void ParserXMLFile(const std::string & filename) {
 			    	break;
 			    }
 			    case ETranslate: {
-			    	Vector3f delta;
-			    	for (pugi::xml_attribute &attribute : node.attributes()) {
+			    	Vector3f delta = toVector(node.attribute("value").value());
+			    	/*for (pugi::xml_attribute &attribute : node.attributes()) {
 			    		//cout << attribute.name() << ' ' << attribute.value() << endl;
 			    		if (strcmp(attribute.name(), "x") == 0) delta.x = toFloat(attribute.value());
 			    		if (strcmp(attribute.name(), "y") == 0) delta.y = toFloat(attribute.value());
 			    		if (strcmp(attribute.name(), "z") == 0) delta.z = toFloat(attribute.value());
-			    	}
+			    	}*/
 			    	m_transform *= Translate(delta);
 			    	break;
 			    }
 			    case EScale: {
-			    	Vector3f scale;
-                    for (pugi::xml_attribute &attribute : node.attributes()) {
-                        //cout << attribute.name() << ' ' << attribute.value() << endl;
+                    Vector3f scale = toVector(node.attribute("value").value());
+                    /*for (pugi::xml_attribute &attribute : node.attributes()) {                        
                         if (strcmp(attribute.name(), "x") == 0) scale.x = toFloat(attribute.value());
                         if (strcmp(attribute.name(), "y") == 0) scale.y = toFloat(attribute.value());
                         if (strcmp(attribute.name(), "z") == 0) scale.z = toFloat(attribute.value());
-                    }
+                    }*/
 			    	Transform s = Scale(scale);
 			    	m_transform *= Scale(scale);
 			    	break;

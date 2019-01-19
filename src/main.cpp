@@ -15,8 +15,9 @@ int main(int argc, char *argv[]) {
     std::vector<std::string> scenes(100);
     scenes[0] = "Rainbow/scenes/cbox/cbox-whitted.xml";
     scenes[1] = "Rainbow/scenes/motto/motto-diffuse.xml";
+    scenes[2] = "Rainbow/scenes/veach_mi/veach_mis.xml";
 
-    std::string filename(solutionDir + scenes[1]);
+    std::string filename(solutionDir + scenes[2]);
 
 	RainbowInit();	
 	filesystem::path path(filename);

@@ -286,6 +286,7 @@
     <Xml Include="..\scenes\motto\motto-dielectric.xml" />
     <Xml Include="..\scenes\motto\motto-diffuse.xml" />
     <Xml Include="..\scenes\motto\motto-mirror.xml" />
+    <Xml Include="..\scenes\veach_mi\veach_mis.xml" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\ext\imgui\LICENSE.txt" />

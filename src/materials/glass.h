@@ -7,13 +7,13 @@ RAINBOW_NAMESPACE_BEGIN
 
 class GlassMaterial :public Material {
 public:
-    GlassMaterial(const RGBSpectrum& m_R, const Float& m_etaI, const Float& m_etaT)
-        :T(m_R), etaI(m_etaI), etaT(m_etaT) {}
+    GlassMaterial(const RGBSpectrum& m_R, const RGBSpectrum& m_T, const Float& m_etaI, const Float& m_etaT)
+        :R(m_R), T(m_T), etaI(m_etaI), etaT(m_etaT) {}
 
     void ComputeScatteringFunctions(MemoryArena& arena, SurfaceInteraction* intersection);
 
     Float etaI, etaT;
-    RGBSpectrum T;
+    RGBSpectrum T, R;
 };
 
 GlassMaterial* CreateGlassMaterial(PropertyList& list);

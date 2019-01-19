@@ -9,7 +9,7 @@
     <camera type="perspective">
         <!-- Camera-to-world coordinate system transformation -->
         <transform name="toWorld">
-          <scale x="-1" y="1" z="1"/>
+          <scale value="-1, 1, 1"/>
           <matrix value="-0.8990397887494896, -0.10195732585744223, -0.42583114253101817, 9.67120708926533, -0.014501815214377626, 0.9789123711002534, -0.20376522535105876, 2.701559486129863, 0.437626730902902, -0.17701772061259594, -0.8815597376175706, 12.558229946078217, -0.0, 0.0, -0.0, 1.0"/>
         </transform>
 
@@ -25,7 +25,7 @@
             <string name="filename" value="motto-diffuse.png"/>			
             <integer name="height" value="384"/>
             <integer name="width" value="768"/>			
-		</film>
+		    </film>
     </camera>
 
     <shape type="obj">

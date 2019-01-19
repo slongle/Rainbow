@@ -88,6 +88,9 @@
     <Filter Include="Resource Files\scenes\motto">
       <UniqueIdentifier>{239d3106-4ba5-4ad1-a1a7-062f0ef8e953}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\scenes\veach_mi">
+      <UniqueIdentifier>{2820c61c-1fde-47cd-b8a1-af477fd0ce0a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\core\bbox.cpp">
@@ -509,6 +512,9 @@
     </Xml>
     <Xml Include="..\scenes\motto\motto-mirror.xml">
       <Filter>Resource Files\scenes\motto</Filter>
+    </Xml>
+    <Xml Include="..\scenes\veach_mi\veach_mis.xml">
+      <Filter>Resource Files\scenes\veach_mi</Filter>
     </Xml>
   </ItemGroup>
   <ItemGroup>
