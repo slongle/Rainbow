@@ -17,7 +17,7 @@ int main(int argc, char *argv[]) {
     scenes[1] = "Rainbow/scenes/motto/motto-diffuse.xml";
     scenes[2] = "Rainbow/scenes/veach_mi/veach_mis.xml";
 
-    std::string filename(solutionDir + scenes[2]);
+    std::string filename(solutionDir + scenes[0]);
 
 	RainbowInit();	
 	filesystem::path path(filename);

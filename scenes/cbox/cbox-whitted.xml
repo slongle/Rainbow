@@ -2,8 +2,8 @@
     <mode type="test"/>
 	<integrator type="path">
 		<integer name="maxDepth" value="50"/>
-        <integer name="sampleNum" value="600"/>
-        <integer name="delta" value="10"/>
+        <integer name="sampleNum" value="1000"/>
+        <integer name="delta" value="100"/>
 	</integrator>
 
 	<sensor type="perspective">
