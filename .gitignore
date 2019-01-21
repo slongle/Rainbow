@@ -10,9 +10,6 @@
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
-# Past Images
-past/
-
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
