@@ -139,7 +139,7 @@ RGBSpectrum BSDF::SampleF(const Vector3f& woWorld, Vector3f* wiWorld, const Poin
         f = RGBSpectrum(0.);
         for (int i = 0; i < nBxDFs; i++) {
             if (bxdfs[i]->MatchFlags(type) &&
-                (( reflect && (bxdf->type & BxDFType::BSDF_REFLECTION)) || 
+                ((reflect && (bxdf->type & BxDFType::BSDF_REFLECTION)) ||
                 ((!reflect && (bxdf->type & BxDFType::BSDF_TRANSMISSION))))) {
                 f += bxdf->f(woLocal, wiLocal);
             }
@@ -148,7 +148,6 @@ RGBSpectrum BSDF::SampleF(const Vector3f& woWorld, Vector3f* wiWorld, const Poin
 
     return f;
 }
-
 
 RGBSpectrum FresnelDielectric::Evaluate(Float cosThetaI) const {
 	return FrDielectric(cosThetaI, etaI, etaT);

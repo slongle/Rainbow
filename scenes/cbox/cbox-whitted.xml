@@ -2,13 +2,14 @@
     <mode type="test"/>
 	<integrator type="path">
 		<integer name="maxDepth" value="50"/>
-        <integer name="sampleNum" value="1000"/>
+        <integer name="sampleNum" value="5000"/>
         <integer name="delta" value="100"/>
 	</integrator>
 
 	<sensor type="perspective">
-		<transform name="toWorld">			
-			<lookat target="0, 0.893051, 4.41198" origin="0, 0.919769, 5.41159" up="0, 1, 0"/>
+		<transform name="toWorld">
+		  <scale value="-1,1,1"/>
+      <lookat target="0, 0.893051, 4.41198" origin="0, 0.919769, 5.41159" up="0, 1, 0"/>
 		</transform>
 
 	  <sampler type="independent">
@@ -18,20 +19,22 @@
 		<float name="fov" value="27.7856"/>
 
 		<film type="hdrfilm">
-            <string name="filename" value="glass.png"/>
+            <string name="filename" value="diffuse3.png"/>
 			<integer name="height" value="600"/>
 			<integer name="width" value="800"/>
 		</film>
 	</sensor>
 
-	<shape type="sphere">
-		<transform name="toWorld">
-			<translate value="-0.4219, 0.3301, -0.2796"/>
-		</transform>
-		<float name="radius" value="0.3261"/>
 
-		<bsdf type="mirror"/>
-	</shape>
+  <shape type="sphere">
+    <transform name="toWorld">
+      <translate value="-0.4219, 0.3301, -0.2796"/>
+    </transform>
+    <float name="radius" value="0.3261"/>
+
+    <bsdf type="diffuse"/>
+  </shape>
+
 
   <shape type="sphere">
     <transform name="toWorld">
@@ -39,7 +42,7 @@
     </transform>
     <float name="radius" value="0.3261"/>
 
-    <bsdf type="glass"/>
+    <bsdf type="diffuse"/>
   </shape>
 
 	<shape type="obj">
