@@ -29,7 +29,7 @@ RGBSpectrum WhittedIntegrator::Li(MemoryArena& arena, const Ray & ray, const Sce
 	    RGBSpectrum Li = light->SampleLi(intersection, sampler->Get2D(), &wi, &pdf, &vis);
 	    if (Li.IsBlack() || pdf == 0) continue;		
 	    RGBSpectrum f = intersection.bsdf->f(wo, wi);
-	    if (!f.IsBlack() && vis.Test(scene)) {			
+	    if (!f.IsBlack() && !vis.Occluded(scene)) {			
 	    	L += f * Li * AbsDot(wi, n) / pdf;
 	    }
         LightNum++;	    

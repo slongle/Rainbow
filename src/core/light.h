@@ -13,7 +13,7 @@ public:
 	Visibility() {}
 	Visibility(const Interaction& m_p0, const Interaction& m_p1) :p0(m_p0), p1(m_p1) {}
 
-	bool Test(const Scene& scene)const;
+	bool Occluded(const Scene& scene)const;
 
 	Interaction p0, p1;
 };

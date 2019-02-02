@@ -30,7 +30,7 @@ RGBSpectrum SamplerIntegrator::EstimateDirectLight(const SurfaceInteraction & in
         BSDFPdf = inter.bsdf->Pdf(inter.wo, wi);
 
         if (!f.IsBlack()) {
-            if (!visibility.Test(scene))
+            if (visibility.Occluded(scene))
                 Li = RGBSpectrum(0.0);
 
             if (!Li.IsBlack()) {

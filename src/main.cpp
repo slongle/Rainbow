@@ -6,9 +6,6 @@
 using namespace rainbow;
 
 int main(int argc, char *argv[]) {
-    //std::string name("a.png");
-    //name.insert(name.find_last_of('.'), "_" + std::to_string(1));
-    //std::cout << name << std::endl;
     
     //std::string solutionDir("F:/Document/Graphics/code/");
     std::string solutionDir("C:/Users/Administrator/Desktop/");

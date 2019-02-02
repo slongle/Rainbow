@@ -4,8 +4,8 @@
 RAINBOW_NAMESPACE_BEGIN
 
 // Return true only if on intersection
-bool Visibility::Test(const Scene & scene) const {
-	return !scene.IntersectP(p0.SpawnToRay(p1));
+bool Visibility::Occluded(const Scene & scene) const {
+	return scene.IntersectP(p0.SpawnToRay(p1));
 }
 
 RGBSpectrum AreaLight::L(const Interaction& interaction, const Vector3f & w) const {

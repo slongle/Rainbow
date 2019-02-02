@@ -10,8 +10,13 @@ RAINBOW_NAMESPACE_BEGIN
 
 inline Point3f OffsetRayOrigin(const Point3f &p, const Vector3f &pError,
     const Normal3f &n, const Vector3f &w) { 
-    // with bug
-    return p + FaceForward(n, w) * Epsilon;
+    // Bug still alive.
+    // The test pictures is stored at past/failed/errorbug
+    return p + w * Epsilon;                 // glass_2
+    return p + FaceForward(n,w) * Epsilon;  // glass_3
+    return p + Normalize(w) * Epsilon;      // glass_1
+
+
     Float d = Dot(Abs(n), pError);
 #ifdef __DOUBLE_TYPE
     // We have tons of precision; for now bump up the offset a bunch just
@@ -43,10 +48,11 @@ public:
 	}
 
 	Ray SpawnToRay(const Interaction& it) const {
-        Point3f orgin = OffsetRayOrigin(p, pError, n, it.p - p);
-        Point3f target = OffsetRayOrigin(it.p, it.pError, it.n, p - it.p);
+        Vector3f dir = it.p - p;
+        Point3f orgin = OffsetRayOrigin(p, pError, n, dir);
+        Point3f target = OffsetRayOrigin(it.p, it.pError, it.n, -dir);
         Vector3f d = target - orgin;
-		return Ray(orgin, d, 1 - Epsilon);
+		return Ray(orgin, d, 1 - 2 * Epsilon);
 	}
 
 	Point3f p;

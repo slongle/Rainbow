@@ -29,7 +29,7 @@ RGBSpectrum PathIntegrator::Li(MemoryArena& arena, const Ray & r, const Scene & 
         }        
 
         L += beta * UniformSampleOneLight(inter, scene);
-        Vector3f wo = Normalize(-ray.d), wi;
+        Vector3f wo = -ray.d, wi;
         Float BSDFPdf;
         BxDFType BSDFType;
         RGBSpectrum f = inter.bsdf->SampleF(wo, &wi, sampler->Get2D(), &BSDFPdf, BSDF_ALL, &BSDFType);

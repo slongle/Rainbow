@@ -19,7 +19,7 @@
 		<float name="fov" value="27.7856"/>
 
 		<film type="hdrfilm">
-            <string name="filename" value="glass_3.png"/>
+            <string name="filename" value="glass_2.png"/>
 			<integer name="height" value="600"/>
 			<integer name="width" value="800"/>
 		</film>
