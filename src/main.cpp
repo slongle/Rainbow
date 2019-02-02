@@ -10,8 +10,8 @@ int main(int argc, char *argv[]) {
     //name.insert(name.find_last_of('.'), "_" + std::to_string(1));
     //std::cout << name << std::endl;
     
-    std::string solutionDir("F:/Document/Graphics/code/");
-    //std::string solutionDir("C:/Users/Administrator/Desktop/");
+    //std::string solutionDir("F:/Document/Graphics/code/");
+    std::string solutionDir("C:/Users/Administrator/Desktop/");
     std::vector<std::string> scenes(100);
     scenes[0] = "Rainbow/scenes/cbox/cbox-whitted.xml";
     scenes[1] = "Rainbow/scenes/motto/motto-diffuse.xml";
