@@ -50,7 +50,8 @@ void ParserXMLFile(const std::string & filename) {
 		ESampler         , 
 		ERFilter     	 ,
 		ELight      	 ,
-		ERef,
+		ERef             ,
+        EHide            ,     
 
 		EBoolean,
 		EInteger,
@@ -80,6 +81,7 @@ void ParserXMLFile(const std::string & filename) {
 	tags["emitter"]     = ELight;
 	tags["rfilter"]     = ERFilter;
 	tags["ref"]         = ERef;
+    tags["hide"]        = EHide;
 					    
 	tags["bool"]        = EBoolean;
 	tags["integer"]     = EInteger;
