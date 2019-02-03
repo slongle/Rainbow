@@ -169,13 +169,16 @@ Interaction Triangle::Sample(const Point3f &p, const Point2f & sample, Float * p
 	inter.p = q[0] * p0 + q[1] * p1 + (1 - q[0] - q[1]) * p2;
 
 	inter.n = Normalize(Normal3f(Cross(p1 - p0, p2 - p0)));
-	inter.n = FaceForward(inter.n, p - inter.p);
 
-	//if (mesh->n) {
-	//	Normal3f ns(q[0] * mesh->n[index[0]] + q[1] * mesh->n[index[1]] +
+	//if (!mesh->Normal.empty()) {
+	//	Normal3f ns(q[0] * mesh->Normal[index[0]] + q[1] * mesh->Normal[index[1]] +
 	//		(1 - q[0] - q[1]) * mesh->n[index[2]]);
 	//	inter.n = FaceForward(inter.n, ns);
 	//}
+
+    Point3f pAbsSum =
+        Abs(q[0] * p0) + Abs(q[1] * p1) + Abs((1 - q[0] - q[1]) * p2);
+    inter.pError = gamma(6) * Vector3f(pAbsSum.x, pAbsSum.y, pAbsSum.z);
 
 	*pdf = 1 / Area();
 	return inter;

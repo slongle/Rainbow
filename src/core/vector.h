@@ -393,6 +393,11 @@ public:
 };
 
 template<typename T>
+inline Point3<T> Abs(const Point3<T> &p) {
+    return Point3<T>(std::abs(p.x), std::abs(p.y), std::abs(p.z));
+}
+
+template<typename T>
 inline Point3<T> Min(const Point3<T> &p1, const Point3<T> &p2) {
 	return Point3<T>(std::min(p1.x, p2.x),
                      std::min(p1.y, p2.y),

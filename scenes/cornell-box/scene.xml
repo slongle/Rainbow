@@ -11,7 +11,8 @@
 	<sensor type="perspective" >
 		<float name="fov" value="19.5" />
 		<transform name="toWorld" >
-			<matrix value="-1 0 0 0 0 1 0 1 0 0 -1 6.8 0 0 0 1"/>
+      <scale value="-1 1 1"/>
+		  <matrix value="-1 0 0 0 0 1 0 1 0 0 -1 6.8 0 0 0 1"/>
 		</transform>
 		<hide type="sobol" >
 			<integer name="sampleCount" value="64" />
@@ -20,7 +21,7 @@
 	    <integer name="sampleCount" value="512"/>
 	  </sampler>
 		<film type="ldrfilm" >
-      <string name="filename" value="scene.png"/>
+      <string name="filename" value="scene_7.png"/>
 			<integer name="width" value="1024" />
 			<integer name="height" value="1024" />
 			<string name="fileFormat" value="png" />

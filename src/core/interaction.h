@@ -13,8 +13,8 @@ inline Point3f OffsetRayOrigin(const Point3f &p, const Vector3f &pError,
     // Bug still alive.
     // The test pictures is stored at past/failed/errorbug
     return p + w * Epsilon;                 // glass_2
-    return p + FaceForward(n,w) * Epsilon;  // glass_3
-    return p + Normalize(w) * Epsilon;      // glass_1
+    // return p + FaceForward(n,w) * Epsilon;  // glass_3
+    // return p + Normalize(w) * Epsilon;      // glass_1
 
 
     Float d = Dot(Abs(n), pError);
@@ -43,16 +43,15 @@ public:
 	Interaction(const Point3f &m_p, const Vector3f & m_pError, const Normal3f & m_n,const Vector3f& m_wo);
 	
     Ray SpawnToRay(const Vector3f& d) const {
-        Point3f o = OffsetRayOrigin(p, pError, n, d);
+        Point3f o = OffsetRayOrigin(p, pError, n, d);        
 		return Ray(o, d);
 	}
 
-	Ray SpawnToRay(const Interaction& it) const {
-        Vector3f dir = it.p - p;
-        Point3f orgin = OffsetRayOrigin(p, pError, n, dir);
-        Point3f target = OffsetRayOrigin(it.p, it.pError, it.n, -dir);
-        Vector3f d = target - orgin;
-		return Ray(orgin, d, 1 - 2 * Epsilon);
+	Ray SpawnToRay(const Interaction& it) const {        
+        Point3f origin = OffsetRayOrigin(p, pError, n, it.p - p);
+        Point3f target = OffsetRayOrigin(it.p, it.pError, it.n, origin - it.p);
+        Vector3f d = target - origin;
+		return Ray(origin, d, 1 - Epsilon);
 	}
 
 	Point3f p;
