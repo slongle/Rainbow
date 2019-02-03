@@ -36,7 +36,10 @@ private:
 	const int triNumber = 0;
 };
 
-std::vector<std::shared_ptr<Shape>> CreateWavefrontOBJ(const Transform* o2w, const Transform* w2o, PropertyList &list);
+std::vector<std::shared_ptr<Triangle>> CreateWavefrontOBJ(const Transform* o2w, const Transform* w2o, PropertyList &list);
+std::vector<std::shared_ptr<Triangle>> CreateRectangle(const Transform* o2w, const Transform* w2o, PropertyList &list);
+std::vector<std::shared_ptr<Triangle>> CreateCube(const Transform* o2w, const Transform* w2o, PropertyList &list);
+
 
 RAINBOW_NAMESPACE_END
 

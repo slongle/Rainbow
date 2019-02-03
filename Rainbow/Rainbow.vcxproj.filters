@@ -91,6 +91,9 @@
     <Filter Include="Resource Files\scenes\veach_mi">
       <UniqueIdentifier>{2820c61c-1fde-47cd-b8a1-af477fd0ce0a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\scenes\cornell-box">
+      <UniqueIdentifier>{86c3fee0-633c-4332-89c3-022aaa784637}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\core\bbox.cpp">
@@ -515,6 +518,9 @@
     </Xml>
     <Xml Include="..\scenes\veach_mi\veach_mis.xml">
       <Filter>Resource Files\scenes\veach_mi</Filter>
+    </Xml>
+    <Xml Include="..\scenes\cornell-box\scene.xml">
+      <Filter>Resource Files\scenes\cornell-box</Filter>
     </Xml>
   </ItemGroup>
   <ItemGroup>

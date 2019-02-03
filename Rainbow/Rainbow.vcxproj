@@ -283,6 +283,7 @@
     <Xml Include="..\scenes\cbox\cbox-whitted.xml">
       <SubType>Designer</SubType>
     </Xml>
+    <Xml Include="..\scenes\cornell-box\scene.xml" />
     <Xml Include="..\scenes\motto\motto-dielectric.xml" />
     <Xml Include="..\scenes\motto\motto-diffuse.xml" />
     <Xml Include="..\scenes\motto\motto-mirror.xml" />

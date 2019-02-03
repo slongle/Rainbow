@@ -62,9 +62,10 @@ struct RenderOptions {
 	PropertyList FilmProperty;
 	std::string LightType;
 	PropertyList LightProperty;
-	std::shared_ptr<Material> CurrentMaterial;
 	std::vector<std::shared_ptr<Primitive>> primitives;
 	std::vector<std::shared_ptr<Light>> lights;
+	std::shared_ptr<Material> CurrentMaterial;
+    std::map<std::string, std::shared_ptr<Material>> MaterialMap;
 };
 
 static std::shared_ptr<RenderOptions> renderOptions;
@@ -161,6 +162,15 @@ void RainbowLight(const std::string & type, PropertyList & list) {
 	renderOptions->LightProperty = list;
 }
 
+void RainbowBSDFMap(const std::string& type, PropertyList& list) {
+    renderOptions->MaterialMap[list.getString("id")] = renderOptions->CurrentMaterial;
+    renderOptions->CurrentMaterial = NULL;
+}
+
+void RainbowRef(const std::string& type, PropertyList& list) {
+    renderOptions->CurrentMaterial = renderOptions->MaterialMap[list.getString("id")];
+}
+
 void InitialTransform() {
 	renderOptions->CurrentTransform = Transform();
 }
@@ -189,7 +199,7 @@ Scene* RenderOptions::MakeScene() {
 
 Film* RenderOptions::MakeFilm() {
 	Film* film = nullptr;
-	if (FilmType == "hdrfilm") {
+    if (FilmType == "hdrfilm" || FilmType == "ldrfilm") {
 		film = CreateFilm(FilmProperty);
 	}
 	return film;
@@ -246,11 +256,20 @@ std::vector<std::shared_ptr<Shape>> MakeShapes(const std::string & type,
 	const Transform* o2w, const Transform* w2o, PropertyList & list) {
 	std::vector<std::shared_ptr<Shape>> shapes;
 	if (type == "obj") {
-		shapes = CreateWavefrontOBJ(o2w, w2o, list);
+        std::vector<std::shared_ptr<Triangle>> tris(CreateWavefrontOBJ(o2w, w2o, list));
+        shapes.insert(shapes.end(), tris.begin(), tris.end());
 	}
 	else if (type == "sphere") {
 		shapes.push_back(CreateSphere(o2w, w2o, list));
 	}
+    else if (type =="rectangle") {
+        std::vector<std::shared_ptr<Triangle>> tris(CreateRectangle(o2w, w2o, list));
+        shapes.insert(shapes.end(), tris.begin(), tris.end());
+    }
+    else if (type =="cube") {
+        std::vector<std::shared_ptr<Triangle>> tris(CreateCube(o2w, w2o, list));
+        shapes.insert(shapes.end(), tris.begin(), tris.end());
+    }
 	return shapes;
 }
 

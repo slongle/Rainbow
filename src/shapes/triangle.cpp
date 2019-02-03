@@ -188,7 +188,9 @@ Float Triangle::Area() const {
  	return static_cast<Float>(0.5) * Cross(p1-p0,p2-p0).Length();
 }
 
-std::vector<std::shared_ptr<Shape>> CreateWavefrontOBJ(const Transform* o2w, const Transform* w2o, 
+std::vector<std::shared_ptr<Triangle>> CreateWavefrontOBJ(
+    const Transform* o2w, 
+    const Transform* w2o, 
 	PropertyList & list) {
 	
 	std::string name = list.getString("filename");
@@ -200,13 +202,95 @@ std::vector<std::shared_ptr<Shape>> CreateWavefrontOBJ(const Transform* o2w, con
 
     std::shared_ptr<TriangleMesh> mesh =
         std::make_shared<TriangleMesh>(o2w, VertexNum, TriangleNum, Position, Indices, Normal);
-	std::vector<std::shared_ptr<Shape>> tris;
-	tris.reserve(TriangleNum);
+	std::vector<std::shared_ptr<Triangle>> tris;
+	tris.resize(TriangleNum);
 	for (int i = 0; i < mesh->TriangleNum; i++) {
-		tris.push_back(std::make_shared<Triangle>(mesh, i));
+        tris[i] = std::make_shared<Triangle>(mesh, i);
 	}
 
 	return tris;
+}
+
+std::vector<std::shared_ptr<Triangle>> CreateRectangle(
+    const Transform* o2w, 
+    const Transform* w2o, 
+    PropertyList &list) {
+
+    const int VertexNum = 4;
+    const int TriangleNum = 2;
+    std::vector<Point3f> Position(VertexNum);
+    std::vector<int> Indices(3 * TriangleNum);
+    std::vector<Normal3f> Normal(TriangleNum);
+
+    Position[0] = Point3f(-1, -1, 0);
+    Position[1] = Point3f(1, -1, 0);
+    Position[2] = Point3f(1, 1, 0);
+    Position[3] = Point3f(-1, 1, 0);
+
+    Indices[0] = 0;
+    Indices[1] = 1;
+    Indices[2] = 2;
+    Indices[3] = 2;
+    Indices[4] = 3;
+    Indices[5] = 0;
+
+    Normal[0] = Normal[1] = Normal3f(0, 0, 1);
+
+    std::shared_ptr<TriangleMesh> mesh =
+        std::make_shared<TriangleMesh>(o2w, VertexNum, TriangleNum, Position, Indices, Normal);
+
+    std::vector<std::shared_ptr<Triangle>> tris;
+    tris.resize(TriangleNum);
+    for (int i = 0; i < mesh->TriangleNum; i++) {
+        tris[i] = std::make_shared<Triangle>(mesh, i);
+    }
+
+    return tris;
+}
+
+static Float CubeData_vertexPositions[][3] = { { 1, -1, -1 },{ 1, -1, 1 },{ -1, -1, 1 },{ -1, -1, -1 },{ 1, 1, -1 },{ -1, 1, -1 },{ -1, 1, 1 },{ 1, 1, 1 },{ 1, -1, -1 },{ 1, 1, -1 },{ 1, 1, 1 },{ 1, -1, 1 },{ 1, -1, 1 },{ 1, 1, 1 },{ -1, 1, 1 },{ -1, -1, 1 },{ -1, -1, 1 },{ -1, 1, 1 },{ -1, 1, -1 },{ -1, -1, -1 },{ 1, 1, -1 },{ 1, -1, -1 },{ -1, -1, -1 },{ -1, 1, -1 } };
+//static Float CubeData_vertexNormals[][3] = { { 0, -1, 0 },{ 0, -1, 0 },{ 0, -1, 0 },{ 0, -1, 0 },{ 0, 1, 0 },{ 0, 1, 0 },{ 0, 1, 0 },{ 0, 1, 0 },{ 1, 0, 0 },{ 1, 0, 0 },{ 1, 0, 0 },{ 1, 0, 0 },{ 0, 0, 1 },{ 0, 0, 1 },{ 0, 0, 1 },{ 0, 0, 1 },{ -1, 0, 0 },{ -1, 0, 0 },{ -1, 0, 0 },{ -1, 0, 0 },{ 0, 0, -1 },{ 0, 0, -1 },{ 0, 0, -1 },{ 0, 0, -1 } };
+static uint32_t CubeData_triangles[][3] = { { 0, 1, 2 },{ 3, 0, 2 },{ 4, 5, 6 },{ 7, 4, 6 },{ 8, 9, 10 },{ 11, 8, 10 },{ 12, 13, 14 },{ 15, 12, 14 },{ 16, 17, 18 },{ 19, 16, 18 },{ 20, 21, 22 },{ 23, 20, 22 } };
+
+std::vector<std::shared_ptr<Triangle>> CreateCube(
+    const Transform* o2w, 
+    const Transform* w2o, 
+    PropertyList &list) {
+
+    const int VertexNum = 24;
+    const int TriangleNum = 12;
+    std::vector<Point3f> Position(VertexNum);
+    std::vector<int> Indices(3 * TriangleNum);
+    std::vector<Normal3f> Normal(TriangleNum);
+
+    for (int i = 0; i < VertexNum; i++)
+        Position[i] = Point3f(CubeData_vertexPositions[i][0], 
+            CubeData_vertexPositions[i][1], 
+            CubeData_vertexPositions[i][2]);
+    for (int i = 0; i < TriangleNum; i++) {
+        int id1 = CubeData_triangles[i][0];
+        int id2 = CubeData_triangles[i][1];
+        int id3 = CubeData_triangles[i][2];
+        Indices[i * 3 + 0] = id1;
+        Indices[i * 3 + 1] = id2;
+        Indices[i * 3 + 2] = id3;
+        Normal3f n(Cross(Position[id2] - Position[id1], Position[id3] - Position[id1]));
+        //cout << n << endl;
+        Assert(n.SquareLength() != 0, "Length of Normal is Zero!");
+        Normal[i] = Normalize(n);
+    }
+
+    std::shared_ptr<TriangleMesh> mesh =
+        std::make_shared<TriangleMesh>(o2w, VertexNum, TriangleNum, Position, Indices, Normal);
+
+    std::vector<std::shared_ptr<Triangle>> tris;
+    tris.resize(TriangleNum);
+    for (int i = 0; i < mesh->TriangleNum; i++) {
+        tris[i] = std::make_shared<Triangle>(mesh, i);
+    }
+
+    return tris;
+
 }
 
 RAINBOW_NAMESPACE_END

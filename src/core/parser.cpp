@@ -44,6 +44,7 @@ void ParserXMLFile(const std::string & filename) {
 		EScene      	 ,
 		ECamera     	 ,
 		EBSDF            ,
+        EBSDFMap         ,
 		EFilm         	 ,
 		EIntegrator      ,    
 		EShape           ,   
@@ -98,8 +99,7 @@ void ParserXMLFile(const std::string & filename) {
 	tags["translate"]  = ETranslate;
 	tags["scale"]      = EScale;
 	tags["rotate"]     = ERotate;
-	tags["matrix"]     = EMatrix;
-
+	tags["matrix"]     = EMatrix;    
 
 	Transform m_transform;	
 
@@ -112,7 +112,6 @@ void ParserXMLFile(const std::string & filename) {
 		if (tags.find(node.name()) == tags.end())
 			return;
 
-
 		ETag tag = tags[node.name()];
 		if (tag == EScene) {
 			node.append_attribute("type");
@@ -124,6 +123,15 @@ void ParserXMLFile(const std::string & filename) {
 		else if (tag == EShape) {
 			InitialTransform();
 		}
+        else if (tag==EBSDF) {
+            if (node.attribute("id") != NULL) {
+                tag = EBSDFMap;                
+            }
+        }
+        else if (tag==ERef) {
+            node.append_attribute("type");
+            node.attribute("type").set_value("ref");
+        }
 
 		PropertyList m_list;
 		for (pugi::xml_node &child : node.children()) {
@@ -165,6 +173,14 @@ void ParserXMLFile(const std::string & filename) {
 				case ELight:
 					RainbowLight(name, m_list);
 					break;
+                case EBSDFMap:
+                    m_list.setString("id", node.attribute("id").value());
+                    RainbowBSDFMap(name, m_list);
+                    break;
+                case ERef:
+                    m_list.setString("id", node.attribute("id").value());
+                    RainbowRef(name, m_list);
+                    break;
 			}			
 		}
 		else {
