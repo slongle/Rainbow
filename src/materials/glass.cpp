@@ -10,8 +10,12 @@ void GlassMaterial::ComputeScatteringFunctions(MemoryArena& arena, SurfaceIntera
 }
 
 GlassMaterial* CreateGlassMaterial(PropertyList& list) {
-    Float etaI = list.getFloat("etaI", Float(1));
-    Float etaT = list.getFloat("etaT", Float(1.5));
+    Float etaI;
+    if (list.findFloat("etaI")) etaI = list.getFloat("etaI", Float(1));
+    else etaI = list.getFloat("extIOR", Float(1));
+    Float etaT;
+    if (list.findFloat("etaT")) etaT = list.getFloat("etaT", Float(1.5));
+    else etaT = list.getFloat("intIOR", Float(1.5));
     RGBSpectrum R = list.getColor("reflectance", RGBSpectrum(1));
     RGBSpectrum T = list.getColor("transmission", RGBSpectrum(1));
     return new GlassMaterial(R, T, etaI, etaT);

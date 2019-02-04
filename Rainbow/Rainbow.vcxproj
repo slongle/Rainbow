@@ -167,6 +167,7 @@
     <ClCompile Include="..\src\core\interaction.cpp" />
     <ClCompile Include="..\src\core\material.cpp" />
     <ClCompile Include="..\src\core\memory.cpp" />
+    <ClCompile Include="..\src\core\microfacet.cpp" />
     <ClCompile Include="..\src\core\object.cpp" />
     <ClCompile Include="..\src\core\parser.cpp" />
     <ClCompile Include="..\src\core\primitive.cpp" />
@@ -189,8 +190,8 @@
     <ClCompile Include="..\src\materials\matte.cpp" />
     <ClCompile Include="..\src\materials\glass.cpp" />
     <ClCompile Include="..\src\materials\mirror.cpp" />
+    <ClCompile Include="..\src\materials\roughconductor.cpp" />
     <ClCompile Include="..\src\samplers\independent.cpp" />
-    <ClCompile Include="..\src\shapes\cube.cpp" />
     <ClCompile Include="..\src\shapes\meshloaders\wavefront.cpp" />
     <ClCompile Include="..\src\shapes\sphere.cpp" />
     <ClCompile Include="..\src\shapes\triangle.cpp" />
@@ -233,6 +234,7 @@
     <ClInclude Include="..\src\core\interaction.h" />
     <ClInclude Include="..\src\core\material.h" />
     <ClInclude Include="..\src\core\memory.h" />
+    <ClInclude Include="..\src\core\microfacet.h" />
     <ClInclude Include="..\src\core\object.h" />
     <ClInclude Include="..\src\core\parser.h" />
     <ClInclude Include="..\src\core\primitive.h" />
@@ -255,8 +257,8 @@
     <ClInclude Include="..\src\materials\matte.h" />
     <ClInclude Include="..\src\materials\glass.h" />
     <ClInclude Include="..\src\materials\mirror.h" />
+    <ClInclude Include="..\src\materials\roughconductor.h" />
     <ClInclude Include="..\src\samplers\independent.h" />
-    <ClInclude Include="..\src\shapes\cube.h" />
     <ClInclude Include="..\src\shapes\meshloaders\wavefront.h" />
     <ClInclude Include="..\src\shapes\sphere.h" />
     <ClInclude Include="..\src\shapes\triangle.h" />
@@ -287,7 +289,8 @@
     <Xml Include="..\scenes\motto\motto-dielectric.xml" />
     <Xml Include="..\scenes\motto\motto-diffuse.xml" />
     <Xml Include="..\scenes\motto\motto-mirror.xml" />
-    <Xml Include="..\scenes\veach_mi\veach_mis.xml" />
+    <Xml Include="..\scenes\veach-bidir\scene.xml" />
+    <Xml Include="..\scenes\veach-mis\scene.xml" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\ext\imgui\LICENSE.txt" />

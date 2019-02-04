@@ -88,11 +88,14 @@
     <Filter Include="Resource Files\scenes\motto">
       <UniqueIdentifier>{239d3106-4ba5-4ad1-a1a7-062f0ef8e953}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files\scenes\veach_mi">
-      <UniqueIdentifier>{2820c61c-1fde-47cd-b8a1-af477fd0ce0a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Resource Files\scenes\cornell-box">
       <UniqueIdentifier>{86c3fee0-633c-4332-89c3-022aaa784637}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\scenes\veach-mis">
+      <UniqueIdentifier>{401f5ceb-4b84-43a8-a4a3-38a5587f249b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\scenes\veach-bidir">
+      <UniqueIdentifier>{3acef949-f8c4-4f7c-81b3-57282a40e858}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -183,9 +186,6 @@
     <ClCompile Include="..\src\cameras\perspective.cpp">
       <Filter>Source Files\cameras</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\shapes\cube.cpp">
-      <Filter>Source Files\shapes</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\integrators\whitted.cpp">
       <Filter>Source Files\integrators</Filter>
     </ClCompile>
@@ -256,6 +256,12 @@
       <Filter>Source Files\core</Filter>
     </ClCompile>
     <ClCompile Include="..\src\materials\glass.cpp">
+      <Filter>Source Files\materials</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\core\microfacet.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\materials\roughconductor.cpp">
       <Filter>Source Files\materials</Filter>
     </ClCompile>
   </ItemGroup>
@@ -349,9 +355,6 @@
     </ClInclude>
     <ClInclude Include="..\src\cameras\perspective.h">
       <Filter>Source Files\cameras</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\shapes\cube.h">
-      <Filter>Source Files\shapes</Filter>
     </ClInclude>
     <ClInclude Include="..\src\integrators\whitted.h">
       <Filter>Source Files\integrators</Filter>
@@ -452,6 +455,12 @@
     <ClInclude Include="..\src\materials\glass.h">
       <Filter>Source Files\materials</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\core\microfacet.h">
+      <Filter>Source Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\materials\roughconductor.h">
+      <Filter>Source Files\materials</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\log\20180811.md">
@@ -516,11 +525,14 @@
     <Xml Include="..\scenes\motto\motto-mirror.xml">
       <Filter>Resource Files\scenes\motto</Filter>
     </Xml>
-    <Xml Include="..\scenes\veach_mi\veach_mis.xml">
-      <Filter>Resource Files\scenes\veach_mi</Filter>
-    </Xml>
     <Xml Include="..\scenes\cornell-box\scene.xml">
       <Filter>Resource Files\scenes\cornell-box</Filter>
+    </Xml>
+    <Xml Include="..\scenes\veach-mis\scene.xml">
+      <Filter>Resource Files\scenes\veach-mis</Filter>
+    </Xml>
+    <Xml Include="..\scenes\veach-bidir\scene.xml">
+      <Filter>Resource Files\scenes\veach-bidir</Filter>
     </Xml>
   </ItemGroup>
   <ItemGroup>

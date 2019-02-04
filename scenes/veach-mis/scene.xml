@@ -1,20 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <scene version="0.5.0" >
-	<integrator type="path" >
-		<integer name="maxDepth" value="3" />
-		<boolean name="strictNormals" value="true" />
-	</integrator>
+  <mode type="test"/>
+  <integrator type="path" >
+    <integer name="maxDepth" value="5" />
+    <integer name="sampleNum" value="5000"/>
+    <integer name="delta" value="100"/>
+    <boolean name="strictNormals" value="true" />
+  </integrator>
 	<sensor type="perspective" >
 		<float name="fov" value="35" />
 		<transform name="toWorld" >
-			<matrix value="-4.37113e-008 0 -1 28.2792 0 1 0 3.5 1 0 -4.37113e-008 1.23612e-006 0 0 0 1"/>
+		  <matrix value="-4.37113e-008 0 -1 28.2792 0 1 0 3.5 1 0 -4.37113e-008 1.23612e-006 0 0 0 1"/>
+		  <scale value="-1 1 1"/>
 		</transform>
-		<sampler type="sobol" >
+        <hide type="sobol" >
 			<integer name="sampleCount" value="64" />
-		</sampler>
+		</hide>
+	  <sampler type="independent">
+	    <integer name="sampleCount" value="512"/>
+	  </sampler>
 		<film type="ldrfilm" >
-			<integer name="width" value="1280" />
+		  <string name="filename" value="scene_4.png"/>
+      <integer name="width" value="1280" />
 			<integer name="height" value="720" />
 			<string name="fileFormat" value="png" />
 			<string name="pixelFormat" value="rgb" />
@@ -104,24 +112,30 @@
 		<ref id="Diffuse" />
 	</shape>
 	<shape type="sphere" >
-		<float name="radius" value="1" />
-		<point name="center" x="0" y="6.5" z="-2.8" />
+		<float name="radius" value="1" />		
+	  <transform name="toWorld">
+	    <translate value="0, 6.5, -2.8"/>
+	  </transform>
 		<ref id="Null" />
 		<emitter type="area" >
 			<rgb name="radiance" value="7.59909, 7.59909, 7.59909"/>
 		</emitter>
 	</shape>
 	<shape type="sphere" >
-		<float name="radius" value="0.5" />
-		<point name="center" x="0" y="6.5" z="0" />
+		<float name="radius" value="0.5" />		
+	  <transform name="toWorld">
+	    <translate value="0, 6.5, 0"/>
+	  </transform>
 		<ref id="Null" />
 		<emitter type="area" >
 			<rgb name="radiance" value="30.3964, 30.3964, 30.3964"/>
 		</emitter>
 	</shape>
 	<shape type="sphere" >
-		<float name="radius" value="0.05" />
-		<point name="center" x="0" y="6.5" z="2.7" />
+		<float name="radius" value="0.05" />		
+	  <transform name="toWorld">
+	    <translate value="0, 6.5, 2.7"/>
+	  </transform>
 		<ref id="Null" />
 		<emitter type="area" >
 			<rgb name="radiance" value="3039.64, 3039.64, 3039.64"/>

@@ -282,7 +282,7 @@ std::shared_ptr<Material> MakeMaterial(const std::string & type, PropertyList & 
     else if (type == "mirror") {
         material = CreateMirrorMaterial(list);
     }
-    else if (type == "glass") {
+    else if (type == "glass" || type == "dielectric") {
         material = CreateGlassMaterial(list);
     }
     else if (type == "roughconductor") {
