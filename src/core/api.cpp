@@ -20,6 +20,7 @@
 #include "src/materials/matte.h"
 #include "src/materials/mirror.h"
 #include "src/materials/glass.h"
+#include "src/materials/roughconductor.h"
 
 #include "src/samplers/independent.h"
 
@@ -283,6 +284,9 @@ std::shared_ptr<Material> MakeMaterial(const std::string & type, PropertyList & 
     }
     else if (type == "glass") {
         material = CreateGlassMaterial(list);
+    }
+    else if (type == "roughconductor") {
+        material = CreateRoughConductorMaterial(list);
     }
 	return std::shared_ptr<Material>(material);
 }

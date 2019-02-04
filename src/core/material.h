@@ -4,6 +4,7 @@
 #include "propertylist.h"
 #include "bsdf.h"
 #include "interaction.h"
+#include "microfacet.h"
 
 
 RAINBOW_NAMESPACE_BEGIN

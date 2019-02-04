@@ -15,13 +15,25 @@ RAINBOW_NAMESPACE_BEGIN
 		Assert(property.type == Property::EP##Typename, "Wrong Value's Type"); \
 		return property.value.XMLName##_value; \
 	} \
+    \
 	Type PropertyList::get##Typename(const std::string &name, const Type & defaultValue) { \
 		if (list.find(name) == list.end()) \
 			return defaultValue; \
 		Property &property = list[name]; \
 		Assert(property.type == Property::EP##Typename, "Wrong Value's Type"); \
 		return property.value.XMLName##_value; \
-	}
+	}\
+    \
+    bool PropertyList::find##Typename(const std::string &name) {\
+        if (list.find(name) != list.end()){\
+            Assert(list[name].type == Property::EP##Typename, "Wrong Value's Type"); \
+            return true;\
+        }\
+        else {\
+            return false;\
+        }\
+    }\
+
 
 
 
@@ -54,6 +66,17 @@ ADD_PROPERTYLIST_FUNCTIONS(Transform, Transform, transform)
 		Property &property = list[name]; 
 		Assert(property.type == Property::EPString, "Wrong Value's Type");
 		return property.value.string_value;
-	}*/
+	}
+    
+    bool PropertyList::findString(const std::string &name) {
+        if (list.find(name) != list.end()){
+            Assert(list[name].type == Property::EPString, "Wrong Value's Type");
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+*/
 
 RAINBOW_NAMESPACE_END

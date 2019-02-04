@@ -63,6 +63,7 @@ typedef Bounds2<Float> Bounds2f;
 typedef Bounds2<int>   Bounds2i;
 typedef Bounds3<Float> Bounds3f;
 
+//class MicrofacetDistribution;
 class PropertyList;
 class Shape;
 class Integrator;
@@ -74,6 +75,7 @@ class Light;
 class AreaLight;
 class Sampler;
 class BxDF;
+class MicrofacetDistribution;
 
 static Float MachineEpsilon = (std::numeric_limits<Float>::epsilon() * 0.5);
 

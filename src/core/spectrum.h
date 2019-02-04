@@ -48,6 +48,17 @@ public:
 		return (*this) *= inv;
 	}
 
+    RGBSpectrum operator / (const RGBSpectrum& s) const {
+        RGBSpectrum ret = *this;
+        Assert(s.r != 0, "Divide Zero");
+	    ret.r /= s.r;
+        Assert(s.g != 0, "Divide Zero");
+        ret.g /= s.g;
+        Assert(s.b != 0, "Divide Zero");
+        ret.b /= s.b;
+        return ret;
+	}
+
     Float MaxComponent() const {
         return std::max(std::max(r, g), b);
     }
@@ -61,6 +72,13 @@ public:
 	}
 
 	friend RGBSpectrum operator * (const Float u,const RGBSpectrum s) { return RGBSpectrum(u*s.r, u*s.g, u*s.b); }
+    friend RGBSpectrum Sqrt(const RGBSpectrum& s) {
+        RGBSpectrum ret;
+        ret.r = std::sqrt(s.r);
+        ret.g = std::sqrt(s.g);
+        ret.b = std::sqrt(s.b);
+        return ret;
+    }
 
 	friend std::ostream &operator << (std::ostream &os, const RGBSpectrum &color) {
 		os << color.toString();

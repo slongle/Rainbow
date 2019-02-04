@@ -57,6 +57,15 @@ bool Sphere::IntersectP(const Ray & ray) const {
 	return true;
 }
 
+Interaction Sphere::Sample(const Point3f & p, const Point2f & sample, Float * pdf) const {
+    Point3f sampleP = Point3f(0,0,0) + radius * UniformSampleSphere(sample);
+    Interaction it;
+    it.n = Normalize((*ObjectToWorld)(Normal3f(sampleP)));
+    it.p = (*ObjectToWorld)(sampleP);
+    *pdf = 1 / Area();
+    return it;
+}
+
 Float Sphere::Area() const {
 	return 4 * M_PI * radius *radius;
 }

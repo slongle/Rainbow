@@ -1,4 +1,5 @@
-#include"bsdf.h"
+#include "bsdf.h"
+#include "microfacet.h"
 
 RAINBOW_NAMESPACE_BEGIN
 
@@ -31,6 +32,31 @@ Float FrDielectric(Float cosThetaI, Float etaI, Float etaT) {
 	Float Fr = (Rparl*Rparl + Rperp * Rperp) * 0.5;
 
 	return Fr;
+}
+
+RGBSpectrum FrConductor(Float cosThetaI, const RGBSpectrum &etai,
+    const RGBSpectrum &etat, const RGBSpectrum &k) {
+    cosThetaI = Clamp(cosThetaI, -1, 1);
+    RGBSpectrum eta = etat / etai;
+    RGBSpectrum etak = k / etai;
+
+    Float cosThetaI2 = cosThetaI * cosThetaI;
+    Float sinThetaI2 = 1. - cosThetaI2;
+    RGBSpectrum eta2 = eta * eta;
+    RGBSpectrum etak2 = etak * etak;
+
+    RGBSpectrum t0 = eta2 - etak2 - sinThetaI2;
+    RGBSpectrum a2plusb2 = Sqrt(t0 * t0 + 4 * eta2 * etak2);
+    RGBSpectrum t1 = a2plusb2 + cosThetaI2;
+    RGBSpectrum a = Sqrt(0.5f * (a2plusb2 + t0));
+    RGBSpectrum t2 = (Float)2 * cosThetaI * a;
+    RGBSpectrum Rs = (t1 - t2) / (t1 + t2);
+
+    RGBSpectrum t3 = cosThetaI2 * a2plusb2 + sinThetaI2 * sinThetaI2;
+    RGBSpectrum t4 = t2 * sinThetaI2;
+    RGBSpectrum Rp = Rs * (t3 - t4) / (t3 + t4);
+
+    return 0.5 * (Rp + Rs);
 }
 
 inline bool Refract(const Vector3f & wi, const Normal3f & n, Float eta, Vector3f* wt) {
@@ -153,6 +179,9 @@ RGBSpectrum FresnelDielectric::Evaluate(Float cosThetaI) const {
 	return FrDielectric(cosThetaI, etaI, etaT);
 }
 
+RGBSpectrum FresnelConductor::Evaluate(Float cosThetaI) const {
+    return FrConductor(cosThetaI, etaI, etaT, k);
+}
 
 RGBSpectrum SpecularReflection::f(const Vector3f & wo, const Vector3f & wi) {
 	return RGBSpectrum(0.0);
@@ -193,11 +222,10 @@ RGBSpectrum LambertianReflection::f(const Vector3f & wo, const Vector3f & wi) {
 	return R * INV_PI;
 }
 
-RGBSpectrum LambertianReflection::SampleF(const Vector3f & woWorld, Vector3f * wiWorld, const Point2f & sample, Float * pdf) {	
-    Vector3f wo=woWorld, wi = CosineSampleHemisphere(sample);
-	if (wo.z < 0) wi.z *= -1;
-	*pdf = Frame::SameHemisphere(wo, wi) ? Frame::AbsCosTheta(wi) * INV_PI : 0;
-    *wiWorld = wi;
+RGBSpectrum LambertianReflection::SampleF(const Vector3f & wo, Vector3f * wi, const Point2f & sample, Float * pdf) {	
+    *wi = CosineSampleHemisphere(sample);
+	if (wo.z < 0) (*wi).z *= -1;
+	*pdf = Frame::SameHemisphere(wo, *wi) ? Frame::AbsCosTheta(*wi) * INV_PI : 0;
 	return R * INV_PI;
 }
 
@@ -205,4 +233,33 @@ Float LambertianReflection::Pdf(const Vector3f & wo, const Vector3f & wi) {
     return INV_TWOPI;
 }
 
+RGBSpectrum MicrofacetReflection::f(const Vector3f & wo, const Vector3f & wi) {
+    Float cosThetaI = Frame::AbsCosTheta(wi), cosThetaO = Frame::AbsCosTheta(wo);
+    Vector3f wh = wi + wo;
+    if (cosThetaI == 0 || cosThetaO == 0) return RGBSpectrum(0.);
+    if (wh.x == 0 && wh.y == 0 && wh.z == 0) return RGBSpectrum(0.);
+    wh = Normalize(wh);
+    RGBSpectrum F = fresnel->Evaluate(Dot(wo, wh)) * R;
+    return distribution->D(wh)*distribution->G(wo, wi)*F / (4 * cosThetaI*cosThetaO);
+}
+
+RGBSpectrum MicrofacetReflection::SampleF(const Vector3f & wo, Vector3f * wi, 
+    const Point2f & sample, Float * pdf) {
+    if (wo.z == 0) return 0.;
+    Vector3f wh = distribution->SampleWh(wo, sample);
+    *wi = Reflect(wo, wh);
+    if (!Frame::SameHemisphere(wo, *wi)) return RGBSpectrum(0.);
+
+    *pdf = distribution->Pdf(wo, wh) / (4 * Dot(wo, wh));
+    return f(wo, *wi);
+}
+
+Float MicrofacetReflection::Pdf(const Vector3f & wo, const Vector3f & wi) {
+    Float cosThetaI = Frame::AbsCosTheta(wi), cosThetaO = Frame::AbsCosTheta(wo);
+    if (!Frame::SameHemisphere(wo, wi)) return 0;
+    Vector3f wh = Normalize(wi + wo);
+    return  distribution->Pdf(wo, wh) * (4 * Dot(wo, wh));    
+}
+
 RAINBOW_NAMESPACE_END
+

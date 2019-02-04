@@ -7,10 +7,12 @@
 
 RAINBOW_NAMESPACE_BEGIN
 
-inline Float FrDielectric(Float cosTheta, Float etaI, Float etaT);
-
 inline Vector3f Reflect(const Vector3f& wi, const Normal3f& n) {
-	return 2 * Dot(wi, n) * n - wi;
+    return 2 * Dot(wi, n) * n - wi;
+}
+
+inline Vector3f Reflect(const Vector3f& wi, const Vector3f& n) {
+    return 2 * Dot(wi, n) * n - wi;
 }
 
 inline bool Refract(const Vector3f & wi, const Normal3f & n, Float eta, Vector3f* wt);
@@ -26,7 +28,7 @@ public:
         else {
             Float invLen = Float(1) / std::sqrt(n.y*n.y + n.z*n.z);
             s = Vector3f(0, n.z*invLen, -n.y*invLen);
-        }        
+        }
         t = Cross(s, n);
     }
 
@@ -41,17 +43,70 @@ public:
     inline static Float CosTheta(const Vector3f& v) { return v.z; }
     inline static Float Cos2Theta(const Vector3f& v) { return v.z*v.z; }
     inline static Float AbsCosTheta(const Vector3f& v) { return std::abs(v.z); }
-    inline static Float Sin2Theta(const Vector3f& v) { return std::max(Float(0), 1 - Frame::Cos2Theta(v)); }
     inline static Float SinTheta(const Vector3f& v) { return std::sqrt(Frame::Sin2Theta(v)); }
+    inline static Float Sin2Theta(const Vector3f& v) { return std::max(Float(0), 1 - Frame::Cos2Theta(v)); }
+    inline static Float TanTheta(const Vector3f& v) { return SinTheta(v) / CosTheta(v); }
+    inline static Float Tan2Theta(const Vector3f& v) { return Sin2Theta(v) / Cos2Theta(v); }
+
+    inline static Float CosPhi(const Vector3f &w) {
+        Float sinTheta = SinTheta(w);
+        return (sinTheta == 0) ? 1 : Clamp(w.x / sinTheta, -1, 1);
+    }
+    inline static Float SinPhi(const Vector3f &w) {
+        Float sinTheta = SinTheta(w);
+        return (sinTheta == 0) ? 0 : Clamp(w.y / sinTheta, -1, 1);
+    }
+    inline static Float Cos2Phi(const Vector3f &w) {
+        return CosPhi(w) * CosPhi(w);
+    }
+    inline static Float Sin2Phi(const Vector3f &w) {
+        return SinPhi(w) * SinPhi(w);
+    }
+
+    inline static Vector3f SphericalDirection(Float sinTheta, Float cosTheta, Float phi) {
+        return Vector3f(sinTheta * std::cos(phi), sinTheta * std::sin(phi),
+            cosTheta);
+    }
 
     inline static bool SameHemisphere(const Vector3f &w, const Vector3f &wp) {
         return w.z * wp.z > 0;
     }
 
-
     Normal3f n;
 private:
-    Vector3f s, t;    
+    Vector3f s, t;
+};
+
+inline Float FrDielectric(Float cosTheta, Float etaI, Float etaT);
+inline RGBSpectrum FrConductor(Float cosThetaI, const RGBSpectrum &etai, 
+    const RGBSpectrum &etat, const RGBSpectrum &k);
+
+class Fresnel {
+public:
+    virtual ~Fresnel() = default;
+    virtual RGBSpectrum Evaluate(Float cosThetaI) const = 0;
+};
+
+class FresnelDielectric :public Fresnel {
+public:
+    FresnelDielectric(const Float& m_etaI, const Float& m_etaT) :etaI(m_etaI), etaT(m_etaT) {}
+    RGBSpectrum Evaluate(Float cosThetaI) const;
+
+    Float etaI, etaT;
+};
+
+class FresnelConductor :public Fresnel {
+public:
+    FresnelConductor(const RGBSpectrum& m_etaI, const RGBSpectrum &m_etaT, const RGBSpectrum& m_k)
+        :etaI(m_etaI), etaT(m_etaT), k(m_k) {};
+    RGBSpectrum Evaluate(Float cosThetaI) const;
+
+    RGBSpectrum etaI, etaT, k;
+};
+
+class FresnelNoOp :public Fresnel {
+public:
+    RGBSpectrum Evaluate(Float) const { return RGBSpectrum(1.); }
 };
 
 enum BxDFType {
@@ -92,7 +147,7 @@ class BxDF{
 public:	
     BxDF(const BxDFType& m_type) :type(m_type) {}
 	virtual RGBSpectrum f(const Vector3f& wo, const Vector3f& wi) = 0;
-    virtual RGBSpectrum SampleF(const Vector3f& woWorld, Vector3f* wiWorld, const Point2f &sample, Float *pdf) = 0;
+    virtual RGBSpectrum SampleF(const Vector3f& wo, Vector3f* wi, const Point2f &sample, Float *pdf) = 0;
     virtual Float Pdf(const Vector3f& wo, const Vector3f& wi) = 0;
 
 	bool MatchFlags(const BxDFType& t) const {
@@ -101,24 +156,6 @@ public:
 	}	
 
 	const BxDFType type;
-};
-
-class Fresnel {
-public:
-    virtual ~Fresnel() = default;
-    virtual RGBSpectrum Evaluate(Float cosThetaI) const = 0;
-};
-
-class FresnelDielectric :public Fresnel {
-public:
-	FresnelDielectric(const Float& m_etaI, const Float& m_etaT) :etaI(m_etaI), etaT(m_etaT) {}
-	RGBSpectrum Evaluate(Float cosThetaI) const;
-	Float etaI, etaT;
-};
-
-class FresnelNoOp:public Fresnel {
-public:
-    RGBSpectrum Evaluate(Float) const { return RGBSpectrum(1.); }
 };
 
 class SpecularReflection :public BxDF {
@@ -153,13 +190,33 @@ class LambertianReflection :public BxDF {
 public:
 	LambertianReflection(const RGBSpectrum& m_R) :
 		BxDF(BxDFType(BSDF_REFLECTION | BSDF_DIFFUSE)), R(m_R) {}
-	RGBSpectrum f(const Vector3f& wo, const Vector3f& wi);
-	RGBSpectrum SampleF(const Vector3f& wo, Vector3f* wi, const Point2f &sample, Float *pdf);
-    Float Pdf(const Vector3f& wo, const Vector3f& wi);
+	RGBSpectrum f(const Vector3f& wo, const Vector3f& wi) override;
+	RGBSpectrum SampleF(const Vector3f& wo, Vector3f* wi, const Point2f &sample, Float *pdf) override;
+    Float Pdf(const Vector3f& wo, const Vector3f& wi) override;
 
 	const RGBSpectrum R;
 };
 
+class MicrofacetReflection :public BxDF {
+public:
+    MicrofacetReflection(
+        const RGBSpectrum& m_R, 
+        MicrofacetDistribution* m_dis, 
+        Fresnel* m_fresnel)
+        :
+        BxDF(BxDFType(BSDF_REFLECTION | BSDF_GLOSSY)), 
+        R(m_R),
+        distribution(m_dis), 
+        fresnel(m_fresnel) {}
+
+    RGBSpectrum f(const Vector3f& wo, const Vector3f& wi) override;
+    RGBSpectrum SampleF(const Vector3f& wo, Vector3f* wi, const Point2f &sample, Float *pdf) override;
+    Float Pdf(const Vector3f& wo, const Vector3f& wi) override;
+
+    RGBSpectrum R;
+    MicrofacetDistribution* distribution;
+    Fresnel* fresnel;
+};
 
 RAINBOW_NAMESPACE_END
 
