@@ -6,6 +6,7 @@
 RAINBOW_NAMESPACE_BEGIN
 
 int show(Integrator* integrator, Scene* scene);
+int AdaptiveShow(Integrator* integrator, Scene* scene);
 
 RAINBOW_NAMESPACE_END
 

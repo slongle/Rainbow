@@ -5,7 +5,7 @@
   <integrator type="path" >
 		<integer name="maxDepth" value="7" />
     <integer name="sampleNum" value="5000"/>
-    <integer name="delta" value="100"/>
+    <integer name="delta" value="20"/>
 		<boolean name="strictNormals" value="true" />
 	</integrator>
 	<sensor type="perspective" >
@@ -18,7 +18,7 @@
 			<integer name="sampleCount" value="64" />
 		</sampler>
 		<film type="ldrfilm" >
-		  <string name="filename" value="scene_1.png"/>
+		  <string name="filename" value="pptest_10.png"/>
       <integer name="width" value="1024" />
 			<integer name="height" value="1024" />
 			<string name="fileFormat" value="png" />
@@ -54,6 +54,48 @@
 			<rgb name="reflectance" value="0.32963, 0.257976, 0.150292"/>
 		</bsdf>
 	</bsdf>
+
+  <shape type="rectangle" >
+    <transform name="toWorld" >
+      <matrix value="-0.0101082 0.067068 0.00138972 -2.69082 -0.0610016 -0.0070995 -0.00842772 5.10417 -0.0282857 -0.00865658 0.0176788 -3.77057 0 0 0 1"/>
+    </transform>
+    <ref id="Diffuse" />
+    <emitter type="area" >
+      <rgb name="radiance" value="12048.2, 8605.84, 6196.21"/>
+    </emitter>
+  </shape>
+
+  <shape type="obj" >
+    <string name="filename" value="models/Mesh004.obj" />
+    <transform name="toWorld" >
+      <matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
+    </transform>
+    <boolean name="faceNormals" value="true" />
+    <ref id="Diffuse" />
+  </shape>
+
+  <hide type="obj" >
+    <string name="filename" value="models/Mesh008.obj" />
+    <transform name="toWorld" >
+      <matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
+    </transform>
+    <boolean name="faceNormals" value="true" />
+    <ref id="Diffuse" />
+  </hide>
+
+  <shape type="obj" >
+    <string name="filename" value="models/Mesh010.obj" />
+    <transform name="toWorld" >
+      <matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
+    </transform>
+    <boolean name="faceNormals" value="true" />
+    <ref id="Diffuse" />
+  </shape>
+
+
+  <hide>
+
+  
 	<shape type="obj" >
 		<string name="filename" value="models/Mesh007.obj" />
 		<transform name="toWorld" >
@@ -62,14 +104,7 @@
 		<boolean name="faceNormals" value="true" />
 		<ref id="Lamp" />
 	</shape>
-	<shape type="obj" >
-		<string name="filename" value="models/Mesh004.obj" />
-		<transform name="toWorld" >
-			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
-		</transform>
-		<boolean name="faceNormals" value="true" />
-		<ref id="Diffuse" />
-	</shape>
+	
 	<shape type="rectangle" >
 		<transform name="toWorld" >
 			<matrix value="-1.20536e-008 0.275755 1.20536e-008 -2.48161 0 -6.64767e-009 0.152081 6 0.275754 1.20536e-008 5.2688e-016 2.5894 0 0 0 1"/>
@@ -79,15 +114,7 @@
 			<rgb name="radiance" value="523.258, 523.258, 523.258"/>
 		</emitter>
 	</shape>
-	<shape type="rectangle" >
-		<transform name="toWorld" >
-			<matrix value="-0.0101082 0.067068 0.00138972 -2.69082 -0.0610016 -0.0070995 -0.00842772 5.10417 -0.0282857 -0.00865658 0.0176788 -3.77057 0 0 0 1"/>
-		</transform>
-		<ref id="Diffuse" />
-		<emitter type="area" >
-			<rgb name="radiance" value="12048.2, 8605.84, 6196.21"/>
-		</emitter>
-	</shape>
+	
 	<shape type="obj" >
 		<string name="filename" value="models/Mesh001.obj" />
 		<transform name="toWorld" >
@@ -102,14 +129,7 @@
 		</transform>
 		<ref id="Lamp" />
 	</shape>
-	<shape type="obj" >
-		<string name="filename" value="models/Mesh008.obj" />
-		<transform name="toWorld" >
-			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
-		</transform>
-		<boolean name="faceNormals" value="true" />
-		<ref id="Diffuse" />
-	</shape>
+	
 	<shape type="obj" >
 		<string name="filename" value="models/Mesh002.obj" />
 		<transform name="toWorld" >
@@ -153,12 +173,7 @@
 		<boolean name="faceNormals" value="true" />
 		<ref id="Wood" />
 	</shape>
-	<shape type="obj" >
-		<string name="filename" value="models/Mesh010.obj" />
-		<transform name="toWorld" >
-			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
-		</transform>
-		<boolean name="faceNormals" value="true" />
-		<ref id="Diffuse" />
-	</shape>
+
+
+  </hide>
 </scene>

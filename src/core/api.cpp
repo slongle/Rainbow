@@ -92,13 +92,17 @@ void RainbowWorld() {
     Assert(scene && integrator, "No Scene or Integrator!");
 
     if (renderOptions->RenderMode == "progressive") {
-        show(integrator, scene);        
+        //show(integrator, scene);        
+        AdaptiveShow(integrator, scene);
     }
     else if (renderOptions->RenderMode == "final") {
         integrator->Render(*scene);        
     }
     else if (renderOptions->RenderMode == "test") {
         integrator->TestRender(*scene);
+    }
+    else if (renderOptions->RenderMode == "adaptive") {
+        integrator->AdaptiveRender(*scene);
     }
 
 }

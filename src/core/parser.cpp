@@ -113,7 +113,10 @@ void ParserXMLFile(const std::string & filename) {
 			return;
 
 		ETag tag = tags[node.name()];
-		if (tag == EScene) {
+        if (tag == EHide) {
+            return;            
+        }
+		else if (tag == EScene) {
 			node.append_attribute("type");
 			node.attribute("type").set_value("scene");
 		}

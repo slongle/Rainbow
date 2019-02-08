@@ -13,6 +13,11 @@ public:
 	Integrator() {}
 	virtual void Render(const Scene &scene) = 0;
 
+    virtual void AdaptiveProgressiveRender(const Scene &scene, const int& x, const int & y)
+    {
+        Assert(false, "Progressive Render No Implement!");
+    }
+
     virtual void ProgressiveRender(const Scene &scene, const int& x, const int & y, bool reset = false)
     {
         Assert(false, "Progressive Render No Implement!");
@@ -20,6 +25,9 @@ public:
 
     virtual void TestRender(const Scene &scene) {
         Assert(false, "Test Render No Implement!");
+    }
+    virtual void AdaptiveRender(const Scene &scene) {
+        Assert(false, "Adaptive Render No Implement!");
     }
 
 	std::shared_ptr<Camera> camera;
@@ -38,8 +46,10 @@ public:
     RGBSpectrum SpecularRefract(MemoryArena& arena, const Ray&ray, const Scene& scene, int depth, SurfaceInteraction intersection);
 
 	void Render (const Scene &scene);
+    void AdaptiveProgressiveRender(const Scene &scene, const int& x, const int & y);
     void ProgressiveRender(const Scene &scene, const int& x, const int & y, bool reset = false);
     void TestRender(const Scene &scene);
+    void AdaptiveRender(const Scene &scene);
     virtual RGBSpectrum Li(MemoryArena& arena, const Ray &ray, const Scene& scene, int depth) = 0;
 
     int sampleNum, delta;

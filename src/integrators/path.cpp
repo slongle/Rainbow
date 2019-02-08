@@ -23,12 +23,10 @@ RGBSpectrum PathIntegrator::Li(MemoryArena& arena, const Ray & r, const Scene & 
         inter.ComputeScatteringFunctions(arena);
         if (!inter.bsdf) {
             break;
-            //ray = inter.SpawnToRay(ray.d);
-            //bounce--;
-            //continue;
         }        
 
         L += beta * UniformSampleOneLight(inter, scene);
+
         Vector3f wo = -ray.d, wi;
         Float BSDFPdf;
         BxDFType BSDFType;
@@ -52,7 +50,7 @@ RGBSpectrum PathIntegrator::Li(MemoryArena& arena, const Ray & r, const Scene & 
 
 
 PathIntegrator * CreatePathIntegrator(PropertyList & list) {
-    int maxDepth = list.getInteger("maxDepth", 10);
+    int maxDepth = list.getInteger("maxDepth", 5);
     int sampleNum = list.getInteger("sampleNum", 10);
     int delta = list.getInteger("delta", 1);
     return new PathIntegrator(maxDepth, sampleNum, delta); 

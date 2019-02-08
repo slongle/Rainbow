@@ -29,6 +29,14 @@ public:
 		else return b;
 	}
 
+    bool operator <= (const RGBSpectrum& s) const {
+        return r <= s.r && g <= s.g && b <= s.b;
+	}
+
+    bool operator >= (const RGBSpectrum& s) const {
+        return r >= s.r && g >= s.g && b >= s.b;
+    }
+
 	RGBSpectrum operator + (const RGBSpectrum& s) const { return RGBSpectrum(r + s.r, g + s.g, b + s.b); }
 	RGBSpectrum &operator += (const RGBSpectrum& s) { r += s.r; g += s.g; b += s.b; return *this; }
 	RGBSpectrum operator - (const RGBSpectrum& s) const { return RGBSpectrum(r - s.r, g - s.g, b - s.b); }
@@ -77,6 +85,14 @@ public:
         ret.r = std::sqrt(s.r);
         ret.g = std::sqrt(s.g);
         ret.b = std::sqrt(s.b);
+        return ret;
+    }
+
+    friend RGBSpectrum Sqr(const RGBSpectrum& s) {
+        RGBSpectrum ret;
+        ret.r = s.r * s.r;
+        ret.g = s.g * s.g;
+        ret.b = s.b * s.b;
         return ret;
     }
 

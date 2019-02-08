@@ -12,12 +12,11 @@ int main(int argc, char *argv[]) {
     std::vector<std::string> scenes(100);
     scenes[0] = "cbox/cbox-whitted.xml";
     scenes[1] = "motto/motto-diffuse.xml";
-    scenes[2] = "veach_mi/veach_mis.xml";
-    scenes[3] = "cornell-box/scene.xml";
-    scenes[4] = "veach-mis/scene.xml";
-    scenes[5] = "veach-bidir/scene.xml";
+    scenes[2] = "cornell-box/scene.xml";
+    scenes[3] = "veach-mis/scene.xml";
+    scenes[4] = "veach-bidir/scene.xml";
 
-    const std::string filename(solutionDir + scenes[5]);
+    const std::string filename(solutionDir + scenes[2]);
 
 	RainbowInit();	
 	filesystem::path path(filename);
