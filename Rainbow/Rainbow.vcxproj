@@ -280,8 +280,6 @@
     <None Include="..\log\20181120.md" />
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="..\scenes\cbox\cbox-distributed.xml" />
-    <Xml Include="..\scenes\cbox\cbox-whitted-mirror.xml" />
     <Xml Include="..\scenes\cbox\cbox-whitted.xml">
       <SubType>Designer</SubType>
     </Xml>

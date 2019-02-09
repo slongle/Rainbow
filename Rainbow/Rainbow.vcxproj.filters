@@ -507,13 +507,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="..\scenes\cbox\cbox-distributed.xml">
-      <Filter>Resource Files\scenes\cbox</Filter>
-    </Xml>
     <Xml Include="..\scenes\cbox\cbox-whitted.xml">
-      <Filter>Resource Files\scenes\cbox</Filter>
-    </Xml>
-    <Xml Include="..\scenes\cbox\cbox-whitted-mirror.xml">
       <Filter>Resource Files\scenes\cbox</Filter>
     </Xml>
     <Xml Include="..\scenes\motto\motto-dielectric.xml">

@@ -186,7 +186,7 @@ void SamplerIntegrator::TestRender(const Scene &scene) {
         tmpName = name;
         timer.Start();
         for (int y = 0; y < film->resolution.y; y++) {
-            fprintf(stderr, "\rRendering (%d spp) %5.2f%%", sampleNum, 100.*(y + 1) / film->resolution.y);
+            fprintf(stderr, "\rRendering (%d spp) %5.2f%%", i*delta, 100.*(y + 1) / film->resolution.y);
             for (int x = 0; x < film->resolution.x; x++) {
                 RGBSpectrum L(0.0);
                 for (int j = 0; j < delta; j++) {

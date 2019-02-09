@@ -18,7 +18,7 @@
 			<integer name="sampleCount" value="64" />
 		</sampler>
 		<film type="ldrfilm" >
-		  <string name="filename" value="pptest_10.png"/>
+		  <string name="filename" value="veach-bidir_2.png"/>
       <integer name="width" value="1024" />
 			<integer name="height" value="1024" />
 			<string name="fileFormat" value="png" />
@@ -74,14 +74,14 @@
     <ref id="Diffuse" />
   </shape>
 
-  <hide type="obj" >
+  <shape type="obj" >
     <string name="filename" value="models/Mesh008.obj" />
     <transform name="toWorld" >
       <matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
     </transform>
     <boolean name="faceNormals" value="true" />
     <ref id="Diffuse" />
-  </hide>
+  </shape>
 
   <shape type="obj" >
     <string name="filename" value="models/Mesh010.obj" />
@@ -91,11 +91,6 @@
     <boolean name="faceNormals" value="true" />
     <ref id="Diffuse" />
   </shape>
-
-
-  <hide>
-
-  
 	<shape type="obj" >
 		<string name="filename" value="models/Mesh007.obj" />
 		<transform name="toWorld" >
@@ -174,6 +169,4 @@
 		<ref id="Wood" />
 	</shape>
 
-
-  </hide>
 </scene>

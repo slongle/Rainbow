@@ -7,8 +7,8 @@ using namespace rainbow;
 
 int main(int argc, char *argv[]) {
     
-    std::string solutionDir("F:/Document/Graphics/code/Rainbow/scenes/");
-    //std::string solutionDir("C:/Users/Administrator/Desktop/Rainbow/scenes/");
+    //std::string solutionDir("F:/Document/Graphics/code/Rainbow/scenes/");
+    std::string solutionDir("C:/Users/Administrator/Desktop/Rainbow/scenes/");
     std::vector<std::string> scenes(100);
     scenes[0] = "cbox/cbox-whitted.xml";
     scenes[1] = "motto/motto-diffuse.xml";
@@ -16,7 +16,7 @@ int main(int argc, char *argv[]) {
     scenes[3] = "veach-mis/scene.xml";
     scenes[4] = "veach-bidir/scene.xml";
 
-    const std::string filename(solutionDir + scenes[2]);
+    const std::string filename(solutionDir + scenes[3]);
 
 	RainbowInit();	
 	filesystem::path path(filename);
