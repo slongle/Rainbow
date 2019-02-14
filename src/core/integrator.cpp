@@ -159,7 +159,7 @@ void SamplerIntegrator::AdaptiveProgressiveRender(const Scene & scene, const int
         L += li;
         sum += li;
         squareSum += Sqr(li);
-        if (n % 128 == 0) {
+        if (n % 64 == 0) {
             mu = sum / n;
             sigma = Sqrt((squareSum - Sqr(sum) / n) / (n - 1));
             I = 1.96 * sigma / std::sqrt(n);
@@ -219,18 +219,19 @@ void SamplerIntegrator::AdaptiveRender(const Scene &scene) {
         fprintf(stderr, "\rRendering (%d spp) %5.2f%%", sampleNum, 100.*(y + 1) / film->resolution.y);
         for (int x = 0; x < film->resolution.x; x++) {
             RGBSpectrum L(0.0);
-            RGBSpectrum sum, squareSum, sigma, mu, I;
+            Float sum = 0, squareSum = 0, sigma, mu, I;
             int n;
             for (n = 1; ; n++) {
                 camera->GenerateRay(&ray,
                     Point2f(x - film->resolution.x *0.5, y - film->resolution.y *0.5) + sampler->Get2D());
                 RGBSpectrum li = Li(arena, ray, scene, 0);
                 L += li;
-                sum += li;
-                squareSum += Sqr(li);
+                Float illum = li.Luma();
+                sum += illum;
+                squareSum += illum * illum;
                 if (n % 64 == 0) {
                     mu = sum / n;
-                    sigma = Sqrt((squareSum - Sqr(sum) / n) / (n - 1));
+                    sigma = std::sqrt((squareSum - sum * sum / n) / (n - 1));
                     I = 1.96 * sigma / std::sqrt(n);
                     if (I <= maxTolerance * mu) {                        
                         //cout << I << endl << maxTolerance * mu << endl << endl;
@@ -241,11 +242,17 @@ void SamplerIntegrator::AdaptiveRender(const Scene &scene) {
             }
             film->AddPixel(Point2i(x, y), L, n);
         }
+        if (y % 5 == 1) {
+            std::string heatMapName = "heat_" + std::to_string(y) + "_" + name;
+            film->SaveHeatMapImage(heatMapName);            
+        }
         if (y % 32 == 0) arena.Reset();
     }
     fflush(stderr);
     cout << timer.LastTime() << endl;
     film->SaveImage(name);
+    std::string heatMapName = "heat_" + name;
+    film->SaveHeatMapImage(heatMapName);
 }
 
 RAINBOW_NAMESPACE_END

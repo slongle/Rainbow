@@ -97,6 +97,9 @@
     <Filter Include="Resource Files\scenes\veach-bidir">
       <UniqueIdentifier>{3acef949-f8c4-4f7c-81b3-57282a40e858}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\scenes\volumetric-caustic">
+      <UniqueIdentifier>{a653ea14-3443-4298-8671-0dfaa9ddca23}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\core\bbox.cpp">
@@ -263,6 +266,9 @@
     </ClCompile>
     <ClCompile Include="..\src\materials\roughconductor.cpp">
       <Filter>Source Files\materials</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\core\medium.cpp">
+      <Filter>Source Files\core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -461,6 +467,9 @@
     <ClInclude Include="..\src\materials\roughconductor.h">
       <Filter>Source Files\materials</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\core\medium.h">
+      <Filter>Source Files\core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\log\20180811.md">
@@ -527,6 +536,9 @@
     </Xml>
     <Xml Include="..\scenes\veach-bidir\scene.xml">
       <Filter>Resource Files\scenes\veach-bidir</Filter>
+    </Xml>
+    <Xml Include="..\scenes\volumetric-caustic\scene.xml">
+      <Filter>Resource Files\scenes\volumetric-caustic</Filter>
     </Xml>
   </ItemGroup>
   <ItemGroup>

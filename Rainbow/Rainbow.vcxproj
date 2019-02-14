@@ -166,6 +166,7 @@
     <ClCompile Include="..\src\core\integrator.cpp" />
     <ClCompile Include="..\src\core\interaction.cpp" />
     <ClCompile Include="..\src\core\material.cpp" />
+    <ClCompile Include="..\src\core\medium.cpp" />
     <ClCompile Include="..\src\core\memory.cpp" />
     <ClCompile Include="..\src\core\microfacet.cpp" />
     <ClCompile Include="..\src\core\object.cpp" />
@@ -233,6 +234,7 @@
     <ClInclude Include="..\src\core\integrator.h" />
     <ClInclude Include="..\src\core\interaction.h" />
     <ClInclude Include="..\src\core\material.h" />
+    <ClInclude Include="..\src\core\medium.h" />
     <ClInclude Include="..\src\core\memory.h" />
     <ClInclude Include="..\src\core\microfacet.h" />
     <ClInclude Include="..\src\core\object.h" />
@@ -289,6 +291,9 @@
     <Xml Include="..\scenes\motto\motto-mirror.xml" />
     <Xml Include="..\scenes\veach-bidir\scene.xml" />
     <Xml Include="..\scenes\veach-mis\scene.xml" />
+    <Xml Include="..\scenes\volumetric-caustic\scene.xml">
+      <SubType>Designer</SubType>
+    </Xml>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\ext\imgui\LICENSE.txt" />

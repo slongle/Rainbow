@@ -15,8 +15,11 @@ int main(int argc, char *argv[]) {
     scenes[2] = "cornell-box/scene.xml";
     scenes[3] = "veach-mis/scene.xml";
     scenes[4] = "veach-bidir/scene.xml";
+    scenes[5] = "volumetric-caustic/scene.xml";
 
-    const std::string filename(solutionDir + scenes[3]);
+
+
+    const std::string filename(solutionDir + scenes[2]);
 
 	RainbowInit();	
 	filesystem::path path(filename);

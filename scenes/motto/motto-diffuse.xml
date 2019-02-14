@@ -22,7 +22,7 @@
 
         <!-- 768 x 768 pixels -->        
         <film type="hdrfilm">
-            <string name="filename" value="motto-diffuse.png"/>			
+            <string name="filename" value="motto-diffuse_1.png"/>			
             <integer name="height" value="384"/>
             <integer name="width" value="768"/>			
 		    </film>

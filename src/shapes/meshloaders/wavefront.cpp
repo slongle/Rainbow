@@ -42,6 +42,7 @@ void ParseWavefrontOBJ(const std::string& name, int* VertexNum, int* TriangleNum
         Point3f b = (*Position)[id2];
         Point3f c = (*Position)[id3];
         Normal3f n(Cross(b - a, c - a));
+        if (n.SquareLength() == 0) n = Normal3f(1, 0, 0);
         Assert(n.SquareLength() != 0, "Length of Normal is Zero!");
         Normal->push_back(Normalize(n));
     };

@@ -75,6 +75,10 @@ public:
         return std::min(std::min(r, g), b);
     }
 
+    Float Luma() const {
+        return Clamp(0.2126*r + 0.7152*g + 0.0722*b, 0., 1.);
+	}
+
 	std::string toString(const int &spaceNum = 0) const {
 		return indent(tfm::format("%.3f, %.3f, %.3f", r, g, b), spaceNum);
 	}

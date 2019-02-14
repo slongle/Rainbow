@@ -352,84 +352,87 @@ int AdaptiveShow(Integrator* integrator, Scene* scene)
     while (!glfwWindowShouldClose(window)) {
         static int counter = 0;
         for (int y = 0; y < integrator->camera->film->resolution.y; y++) {
-            if (render) {
-                for (int x = 0; x < integrator->camera->film->resolution.x; x++) {
+            for (int x = 0; x < integrator->camera->film->resolution.x; x++) {
+                if (render) {
                     integrator->AdaptiveProgressiveRender(*scene, x, y);
-                    integrator->camera->film->UpdateToUnsignedCharPointer(image_data, x, y);                            
+                    integrator->camera->film->UpdateToUnsignedCharPointer(image_data, x, y);                    
+                }
+                else {
+                    x--;
+                }
 
-                    glfwPollEvents();
-                    // Start the Dear ImGui frame
-                    ImGui_ImplOpenGL3_NewFrame();
-                    ImGui_ImplGlfw_NewFrame();
-                    ImGui::NewFrame();
+                glfwPollEvents();
+                // Start the Dear ImGui frame
+                ImGui_ImplOpenGL3_NewFrame();
+                ImGui_ImplGlfw_NewFrame();
+                ImGui::NewFrame();
 
-                    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image_width, image_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image_data);
-                    ImGui::Begin("Image Test");
-                    ImGui::Image((void*)(intptr_t)my_opengl_texture, ImVec2(image_width, image_height));
-                    ImGui::End();
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image_width, image_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image_data);
+                ImGui::Begin("Image Test");
+                ImGui::Image((void*)(intptr_t)my_opengl_texture, ImVec2(image_width, image_height));
+                ImGui::End();
 
-                    // 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
-                    {
-                        static float f = 0.0f;
-                        //static int counter = 0;
-                        static char a[35] = "filename.png";
+                // 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
+                {
+                    static float f = 0.0f;
+                    //static int counter = 0;
+                    static char a[35] = "filename.png";
 
-                        // Create a window called "Information" and append into it.
-                        ImGui::Begin("Information");
+                    // Create a window called "Information" and append into it.
+                    ImGui::Begin("Information");
 
-                        // Stop / Continue Rendering
-                        if (render) {
-                            if (ImGui::Button("Stop Rendering")) {
-                                render = false;
-                                timer.Stop();
-                            }
+                    // Stop / Continue Rendering
+                    if (render) {
+                        if (ImGui::Button("Stop Rendering")) {
+                            render = false;
+                            timer.Stop();
                         }
-                        else {
-                            if (ImGui::Button("Continue Rendering")) {
-                                render = true;
-                                timer.Continue();
-                            }
+                    }
+                    else {
+                        if (ImGui::Button("Continue Rendering")) {
+                            render = true;
+                            timer.Continue();
                         }
-                        // Halt Button
-                        ImGui::SameLine(); // SameLine with Stop/Continue Rendering button
-                        if (ImGui::Button("Halt")) {
-                            halt = true;
-                            break;
-                        }
-
-                        // Progressive Render Counter
-                        ImGui::Text("Counter = %d", counter);
-
-                        // Save as Button                
-                        ImGui::InputText("Filename", a, 35);
-                        ImGui::SameLine();
-                        if (ImGui::Button("Save as")) {
-                            ExportToPNG(std::string(a), image_data, image_width, image_height);
-                        }
-
-                        ImGui::Text("Rendering %5.2f%%", 100.*(y + 1) / integrator->camera->film->resolution.y);
-                        ImGui::Text("Time %s", timer.LastTime());
-                        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-                        ImGui::End();
+                    }
+                    // Halt Button
+                    ImGui::SameLine(); // SameLine with Stop/Continue Rendering button
+                    if (ImGui::Button("Halt")) {
+                        halt = true;
+                        break;
                     }
 
+                    // Progressive Render Counter
+                    ImGui::Text("Counter = %d", counter);
 
-                    // Rendering
-                    ImGui::Render();
-                    int display_w, display_h;
-                    glfwMakeContextCurrent(window);
-                    glfwGetFramebufferSize(window, &display_w, &display_h);
-                    glViewport(0, 0, display_w, display_h);
-                    glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
-                    glClear(GL_COLOR_BUFFER_BIT);
-                    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+                    // Save as Button                
+                    ImGui::InputText("Filename", a, 35);
+                    ImGui::SameLine();
+                    if (ImGui::Button("Save as")) {
+                        ExportToPNG(std::string(a), image_data, image_width, image_height);
+                    }
+                    if (ImGui::Button("Save Heat Map")) {
+                        integrator->camera->film->SaveHeatMapImage("heat_" + std::string(a));
+                    }
 
-                    glfwMakeContextCurrent(window);
-                    glfwSwapBuffers(window);
+                    ImGui::Text("Rendering %5.2f%%", 100.*(y + 1) / integrator->camera->film->resolution.y);
+                    ImGui::Text("Time %s", timer.LastTime());
+                    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+                    ImGui::End();
                 }
-            }
-            else {
-                y--;
+
+
+                // Rendering
+                ImGui::Render();
+                int display_w, display_h;
+                glfwMakeContextCurrent(window);
+                glfwGetFramebufferSize(window, &display_w, &display_h);
+                glViewport(0, 0, display_w, display_h);
+                glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
+                glClear(GL_COLOR_BUFFER_BIT);
+                ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+                glfwMakeContextCurrent(window);
+                glfwSwapBuffers(window);
             }
         }
         counter++;

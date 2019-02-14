@@ -25,8 +25,11 @@ public:
     RGBSpectrum RetPixel(const Point2i & p) const;
     void SaveImage() const;
     void SaveImage(const std::string &name) const;
+    void SaveHeatMapImage() const;
+    void SaveHeatMapImage(const std::string &name) const;
+    void ExportToHeatMapUnsignedCharPointer(unsigned char* data) const;
     void ExportToUnsignedCharPointer(unsigned char* data) const;
-    void UpdateToUnsignedCharPointer(unsigned char* data, const int &x, const int &y) const;
+    void UpdateToUnsignedCharPointer(unsigned char* data, const int &x, const int &y) const;    
 
 	const std::string filename;
 	const Point2i resolution;
