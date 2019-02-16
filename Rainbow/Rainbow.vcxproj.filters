@@ -514,6 +514,7 @@
     <None Include="..\ext\imgui\.travis.yml">
       <Filter>Extend Files\imgui</Filter>
     </None>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\scenes\cbox\cbox-whitted.xml">

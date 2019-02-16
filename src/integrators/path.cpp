@@ -2,12 +2,17 @@
 
 RAINBOW_NAMESPACE_BEGIN
 
-RGBSpectrum PathIntegrator::Li(MemoryArena& arena, const Ray & r, const Scene & scene, Sampler &sampler, int depth) {
+RGBSpectrum PathIntegrator::Li(
+    MemoryArena &arena, 
+    const Ray &r, 
+    const Scene &scene, 
+    Sampler &sampler, 
+    int depth) 
+{
     RGBSpectrum L(0.f), beta(1);
     SurfaceInteraction inter;
     bool SpecularBounce = false;
     Ray ray(r);
-    bool Trans = false;
 
     for (int bounce = 0;; bounce++) {        
         bool FoundIntersect = scene.Intersect(ray, &inter);

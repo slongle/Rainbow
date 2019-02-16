@@ -280,6 +280,7 @@
     <None Include="..\log\20180924.md" />
     <None Include="..\log\20181011.md" />
     <None Include="..\log\20181120.md" />
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\scenes\cbox\cbox-whitted.xml">

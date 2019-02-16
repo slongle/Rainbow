@@ -9,11 +9,11 @@ struct BVHPrimitiveInfo {
 
     Bounds3f bounds;
     Point3f centroid;
-    size_t idx;          // the index in primitives aray
+    int idx;          // the index in primitives aray
 };
 
 struct BVHBuildNode {
-    void InitLeaf(const Bounds3f& m_bounds, const int &m_firstPrimOffset, const int& m_nPrimitives) {
+    void InitLeaf(const Bounds3f& m_bounds, const size_t &m_firstPrimOffset, const int& m_nPrimitives) {
         bounds = m_bounds;
         firstPrimOffset = m_firstPrimOffset;
         nPrimitives = m_nPrimitives;
@@ -88,13 +88,13 @@ BVHBuildNode * BVHAccelerator::RecursiveBuild(MemoryArena& arena, std::vector<BV
 
     // Compute bounds of all primitives in this BVH node
     Bounds3f bounds;
-    for (size_t i = begin; i < end; i++)
+    for (int i = begin; i < end; i++)
         bounds = Union(bounds, primitiveInfo[i].bounds);
 
     int nPrimitives = end - begin;
     if (nPrimitives == 1) {
         // Create leaf node
-        int firstPrimOffset = orderedPrims.size();
+        size_t firstPrimOffset = orderedPrims.size();
         for (int i = begin; i < end; i++) {
             int idx = primitiveInfo[i].idx;
             orderedPrims.push_back(primitives[idx]);
@@ -104,7 +104,7 @@ BVHBuildNode * BVHAccelerator::RecursiveBuild(MemoryArena& arena, std::vector<BV
     else {
         // Compute bound of primitive centroid, choose split dimension
         Bounds3f centroidBounds;
-        for (size_t i = begin; i < end; i++)
+        for (int i = begin; i < end; i++)
             centroidBounds = Union(centroidBounds, primitiveInfo[i].centroid);
         int dim = centroidBounds.MaximumExtent();
 
@@ -112,8 +112,8 @@ BVHBuildNode * BVHAccelerator::RecursiveBuild(MemoryArena& arena, std::vector<BV
         int mid = (begin + end) >> 1;
         if (centroidBounds.pMin[dim] == centroidBounds.pMax[dim]) {
             // Create leaf node
-            int firstPrimOffset = orderedPrims.size();
-            for (size_t i = begin; i < end; i++) {
+            size_t firstPrimOffset = orderedPrims.size();
+            for (int i = begin; i < end; i++) {
                 int idx = primitiveInfo[i].idx;
                 orderedPrims.push_back(primitives[idx]);
             }
@@ -187,7 +187,7 @@ BVHBuildNode * BVHAccelerator::RecursiveBuild(MemoryArena& arena, std::vector<BV
                     // Find bucket to split at that minimizes SAH metric
                     Float minCost = costPre[0] + costSuf[1];                    
                     int minCostSplitBucket = 0; // Split after minCostSplitBucket                     
-                    for (size_t i = 1; i < nBuckets - 1; i++) {
+                    for (int i = 1; i < nBuckets - 1; i++) {
                         if (costPre[i] + costSuf[i + 1] < minCost) {
                             minCost = costPre[i] + costSuf[i + 1];
                             minCostSplitBucket = i;
@@ -208,8 +208,8 @@ BVHBuildNode * BVHAccelerator::RecursiveBuild(MemoryArena& arena, std::vector<BV
                     }
                     else {
                         // Create leaf node
-                        int firstPrimOffset = orderedPrims.size();
-                        for (size_t i = begin; i < end; i++) {
+                        size_t firstPrimOffset = orderedPrims.size();
+                        for (int i = begin; i < end; i++) {
                             int idx = primitiveInfo[i].idx;
                             orderedPrims.push_back(primitives[idx]);
                         }

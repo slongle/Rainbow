@@ -90,7 +90,7 @@ bool Triangle::Intersect(const Ray & ray, Float * tHit, SurfaceInteraction* inte
 	Float b0 = e0 * invDet;
 	Float b1 = e1 * invDet;
 	Float b2 = e2 * invDet;
-	Float t = sum * invDet;
+	//Float t = sum * invDet;
 
 	*tHit = sum * invDet;
 	Point3f pHit = ray(*tHit);

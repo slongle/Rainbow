@@ -253,7 +253,7 @@ void ParserXMLFile(const std::string & filename) {
 			    }
 			    case ERotate: {
 			    	Vector3f axis;
-			    	Float angle;
+			    	Float angle = 0;
 			    	for (pugi::xml_attribute &attribute : node.attributes()) {
 			    		if (strcmp(attribute.name(), "x") == 0) axis.x = toFloat(attribute.value());
 			    		if (strcmp(attribute.name(), "y") == 0) axis.y = toFloat(attribute.value());

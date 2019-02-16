@@ -127,7 +127,7 @@ RGBSpectrum BSDF::SampleF(const Vector3f& woWorld, Vector3f* wiWorld, const Poin
     }
 
     int chooseComp = std::min((int)std::floor(sample[0] * matchComp), matchComp - 1), 
-        counter = chooseComp, idx;
+        counter = chooseComp;
 
     BxDF* bxdf = nullptr;
     for (int i = 0; i < nBxDFs; i++) {
@@ -254,8 +254,7 @@ RGBSpectrum MicrofacetReflection::SampleF(const Vector3f & wo, Vector3f * wi,
     return f(wo, *wi);
 }
 
-Float MicrofacetReflection::Pdf(const Vector3f & wo, const Vector3f & wi) {
-    Float cosThetaI = Frame::AbsCosTheta(wi), cosThetaO = Frame::AbsCosTheta(wo);
+Float MicrofacetReflection::Pdf(const Vector3f & wo, const Vector3f & wi) {    
     if (!Frame::SameHemisphere(wo, wi)) return 0;
     Vector3f wh = Normalize(wi + wo);
     return  distribution->Pdf(wo, wh) * (4 * Dot(wo, wh));    

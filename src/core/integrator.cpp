@@ -50,7 +50,7 @@ RGBSpectrum SamplerIntegrator::EstimateDirectLight(const SurfaceInteraction & in
         }
     }
 
-    // Sample BSDF with MSI
+    // Sample BSDF with MIS
     if (!light->IsDeltaLight()) {
 
         BxDFType BSDFType;
@@ -73,17 +73,17 @@ RGBSpectrum SamplerIntegrator::EstimateDirectLight(const SurfaceInteraction & in
 
             bool FoundIntersection = scene.Intersect(ray, &LightIntersect);
 
-            RGBSpectrum Li(0.0);
+            RGBSpectrum Le(0.0);
             if (FoundIntersection) {
                 if (LightIntersect.primitive->getAreaLight() == light.get())
-                    Li = LightIntersect.Le(-wi);
+                    Le = LightIntersect.Le(-wi);
             }
             else {
-                //Li = light.Le(ray);
+                //Le = light.Le(ray);
             }
 
-            if (!Li.IsBlack())
-                Ld += f * Li * weight / BSDFPdf;
+            if (!Le.IsBlack())
+                Ld += f * Le * weight / BSDFPdf;
         }
     }
 
