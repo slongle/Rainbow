@@ -2,7 +2,7 @@
 
 RAINBOW_NAMESPACE_BEGIN
 
-RGBSpectrum DirectLightIntegrator::Li(MemoryArena& arena, const Ray & ray, const Scene & scene, int depth) {
+RGBSpectrum DirectLightIntegrator::Li(MemoryArena& arena, const Ray & ray, const Scene & scene, Sampler &sampler, int depth) {
     RGBSpectrum L(0.0);
     SurfaceInteraction intersection;
     if (!scene.Intersect(ray, &intersection)) {

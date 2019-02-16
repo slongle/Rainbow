@@ -2,7 +2,7 @@
 
 RAINBOW_NAMESPACE_BEGIN
 
-RGBSpectrum PathIntegrator::Li(MemoryArena& arena, const Ray & r, const Scene & scene, int depth) {
+RGBSpectrum PathIntegrator::Li(MemoryArena& arena, const Ray & r, const Scene & scene, Sampler &sampler, int depth) {
     RGBSpectrum L(0.f), beta(1);
     SurfaceInteraction inter;
     bool SpecularBounce = false;
@@ -30,7 +30,7 @@ RGBSpectrum PathIntegrator::Li(MemoryArena& arena, const Ray & r, const Scene & 
         Vector3f wo = -ray.d, wi;
         Float BSDFPdf;
         BxDFType BSDFType;
-        RGBSpectrum f = inter.bsdf->SampleF(wo, &wi, sampler->Get2D(), &BSDFPdf, BSDF_ALL, &BSDFType);
+        RGBSpectrum f = inter.bsdf->SampleF(wo, &wi, sampler.Get2D(), &BSDFPdf, BSDF_ALL, &BSDFType);
         if (BSDFPdf == 0 || f.IsBlack()) break;
         beta *= f * AbsDot(wi, inter.n) / BSDFPdf;
 
@@ -40,7 +40,7 @@ RGBSpectrum PathIntegrator::Li(MemoryArena& arena, const Ray & r, const Scene & 
 
         if (bounce > 3) {
             Float q = std::min(1.0f, beta.MaxComponent());
-            if (sampler->Get1D() >= q)
+            if (sampler.Get1D() >= q)
                 break;
             beta /= q;  
         }

@@ -10,6 +10,8 @@ RAINBOW_NAMESPACE_BEGIN
 
 class Sampler {
 public:
+    virtual void Initialize(const int &x, const int &y) = 0;
+    virtual std::unique_ptr<Sampler> Clone() = 0;
 	virtual Float Get1D() = 0;
 	virtual Point2f Get2D() = 0;
 };

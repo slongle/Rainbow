@@ -9,7 +9,7 @@ class PathIntegrator :public SamplerIntegrator {
 public:
     PathIntegrator(const int& m_maxDepth, const int& m_sampleNum,const int &m_delta) :
         maxDepth(m_maxDepth), SamplerIntegrator(m_sampleNum, m_delta) {}
-    RGBSpectrum Li(MemoryArena& arena, const Ray &ray, const Scene& scene, int depth);
+    RGBSpectrum Li(MemoryArena& arena, const Ray &ray, const Scene& scene, Sampler &sampler, int depth);
 
     int maxDepth;
 };

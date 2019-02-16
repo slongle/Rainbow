@@ -3,7 +3,7 @@
 	  <integrator type="path">
 		    <integer name="maxDepth" value="50"/>
         <integer name="sampleNum" value="5000"/>
-        <integer name="delta" value="20"/>
+        <integer name="delta" value="10"/>
 	  </integrator>
 	  <sensor type="perspective">
 		    <float name="fov" value="19.5"/>
@@ -15,7 +15,7 @@
 	          <integer name="sampleCount" value="512"/>
 	      </sampler>
 		    <film type="hdrfilm">
-            <string name="filename" value="glass_4.png"/>
+            <string name="filename" value="sphere_1.png"/>
 			      <integer name="height" value="600"/>
 			      <integer name="width" value="800"/>
 		    </film>

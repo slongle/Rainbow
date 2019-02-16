@@ -9,7 +9,7 @@ class DirectLightIntegrator :public SamplerIntegrator{
 public:
     DirectLightIntegrator(const int &m_maxDepth,const int & m_sampleNum) :
         maxDepth(m_maxDepth), SamplerIntegrator(m_sampleNum) {}
-    RGBSpectrum Li(MemoryArena& arena, const Ray &ray, const Scene& scene, int depth);
+    RGBSpectrum Li(MemoryArena& arena, const Ray &ray, const Scene& scene, Sampler &sampler, int depth);
 
     int maxDepth;
 };

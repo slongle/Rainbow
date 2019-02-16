@@ -7,15 +7,16 @@ RAINBOW_NAMESPACE_BEGIN
 
 class Independent :public Sampler {
 public:
-	Independent(int m_SamplerCount) :SamplerCount(m_SamplerCount)
-	{
-	}
+    Independent(){}
+	Independent(int m_sampleCount) :sampleCount(m_sampleCount)
+	{}
 
-    void Prepare();
+    void Initialize(const int &x, const int &y);
+    std::unique_ptr<Sampler> Clone();
 	Float Get1D();
 	Point2f Get2D();
 
-	int SamplerCount;
+	int sampleCount;
 	pcg32 rng;
 };
 

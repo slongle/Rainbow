@@ -2,10 +2,16 @@
 
 RAINBOW_NAMESPACE_BEGIN
 
-Film::Film(const std::string & _filename, const Point2i & _resolution) :
-    filename(_filename), resolution(_resolution), 
+Film::Film(const std::string & m_filename, const Point2i & m_resolution) :
+    filename(m_filename), resolution(m_resolution), 
     aspect(static_cast<Float>(resolution.x) / resolution.y) {
 	pixels = std::unique_ptr<Pixel[]>(new Pixel[resolution.x * resolution.y]);
+}
+
+void Film::MergeFilmTile(const FilmTile & tile) {
+    for (int y = tile.bounds.pMin.y; y < tile.bounds.pMax.y; y++)
+        for (int x = tile.bounds.pMin.x; x < tile.bounds.pMax.x; x++)
+            GetPixel(Point2i(x,y)) = tile.GetPixel(Point2i(x, y));
 }
 
 void Film::AddPixel(const Point2i & p, const RGBSpectrum & L, const int &num) const {
@@ -123,12 +129,20 @@ void Film::UpdateToUnsignedCharPointer(unsigned char* data, const int &x, const 
 #undef TO_BYTE
 }
 
-Film * CreateFilm(PropertyList & list) {
+Film *CreateFilm(PropertyList & list) {
 	std::string filename = list.getString("filename", "output.png");
 	Point2i resolution;
 	resolution.x = list.getInteger("width" , 1280);
 	resolution.y = list.getInteger("height", 720);
 	return new Film(filename, resolution);
+}
+
+void FilmTile::AddSample(const Point2f & pixelSample, const RGBSpectrum & L) {    
+    //Pixel &pixel = GetPixel(Point2i(std::floor(pixelSample.x), std::floor(pixelSample.y)));
+    Pixel &pixel = GetPixel(Point2i(pixelSample.x, pixelSample.y));
+    for (int i = 0; i < 3; i++)
+        pixel.rgb[i] += L[i];
+    pixel.sampleNum++;
 }
 
 RAINBOW_NAMESPACE_END

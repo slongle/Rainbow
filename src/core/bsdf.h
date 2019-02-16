@@ -124,7 +124,7 @@ class BSDF {
 public:
     BSDF(const Normal3f& m_n) :nBxDFs(0), frame(m_n) {}
 
-    void Add(BxDF* bxdf) {
+    void Add(BxDF* bxdf) {        
         Assert(nBxDFs < MaxBxDFs, "Too many BxDFs!");
         bxdfs[nBxDFs++] = bxdf;
     }

@@ -96,7 +96,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalLibraryDirectories>$(SolutionDir)\ext\imgui\examples\libs\glfw\lib-vc2010-64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>F:\Document\Graphics\code\Rainbow\ext\tbb\build\vs2010\intel64\Debug;$(SolutionDir)\ext\imgui\examples\libs\glfw\lib-vc2010-64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>msvcrt.lib</IgnoreSpecificDefaultLibraries>
       <StackReserveSize>104857600</StackReserveSize>
@@ -136,7 +136,7 @@
       <AdditionalDependencies>opengl32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
-      <AdditionalLibraryDirectories>$(SolutionDir)\ext\imgui\examples\libs\glfw\lib-vc2010-64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>F:\Document\Graphics\code\Rainbow\ext\tbb\build\vs2010\intel64\Release;$(SolutionDir)\ext\imgui\examples\libs\glfw\lib-vc2010-64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -285,7 +285,9 @@
     <Xml Include="..\scenes\cbox\cbox-whitted.xml">
       <SubType>Designer</SubType>
     </Xml>
-    <Xml Include="..\scenes\cornell-box\scene.xml" />
+    <Xml Include="..\scenes\cornell-box\scene.xml">
+      <SubType>Designer</SubType>
+    </Xml>
     <Xml Include="..\scenes\motto\motto-dielectric.xml" />
     <Xml Include="..\scenes\motto\motto-diffuse.xml" />
     <Xml Include="..\scenes\motto\motto-mirror.xml" />
