@@ -2,15 +2,11 @@
 
 RAINBOW_NAMESPACE_BEGIN
 
-void Independent::Initialize(const int &x, const int &y) {
-    rng.seed(x, y);
-}
-
-
-std::unique_ptr<Sampler> Independent::Clone() {
+std::unique_ptr<Sampler> Independent::Clone(const Point2i &seed) {
     std::unique_ptr<Independent> cloned(new Independent());
     cloned->sampleCount = sampleCount;
-    cloned->rng= rng;
+    cloned->rng = rng;
+    cloned->rng.seed(seed.x, seed.y);
     return std::move(cloned);
 }
 

@@ -1,8 +1,8 @@
 <scene>
-    <mode type="test"/>
+    <mode type="final"/>
 	  <integrator type="path">
 		    <integer name="maxDepth" value="50"/>
-        <integer name="sampleNum" value="5000"/>
+        <integer name="sampleNum" value="10"/>
         <integer name="delta" value="10"/>
 	  </integrator>
 	  <sensor type="perspective">

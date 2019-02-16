@@ -9,7 +9,7 @@
 
 RAINBOW_NAMESPACE_BEGIN
 
-#define RAINBOW_TILE_SIZE 64
+#define RAINBOW_TILE_SIZE 16
 
 struct Pixel {
     Pixel() { rgb[0] = rgb[1] = rgb[2] = sampleNum = 0; }
@@ -25,7 +25,7 @@ public:
         pixels = std::unique_ptr<Pixel[]>(new Pixel[size.x*size.y]);
     }
 
-    void AddSample(const Point2f &pixelSample, const RGBSpectrum &L);
+    void AddSample(const Point2f &pixelSample, const RGBSpectrum &L, const int &num = 1);
 
     static std::vector<FilmTile> GenerateTiles(const Point2i &resolution, const int &tileSize) {
         Point2i numTiles(std::ceil(resolution.x / static_cast<Float>(tileSize)),

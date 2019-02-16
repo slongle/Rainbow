@@ -21,7 +21,7 @@ int main(int argc, char *argv[]) {
 
 
 
-    const std::string filename(solutionDir + scenes[2]);
+    const std::string filename(solutionDir + scenes[0]);
 
 	RainbowInit();	
 	filesystem::path path(filename);

@@ -10,9 +10,8 @@ public:
     Independent(){}
 	Independent(int m_sampleCount) :sampleCount(m_sampleCount)
 	{}
-
-    void Initialize(const int &x, const int &y);
-    std::unique_ptr<Sampler> Clone();
+    
+    std::unique_ptr<Sampler> Clone(const Point2i &seed);
 	Float Get1D();
 	Point2f Get2D();
 

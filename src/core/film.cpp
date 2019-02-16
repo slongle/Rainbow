@@ -137,12 +137,12 @@ Film *CreateFilm(PropertyList & list) {
 	return new Film(filename, resolution);
 }
 
-void FilmTile::AddSample(const Point2f & pixelSample, const RGBSpectrum & L) {    
+void FilmTile::AddSample(const Point2f & pixelSample, const RGBSpectrum & L, const int &num) {
     //Pixel &pixel = GetPixel(Point2i(std::floor(pixelSample.x), std::floor(pixelSample.y)));
     Pixel &pixel = GetPixel(Point2i(pixelSample.x, pixelSample.y));
     for (int i = 0; i < 3; i++)
         pixel.rgb[i] += L[i];
-    pixel.sampleNum++;
+    pixel.sampleNum += num;
 }
 
 RAINBOW_NAMESPACE_END
