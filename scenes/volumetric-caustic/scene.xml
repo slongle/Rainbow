@@ -5,7 +5,7 @@
   <integrator type="volpath" >
 		<integer name="maxDepth" value="7" />
     <integer name="sampleNum" value="50"/>
-    <integer name="delta" value="1"/>
+    <integer name="delta" value="50"/>
 		<boolean name="strictNormals" value="true" />
 	</integrator>
 	<sensor type="perspective" >

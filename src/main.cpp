@@ -2,9 +2,26 @@
 #include "core/parser.h"
 #include "ext/filesystem/filesystem/path.h"
 
+#include "core/film.h"
+#include "core/memory.h"
+#include "materials/glass.h"
+#include "shapes/sphere.h"
+
 using namespace rainbow;
 
+void foo() {
+    MemoryArena arena;
+    GlassMaterial g(RGBSpectrum(1), RGBSpectrum(1), 0.1, 0.1);
+    Transform t = Scale(Vector3f(1, 1, 1)), invT = Inverse(t);
+    Sphere s(&t, &invT, 1);
+    SurfaceInteraction inter = SurfaceInteraction(Point3f(), Vector3f(), Normal3f(1, 0, 0), Vector3f(), &s);
+    g.ComputeScatteringFunctions(arena, &inter);
+    arena.Reset();
+}
+
 int main(int argc, char *argv[]) {
+
+
     std::string solutionDir("F:/Document/Graphics/code/Rainbow/scenes/");
     //std::string solutionDir("C:/Users/Administrator/Desktop/Rainbow/scenes/");
     std::vector<std::string> scenes(100);

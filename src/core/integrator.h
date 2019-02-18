@@ -57,7 +57,7 @@ public:
     RGBSpectrum SpecularRefract(MemoryArena& arena, const Ray&ray, const Scene& scene, int depth, SurfaceInteraction intersection);
 
     void RenderTileAdaptive(const Scene &scene, Sampler& sampler, FilmTile &tile);
-    void RenderTile(const Scene &scene, Sampler& sampler, FilmTile &tile, MemoryArena &arena);
+    void RenderTile(const Scene &scene, Sampler& sampler, FilmTile &tile);
 	void Render (const Scene &scene);
     virtual RGBSpectrum Li(MemoryArena& arena, const Ray &ray, const Scene& scene, Sampler &sampler, int depth) = 0;
 

@@ -181,18 +181,18 @@ void SamplerIntegrator::RenderTileAdaptive(const Scene &scene, Sampler& sampler,
     arena.Reset();
 }
 
-void SamplerIntegrator::RenderTile(const Scene &scene, Sampler& sampler, FilmTile &tile, MemoryArena &arena) {    
+void SamplerIntegrator::RenderTile(const Scene &scene, Sampler& sampler, FilmTile &tile) {    
     Ray ray;
-    
+    MemoryArena arena;
     for (int y = tile.bounds.pMin.y; y < tile.bounds.pMax.y; y++) {
         for (int x = tile.bounds.pMin.x; x < tile.bounds.pMax.x; x++) {            
             RGBSpectrum L(0.);
-            for (int i = 0; i < sampleNum; i++) {
+            for (int i = 0; i < delta; i++) {
                 Point2f pixelSample = Point2f(x, y) + sampler.Get2D();
                 RGBSpectrum weight = camera->GenerateRay(&ray, pixelSample);
                 L += weight * Li(arena, ray, scene, sampler, 0);
             }
-            tile.AddSample(Point2f(x, y), L, sampleNum);
+            tile.AddSample(Point2f(x, y), L, delta);
         }        
     }
     arena.Reset();
@@ -211,8 +211,7 @@ void SamplerIntegrator::Render(const Scene &scene) {
 
     std::thread renderThread([&] {
 
-        tbb::blocked_range<int> range(0, tiles.size());        
-        MemoryArena arena;
+        tbb::blocked_range<int> range(0, tiles.size());                
 
         auto map = [&](const tbb::blocked_range<int> &range) {               
             for (int i = range.begin(); i<range.end(); ++i) {
@@ -223,23 +222,25 @@ void SamplerIntegrator::Render(const Scene &scene) {
                 std::unique_ptr<Sampler> clonedSampler(sampler->Clone(tile.bounds.pMin));
 
                 /* Render all contained pixels */
-                RenderTile(scene, *clonedSampler, tile, arena);
+                RenderTile(scene, *clonedSampler, tile);
 
                 film->MergeFilmTile(tile);
             }                
         };
 
-        /// Uncomment the following line for single threaded rendering
-        //map(range);
+        
+            /// Uncomment the following line for single threaded rendering
+            //map(range);
 
-        /// Default: parallel rendering
-        tbb::parallel_for(range, map);
+            /// Default: parallel rendering
+            tbb::parallel_for(range, map);
 
+           
     });
     
     
     renderThread.join();
-    
+
     film->SaveImage();
 
     cout << timer.LastTime() << endl;

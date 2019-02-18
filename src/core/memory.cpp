@@ -11,6 +11,17 @@ T* AllocAligned(const size_t count) {
     return (T*)AllocAligned(count * sizeof(T));
 }
 
+void FreeAligned(void *ptr) {
+    if (!ptr) return;
+    _aligned_free(ptr);
+}
+
+MemoryArena::~MemoryArena() {
+    FreeAligned(currentBlock);
+    for (auto &block : usedBlocks) FreeAligned(block.second);
+    for (auto &block : availableBlocks) FreeAligned(block.second);
+}
+
 void* MemoryArena::Alloc(size_t nBytes) {
     size_t align = 16;
     nBytes = (nBytes + (align - 1)) & (~(align - 1));

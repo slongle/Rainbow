@@ -12,6 +12,7 @@
 class MemoryArena {
 public:
     MemoryArena(size_t m_blockSize = 1 << 18) :blockSize(m_blockSize) {}
+    ~MemoryArena();
 
     void *Alloc(size_t nBytes);
     template<typename T>
