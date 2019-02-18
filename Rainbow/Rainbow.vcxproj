@@ -186,12 +186,14 @@
     <ClCompile Include="..\src\filters\tent.cpp" />
     <ClCompile Include="..\src\integrators\direct.cpp" />
     <ClCompile Include="..\src\integrators\path.cpp" />
+    <ClCompile Include="..\src\integrators\volpath.cpp" />
     <ClCompile Include="..\src\integrators\whitted.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\materials\matte.cpp" />
     <ClCompile Include="..\src\materials\glass.cpp" />
     <ClCompile Include="..\src\materials\mirror.cpp" />
     <ClCompile Include="..\src\materials\roughconductor.cpp" />
+    <ClCompile Include="..\src\media\homogeneous.cpp" />
     <ClCompile Include="..\src\samplers\independent.cpp" />
     <ClCompile Include="..\src\shapes\meshloaders\wavefront.cpp" />
     <ClCompile Include="..\src\shapes\sphere.cpp" />
@@ -255,11 +257,13 @@
     <ClInclude Include="..\src\filters\tent.h" />
     <ClInclude Include="..\src\integrators\direct.h" />
     <ClInclude Include="..\src\integrators\path.h" />
+    <ClInclude Include="..\src\integrators\volpath.h" />
     <ClInclude Include="..\src\integrators\whitted.h" />
     <ClInclude Include="..\src\materials\matte.h" />
     <ClInclude Include="..\src\materials\glass.h" />
     <ClInclude Include="..\src\materials\mirror.h" />
     <ClInclude Include="..\src\materials\roughconductor.h" />
+    <ClInclude Include="..\src\media\homogeneous.h" />
     <ClInclude Include="..\src\samplers\independent.h" />
     <ClInclude Include="..\src\shapes\meshloaders\wavefront.h" />
     <ClInclude Include="..\src\shapes\sphere.h" />
@@ -280,7 +284,6 @@
     <None Include="..\log\20180924.md" />
     <None Include="..\log\20181011.md" />
     <None Include="..\log\20181120.md" />
-    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\scenes\cbox\cbox-whitted.xml">

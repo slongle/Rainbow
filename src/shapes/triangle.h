@@ -24,8 +24,8 @@ public:
 	Bounds3f ObjectBounds() const;
 	Bounds3f WorldBounds() const;
 
-	bool Intersect(const Ray & ray, Float *tHit, SurfaceInteraction*inter) const;
-	bool IntersectP(const Ray & ray) const;
+	bool IntersectP(const Ray & ray, Float *tHit, SurfaceInteraction*inter) const;
+	bool Intersect(const Ray & ray) const;
 
 	Interaction Sample(const Point3f &p, const Point2f& sample, Float* pdf) const;
 	Float Area() const;	

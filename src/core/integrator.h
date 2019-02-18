@@ -39,14 +39,25 @@ public:
     SamplerIntegrator(const int& m_sampleNum, const int &m_delta = 1) :
         sampleNum(m_sampleNum), delta(m_delta) {}
 
-    RGBSpectrum UniformSampleOneLight(const SurfaceInteraction& inter, const Scene& scene);
-    RGBSpectrum EstimateDirectLight(const SurfaceInteraction& inter, std::shared_ptr<Light> light, const Scene& scene);
+    RGBSpectrum UniformSampleOneLight(
+        const Interaction& inter,
+        const Scene& scene,
+        Sampler& sampler,
+        const bool handleMedium = false);
+
+    RGBSpectrum EstimateDirectLight(
+        const Interaction &inter,
+        const std::shared_ptr<Light> &light,
+        const Scene& scene,
+        const Point2f& scatteru,
+        const Point2f& lightu,
+        const bool handleMedia = false);
 
     RGBSpectrum SpecularReflect(MemoryArena& arena, const Ray&ray, const Scene& scene, int depth, SurfaceInteraction intersection);
     RGBSpectrum SpecularRefract(MemoryArena& arena, const Ray&ray, const Scene& scene, int depth, SurfaceInteraction intersection);
 
     void RenderTileAdaptive(const Scene &scene, Sampler& sampler, FilmTile &tile);
-    void RenderTile(const Scene &scene, Sampler& sampler, FilmTile &tile);
+    void RenderTile(const Scene &scene, Sampler& sampler, FilmTile &tile, MemoryArena &arena);
 	void Render (const Scene &scene);
     virtual RGBSpectrum Li(MemoryArena& arena, const Ray &ray, const Scene& scene, Sampler &sampler, int depth) = 0;
 

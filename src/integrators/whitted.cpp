@@ -5,7 +5,7 @@ RAINBOW_NAMESPACE_BEGIN
 RGBSpectrum WhittedIntegrator::Li(MemoryArena& arena, const Ray & ray, const Scene & scene, Sampler &sampler, int depth) {
 	RGBSpectrum L(0.0);
 	SurfaceInteraction intersection;
-	if (!scene.Intersect(ray, &intersection)) {
+	if (!scene.IntersectP(ray, &intersection)) {
 		return L;
 	}
 

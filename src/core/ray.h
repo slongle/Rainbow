@@ -8,7 +8,11 @@ RAINBOW_NAMESPACE_BEGIN
 class Ray {
 public:
 	Ray() :tMax(INFINITY) {}
-	Ray(const Point3f &m_o, const Vector3f &m_d, const Float m_tMax = INFINITY) :o(m_o), d(m_d), tMax(m_tMax) {}
+    Ray(const Point3f& m_o,
+        const Vector3f& m_d,
+        const Float& m_tMax = INFINITY,
+        const Medium *m_medium = nullptr)
+        :o(m_o), d(m_d), tMax(m_tMax), medium(m_medium) {}
 
 	Point3f operator ()(Float t) const { return o + d * t; }
 
@@ -26,9 +30,10 @@ public:
 		return os;
 	}
 
-	mutable Float tMax;
 	Point3f o;
 	Vector3f d;
+	mutable Float tMax;
+    const Medium *medium;
 };
 
 RAINBOW_NAMESPACE_END

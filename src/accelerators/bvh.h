@@ -23,8 +23,8 @@ public:
 
     int FlattenBVHTree(BVHBuildNode *node, int *offset);
 
-    bool Intersect(const Ray & ray, SurfaceInteraction*inter) const;
-    bool IntersectP(const Ray & ray) const;
+    bool IntersectP(const Ray & ray, SurfaceInteraction*inter) const;
+    bool Intersect(const Ray & ray) const;
 
 
     int maxPrimsInNode;

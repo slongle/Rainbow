@@ -322,7 +322,7 @@ Bounds3f Transform::operator()(const Bounds3f & bounds) const {
 	ret = Union(ret, M(Point3f(bounds.pMax.x, bounds.pMax.y, bounds.pMin.z)));
 	ret = Union(ret, M(Point3f(bounds.pMax.x, bounds.pMin.y, bounds.pMax.z)));
 	ret = Union(ret, M(Point3f(bounds.pMax.x, bounds.pMax.y, bounds.pMax.z)));
-	//return ret;
+	return ret;
 
 	/*
 	Transforming Axis-Aligned Bounding Boxes

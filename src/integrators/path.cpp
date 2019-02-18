@@ -10,27 +10,31 @@ RGBSpectrum PathIntegrator::Li(
     int depth) 
 {
     RGBSpectrum L(0.f), beta(1);
-    SurfaceInteraction inter;
     bool SpecularBounce = false;
     Ray ray(r);
 
     for (int bounce = 0;; bounce++) {        
-        bool FoundIntersect = scene.Intersect(ray, &inter);
+        SurfaceInteraction inter;
+        bool foundIntersect = scene.IntersectP(ray, &inter);
 
         if (bounce == 0 || SpecularBounce) {
-            if (FoundIntersect) {
+            if (foundIntersect) {
                 L += beta * inter.Le(-ray.d);
             }
         }
 
-        if (!FoundIntersect || bounce >= maxDepth) break;                
+        if (!foundIntersect || bounce >= maxDepth) break;                
 
         inter.ComputeScatteringFunctions(arena);
         if (!inter.bsdf) {
-            break;
+            ray = inter.SpawnToRay(ray.d);
+            bounce--;
+            continue;
         }        
 
-        L += beta * UniformSampleOneLight(inter, scene);
+        if (inter.bsdf->NumComponents(BxDFType(BSDF_ALL & ~BSDF_SPECULAR)) > 0) {
+            L += beta * UniformSampleOneLight(inter, scene, sampler);       
+        }
 
         Vector3f wo = -ray.d, wi;
         Float BSDFPdf;

@@ -442,10 +442,11 @@ public:
 
 	bool HasNaNs() const { return isNaN(x) || isNaN(y) || isNaN(z); }
 
-	Normal3<T> operator + (const Normal3<T> &n) const { return Normal3<T>(x + n.x, y + n.y, z + n.z); }
+    bool operator != (const Normal3<T>& n) const { return x != n.x || y != n.y || z != n.z; }
+	Normal3<T> operator + (const Normal3<T>& n) const { return Normal3<T>(x + n.x, y + n.y, z + n.z); }
 	Normal3<T> operator - () const { return Normal3<T>(-x, -y, -z); }
-	Normal3<T> operator * (const Float &u) const { return Normal3<T>(x*u, y*u, z*u); }
-	Normal3<T> operator / (const Float &u) const { 
+	Normal3<T> operator * (const Float& u) const { return Normal3<T>(x*u, y*u, z*u); }
+	Normal3<T> operator / (const Float& u) const { 
 		Assert(u != 0, "Divide Zero!");
 		Float inv = 1.0f / u;
 		return Normal3<T>(x*inv, y*inv, z*inv);

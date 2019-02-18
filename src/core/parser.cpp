@@ -45,6 +45,7 @@ void ParserXMLFile(const std::string & filename) {
 		ECamera     	 ,
 		EBSDF            ,
         EBSDFMap         ,
+        EMedium          ,
 		EFilm         	 ,
 		EIntegrator      ,    
 		EShape           ,   
@@ -78,6 +79,7 @@ void ParserXMLFile(const std::string & filename) {
 	tags["sampler"]     = ESampler;
 	tags["film"]        = EFilm;
 	tags["bsdf"]        = EBSDF;
+    tags["medium"]      = EMedium;
 	tags["shape"]       = EShape;
 	tags["emitter"]     = ELight;
 	tags["rfilter"]     = ERFilter;
@@ -148,41 +150,46 @@ void ParserXMLFile(const std::string & filename) {
 		if (isObject) {
 			Assert(checkAttribute(node, "type"), "Missing attribute \"type\" in " +
 				static_cast<std::string>(node.name()));
-			std::string name = static_cast<std::string>(node.attribute("type").value());
+			std::string type = static_cast<std::string>(node.attribute("type").value());
 			switch (tag) {
                 case EMode:
-                    RainbowRenderMode(name);
+                    RainbowRenderMode(type);
                     break;
 				case EScene:
 					break;
 				case EIntegrator:
-					RainbowIntegrator(name, m_list);
+					RainbowIntegrator(type, m_list);
 					break;
 				case ECamera:			
-					RainbowCamera(name, m_list);
+					RainbowCamera(type, m_list);
 					break;			
 				case ESampler:
-					RainbowSampler(name, m_list);
+					RainbowSampler(type, m_list);
 					break;
 				case EFilm:
-					RainbowFilm(name, m_list);
+					RainbowFilm(type, m_list);
 					break;
 				case EBSDF:
-					RainbowMaterial(name,m_list);
+                    RainbowMaterial(type, m_list);
 					break;
+                case EMedium: {                    
+                    std::string name = static_cast<std::string>(node.attribute("name").value());
+                    RainbowMedium(type, name, m_list);
+                    break;
+                }
 				case EShape:
-					RainbowShape(name, m_list);
+					RainbowShape(type, m_list);
 					break;
 				case ELight:
-					RainbowLight(name, m_list);
+					RainbowLight(type, m_list);
 					break;
                 case EBSDFMap:
                     m_list.setString("id", node.attribute("id").value());
-                    RainbowBSDFMap(name, m_list);
+                    RainbowBSDFMap(type, m_list);
                     break;
                 case ERef:
                     m_list.setString("id", node.attribute("id").value());
-                    RainbowRef(name, m_list);
+                    RainbowRef(type, m_list);
                     break;
 			}			
 		}

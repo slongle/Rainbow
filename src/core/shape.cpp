@@ -9,8 +9,8 @@ Bounds3f Shape::WorldBounds() const {
 	return (*ObjectToWorld)(ObjectBounds());
 }
 
-bool Shape::IntersectP(const Ray & ray) const {
-	return Intersect(ray, nullptr, nullptr);
+bool Shape::Intersect(const Ray & ray) const {
+	return IntersectP(ray, nullptr, nullptr);
 }
 
 Interaction Shape::Sample(const Interaction & ref, const Point2f & sample, Float * pdf) const {

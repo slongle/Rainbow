@@ -58,8 +58,8 @@ public:
 		return pMin == b.pMin && pMax == b.pMax;
 	}
 	
-	bool IntersectP(const Ray &ray, Float* hitt0 = nullptr, Float* hitt1 = nullptr) const;
-    bool IntersectP(const Ray &ray, const Vector3f &invDir,
+	bool Intersect(const Ray &ray, Float* hitt0 = nullptr, Float* hitt1 = nullptr) const;
+    bool Intersect(const Ray &ray, const Vector3f &invDir,
         const int dirIsNeg[3]) const;
 
     Vector3<T> Offset(const Point3<T> &p) const {
@@ -133,7 +133,7 @@ Bounds3<T> Union(const Bounds3<T> &b1, const Bounds3<T> &b2) {
 }
 
 template<typename T>
-bool Bounds3<T>::IntersectP(const Ray & ray, Float* hitt0, Float* hitt1) const {
+bool Bounds3<T>::Intersect(const Ray & ray, Float* hitt0, Float* hitt1) const {
     Float t0 = 0, t1 = ray.tMax;
     for (int i = 0; i < 3; i++) {
         Float invDir = 1 / ray.d[i];
@@ -151,7 +151,7 @@ bool Bounds3<T>::IntersectP(const Ray & ray, Float* hitt0, Float* hitt1) const {
 }
 
 template <typename T>
-inline bool Bounds3<T>::IntersectP(const Ray &ray, const Vector3f &invDir,
+inline bool Bounds3<T>::Intersect(const Ray &ray, const Vector3f &invDir,
     const int dirIsNeg[3]) const {
     const Bounds3f &bounds = *this;
 

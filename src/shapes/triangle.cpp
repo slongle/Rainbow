@@ -38,7 +38,7 @@ Bounds3f Triangle::WorldBounds() const {
 	return Union(Bounds3f(p0, p1), p2);
 }
 
-bool Triangle::Intersect(const Ray & ray, Float * tHit, SurfaceInteraction* inter) const {
+bool Triangle::IntersectP(const Ray & ray, Float * tHit, SurfaceInteraction* inter) const {
 	/* Get Triangle's Vertices p0, p1, p2*/
 	const Point3f &p0 = mesh->Position[index[0]];
 	const Point3f &p1 = mesh->Position[index[1]];
@@ -113,7 +113,7 @@ bool Triangle::Intersect(const Ray & ray, Float * tHit, SurfaceInteraction* inte
 	return true;
 }
 
-bool Triangle::IntersectP(const Ray & ray) const {
+bool Triangle::Intersect(const Ray & ray) const {
 	const Point3f &p0 = mesh->Position[index[0]];
 	const Point3f &p1 = mesh->Position[index[1]];
 	const Point3f &p2 = mesh->Position[index[2]];

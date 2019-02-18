@@ -37,6 +37,7 @@ public:
         return r >= s.r && g >= s.g && b >= s.b;
     }
 
+    RGBSpectrum operator - () const { return RGBSpectrum(-r, -g, -b); }
 	RGBSpectrum operator + (const RGBSpectrum& s) const { return RGBSpectrum(r + s.r, g + s.g, b + s.b); }
 	RGBSpectrum &operator += (const RGBSpectrum& s) { r += s.r; g += s.g; b += s.b; return *this; }
 	RGBSpectrum operator - (const RGBSpectrum& s) const { return RGBSpectrum(r - s.r, g - s.g, b - s.b); }
@@ -99,6 +100,14 @@ public:
         ret.b = s.b * s.b;
         return ret;
     }
+
+    friend RGBSpectrum Exp(const RGBSpectrum& s) {
+        RGBSpectrum ret;
+        ret.r = std::exp(ret.r);
+        ret.g = std::exp(ret.g);
+        ret.b = std::exp(ret.b);
+        return ret;
+	}
 
 	friend std::ostream &operator << (std::ostream &os, const RGBSpectrum &color) {
 		os << color.toString();

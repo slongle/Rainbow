@@ -4,7 +4,6 @@
 #include "ext/pcg32/pcg32.h"
 
 #include "vector.h"
-#include "propertylist.h"
 
 RAINBOW_NAMESPACE_BEGIN
 

@@ -7,6 +7,7 @@
 #include "scene.h"
 #include "light.h"
 #include "material.h"
+#include "medium.h"
 
 #include "src/cameras/perspective.h"
 
@@ -16,6 +17,7 @@
 #include "src/integrators/direct.h"
 #include "src/integrators/whitted.h"
 #include "src/integrators/path.h"
+#include "src/integrators/volpath.h"
 
 #include "src/materials/matte.h"
 #include "src/materials/mirror.h"
@@ -25,6 +27,8 @@
 #include "src/samplers/independent.h"
 
 #include "src/accelerators/bvh.h"
+
+#include "src/media/homogeneous.h"
 
 RAINBOW_NAMESPACE_BEGIN
 
@@ -67,20 +71,74 @@ struct RenderOptions {
 	std::vector<std::shared_ptr<Light>> lights;
 	std::shared_ptr<Material> CurrentMaterial;
     std::map<std::string, std::shared_ptr<Material>> MaterialMap;
+
+    Medium *CurrentMediumInter, *CurrentMediumExter;
 };
 
 static std::shared_ptr<RenderOptions> renderOptions;
 static std::shared_ptr<TransformPool> transformPool;
 
-std::vector<std::shared_ptr<Shape>> MakeShapes(const std::string & type, 
-	const Transform* o2w, const Transform* w2o, PropertyList & list);
-std::shared_ptr<Material> MakeMaterial(const std::string & type, PropertyList & list);
-std::shared_ptr<AreaLight> MakeAreaLight(PropertyList & list, const std::shared_ptr<Shape> shape);
+std::vector<std::shared_ptr<Shape>> MakeShapes(const std::string & type,
+    const Transform* o2w, const Transform* w2o, PropertyList & list) {
+    std::vector<std::shared_ptr<Shape>> shapes;
+    if (type == "obj") {
+        std::vector<std::shared_ptr<Triangle>> tris(CreateWavefrontOBJ(o2w, w2o, list));
+        shapes.insert(shapes.end(), tris.begin(), tris.end());
+    }
+    else if (type == "sphere") {
+        shapes.push_back(CreateSphere(o2w, w2o, list));
+    }
+    else if (type == "rectangle") {
+        std::vector<std::shared_ptr<Triangle>> tris(CreateRectangle(o2w, w2o, list));
+        shapes.insert(shapes.end(), tris.begin(), tris.end());
+    }
+    else if (type == "cube") {
+        std::vector<std::shared_ptr<Triangle>> tris(CreateCube(o2w, w2o, list));
+        shapes.insert(shapes.end(), tris.begin(), tris.end());
+    }
+    return shapes;
+}
+
+std::shared_ptr<Material> MakeMaterial(const std::string & type, PropertyList & list) {
+    Material* material = nullptr;
+    if (type == "diffuse" || type == "matte") {
+        material = CreateMatteMaterial(list);
+    }
+    else if (type == "mirror") {
+        material = CreateMirrorMaterial(list);
+    }
+    else if (type == "glass" || type == "dielectric") {
+        material = CreateGlassMaterial(list);
+    }
+    else if (type == "roughconductor") {
+        material = CreateRoughConductorMaterial(list);
+    }
+    return std::shared_ptr<Material>(material);
+}
+
+Medium* MakeMedium(const std::string & type, PropertyList & list) {
+    Medium *medium = nullptr;
+    if (type == "homogeneous") {
+        medium = CreateHomogeneousMedium(list);
+    }
+    return medium;
+}
+
+std::shared_ptr<AreaLight> MakeAreaLight(
+    PropertyList& list,
+    const std::shared_ptr<Shape>& shape,
+    const MediumInterface& mediumInterface) 
+{
+    std::shared_ptr<AreaLight> area;
+    area = CreateAreaLight(list, shape, mediumInterface);
+    return area;
+}
 
 void RainbowInit() {
-	renderOptions = std::make_shared<RenderOptions>();
-	transformPool = std::make_shared<TransformPool>();
+    renderOptions = std::make_shared<RenderOptions>();
+    transformPool = std::make_shared<TransformPool>();
 }
+
 
 void RainbowWorld() {
 	//std::shared_ptr<Integrator> integrator(renderOptions->MakeIntegrator());
@@ -139,17 +197,22 @@ void RainbowShape(const std::string & type, PropertyList & list) {
 	std::vector<std::shared_ptr<Shape>> shapes = MakeShapes(type, ObjectToWorld, WorldToObject, list);
 	std::vector<std::shared_ptr<Light>> lights;
 	std::shared_ptr<Material> mtl = renderOptions->CurrentMaterial;
+	renderOptions->CurrentMaterial = nullptr;
+    MediumInterface mi = MediumInterface(renderOptions->CurrentMediumInter, 
+                                         renderOptions->CurrentMediumExter);
+    renderOptions->CurrentMediumInter = nullptr;
+    renderOptions->CurrentMediumExter = nullptr;
+
 	if (shapes.empty()) return;
 	for (auto s : shapes) {
 		std::shared_ptr<AreaLight> area;
 		if (!renderOptions->LightType.empty()) {
-			area = MakeAreaLight(renderOptions->LightProperty, s);
+            area = MakeAreaLight(renderOptions->LightProperty, s, mi);
 			lights.push_back(area);
 		}
-		prims.push_back(std::make_shared<Primitive>(s, mtl, area));
+        prims.push_back(std::make_shared<Primitive>(s, mtl, area, mi));
 	}
 	renderOptions->primitives.insert(renderOptions->primitives.end(), prims.begin(), prims.end());
-	renderOptions->CurrentMaterial = nullptr;
 	if (!lights.empty()) {
 		renderOptions->lights.insert(renderOptions->lights.end(), lights.begin(), lights.end());
 		renderOptions->LightType = "";
@@ -160,6 +223,14 @@ void RainbowShape(const std::string & type, PropertyList & list) {
 void RainbowMaterial(const std::string & type, PropertyList & list) {
 	std::shared_ptr<Material> material = MakeMaterial(type, list);
 	renderOptions->CurrentMaterial = material;
+}
+
+void RainbowMedium(const std::string& type, const std::string& name, PropertyList& list) {
+     Medium *medium = MakeMedium(type, list);
+     if (name == "exterior")
+         renderOptions->CurrentMediumExter = medium;
+     else if (name == "interior")
+         renderOptions->CurrentMediumInter = medium;
 }
 
 void RainbowLight(const std::string & type, PropertyList & list) {
@@ -186,8 +257,8 @@ void RainbowTransform(const Transform & ObjectToWorld) {
 
 Aggregate* RenderOptions::MakeAggregate() {
     //Aggregate* aggregate = new BVHAccelerator(primitives);
-	//Aggregate* aggregate = new Aggregate(primitives);
-    Aggregate* aggregate = CreateBVHAccelerator(primitives);
+	Aggregate* aggregate = new Aggregate(primitives);
+    //Aggregate* aggregate = CreateBVHAccelerator(primitives);
 	primitives.clear();
 	return aggregate;
 }
@@ -252,53 +323,12 @@ Integrator* RenderOptions::MakeIntegrator() {
     else if (IntegratorType == "path") {
         integrator = CreatePathIntegrator(IntegratorProperty);
     }
+    else if (IntegratorType == "volpath") {
+        integrator = CreateVolPathIntegrator(IntegratorProperty);
+    }
 	integrator->camera = camera;
 	integrator->sampler = sampler;
 	return integrator;
-}
-
-std::vector<std::shared_ptr<Shape>> MakeShapes(const std::string & type, 
-	const Transform* o2w, const Transform* w2o, PropertyList & list) {
-	std::vector<std::shared_ptr<Shape>> shapes;
-	if (type == "obj") {
-        std::vector<std::shared_ptr<Triangle>> tris(CreateWavefrontOBJ(o2w, w2o, list));
-        shapes.insert(shapes.end(), tris.begin(), tris.end());
-	}
-	else if (type == "sphere") {
-		shapes.push_back(CreateSphere(o2w, w2o, list));
-	}
-    else if (type =="rectangle") {
-        std::vector<std::shared_ptr<Triangle>> tris(CreateRectangle(o2w, w2o, list));
-        shapes.insert(shapes.end(), tris.begin(), tris.end());
-    }
-    else if (type =="cube") {
-        std::vector<std::shared_ptr<Triangle>> tris(CreateCube(o2w, w2o, list));
-        shapes.insert(shapes.end(), tris.begin(), tris.end());
-    }
-	return shapes;
-}
-
-std::shared_ptr<Material> MakeMaterial(const std::string & type, PropertyList & list) {
-	Material* material = nullptr;
-	if (type == "diffuse" || type == "matte") {
-		material = CreateMatteMaterial(list);
-	}
-    else if (type == "mirror") {
-        material = CreateMirrorMaterial(list);
-    }
-    else if (type == "glass" || type == "dielectric") {
-        material = CreateGlassMaterial(list);
-    }
-    else if (type == "roughconductor") {
-        material = CreateRoughConductorMaterial(list);
-    }
-	return std::shared_ptr<Material>(material);
-}
-
-std::shared_ptr<AreaLight> MakeAreaLight(PropertyList & list, const std::shared_ptr<Shape> shape) {
-	std::shared_ptr<AreaLight> area;
-	area = CreateAreaLight(list, shape);
-	return area;
 }
 
 RAINBOW_NAMESPACE_END

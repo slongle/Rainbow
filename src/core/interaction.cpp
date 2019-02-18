@@ -27,13 +27,22 @@ Point3f OffsetRayOrigin(const Point3f &p, const Vector3f &pError,
     return po;
 }
 
-Interaction::Interaction(const Point3f & m_p, const Vector3f & m_pError, const Normal3f & m_n, const Vector3f& m_wo) :
-	p(m_p), n(m_n), wo(m_wo) {}
+Interaction::Interaction(
+    const Point3f & m_p, const Vector3f & m_pError,
+    const Normal3f & m_n, const Vector3f& m_wo,
+    const MediumInterface& m_mediumInterface) :
+    p(m_p), n(m_n), wo(m_wo), mediumInterface(m_mediumInterface) {}
 
-SurfaceInteraction::SurfaceInteraction(const Point3f & m_p, const Vector3f & m_pError,
-    const Normal3f & m_n, const Vector3f & m_wo, const Shape * m_shape) :
-    Interaction(m_p, m_pError, m_n, m_wo), shape(m_shape) {
-}
+Interaction::Interaction(
+    const Point3f &m_p, const Vector3f &m_wo,
+    const MediumInterface &m_mediumInterface)
+    : p(m_p), wo(m_wo), mediumInterface(m_mediumInterface) {}
+
+SurfaceInteraction::SurfaceInteraction(
+    const Point3f & m_p, const Vector3f & m_pError,
+    const Normal3f & m_n, const Vector3f & m_wo, const Shape * m_shape) 
+    :
+    Interaction(m_p, m_pError, m_n, m_wo, MediumInterface()), shape(m_shape) {}
 
 void SurfaceInteraction::ComputeScatteringFunctions(MemoryArena& arena) {
 	if (primitive)
@@ -44,5 +53,10 @@ RGBSpectrum SurfaceInteraction::Le(const Vector3f & w) const {
 	AreaLight* areaLight= primitive->getAreaLight();
 	return areaLight ? areaLight->L(*this, w) : RGBSpectrum(0.0);
 }
+
+MediumInteraction::MediumInteraction(
+    const Point3f & m_p, const Vector3f & m_wo,
+    const Medium * m_medium, const PhaseFunction * m_phase)
+    :Interaction(m_p, m_wo, MediumInterface(m_medium)), phase(m_phase) {}
 
 RAINBOW_NAMESPACE_END

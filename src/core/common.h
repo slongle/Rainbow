@@ -42,6 +42,8 @@ typedef float Float;
 typedef double Float;
 #endif
 
+#define MAXFLOAT std::numeric_limits<Float>::max()
+
 RAINBOW_NAMESPACE_BEGIN
 
 /* Forward declarations */
@@ -76,6 +78,8 @@ class AreaLight;
 class Sampler;
 class BxDF;
 class MicrofacetDistribution;
+class Medium;
+class MediumInteraction;
 
 static Float MachineEpsilon = (std::numeric_limits<Float>::epsilon() * 0.5);
 

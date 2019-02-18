@@ -100,6 +100,9 @@
     <Filter Include="Resource Files\scenes\volumetric-caustic">
       <UniqueIdentifier>{a653ea14-3443-4298-8671-0dfaa9ddca23}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\media">
+      <UniqueIdentifier>{677a1292-e381-476c-8831-7b730dc1b14d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\core\bbox.cpp">
@@ -269,6 +272,12 @@
     </ClCompile>
     <ClCompile Include="..\src\core\medium.cpp">
       <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\integrators\volpath.cpp">
+      <Filter>Source Files\integrators</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\media\homogeneous.cpp">
+      <Filter>Source Files\media</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -470,6 +479,12 @@
     <ClInclude Include="..\src\core\medium.h">
       <Filter>Source Files\core</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\integrators\volpath.h">
+      <Filter>Source Files\integrators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\media\homogeneous.h">
+      <Filter>Source Files\media</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\log\20180811.md">
@@ -514,7 +529,6 @@
     <None Include="..\ext\imgui\.travis.yml">
       <Filter>Extend Files\imgui</Filter>
     </None>
-    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\scenes\cbox\cbox-whitted.xml">

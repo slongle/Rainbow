@@ -248,7 +248,7 @@ int BVHAccelerator::FlattenBVHTree(BVHBuildNode * node, int * offset) {
     return myOffset;
 }
 
-bool BVHAccelerator::Intersect(const Ray & ray, SurfaceInteraction * inter) const {
+bool BVHAccelerator::IntersectP(const Ray & ray, SurfaceInteraction * inter) const {
     if (!nodes) return false;
     bool hit = false;
     Vector3f invDir(1 / ray.d.x, 1 / ray.d.y, 1 / ray.d.z);
@@ -258,11 +258,11 @@ bool BVHAccelerator::Intersect(const Ray & ray, SurfaceInteraction * inter) cons
     int nodesToVisit[64];
     while(true) {
         LinearBVHNode *node = &nodes[currentNodeIndex];
-        if (node->bounds.IntersectP(ray,invDir,dirIsNeg)) {
+        if (node->bounds.Intersect(ray,invDir,dirIsNeg)) {
             if (node->nPrimitives > 0) {
                 // Leaf node
                 for (int i = 0; i < node->nPrimitives; i++)
-                    if (primitives[node->primitivesOffset + i]->Intersect(ray, inter))
+                    if (primitives[node->primitivesOffset + i]->IntersectP(ray, inter))
                         hit = true;
                 if (toVisitOffset == 0) break;
                 currentNodeIndex = nodesToVisit[--toVisitOffset];
@@ -287,7 +287,7 @@ bool BVHAccelerator::Intersect(const Ray & ray, SurfaceInteraction * inter) cons
     return hit;
 }
 
-bool BVHAccelerator::IntersectP(const Ray & ray) const {
+bool BVHAccelerator::Intersect(const Ray & ray) const {
     if (!nodes) return false;
     Vector3f invDir(1 / ray.d.x, 1 / ray.d.y, 1 / ray.d.z);
     int dirIsNeg[3] = { invDir.x < 0,invDir.y < 0,invDir.z < 0 };
@@ -296,11 +296,11 @@ bool BVHAccelerator::IntersectP(const Ray & ray) const {
     int nodesToVisit[64];
     while (true) {
         LinearBVHNode *node = &nodes[currentNodeIndex];
-        if (node->bounds.IntersectP(ray, invDir, dirIsNeg)) {
+        if (node->bounds.Intersect(ray, invDir, dirIsNeg)) {
             if (node->nPrimitives > 0) {
                 // Leaf node
                 for (int i = 0; i < node->nPrimitives; i++)
-                    if (primitives[node->primitivesOffset + i]->IntersectP(ray))
+                    if (primitives[node->primitivesOffset + i]->Intersect(ray))
                         return true;
                 if (toVisitOffset == 0) break;
                 currentNodeIndex = nodesToVisit[--toVisitOffset];

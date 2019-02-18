@@ -16,8 +16,8 @@ public:
 	virtual Bounds3f WorldBounds() const;
 	virtual Bounds3f ObjectBounds() const = 0;
 
-	virtual bool Intersect(const Ray & ray,Float *tHit, SurfaceInteraction*inter) const = 0;
-	virtual bool IntersectP(const Ray & ray) const;
+	virtual bool IntersectP(const Ray & ray,Float *tHit, SurfaceInteraction*inter) const = 0;
+	virtual bool Intersect(const Ray & ray) const;
 
 	virtual Interaction Sample(const Point3f &p, const Point2f& sample, Float* pdf) const = 0;
 	virtual Interaction Sample(const Interaction &ref, const Point2f& sample, Float* pdf) const;

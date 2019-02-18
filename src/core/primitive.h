@@ -1,6 +1,7 @@
 #ifndef __PRIMITIVE_H
 #define __PRIMITIVE_H
 
+#include "sampler.h"
 #include "shape.h"
 #include "material.h"
 
@@ -8,12 +9,13 @@ RAINBOW_NAMESPACE_BEGIN
 
 class Primitive{
 public:
-	Primitive(std::shared_ptr<Shape> m_shape, std::shared_ptr<Material> m_material = nullptr,
-		std::shared_ptr<AreaLight> m_areaLight = nullptr) :
-		shape(m_shape), material(m_material), areaLight(m_areaLight) {}
+    Primitive(const std::shared_ptr<Shape> &m_shape,
+              const std::shared_ptr<Material> &m_material,
+              const std::shared_ptr<AreaLight> &m_areaLight,
+              const MediumInterface &m_mediumInterface);
 
-	bool Intersect(const Ray & ray, SurfaceInteraction*inter) const;
-	bool IntersectP(const Ray & ray) const;
+	bool IntersectP(const Ray & ray, SurfaceInteraction*inter) const;
+	bool Intersect(const Ray & ray) const;
 
 	void ComputeScatteringFunctions(MemoryArena& arena, SurfaceInteraction* intersection) const;
 
@@ -22,13 +24,14 @@ public:
 	std::shared_ptr<Shape> shape;
 	std::shared_ptr<Material> material;
 	std::shared_ptr<AreaLight> areaLight;
+    MediumInterface mediumInterface;
 };
 
 class Aggregate{
 public:
 	Aggregate(std::vector<std::shared_ptr<Primitive>>& m_primitives) : primitives(m_primitives) {}
-	virtual bool Intersect(const Ray & ray, SurfaceInteraction*inter) const;
-	virtual bool IntersectP(const Ray & ray) const;
+	virtual bool IntersectP(const Ray & ray, SurfaceInteraction*inter) const;
+	virtual bool Intersect(const Ray & ray) const;
 
 	Bounds3f Bounds() const ;
 

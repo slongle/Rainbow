@@ -5,7 +5,7 @@ RAINBOW_NAMESPACE_BEGIN
 RGBSpectrum DirectLightIntegrator::Li(MemoryArena& arena, const Ray & ray, const Scene & scene, Sampler &sampler, int depth) {
     RGBSpectrum L(0.0);
     SurfaceInteraction intersection;
-    if (!scene.Intersect(ray, &intersection)) {
+    if (!scene.IntersectP(ray, &intersection)) {
         return L;
     }
 
@@ -21,7 +21,7 @@ RGBSpectrum DirectLightIntegrator::Li(MemoryArena& arena, const Ray & ray, const
     }
 
     if (scene.lights.size() > 0) {
-        L += UniformSampleOneLight(intersection, scene);
+        L += UniformSampleOneLight(intersection, scene, sampler);
     }
 
     if (depth + 1 < maxDepth) {
