@@ -9,6 +9,15 @@
 
 #define ARENA_ALLOCA(ARENA, TYPE) new ((ARENA).Alloc(sizeof(TYPE))) TYPE
 
+void* AllocAligned(const size_t size);
+
+template<typename T>
+T* AllocAligned(const size_t count) {
+    return (T*)AllocAligned(count * sizeof(T));
+}
+
+void FreeAligned(void *ptr);
+
 class MemoryArena {
 public:
     MemoryArena(size_t m_blockSize = 1 << 18) :blockSize(m_blockSize) {}

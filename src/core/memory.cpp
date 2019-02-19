@@ -6,11 +6,6 @@ void* AllocAligned(const size_t size) {
     return _aligned_malloc(size, RAINBOW_L1_CACHE_LINE_SIZE);
 }
 
-template<typename T>
-T* AllocAligned(const size_t count) {
-    return (T*)AllocAligned(count * sizeof(T));
-}
-
 void FreeAligned(void *ptr) {
     if (!ptr) return;
     _aligned_free(ptr);

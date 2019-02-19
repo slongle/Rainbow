@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <scene version="0.5.0" >
-  <mode type="test"/>
+  <mode type="final"/>
   <integrator type="path" >
     <integer name="maxDepth" value="5" />
-    <integer name="sampleNum" value="1000"/>
+    <integer name="sampleNum" value="10000"/>
     <integer name="delta" value="100"/>
     <boolean name="strictNormals" value="true" />
   </integrator>
@@ -21,7 +21,7 @@
 	    <integer name="sampleCount" value="512"/>
 	  </sampler>
 		<film type="ldrfilm" >
-		  <string name="filename" value="veach-mis_1.png"/>
+		  <string name="filename" value="veach-mis.png"/>
       <integer name="width" value="1280" />
 			<integer name="height" value="720" />
 			<string name="fileFormat" value="png" />

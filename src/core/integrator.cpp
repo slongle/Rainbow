@@ -186,12 +186,12 @@ void SamplerIntegrator::RenderTile(const Scene &scene, Sampler& sampler, FilmTil
     for (int y = tile.bounds.pMin.y; y < tile.bounds.pMax.y; y++) {
         for (int x = tile.bounds.pMin.x; x < tile.bounds.pMax.x; x++) {            
             RGBSpectrum L(0.);
-            for (int i = 0; i < sampleNum; i++) {
+            for (int i = 0; i < delta; i++) {
                 Point2f pixelSample = Point2f(x, y) + sampler.Get2D();
                 RGBSpectrum weight = camera->GenerateRay(&ray, pixelSample);
                 L += weight * Li(arena, ray, scene, sampler, 0);
             }
-            tile.AddSample(Point2f(x, y), L, sampleNum);
+            tile.AddSample(Point2f(x, y), L, delta);
         }                
     }
 }
@@ -202,44 +202,51 @@ void SamplerIntegrator::Render(const Scene &scene) {
     tiles = FilmTile::GenerateTiles(camera->film->resolution, RAINBOW_TILE_SIZE);
 
     cout << sampleNum << endl;
-    cout << "Rendering .. ";
+    cout << "Rendering .. \n";
     cout.flush();
     std::string filename = film->filename;
     Timer timer;
 
     std::thread renderThread([&] {
 
-        tbb::blocked_range<int> range(0, tiles.size());                
+        tbb::blocked_range<int> range(0, tiles.size());
+        int cnt = 1;
+        int area = (film->resolution.x)*(film->resolution.y);
 
-        auto map = [&](const tbb::blocked_range<int> &range) {               
-            for (int i = range.begin(); i<range.end(); ++i) {
+        auto map = [&](const tbb::blocked_range<int> &range) {
+            for (int i = range.begin(); i < range.end(); ++i) {
                 /* Request an image block from the block generator */
                 FilmTile &tile = tiles[i];
-                
+
                 /* Inform the sampler about the block to be rendered */
-                std::unique_ptr<Sampler> clonedSampler(sampler->Clone(tile.bounds.pMin));
+                Point2i seed = Point2i((cnt - 1)*area, (cnt - 1)*area) + 
+                               tile.bounds.pMin;
+                
+                std::unique_ptr<Sampler> clonedSampler(sampler->Clone(seed));
 
                 /* Render all contained pixels */
                 RenderTile(scene, *clonedSampler, tile);
 
                 film->MergeFilmTile(tile);
-            }                
+            }
         };
 
-        
+        for (cnt = 1; cnt <= sampleNum / delta; cnt++) {
             /// Uncomment the following line for single threaded rendering
             //map(range);
 
             /// Default: parallel rendering
             tbb::parallel_for(range, map);
 
-           
-    });
-    
-    
-    renderThread.join();
+            std::string tmpName = filename;
+            tmpName.insert(film->filename.find_last_of('.'), "_" + std::to_string(cnt * delta) + "spp");
+            std::cout << tmpName << std::endl;
+            film->SaveImage(tmpName);
+        }
 
-    film->SaveImage();
+    });
+
+    renderThread.join();    
 
     cout << timer.LastTime() << endl;
 }

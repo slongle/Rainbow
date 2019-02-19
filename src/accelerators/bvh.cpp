@@ -75,7 +75,7 @@ BVHAccelerator::BVHAccelerator(std::vector<std::shared_ptr<Primitive>>& m_primit
     orderedPrims.resize(0);
 
     // Compute representation of depth-first traversal of BVH tree
-    nodes = arena.Alloc<LinearBVHNode>(totalNodes);
+    nodes = AllocAligned<LinearBVHNode>(totalNodes);
     int offset = 0;
     FlattenBVHTree(root, &offset);
 }

@@ -67,7 +67,7 @@ public:
     void TestRender(const Scene &scene);
     void AdaptiveRender(const Scene &scene);
 
-    int sampleNum, delta;    
+    int sampleNum, delta;
 };
 
 RAINBOW_NAMESPACE_END

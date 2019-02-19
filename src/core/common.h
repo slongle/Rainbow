@@ -58,6 +58,7 @@ template<typename T> class Bounds3;
 typedef Vector2<Float> Vector2f;
 typedef Vector3<Float> Vector3f;
 typedef Point2<int>	   Point2i;
+//typedef Point2<uint64_t> Point2u64;
 typedef Point2<Float>  Point2f;
 typedef Point3<Float>  Point3f;
 typedef Normal3<Float> Normal3f;
