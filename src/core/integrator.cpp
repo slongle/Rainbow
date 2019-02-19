@@ -220,7 +220,7 @@ void SamplerIntegrator::Render(const Scene &scene) {
                 std::unique_ptr<Sampler> clonedSampler(sampler->Clone(tile.bounds.pMin));
 
                 /* Render all contained pixels */
-                RenderTileAdaptive(scene, *clonedSampler, tile);
+                RenderTile(scene, *clonedSampler, tile);
 
                 film->MergeFilmTile(tile);
             }                
@@ -240,7 +240,6 @@ void SamplerIntegrator::Render(const Scene &scene) {
     renderThread.join();
 
     film->SaveImage();
-    film->SaveHeatMapImage("heat_" + filename);
 
     cout << timer.LastTime() << endl;
 }

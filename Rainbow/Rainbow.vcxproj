@@ -300,6 +300,9 @@
     <Xml Include="..\scenes\volumetric-caustic\scene.xml">
       <SubType>Designer</SubType>
     </Xml>
+    <Xml Include="..\scenes\water-caustic\scene.xml">
+      <SubType>Designer</SubType>
+    </Xml>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\ext\imgui\LICENSE.txt" />

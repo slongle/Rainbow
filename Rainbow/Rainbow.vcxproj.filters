@@ -103,6 +103,9 @@
     <Filter Include="Source Files\media">
       <UniqueIdentifier>{677a1292-e381-476c-8831-7b730dc1b14d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\scenes\water-caustic">
+      <UniqueIdentifier>{7d12c4b3-bc99-4314-9066-83aef212eb79}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\core\bbox.cpp">
@@ -554,6 +557,9 @@
     </Xml>
     <Xml Include="..\scenes\volumetric-caustic\scene.xml">
       <Filter>Resource Files\scenes\volumetric-caustic</Filter>
+    </Xml>
+    <Xml Include="..\scenes\water-caustic\scene.xml">
+      <Filter>Resource Files\scenes\water-caustic</Filter>
     </Xml>
   </ItemGroup>
   <ItemGroup>
