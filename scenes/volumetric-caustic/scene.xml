@@ -4,8 +4,8 @@
   <mode type="final"/>
   <integrator type="volpath" >
 		<integer name="maxDepth" value="7" />
-    <integer name="sampleNum" value="50"/>
-    <integer name="delta" value="50"/>
+    <integer name="sampleNum" value="100"/>
+    <integer name="delta" value="100"/>
 		<boolean name="strictNormals" value="true" />
 	</integrator>
 	<sensor type="perspective" >
@@ -18,7 +18,7 @@
 			<integer name="sampleCount" value="64" />
 		</sampler>
 		<film type="ldrfilm" >
-		  <string name="filename" value="vol-caustic_10.png"/>
+		  <string name="filename" value="vol-caustic_100spp.png"/>
       <integer name="width" value="1024" />
 			<integer name="height" value="1024" />
 			<string name="fileFormat" value="png" />

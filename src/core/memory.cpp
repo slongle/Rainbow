@@ -48,7 +48,7 @@ void* MemoryArena::Alloc(size_t nBytes) {
         }
     }
 
-    void*ret = currentBlock + currentBlockPos;
+    void *ret = currentBlock + currentBlockPos;
     currentBlockPos += nBytes;
     return ret;
 }

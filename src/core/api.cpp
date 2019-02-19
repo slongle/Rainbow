@@ -257,8 +257,8 @@ void RainbowTransform(const Transform & ObjectToWorld) {
 
 Aggregate* RenderOptions::MakeAggregate() {
     //Aggregate* aggregate = new BVHAccelerator(primitives);
-	Aggregate* aggregate = new Aggregate(primitives);
-    //Aggregate* aggregate = CreateBVHAccelerator(primitives);
+	//Aggregate* aggregate = new Aggregate(primitives);
+    Aggregate* aggregate = CreateBVHAccelerator(primitives);
 	primitives.clear();
 	return aggregate;
 }

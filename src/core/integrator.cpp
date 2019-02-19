@@ -178,7 +178,6 @@ void SamplerIntegrator::RenderTileAdaptive(const Scene &scene, Sampler& sampler,
             tile.AddSample(Point2f(x, y), L, num);
         }
     }
-    arena.Reset();
 }
 
 void SamplerIntegrator::RenderTile(const Scene &scene, Sampler& sampler, FilmTile &tile) {    
@@ -187,15 +186,14 @@ void SamplerIntegrator::RenderTile(const Scene &scene, Sampler& sampler, FilmTil
     for (int y = tile.bounds.pMin.y; y < tile.bounds.pMax.y; y++) {
         for (int x = tile.bounds.pMin.x; x < tile.bounds.pMax.x; x++) {            
             RGBSpectrum L(0.);
-            for (int i = 0; i < delta; i++) {
+            for (int i = 0; i < sampleNum; i++) {
                 Point2f pixelSample = Point2f(x, y) + sampler.Get2D();
                 RGBSpectrum weight = camera->GenerateRay(&ray, pixelSample);
                 L += weight * Li(arena, ray, scene, sampler, 0);
             }
-            tile.AddSample(Point2f(x, y), L, delta);
-        }        
+            tile.AddSample(Point2f(x, y), L, sampleNum);
+        }                
     }
-    arena.Reset();
 }
 
 void SamplerIntegrator::Render(const Scene &scene) {    
@@ -222,7 +220,7 @@ void SamplerIntegrator::Render(const Scene &scene) {
                 std::unique_ptr<Sampler> clonedSampler(sampler->Clone(tile.bounds.pMin));
 
                 /* Render all contained pixels */
-                RenderTile(scene, *clonedSampler, tile);
+                RenderTileAdaptive(scene, *clonedSampler, tile);
 
                 film->MergeFilmTile(tile);
             }                
@@ -242,6 +240,7 @@ void SamplerIntegrator::Render(const Scene &scene) {
     renderThread.join();
 
     film->SaveImage();
+    film->SaveHeatMapImage("heat_" + filename);
 
     cout << timer.LastTime() << endl;
 }
