@@ -153,29 +153,46 @@ RGBSpectrum SamplerIntegrator::SpecularRefract
 void SamplerIntegrator::RenderTileAdaptive(const Scene &scene, Sampler& sampler, FilmTile &tile) {
     Ray ray;
     MemoryArena arena;
-    Float maxTolerance = 0.05;
+    Float maxError = 0.05, pValue = 0.05;
+    //boost::math::normal dist(0, 1);
+    //Float quantile = (Float)boost::math::quantile(dist, 1 - pValue / 2);
+    Float quantile = 1.95996;
     for (int y = tile.bounds.pMin.y; y < tile.bounds.pMax.y; y++) {
         for (int x = tile.bounds.pMin.x; x < tile.bounds.pMax.x; x++) {
             RGBSpectrum L(0.0);
-            Float sum = 0, squareSum = 0, sigma, mu, I;
-            int num;
-            for (num = 1; num <= 10240; num++) {                
+            
+            //Float sum = 0, squareSum = 0, sigma, mu, I;
+            Float mean = 0, meanSqr = 0;
+
+            int sampleCount;
+            for (sampleCount = 1; sampleCount <= 10240; sampleCount++) {
                 RGBSpectrum weight = camera->GenerateRay(&ray, Point2f(x, y) + sampler.Get2D());
                 RGBSpectrum li = weight * Li(arena, ray, scene, sampler, 0);
                 L += li;
-                Float illum = li.Luma();
-                sum += illum;
-                squareSum += illum * illum;
-                if (num % 64 == 0) {
-                    mu = sum / num;
-                    sigma = std::sqrt((squareSum - sum * sum / num) / (num - 1));
-                    I = 1.96 * sigma / std::sqrt(num);
-                    if (I <= maxTolerance * mu) {
+
+                Float sampleLuminance = li.Luma();
+                const Float delta = sampleLuminance - mean;
+                mean += delta / sampleCount;
+                meanSqr += delta * (sampleLuminance - mean);
+
+                if (sampleCount>64) {                    
+                    const Float variance = meanSqr / (sampleCount - 1);
+
+                    Float stdError = std::sqrt(variance / sampleCount);
+
+                    /* Half width of the confidence interval */
+                    Float ciWidth = stdError * quantile;
+
+                    /* Relative error heuristic */
+                    //Float base = std::max(mean, m_averageLuminance * 0.01f);
+                    Float base = mean;
+
+                    if (ciWidth <= maxError * base)
                         break;
-                    }
                 }
+
             }
-            tile.AddSample(Point2f(x, y), L, num);
+            tile.AddSample(Point2f(x, y), L, sampleCount);
         }
     }
 }
@@ -212,6 +229,7 @@ void SamplerIntegrator::Render(const Scene &scene) {
         tbb::blocked_range<int> range(0, tiles.size());
         int cnt = 1;
         int area = (film->resolution.x)*(film->resolution.y);
+        std::atomic<int> finishedTiles = 0;
 
         auto map = [&](const tbb::blocked_range<int> &range) {
             for (int i = range.begin(); i < range.end(); ++i) {
@@ -228,6 +246,9 @@ void SamplerIntegrator::Render(const Scene &scene) {
                 RenderTile(scene, *clonedSampler, tile);
 
                 film->MergeFilmTile(tile);
+
+                finishedTiles++;
+                fprintf(stderr, "\r%.2f%%", 100. * finishedTiles / tiles.size());
             }
         };
 
@@ -250,6 +271,64 @@ void SamplerIntegrator::Render(const Scene &scene) {
 
     cout << timer.LastTime() << endl;
 }
+
+
+void SamplerIntegrator::AdaptiveRender(const Scene &scene) {
+    std::shared_ptr<Film> film = camera->film;
+    std::vector<FilmTile> tiles;
+    tiles = FilmTile::GenerateTiles(camera->film->resolution, RAINBOW_TILE_SIZE);
+
+    cout << sampleNum << endl;
+    cout << "Rendering .. \n";
+    cout.flush();
+    std::string filename = film->filename;
+    Timer timer;
+
+    std::thread renderThread([&] {
+
+        tbb::blocked_range<int> range(0, tiles.size());
+        std::atomic<int> cnt = 0;
+        int area = (film->resolution.x)*(film->resolution.y);
+
+        auto map = [&](const tbb::blocked_range<int> &range) {
+            for (int i = range.begin(); i < range.end(); ++i) {
+                /* Request an image block from the block generator */
+                FilmTile &tile = tiles[i];
+
+                /* Inform the sampler about the block to be rendered */
+                Point2i seed = Point2i((cnt - 1)*area, (cnt - 1)*area) +
+                    tile.bounds.pMin;
+
+                std::unique_ptr<Sampler> clonedSampler(sampler->Clone(seed));
+
+                /* Render all contained pixels */
+                RenderTileAdaptive(scene, *clonedSampler, tile);
+
+                film->MergeFilmTile(tile);
+
+                cnt++;
+                fprintf(stderr, "\r%.2f%%", 100. * cnt / tiles.size());
+
+                if (cnt % 20 == 0) film->SaveImage(std::to_string(cnt) + '_' + filename);
+            }
+        };
+        
+        /// Uncomment the following line for single threaded rendering
+        //map(range);
+
+        /// Default: parallel rendering
+        tbb::parallel_for(range, map);
+
+    });
+
+    renderThread.join();
+
+    film->SaveImage();
+    film->SaveHeatMapImage("heat_" + filename);
+
+    cout << timer.LastTime() << endl;
+}
+
 
 void SamplerIntegrator::ProgressiveRender(const Scene &scene,const int& x,const int & y, bool reset) {    
     std::shared_ptr<Film> film = camera->film;
@@ -288,86 +367,6 @@ void SamplerIntegrator::AdaptiveProgressiveRender(const Scene & scene, const int
     }
     film->AddPixel(Point2i(x, y), L, n);
     if (y % 32 == 0) arena.Reset();
-}
-
-void SamplerIntegrator::TestRender(const Scene &scene) {
-    cout << scene.aggregate->primitives.size() << endl;
-    MemoryArena arena;
-    std::shared_ptr<Film> film = camera->film;
-    Ray ray;
-    Timer timer;
-    std::string name = film->filename, tmpName;
-    for (int i = 1; i <= sampleNum / delta; i++) {  
-        tmpName = name;
-        timer.Start();
-        for (int y = 0; y < film->resolution.y; y++) {
-            fprintf(stderr, "\rRendering (%d spp) %5.2f%%", i*delta, 100.*(y + 1) / film->resolution.y);
-            for (int x = 0; x < film->resolution.x; x++) {
-                RGBSpectrum L(0.0);
-                for (int j = 0; j < delta; j++) {
-                    camera->GenerateRay(&ray, Point2f(x, y) + sampler->Get2D());
-                    L += Li(arena, ray, scene, *sampler, 0);
-                }
-                film->AddPixel(Point2i(x, y), L, delta);
-            }
-            arena.Reset();
-        }
-        fflush(stderr);
-        cout << timer.LastTime() << endl;
-        tmpName.insert(name.find_last_of('.'), "_" + std::to_string(i*delta) + "spp");
-        std::cout << tmpName << std::endl;
-        film->SaveImage(tmpName);
-    }
-}
-
-void SamplerIntegrator::AdaptiveRender(const Scene &scene) {
-    cout << scene.aggregate->primitives.size() << endl;
-    MemoryArena arena;
-    std::shared_ptr<Film> film = camera->film;
-    Ray ray;
-    Timer timer;
-    std::string name = film->filename, tmpName;
-    timer.Start();
-    Float maxTolerance = 0.05;
-    int total = film->resolution.x*film->resolution.y, now = 0;
-    for (int y = 0; y < film->resolution.y; y++) {
-        for (int x = 0; x < film->resolution.x; x++) {
-            RGBSpectrum L(0.0);
-            Float sum = 0, squareSum = 0, sigma, mu, I;
-            int n;
-            for (n = 1; n <= 10240 ; n++) {
-                camera->GenerateRay(&ray, Point2f(x, y) + sampler->Get2D());
-                RGBSpectrum li = Li(arena, ray, scene, *sampler, 0);
-                L += li;
-                Float illum = li.Luma();
-                sum += illum;
-                squareSum += illum * illum;
-                if (n % 64 == 0) {
-                    mu = sum / n;
-                    sigma = std::sqrt((squareSum - sum * sum / n) / (n - 1));
-                    I = 1.96 * sigma / std::sqrt(n);
-                    if (I <= maxTolerance * mu) {                        
-                        //cout << I << endl << maxTolerance * mu << endl << endl;
-                        //cout << n << endl;
-                        break;
-                    }
-                }
-            }
-            now++;
-            fprintf(stderr, "\rRendering %d / %d : %d", now, total, n);
-            film->AddPixel(Point2i(x, y), L, n);
-        }
-        if (y % 5 == 1) {
-            std::string heatMapName = "heat_" + std::to_string(y) + "_" + name;
-            film->SaveHeatMapImage(heatMapName);            
-        }
-        if (y % 32 == 0) arena.Reset();
-    }
-    fflush(stderr);
-    cout << timer.LastTime() << endl;
-    film->SaveImage(name);
-    std::string heatMapName = "heat_" + name;
-    film->SaveHeatMapImage(heatMapName);
 }
 
 RAINBOW_NAMESPACE_END

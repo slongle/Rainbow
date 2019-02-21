@@ -59,13 +59,12 @@ public:
     void RenderTileAdaptive(const Scene &scene, Sampler& sampler, FilmTile &tile);
     void RenderTile(const Scene &scene, Sampler& sampler, FilmTile &tile);
 	void Render (const Scene &scene);
+    void AdaptiveRender(const Scene &scene);
     virtual RGBSpectrum Li(MemoryArena& arena, const Ray &ray, const Scene& scene, Sampler &sampler, int depth) = 0;
 
 
     void AdaptiveProgressiveRender(const Scene &scene, const int& x, const int & y);
     void ProgressiveRender(const Scene &scene, const int& x, const int & y, bool reset = false);
-    void TestRender(const Scene &scene);
-    void AdaptiveRender(const Scene &scene);
 
     int sampleNum, delta;
 };

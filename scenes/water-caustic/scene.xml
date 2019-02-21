@@ -4,8 +4,8 @@
   <mode type="final"/>
   <integrator type="path" >
 		<integer name="maxDepth" value="9" />
-    <integer name="sampleNum" value="1"/>
-    <integer name="delta" value="1"/>
+    <integer name="sampleNum" value="100"/>
+    <integer name="delta" value="10"/>
 		<integer name="photonCount" value="5000000" />
 		<float name="initialRadius" value="0.05" />
 		<float name="alpha" value="0.3" />
@@ -134,7 +134,11 @@
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1.5 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
-		<ref id="Water" />
+		<hide id="Water" />
+	  <bsdf type="dielectric">
+	    <float name="intIOR" value="1.8" />
+	    <float name="extIOR" value="1" />
+	  </bsdf>
 	</shape>
 	<shape type="obj" >
 		<string name="filename" value="models/Mesh000.obj" />
@@ -142,6 +146,10 @@
 			<matrix value="1 0 0 0 0 1.5 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<boolean name="faceNormals" value="true" />
-		<ref id="Water" />
+		<hide id="Water" />
+	  <bsdf type="dielectric">
+	    <float name="intIOR" value="1.8" />
+	    <float name="extIOR" value="1" />
+	  </bsdf>
 	</shape>
 </scene>

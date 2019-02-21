@@ -156,9 +156,6 @@ void RainbowWorld() {
     else if (renderOptions->RenderMode == "final") {
         integrator->Render(*scene);        
     }
-    else if (renderOptions->RenderMode == "test") {
-        integrator->TestRender(*scene);
-    }
     else if (renderOptions->RenderMode == "adaptive") {
         integrator->AdaptiveRender(*scene);
     }
