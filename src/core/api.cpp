@@ -30,6 +30,9 @@
 
 #include "src/media/homogeneous.h"
 
+#include "src/lights/spot.h"
+#include "src/lights/point.h"
+
 RAINBOW_NAMESPACE_BEGIN
 
 class TransformPool {
@@ -230,9 +233,17 @@ void RainbowMedium(const std::string& type, const std::string& name, PropertyLis
          renderOptions->CurrentMediumInter = medium;
 }
 
-void RainbowLight(const std::string & type, PropertyList & list) {
-	renderOptions->LightType = type;
-	renderOptions->LightProperty = list;
+void RainbowLight(const std::string & type, PropertyList & list) {	
+    if (type=="spot") {
+        renderOptions->lights.push_back(CreateSpotLight(list));
+    }
+    else if (type == "point") {
+        renderOptions->lights.push_back(CreatePointLight(list));
+    }
+    else if (type == "area") {
+        renderOptions->LightType = type;
+        renderOptions->LightProperty = list;
+    }
 }
 
 void RainbowBSDFMap(const std::string& type, PropertyList& list) {

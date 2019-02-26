@@ -15,7 +15,7 @@
 	          <integer name="sampleCount" value="512"/>
 	      </sampler>
 		    <film type="hdrfilm">
-            <string name="filename" value="sphere-cornell-box_1000spp.png"/>
+            <string name="filename" value="sphere-cornell-box.png"/>
 			      <integer name="height" value="600"/>
 			      <integer name="width" value="800"/>
 		    </film>
@@ -28,13 +28,13 @@
         <bsdf type="mirror"/>
     </shape>
 
-    <shape type="sphere">
+    <hide type="sphere">
         <transform name="toWorld">
             <translate value="0.4456, 0.3301, 0.3767"/>
         </transform>
         <float name="radius" value="0.3261"/>
         <bsdf type="glass"/>
-    </shape>
+    </hide>
 
 	  <shape type="obj">
 		    <string name="filename" value="meshes/walls.obj"/>

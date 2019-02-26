@@ -35,8 +35,13 @@ Interaction::Interaction(
 
 Interaction::Interaction(
     const Point3f &m_p, const Vector3f &m_wo,
-    const MediumInterface &m_mediumInterface)
-    : p(m_p), wo(m_wo), mediumInterface(m_mediumInterface) {}
+    const MediumInterface &m_mediumInterface) : 
+    p(m_p), wo(m_wo), mediumInterface(m_mediumInterface) {}
+
+Interaction::Interaction(
+    const Point3f & m_p,
+    const MediumInterface & m_mediumInterface) :
+    p(m_p), mediumInterface(m_mediumInterface) {}
 
 SurfaceInteraction::SurfaceInteraction(
     const Point3f & m_p, const Vector3f & m_pError,

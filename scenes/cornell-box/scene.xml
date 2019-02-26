@@ -4,7 +4,7 @@
   <mode type="final"/>
 	<integrator type="path" >
 		<integer name="maxDepth" value="65" />
-        <integer name="sampleNum" value="10"/>
+        <integer name="sampleNum" value="1000"/>
         <integer name="delta" value="10"/>
 		<boolean name="strictNormals" value="true" />
 	</integrator>
@@ -21,7 +21,7 @@
 	    <integer name="sampleCount" value="512"/>
 	  </sampler>
 		<film type="ldrfilm" >
-      <string name="filename" value="cornell-box_3.png"/>
+      <string name="filename" value="cornell-box_4.png"/>
 			<integer name="width" value="1024" />
 			<integer name="height" value="1024" />
 			<string name="fileFormat" value="png" />
@@ -113,7 +113,26 @@
 		</transform>
 		<ref id="TallBox" />
 	</shape>
-	<shape type="rectangle" >
+
+  <emitter type="point">
+    <transform name="toWorld">
+      <matrix value="0.235 -1.66103e-008 -7.80685e-009 -0.005 -2.05444e-008 3.90343e-009 -0.0893 1.98 2.05444e-008 0.19 8.30516e-009 -0.03 0 0 0 1"/>
+      <translate value="0, 0, 0.5"/>
+    </transform>
+    <rgb name="intensity" value="1, 1, 1"/>
+  </emitter>
+
+  <hide type="spot">
+    <transform name="toWorld">
+      <matrix value="0.235 -1.66103e-008 -7.80685e-009 -0.005 -2.05444e-008 3.90343e-009 -0.0893 1.98 2.05444e-008 0.19 8.30516e-009 -0.03 0 0 0 1"/>
+      <translate value="0, 0, 0.5"/>
+    </transform>
+    <rgb name="intensity" value="1, 1, 1"/>
+    <float name="totalAngle" value="10"/>
+    <float name="falloffAngle" value="5"/>
+  </hide>
+
+	<hide type="rectangle" >
 		<transform name="toWorld" >
 			<matrix value="0.235 -1.66103e-008 -7.80685e-009 -0.005 -2.05444e-008 3.90343e-009 -0.0893 1.98 2.05444e-008 0.19 8.30516e-009 -0.03 0 0 0 1"/>
 		</transform>
@@ -121,5 +140,5 @@
 		<emitter type="area" >
 			<rgb name="radiance" value="17, 12, 4"/>
 		</emitter>
-	</shape>
+	</hide>
 </scene>

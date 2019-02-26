@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- MI test scene from Eric Veach's thesis - modeled
+     after a file by Steve Marschner (CS667)
+-->
+<scene version="0.5.0">
+	<integrator type="path">
+		<integer name="maxDepth" value="5"/>
+		<integer name="sampleNum" value="10000"/>
+		<integer name="delta" value="100"/>
+	</integrator>
+
+	<shape type="sphere">
+		<transform name="toWorld">
+			<translate value="10, 10, 4"/>
+		</transform>
+		<float name="radius" value=".5"/>
+
+		<emitter type="area">
+			<rgb name="radiance" value="800, 800, 800"/>
+		</emitter>
+
+		<bsdf type="diffuse">
+			<rgb name="reflectance" value="0,0,0"/>
+		</bsdf>
+	</shape>
+
+	<shape type="sphere">
+		<transform name="toWorld">
+			<translate value="-1.25, 0, 0"/>
+		</transform>
+		<float name="radius" value=".1"/>
+
+		<emitter type="area">
+			<rgb name="radiance" value="100, 100, 100"/>
+		</emitter>
+
+		<bsdf type="diffuse">
+			<rgb name="reflectance" value="0,0,0"/>
+		</bsdf>
+	</shape>
+
+	<shape type="sphere">
+		<transform name="toWorld">
+			<translate value="-3.75, 0, 0"/>
+		</transform>
+		<float name="radius" value=".03333"/>
+
+		<emitter type="area">
+			<rgb name="radiance" value="901.803 901.803 901.803"/>
+		</emitter>
+
+		<bsdf type="diffuse">
+			<rgb name="reflectance" value="0,0,0"/>
+		</bsdf>
+	</shape>
+
+	<shape type="sphere">
+		<transform name="toWorld">
+			<translate value="1.25, 0, 0"/>
+		</transform>
+		<float name="radius" value=".3"/>
+
+		<emitter type="area">
+			<rgb name="radiance" value="11.1111 11.1111 11.1111"/>
+		</emitter>
+
+		<bsdf type="diffuse">
+			<rgb name="reflectance" value="0,0,0"/>
+		</bsdf>
+	</shape>
+
+	<shape type="sphere">
+		<transform name="toWorld">
+			<translate value="3.75, 0, 0"/>
+		</transform>
+		<float name="radius" value=".9"/>
+
+		<emitter type="area">
+			<rgb name="radiance" value="1.23457 1.23457 1.23457"/>
+		</emitter>
+
+		<bsdf type="diffuse">
+			<rgb name="reflectance" value="0,0,0"/>
+		</bsdf>
+	</shape>
+
+	<shape type="obj">
+		<string name="filename" value="models/plate1.obj"/>
+
+		<bsdf type="roughconductor">
+			<float name="alpha" value="0.01"/>
+			<string name="distribution" value="beckmann"/>
+			<float name="extEta" value="1"/>
+			<rgb name="specularReflectance" value="0.3, 0.3, 0.3"/>
+			<rgb name="eta" value="0.200438, 0.924033, 1.10221"/>
+			<rgb name="k" value="3.91295, 2.45285, 2.14219"/>
+		</bsdf>
+	</shape>
+
+	<shape type="obj">
+		<string name="filename" value="models/plate2.obj"/>
+
+		<bsdf type="roughconductor">
+			<float name="alpha" value="0.05"/>
+			<string name="distribution" value="beckmann"/>
+			<float name="extEta" value="1"/>
+			<rgb name="specularReflectance" value="0.3, 0.3, 0.3"/>
+			<rgb name="eta" value="0.200438, 0.924033, 1.10221"/>
+			<rgb name="k" value="3.91295, 2.45285, 2.14219"/>
+		</bsdf>
+	</shape>
+
+	<shape type="obj">
+		<string name="filename" value="models/plate3.obj"/>
+
+		<bsdf type="roughconductor">
+			<float name="alpha" value="0.1"/>
+			<string name="distribution" value="beckmann"/>
+			<float name="extEta" value="1"/>
+			<rgb name="specularReflectance" value="0.3, 0.3, 0.3"/>
+			<rgb name="eta" value="0.200438, 0.924033, 1.10221"/>
+			<rgb name="k" value="3.91295, 2.45285, 2.14219"/>
+		</bsdf>
+	</shape>
+
+	<shape type="obj">
+		<string name="filename" value="models/plate4.obj"/>
+
+		<bsdf type="roughconductor">
+			<float name="alpha" value="0.25"/>
+			<string name="distribution" value="beckmann"/>
+			<float name="extEta" value="1"/>
+			<rgb name="specularReflectance" value="0.3, 0.3, 0.3"/>
+			<rgb name="eta" value="0.200438, 0.924033, 1.10221"/>
+			<rgb name="k" value="3.91295, 2.45285, 2.14219"/>
+		</bsdf>
+	</shape>
+
+	<shape type="obj">
+		<string name="filename" value="models/floor.obj"/>
+
+		<bsdf type="diffuse">
+			<rgb name="reflectance" value="0.4 0.4 0.4"/>
+		</bsdf>
+	</shape>
+
+	<sensor type="perspective">
+		<string name="fovAxis" value="smaller"/>
+		<transform name="toWorld">
+			<scale value="-1, 1, 1"/>
+			<lookAt origin="0, 2, 15" target="0, -2, 2.5" up="0, 1, 0"/>
+		</transform>
+		<float name="fov" value="28"/>
+
+		<sampler type="independent">
+			<integer name="sampleCount" value="16"/>
+			<integer name="dimension" value="1"/>
+		</sampler>
+
+		<film type="hdrfilm">
+			<string name="filename" value="veach-mis.png"/>
+			<integer name="width" value="768"/>
+			<integer name="height" value="512"/>
+			<boolean name="banner" value="true"/>
+
+			<rfilter type="gaussian"/>
+		</film>
+	</sensor>
+</scene>

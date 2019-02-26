@@ -29,7 +29,7 @@ RGBSpectrum Visibility::Tr(const Scene & scene, Sampler& sampler) const {
 }
 
 RGBSpectrum AreaLight::L(const Interaction& interaction, const Vector3f & w) const {
-	return (Dot(interaction.n, w) > 0) ? Le : RGBSpectrum(0.0);
+	return (Dot(interaction.n, w) > 0) ? I : RGBSpectrum(0.0);
 }
 
 Float AreaLight::PdfLi(const Interaction & ref, const Vector3f & wi) const {
@@ -63,8 +63,9 @@ std::shared_ptr<AreaLight> CreateAreaLight(
     PropertyList& list, 
     const std::shared_ptr<Shape>& shape,
     const MediumInterface& mediumInterface) {
+    Transform lightToWorld;
 	RGBSpectrum L = list.getColor("radiance", RGBSpectrum(1.0));
-    return std::make_shared<AreaLight>(mediumInterface, L, shape);
+    return std::make_shared<AreaLight>(lightToWorld, mediumInterface, L, shape);
 }
 
 RAINBOW_NAMESPACE_END

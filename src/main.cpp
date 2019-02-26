@@ -21,18 +21,18 @@ void foo() {
 
 int main(int argc, char *argv[]) {
 
-    //std::string solutionDir("F:/Document/Graphics/code/Rainbow/scenes/");
-    std::string solutionDir("C:/Users/Administrator/Desktop/Rainbow/scenes/");
+    std::string solutionDir("F:/Document/Graphics/code/Rainbow/scenes/");
+    //std::string solutionDir("C:/Users/Administrator/Desktop/Rainbow/scenes/");
     std::vector<std::string> scenes(100);
     scenes[0] = "cbox/cbox-whitted.xml";
-    scenes[1] = "motto/motto-diffuse.xml";
-    scenes[2] = "cornell-box/scene.xml";
-    scenes[3] = "veach-mis/scene.xml";
-    scenes[4] = "veach-bidir/scene.xml";
-    scenes[5] = "volumetric-caustic/scene.xml";
-    scenes[6] = "water-caustic/scene.xml";
+    scenes[1] = "cornell-box/scene.xml";
+    scenes[2] = "veach-mis/scene.xml";
+    scenes[3] = "veach-bidir/scene.xml";
+    scenes[4] = "volumetric-caustic/scene.xml";
+    scenes[5] = "water-caustic/scene.xml";
+    scenes[6] = "light-test/scene.xml";
 
-    const std::string filename(solutionDir + scenes[3]);
+    const std::string filename(solutionDir + scenes[6]);
 
 	RainbowInit();	
 	filesystem::path path(filename);

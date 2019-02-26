@@ -85,9 +85,6 @@
     <Filter Include="Extend Files\stb_images">
       <UniqueIdentifier>{8a6fb0d2-58b4-4d6a-a7e7-c477dc6c0516}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files\scenes\motto">
-      <UniqueIdentifier>{239d3106-4ba5-4ad1-a1a7-062f0ef8e953}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Resource Files\scenes\cornell-box">
       <UniqueIdentifier>{86c3fee0-633c-4332-89c3-022aaa784637}</UniqueIdentifier>
     </Filter>
@@ -105,6 +102,12 @@
     </Filter>
     <Filter Include="Resource Files\scenes\water-caustic">
       <UniqueIdentifier>{7d12c4b3-bc99-4314-9066-83aef212eb79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\lights">
+      <UniqueIdentifier>{7cf38d63-d3bc-46ce-b345-118e2d8ef988}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\scenes\light-test">
+      <UniqueIdentifier>{0df85d96-d927-4023-85c4-a0d1a666a2d8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -281,6 +284,12 @@
     </ClCompile>
     <ClCompile Include="..\src\media\homogeneous.cpp">
       <Filter>Source Files\media</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lights\spot.cpp">
+      <Filter>Source Files\lights</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lights\point.cpp">
+      <Filter>Source Files\lights</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -488,6 +497,12 @@
     <ClInclude Include="..\src\media\homogeneous.h">
       <Filter>Source Files\media</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\lights\spot.h">
+      <Filter>Source Files\lights</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\lights\point.h">
+      <Filter>Source Files\lights</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\log\20180811.md">
@@ -537,15 +552,6 @@
     <Xml Include="..\scenes\cbox\cbox-whitted.xml">
       <Filter>Resource Files\scenes\cbox</Filter>
     </Xml>
-    <Xml Include="..\scenes\motto\motto-dielectric.xml">
-      <Filter>Resource Files\scenes\motto</Filter>
-    </Xml>
-    <Xml Include="..\scenes\motto\motto-diffuse.xml">
-      <Filter>Resource Files\scenes\motto</Filter>
-    </Xml>
-    <Xml Include="..\scenes\motto\motto-mirror.xml">
-      <Filter>Resource Files\scenes\motto</Filter>
-    </Xml>
     <Xml Include="..\scenes\cornell-box\scene.xml">
       <Filter>Resource Files\scenes\cornell-box</Filter>
     </Xml>
@@ -560,6 +566,9 @@
     </Xml>
     <Xml Include="..\scenes\water-caustic\scene.xml">
       <Filter>Resource Files\scenes\water-caustic</Filter>
+    </Xml>
+    <Xml Include="..\scenes\light-test\scene.xml">
+      <Filter>Resource Files\scenes\light-test</Filter>
     </Xml>
   </ItemGroup>
   <ItemGroup>

@@ -20,8 +20,10 @@ public:
 
 class Light {
 public:
-    Light(const MediumInterface& m_mediumInterface)
-        : mediumInterface(m_mediumInterface) {}
+    Light(const Transform& m_LightToWorld, const MediumInterface& m_mediumInterface)
+        : LightToWorld(m_LightToWorld),
+        WorldToLight(Inverse(LightToWorld)),
+        mediumInterface(m_mediumInterface) {}
     
     virtual Float PdfLi(const Interaction& ref,const Vector3f& wi) const = 0;
 	virtual RGBSpectrum SampleLi(const Interaction& intersection, 
@@ -30,16 +32,19 @@ public:
     virtual bool IsDeltaLight() const = 0;
 
     const MediumInterface mediumInterface;
+    const Transform LightToWorld, WorldToLight;
 };
 
 class AreaLight :public Light {
 public:
-    AreaLight(const MediumInterface& m_mediumInterface,
+    AreaLight(const Transform& m_LightToWorld,
+        const MediumInterface& m_mediumInterface,
         const RGBSpectrum& m_Le,
         const std::shared_ptr<Shape>& m_shape)
-        : Light(m_mediumInterface), Le(m_Le), shape(m_shape) {}
+        : Light(m_LightToWorld, m_mediumInterface), I(m_Le), shape(m_shape) {}
 	
-	RGBSpectrum L(const Interaction& intersection,const Vector3f &w) const;	
+	RGBSpectrum L(const Interaction& intersection,const Vector3f &w) const;
+    
     Float PdfLi(const Interaction& ref, const Vector3f& wi) const override;
     RGBSpectrum SampleLi(
         const Interaction& intersection,
@@ -50,8 +55,7 @@ public:
 
     bool IsDeltaLight() const override { return false; }
 
-
-    RGBSpectrum Le;
+    RGBSpectrum I;
 	std::shared_ptr<Shape> shape;
 };
 

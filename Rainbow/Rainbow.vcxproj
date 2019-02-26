@@ -188,6 +188,8 @@
     <ClCompile Include="..\src\integrators\path.cpp" />
     <ClCompile Include="..\src\integrators\volpath.cpp" />
     <ClCompile Include="..\src\integrators\whitted.cpp" />
+    <ClCompile Include="..\src\lights\point.cpp" />
+    <ClCompile Include="..\src\lights\spot.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\materials\matte.cpp" />
     <ClCompile Include="..\src\materials\glass.cpp" />
@@ -259,6 +261,8 @@
     <ClInclude Include="..\src\integrators\path.h" />
     <ClInclude Include="..\src\integrators\volpath.h" />
     <ClInclude Include="..\src\integrators\whitted.h" />
+    <ClInclude Include="..\src\lights\point.h" />
+    <ClInclude Include="..\src\lights\spot.h" />
     <ClInclude Include="..\src\materials\matte.h" />
     <ClInclude Include="..\src\materials\glass.h" />
     <ClInclude Include="..\src\materials\mirror.h" />
@@ -292,9 +296,7 @@
     <Xml Include="..\scenes\cornell-box\scene.xml">
       <SubType>Designer</SubType>
     </Xml>
-    <Xml Include="..\scenes\motto\motto-dielectric.xml" />
-    <Xml Include="..\scenes\motto\motto-diffuse.xml" />
-    <Xml Include="..\scenes\motto\motto-mirror.xml" />
+    <Xml Include="..\scenes\light-test\scene.xml" />
     <Xml Include="..\scenes\veach-bidir\scene.xml" />
     <Xml Include="..\scenes\veach-mis\scene.xml" />
     <Xml Include="..\scenes\volumetric-caustic\scene.xml">

@@ -16,13 +16,17 @@ class Interaction {
 public:
 	Interaction() {}
     Interaction(
-        const Point3f &m_p, const Vector3f & m_pError,
-        const Normal3f & m_n, const Vector3f& m_wo, 
+        const Point3f& m_p, const Vector3f& m_pError,
+        const Normal3f& m_n, const Vector3f& m_wo, 
         const MediumInterface& m_mediumInterface);
 
     Interaction(
-        const Point3f &m_p, const Vector3f &m_wo,
-        const MediumInterface &m_mediumInterface);
+        const Point3f& m_p, const Vector3f& m_wo,
+        const MediumInterface& m_mediumInterface);
+
+    Interaction(
+        const Point3f& m_p, 
+        const MediumInterface& m_mediumInterface);
 	
     Ray SpawnToRay(const Vector3f& d) const {
         Point3f o = OffsetRayOrigin(p, pError, n, d);        
