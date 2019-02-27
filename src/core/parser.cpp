@@ -254,6 +254,7 @@ void ParserXMLFile(const std::string & filename) {
                         if (strcmp(attribute.name(), "y") == 0) scale.y = toFloat(attribute.value());
                         if (strcmp(attribute.name(), "z") == 0) scale.z = toFloat(attribute.value());
                     }*/
+                    cout << scale << endl;
 			    	Transform s = Scale(scale);
 			    	m_transform *= Scale(scale);
 			    	break;

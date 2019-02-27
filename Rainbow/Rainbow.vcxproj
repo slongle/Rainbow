@@ -22,7 +22,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{8847F2FF-E09C-41C6-A53F-B57A5B02D979}</ProjectGuid>
     <RootNamespace>Rainbow</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -297,6 +297,7 @@
       <SubType>Designer</SubType>
     </Xml>
     <Xml Include="..\scenes\light-test\scene.xml" />
+    <Xml Include="..\scenes\rainbow\scene.xml" />
     <Xml Include="..\scenes\veach-bidir\scene.xml" />
     <Xml Include="..\scenes\veach-mis\scene.xml" />
     <Xml Include="..\scenes\volumetric-caustic\scene.xml">

@@ -112,12 +112,12 @@ public:
 	}
 
 	Transform operator * (const Transform &t) const {
-		return Transform(m * t.m, mInv * t.mInv);
+		return Transform(m * t.m, t.mInv * mInv);
 	}
 
 	Transform &operator *= (const Transform &t) {
 		m = m * t.m;
-		mInv = mInv * t.mInv;
+        mInv = t.mInv * mInv;
 		return *this;
 	}
 

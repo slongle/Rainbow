@@ -20,8 +20,7 @@ PerspectiveCamera::PerspectiveCamera(const Transform& CameraToWorld, const Bound
 
 
 RGBSpectrum PerspectiveCamera::GenerateRay(Ray* r, const Point2f & p) const {
-    Point2f sp(p); 
-    sp -= Point2f(film->resolution.x*0.5, film->resolution.y*0.5);
+    Point2f sp(p);     
 	Vector3f d = Normalize(RasterToCamera(Point3f(sp.x, sp.y, 0)));
 	*r = Ray(Point3f(0, 0, 0), d);
 	*r = CameraToWorld(*r);
