@@ -20,7 +20,7 @@
 #define RAINBOW_NAMESPACE_END }
 
 /* Define Epsilon for precision */
-#define Epsilon 1e-3f
+#define Epsilon 1e-5f
 
 /* Define some useful constant variable*/
 #undef M_PI

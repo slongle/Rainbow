@@ -69,7 +69,7 @@ void ParseWavefrontOBJ(const std::string& name, int* VertexNum, int* TriangleNum
             line >> v1 >> v2 >> v3 >> v4;
             if (!v4.empty()) {
                 DealFace(v1, v2, v3);
-                DealFace(v4, v1, v2);
+                DealFace(v4, v1, v3);
             }
             else
                 DealFace(v1, v2, v3);                        

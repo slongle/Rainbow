@@ -21,6 +21,8 @@ void foo() {
 
 int main(int argc, char *argv[]) {
 
+    
+
     std::string solutionDir("F:/Document/Graphics/code/Rainbow/scenes/");
     //std::string solutionDir("C:/Users/Administrator/Desktop/Rainbow/scenes/");
     std::vector<std::string> scenes(100);

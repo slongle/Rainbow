@@ -15,7 +15,7 @@
 	          <integer name="sampleCount" value="512"/>
 	      </sampler>
 		    <film type="hdrfilm">
-            <string name="filename" value="sphere-cornell-box.png"/>
+            <string name="filename" value="sphere-cornell-box_1.png"/>
 			      <integer name="height" value="600"/>
 			      <integer name="width" value="800"/>
 		    </film>

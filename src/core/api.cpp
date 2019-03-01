@@ -160,7 +160,10 @@ void RainbowWorld() {
         integrator->Render(*scene);        
     }
     else if (renderOptions->RenderMode == "adaptive") {
-        integrator->AdaptiveRender(*scene);
+        integrator->RenderAdaptive(*scene);
+    }
+    else if (renderOptions->RenderMode == "eye") {
+        integrator->RenderEyeLight(*scene);
     }
 
 }

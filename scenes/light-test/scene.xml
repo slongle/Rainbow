@@ -18,7 +18,7 @@
 	    <integer name="sampleCount" value="512"/>
 	  </sampler>
 		<film type="ldrfilm" >
-      <string name="filename" value="spot_8.png"/>
+      <string name="filename" value="spot_1.png"/>
 		  <integer name="width" value="1024" />
 		  <integer name="height" value="1024" />
 		  <rfilter type="tent" />

@@ -213,6 +213,25 @@ void SamplerIntegrator::RenderTile(const Scene &scene, Sampler& sampler, FilmTil
     }
 }
 
+void SamplerIntegrator::RenderTileEyeLight(const Scene &scene, Sampler& sampler, FilmTile &tile) {
+    Ray ray;
+    MemoryArena arena;
+    for (int y = tile.bounds.pMin.y; y < tile.bounds.pMax.y; y++) {
+        for (int x = tile.bounds.pMin.x; x < tile.bounds.pMax.x; x++) {
+            Point2f pixelSample = Point2f(x, y) + sampler.Get2D();
+            RGBSpectrum weight = camera->GenerateRay(&ray, pixelSample);
+            SurfaceInteraction inter;
+            if (scene.IntersectP(ray, &inter)) {
+                Float dotLN = Dot(-ray.d, inter.n);
+                if (dotLN > 0)
+                    tile.AddSample(Point2f(x, y), RGBSpectrum(dotLN), 1);
+                else
+                    tile.AddSample(Point2f(x, y), RGBSpectrum(-dotLN, 0, 0), 1);
+            }
+        }
+    }
+}
+
 void SamplerIntegrator::Render(const Scene &scene) {    
     std::shared_ptr<Film> film = camera->film;
     std::vector<FilmTile> tiles;
@@ -273,7 +292,7 @@ void SamplerIntegrator::Render(const Scene &scene) {
 }
 
 
-void SamplerIntegrator::AdaptiveRender(const Scene &scene) {
+void SamplerIntegrator::RenderAdaptive(const Scene &scene) {
     std::shared_ptr<Film> film = camera->film;
     std::vector<FilmTile> tiles;
     tiles = FilmTile::GenerateTiles(camera->film->resolution, RAINBOW_TILE_SIZE);
@@ -329,6 +348,59 @@ void SamplerIntegrator::AdaptiveRender(const Scene &scene) {
     cout << timer.LastTime() << endl;
 }
 
+void SamplerIntegrator::RenderEyeLight(const Scene &scene) {
+    std::shared_ptr<Film> film = camera->film;
+    std::vector<FilmTile> tiles;
+    tiles = FilmTile::GenerateTiles(camera->film->resolution, RAINBOW_TILE_SIZE);
+
+    cout << sampleNum << endl;
+    cout << "Rendering .. \n";
+    cout.flush();
+    std::string filename = film->filename;
+    Timer timer;
+
+    std::thread renderThread([&] {
+
+        tbb::blocked_range<int> range(0, tiles.size());
+        int cnt = 1;
+        int area = (film->resolution.x)*(film->resolution.y);
+        std::atomic<int> finishedTiles = 0;
+
+        auto map = [&](const tbb::blocked_range<int> &range) {
+            for (int i = range.begin(); i < range.end(); ++i) {
+                /* Request an image block from the block generator */
+                FilmTile &tile = tiles[i];
+
+                /* Inform the sampler about the block to be rendered */
+                Point2i seed = Point2i((cnt - 1)*area, (cnt - 1)*area) +
+                    tile.bounds.pMin;
+
+                std::unique_ptr<Sampler> clonedSampler(sampler->Clone(seed));
+
+                /* Render all contained pixels */
+                RenderTileEyeLight(scene, *clonedSampler, tile);
+
+                film->MergeFilmTile(tile);
+
+                finishedTiles++;
+                fprintf(stderr, "\r%.2f%%", 100. * finishedTiles / tiles.size());
+            }
+        };
+
+        
+        /// Uncomment the following line for single threaded rendering
+        //map(range);
+
+        /// Default: parallel rendering
+        tbb::parallel_for(range, map);
+
+
+    });
+
+    renderThread.join();
+    film->SaveImage();
+    cout << timer.LastTime() << endl;
+}
 
 void SamplerIntegrator::ProgressiveRender(const Scene &scene,const int& x,const int & y, bool reset) {    
     std::shared_ptr<Film> film = camera->film;

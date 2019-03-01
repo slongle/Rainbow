@@ -122,7 +122,7 @@
     <rgb name="intensity" value="1, 1, 1"/>
   </emitter>
 
-  <hide type="spot">
+  <hide type="point">
     <transform name="toWorld">
       <matrix value="0.235 -1.66103e-008 -7.80685e-009 -0.005 -2.05444e-008 3.90343e-009 -0.0893 1.98 2.05444e-008 0.19 8.30516e-009 -0.03 0 0 0 1"/>
       <translate value="0, 0, 0.5"/>

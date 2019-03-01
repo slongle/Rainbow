@@ -26,8 +26,11 @@ public:
     virtual void TestRender(const Scene &scene) {
         Assert(false, "Test Render No Implement!");
     }
-    virtual void AdaptiveRender(const Scene &scene) {
+    virtual void RenderAdaptive(const Scene &scene) {
         Assert(false, "Adaptive Render No Implement!");
+    }
+    virtual void RenderEyeLight(const Scene &scene) {
+        Assert(false, "Eyelight Render No Implement!");
     }
 
 	std::shared_ptr<Camera> camera;
@@ -56,10 +59,12 @@ public:
     RGBSpectrum SpecularReflect(MemoryArena& arena, const Ray&ray, const Scene& scene, int depth, SurfaceInteraction intersection);
     RGBSpectrum SpecularRefract(MemoryArena& arena, const Ray&ray, const Scene& scene, int depth, SurfaceInteraction intersection);
 
+    void RenderTileEyeLight(const Scene &scene, Sampler& sampler, FilmTile &tile);
     void RenderTileAdaptive(const Scene &scene, Sampler& sampler, FilmTile &tile);
     void RenderTile(const Scene &scene, Sampler& sampler, FilmTile &tile);
 	void Render (const Scene &scene);
-    void AdaptiveRender(const Scene &scene);
+    void RenderAdaptive(const Scene &scene);
+    void RenderEyeLight(const Scene &scene);
     virtual RGBSpectrum Li(MemoryArena& arena, const Ray &ray, const Scene& scene, Sampler &sampler, int depth) = 0;
 
 
