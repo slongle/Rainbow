@@ -4,8 +4,8 @@
     <mode type="final"/>
 	<integrator type="path" >
 		<integer name="maxDepth" value="65" />
-        <integer name="sampleNum" value="5000"/>
-        <integer name="delta" value="1"/>
+        <integer name="sampleNum" value="100000"/>
+        <integer name="delta" value="10"/>
 		<boolean name="strictNormals" value="true" />
 	</integrator>
 	<sensor type="perspective" >
@@ -17,7 +17,7 @@
 			<integer name="sampleCount" value="64" />
 		</sampler>
 		<film type="ldrfilm" >
-            <string name="filename" value="rainbow_4.png"/>
+            <string name="filename" value="rainbow_3.png"/>
 			<integer name="width" value="2048" />
 			<integer name="height" value="1024" />
 			<string name="fileFormat" value="png" />
@@ -98,20 +98,20 @@
         <rotate x="0" y="1" z="0" angle="180"/>
       </transform>
       <string name="filename" value="meshes/rainbow.obj"/>    
-        <bsdf type="diffuse"/>
+        <bsdf type="glass"/>
     </shape>
 
-  <emitter type="spot">
+  <hide type="spot">
     <transform name="toWorld">
       <lookat target="0, 0, 0" origin="0, 1, 0" up="0, 0, 1"/>
     </transform>
     <rgb name="intensity" value="17, 12, 4"/>
     <float name="totalAngle" value="80"/>
     <float name="falloffAngle" value="70"/>
-  </emitter>
+  </hide>
 
 
-	<hide type="rectangle" >
+	<shape type="rectangle" >
 		<transform name="toWorld" >
 			<matrix value="0.235 -1.66103e-008 -7.80685e-009 -0.005 -2.05444e-008 3.90343e-009 -0.0893 1.98 2.05444e-008 0.19 8.30516e-009 -0.03 0 0 0 1"/>
 		</transform>
@@ -119,5 +119,5 @@
 		<emitter type="area" >
 			<rgb name="radiance" value="17, 12, 4"/>
 		</emitter>
-	</hide>
+	</shape>
 </scene>

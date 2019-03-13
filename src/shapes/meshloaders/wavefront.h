@@ -1,12 +1,18 @@
 #ifndef __WAVEFRONT_H
 #define __WAVEFRONT_H
 
-#include "../../core/vector.h"
+#include "src/core/vector.h"
 
 RAINBOW_NAMESPACE_BEGIN
 
-void ParseWavefrontOBJ(const std::string& name, int* VertexNum, int* TriangleNum,
-    std::vector<Point3f>* Position, std::vector<int>* Indices, std::vector<Normal3f>* Normal);
+void ParseWavefrontOBJ(
+    const std::string&       name,         // input filename
+    int*                     vertexNum,    // the number of vertex
+    int*                     triangleNum,  // the number of triangle
+    std::vector<Point3f>*    vertices,     // v
+    std::vector<Normal3f>*   normals,      // vn
+    std::vector<Point2f>*    texcoords,    // vt
+    std::vector<int>*        indices);     // 
 
 RAINBOW_NAMESPACE_END
 

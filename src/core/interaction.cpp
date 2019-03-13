@@ -6,7 +6,7 @@ RAINBOW_NAMESPACE_BEGIN
 
 Point3f OffsetRayOrigin(const Point3f &p, const Vector3f &pError,
     const Normal3f &n, const Vector3f &w) {
-    return p + w * Epsilon;
+    //return p + w * Epsilon;
     Float d = Dot(Abs(n), pError);
 #ifdef __DOUBLE_TYPE
     // We have tons of precision; for now bump up the offset a bunch just

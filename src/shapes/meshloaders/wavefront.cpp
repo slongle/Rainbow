@@ -1,6 +1,85 @@
+#define TINYOBJLOADER_IMPLEMENTATION
+#include "ext/tinyobjloader/tiny_obj_loader.h"
+
 #include "wavefront.h"
 
 RAINBOW_NAMESPACE_BEGIN
+
+void foo(
+    const std::string&       filename,         // input filename
+    int*                     vertexNum,    // the number of vertex
+    int*                     triangleNum,  // the number of triangle
+    std::vector<Point3f>*    vertices,     // v
+    std::vector<Normal3f>*   normals,      // vn
+    std::vector<Point2f>*    texcoords,    // vt
+    std::vector<int>*        indices)      // 
+{
+    // Clear Data
+    *vertexNum = 0;
+    *triangleNum = 0;
+    vertices->clear();
+    normals->clear();
+    texcoords->clear();
+    indices->clear();
+
+    //std::string filename = "F:/Document/Graphics/code/Rainbow/scenes/rainbow/meshes/rainbow.obj";
+    tinyobj::attrib_t attrib;
+    std::vector<tinyobj::shape_t> shapes;
+    std::vector<tinyobj::material_t> materials;
+
+    std::string warn;
+    std::string err;
+    bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, filename.c_str());
+
+    if (!err.empty()) 
+    {
+        std::cerr << err << std::endl;
+    }
+
+    if (!ret) 
+    {
+        std::cerr << ret << std::endl;
+        return;
+    }
+
+    // Loop over shapes
+    for (size_t s = 0; s < shapes.size(); s++) 
+    {
+        // Loop over faces (polygon)
+        size_t index_offset = 0;
+        for (size_t f = 0; f < shapes[s].mesh.num_face_vertices.size(); f++) 
+        {
+            int fv = shapes[s].mesh.num_face_vertices[f];
+
+            // Loop over vertices in the face.
+            for (size_t v = 0; v < fv; v++) {
+                // access to vertex
+                tinyobj::index_t idx = shapes[s].mesh.indices[index_offset + v];
+                Float vx = attrib.vertices[3 * idx.vertex_index + 0];
+                Float vy = attrib.vertices[3 * idx.vertex_index + 1];
+                Float vz = attrib.vertices[3 * idx.vertex_index + 2];
+                Float nx = attrib.normals[3 * idx.normal_index + 0];
+                Float ny = attrib.normals[3 * idx.normal_index + 1];
+                Float nz = attrib.normals[3 * idx.normal_index + 2];
+                Float tx = attrib.texcoords[2 * idx.texcoord_index + 0];
+                Float ty = attrib.texcoords[2 * idx.texcoord_index + 1];
+                
+                vertices->emplace_back(vx, vy, vz);
+                normals->emplace_back(nx, ny, nz);
+                texcoords->emplace_back(tx, ty);
+                
+                // Optional: vertex colors
+                // tinyobj::real_t red = attrib.colors[3*idx.vertex_index+0];
+                // tinyobj::real_t green = attrib.colors[3*idx.vertex_index+1];
+                // tinyobj::real_t blue = attrib.colors[3*idx.vertex_index+2];
+            }
+            index_offset += fv;
+
+            // per-face material
+            shapes[s].mesh.material_ids[f];
+        }
+    }
+}
 
 int ParseOBJVertexIndex(const std::string& s) {
     return toInteger(s.substr(0, s.find('//')));

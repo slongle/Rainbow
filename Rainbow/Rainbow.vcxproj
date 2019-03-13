@@ -297,7 +297,9 @@
       <SubType>Designer</SubType>
     </Xml>
     <Xml Include="..\scenes\light-test\scene.xml" />
-    <Xml Include="..\scenes\rainbow\scene.xml" />
+    <Xml Include="..\scenes\rainbow\scene.xml">
+      <SubType>Designer</SubType>
+    </Xml>
     <Xml Include="..\scenes\veach-bidir\scene.xml" />
     <Xml Include="..\scenes\veach-mis\scene.xml" />
     <Xml Include="..\scenes\volumetric-caustic\scene.xml">
