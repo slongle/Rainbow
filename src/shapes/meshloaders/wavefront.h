@@ -2,6 +2,7 @@
 #define __WAVEFRONT_H
 
 #include "src/core/vector.h"
+#include "src/shapes/triangle.h"
 
 RAINBOW_NAMESPACE_BEGIN
 
@@ -12,7 +13,7 @@ void ParseWavefrontOBJ(
     std::vector<Point3f>*    vertices,     // v
     std::vector<Normal3f>*   normals,      // vn
     std::vector<Point2f>*    texcoords,    // vt
-    std::vector<int>*        indices);     // 
+    std::vector<Index>*      indices);     // 
 
 RAINBOW_NAMESPACE_END
 

@@ -3,46 +3,53 @@
 
 RAINBOW_NAMESPACE_BEGIN
 
-TriangleMesh::TriangleMesh(const Transform * ObjectToWorld, const int & m_VertexNum, const int & m_TriangleNum, 
-    const std::vector<Point3f>& m_Position, const std::vector<int>& m_VertexIndices, 
-    const std::vector<Normal3f>& m_Normal):
-    TriangleNum(m_TriangleNum), VertexNum(m_VertexNum), VertexIndices(m_VertexIndices) {
+TriangleMesh::TriangleMesh(
+    const Transform*             ObjectToWorld, 
+    const int&                   vertexNum, 
+    const int&                   triangleNum, 
+    const std::vector<Point3f>&  vertices, 
+    const std::vector<Normal3f>& normals,
+    const std::vector<Point2f>&  texcoords,
+    const std::vector<Index>&    indices) : 
+    m_triangleNum(triangleNum), m_vertexNum(vertexNum), m_indices(indices) {
     
-    Position.resize(VertexNum);
-    for (int i = 0; i < VertexNum; i++)
-        Position[i] = (*ObjectToWorld)(m_Position[i]);
+    m_vertices.resize(m_vertexNum);
+    for (int i = 0; i < m_vertexNum; i++)
+        m_vertices[i] = (*ObjectToWorld)(m_vertices[i]);
     
-    Normal.resize(TriangleNum);
-    for (int i = 0; i < TriangleNum; i++)
-        Normal[i] = (*ObjectToWorld)(m_Normal[i]);
+    m_normals.resize(m_triangleNum);
+    for (int i = 0; i < triangleNum; i++)
+        m_normals[i] = (*ObjectToWorld)(m_normals[i]);
 }
 
-Triangle::Triangle(const std::shared_ptr<TriangleMesh>& _mesh, int _triNumber):
-	mesh(_mesh),triNumber(_triNumber){
-	index = &(mesh->VertexIndices[3 * triNumber]);
-	//std::cout << index[0] << ' ' << index[1] << ' ' << index[2] << std::endl;
+Triangle::Triangle(
+    const std::shared_ptr<TriangleMesh>& mesh, 
+    const int&                           triNumber):
+	m_mesh(mesh), m_triNumber(triNumber)
+{
+	m_index = &(mesh->m_indices[3 * triNumber]);	
 }
 
 Bounds3f Triangle::ObjectBounds() const {
-	const Point3f &p0 = mesh->Position[index[0]];
-	const Point3f &p1 = mesh->Position[index[1]];
-	const Point3f &p2 = mesh->Position[index[2]];
+	const Point3f &p0 = m_mesh->m_vertices[m_index[0].vertexIndex];
+	const Point3f &p1 = m_mesh->m_vertices[m_index[1].vertexIndex];
+	const Point3f &p2 = m_mesh->m_vertices[m_index[2].vertexIndex];
 	const Transform &T = *WorldToObject;
 	return Union(Bounds3f(T(p0), T(p1)), T(p2));
 }
 
 Bounds3f Triangle::WorldBounds() const {
-	const Point3f &p0 = mesh->Position[index[0]];
-	const Point3f &p1 = mesh->Position[index[1]];
-	const Point3f &p2 = mesh->Position[index[2]];
+    const Point3f &p0 = m_mesh->m_vertices[m_index[0].vertexIndex];
+    const Point3f &p1 = m_mesh->m_vertices[m_index[1].vertexIndex];
+    const Point3f &p2 = m_mesh->m_vertices[m_index[2].vertexIndex];
 	return Union(Bounds3f(p0, p1), p2);
 }
 
 bool Triangle::IntersectP(const Ray & ray, Float * tHit, SurfaceInteraction* inter) const {
 	/* Get Triangle's Vertices p0, p1, p2*/
-	const Point3f &p0 = mesh->Position[index[0]];
-	const Point3f &p1 = mesh->Position[index[1]];
-	const Point3f &p2 = mesh->Position[index[2]];
+    const Point3f &p0 = m_mesh->m_vertices[m_index[0].vertexIndex];
+    const Point3f &p1 = m_mesh->m_vertices[m_index[1].vertexIndex];
+    const Point3f &p2 = m_mesh->m_vertices[m_index[2].vertexIndex];
 
 	Point3f tp0(p0), tp1(p1), tp2(p2);
 	tp0 -= ray.o;
@@ -96,7 +103,7 @@ bool Triangle::IntersectP(const Ray & ray, Float * tHit, SurfaceInteraction* int
 	Point3f pHit = ray(*tHit);
 	Normal3f nHit;
 
-    nHit = mesh->Normal[triNumber];
+    nHit = m_mesh->m_normals[m_triNumber];
 
     // Compute error bounds for triangle intersection
     Float xAbsSum =
@@ -114,9 +121,9 @@ bool Triangle::IntersectP(const Ray & ray, Float * tHit, SurfaceInteraction* int
 }
 
 bool Triangle::Intersect(const Ray & ray) const {
-	const Point3f &p0 = mesh->Position[index[0]];
-	const Point3f &p1 = mesh->Position[index[1]];
-	const Point3f &p2 = mesh->Position[index[2]];
+    const Point3f &p0 = m_mesh->m_vertices[m_index[0].vertexIndex];
+    const Point3f &p1 = m_mesh->m_vertices[m_index[1].vertexIndex];
+    const Point3f &p2 = m_mesh->m_vertices[m_index[2].vertexIndex];
 
 	Point3f tp0(p0), tp1(p1), tp2(p2);
 	tp0 -= ray.o;
@@ -163,15 +170,15 @@ Interaction Triangle::Sample(const Point3f &p, const Point2f & sample, Float * p
 	Interaction inter;
 
 	Point2f q = UniformSampleTriangle(sample);
-	const Point3f &p0 = mesh->Position[index[0]];
-	const Point3f &p1 = mesh->Position[index[1]];
-	const Point3f &p2 = mesh->Position[index[2]];
+    const Point3f &p0 = m_mesh->m_vertices[m_index[0].vertexIndex];
+    const Point3f &p1 = m_mesh->m_vertices[m_index[1].vertexIndex];
+    const Point3f &p2 = m_mesh->m_vertices[m_index[2].vertexIndex];
 	inter.p = q[0] * p0 + q[1] * p1 + (1 - q[0] - q[1]) * p2;
 
 	inter.n = Normalize(Normal3f(Cross(p1 - p0, p2 - p0)));
 
-	//if (!mesh->Normal.empty()) {
-	//	Normal3f ns(q[0] * mesh->Normal[index[0]] + q[1] * mesh->Normal[index[1]] +
+	//if (!mesh->normals.empty()) {
+	//	Normal3f ns(q[0] * mesh->normals[index[0]] + q[1] * mesh->normals[index[1]] +
 	//		(1 - q[0] - q[1]) * mesh->n[index[2]]);
 	//	inter.n = FaceForward(inter.n, ns);
 	//}
@@ -185,9 +192,9 @@ Interaction Triangle::Sample(const Point3f &p, const Point2f & sample, Float * p
 }
 
 Float Triangle::Area() const {
-	const Point3f &p0 = mesh->Position[index[0]];
-	const Point3f &p1 = mesh->Position[index[1]];
-	const Point3f &p2 = mesh->Position[index[2]];
+    const Point3f &p0 = m_mesh->m_vertices[m_index[0].vertexIndex];
+    const Point3f &p1 = m_mesh->m_vertices[m_index[1].vertexIndex];
+    const Point3f &p2 = m_mesh->m_vertices[m_index[2].vertexIndex];
  	return static_cast<Float>(0.5) * Cross(p1-p0,p2-p0).Length();
 }
 
@@ -196,18 +203,23 @@ std::vector<std::shared_ptr<Triangle>> CreateWavefrontOBJ(
     const Transform* w2o, 
 	PropertyList & list) {
 	
-	std::string name = list.getString("filename");
-	int VertexNum = 0, TriangleNum = 0;
-	std::vector<Point3f> Position;
-	std::vector<int> Indices;
-    std::vector<Normal3f> Normal;
-    ParseWavefrontOBJ(name, &VertexNum, &TriangleNum, &Position, &Indices, &Normal);
+	std::string filename = list.getString("filename");
+	int vertexNum = 0, triangleNum = 0;
+	std::vector<Point3f>  vertices;
+    std::vector<Normal3f> normals;
+    std::vector<Point2f>  texcoords;
+	std::vector<Index>    indices;
+    ParseWavefrontOBJ(
+        filename, &vertexNum, &triangleNum,
+        &vertices, &normals, &texcoords, &indices);
 
     std::shared_ptr<TriangleMesh> mesh =
-        std::make_shared<TriangleMesh>(o2w, VertexNum, TriangleNum, Position, Indices, Normal);
+        std::make_shared<TriangleMesh>(
+            o2w, vertexNum, triangleNum, 
+            vertices, normals, texcoords, indices);
 	std::vector<std::shared_ptr<Triangle>> tris;
-	tris.resize(TriangleNum);
-	for (int i = 0; i < mesh->TriangleNum; i++) {
+	tris.resize(triangleNum);
+	for (int i = 0; i < mesh->m_triangleNum; i++) {
         tris[i] = std::make_shared<Triangle>(mesh, i);
 	}
 
@@ -219,39 +231,42 @@ std::vector<std::shared_ptr<Triangle>> CreateRectangle(
     const Transform* w2o, 
     PropertyList &list) {
 
-    const int VertexNum = 4;
-    const int TriangleNum = 2;
-    std::vector<Point3f> Position(VertexNum);
-    std::vector<int> Indices(3 * TriangleNum);
-    std::vector<Normal3f> Normal(TriangleNum);
+    const int vertexNum = 4;
+    const int triangleNum = 2;
+    std::vector<Point3f>  vertices;  vertices.resize(vertexNum);
+    std::vector<Index>    indices;   indices.resize(3 * triangleNum);
+    std::vector<Normal3f> normals;   normals.resize(3 * triangleNum);
+    std::vector<Point2f>  texcoords; texcoords.resize(3 * triangleNum);
 
-    Position[0] = Point3f(-1, -1, 0);
-    Position[1] = Point3f(1, -1, 0);
-    Position[2] = Point3f(1, 1, 0);
-    Position[3] = Point3f(-1, 1, 0);
+    vertices[0] = Point3f(-1, -1, 0);
+    vertices[1] = Point3f(1, -1, 0);
+    vertices[2] = Point3f(1, 1, 0);
+    vertices[3] = Point3f(-1, 1, 0);
 
-    Indices[0] = 0;
-    Indices[1] = 1;
-    Indices[2] = 2;
-    Indices[3] = 2;
-    Indices[4] = 3;
-    Indices[5] = 0;
+    indices[0] = Index(0, 0, 0);
+    indices[1] = Index(1, 0, 0);
+    indices[2] = Index(2, 0, 0);
+    indices[3] = Index(2, 0, 0);
+    indices[4] = Index(3, 0, 0);
+    indices[5] = Index(0, 0, 0);
 
-    Normal[0] = Normal[1] = Normal3f(0, 0, 1);
+    normals[0] = normals[1] = Normal3f(0, 0, 1);
 
     std::shared_ptr<TriangleMesh> mesh =
-        std::make_shared<TriangleMesh>(o2w, VertexNum, TriangleNum, Position, Indices, Normal);
+        std::make_shared<TriangleMesh>(
+            o2w, vertexNum, triangleNum, 
+            vertices, normals, texcoords, indices);
 
     std::vector<std::shared_ptr<Triangle>> tris;
-    tris.resize(TriangleNum);
-    for (int i = 0; i < mesh->TriangleNum; i++) {
+    tris.resize(triangleNum);
+    for (int i = 0; i < mesh->m_triangleNum; i++) {
         tris[i] = std::make_shared<Triangle>(mesh, i);
     }
 
     return tris;
 }
 
-static Float CubeData_vertexPositions[][3] = { { 1, -1, -1 },{ 1, -1, 1 },{ -1, -1, 1 },{ -1, -1, -1 },{ 1, 1, -1 },{ -1, 1, -1 },{ -1, 1, 1 },{ 1, 1, 1 },{ 1, -1, -1 },{ 1, 1, -1 },{ 1, 1, 1 },{ 1, -1, 1 },{ 1, -1, 1 },{ 1, 1, 1 },{ -1, 1, 1 },{ -1, -1, 1 },{ -1, -1, 1 },{ -1, 1, 1 },{ -1, 1, -1 },{ -1, -1, -1 },{ 1, 1, -1 },{ 1, -1, -1 },{ -1, -1, -1 },{ -1, 1, -1 } };
+static Float CubeData_vertexverticess[][3] = { { 1, -1, -1 },{ 1, -1, 1 },{ -1, -1, 1 },{ -1, -1, -1 },{ 1, 1, -1 },{ -1, 1, -1 },{ -1, 1, 1 },{ 1, 1, 1 },{ 1, -1, -1 },{ 1, 1, -1 },{ 1, 1, 1 },{ 1, -1, 1 },{ 1, -1, 1 },{ 1, 1, 1 },{ -1, 1, 1 },{ -1, -1, 1 },{ -1, -1, 1 },{ -1, 1, 1 },{ -1, 1, -1 },{ -1, -1, -1 },{ 1, 1, -1 },{ 1, -1, -1 },{ -1, -1, -1 },{ -1, 1, -1 } };
 //static Float CubeData_vertexNormals[][3] = { { 0, -1, 0 },{ 0, -1, 0 },{ 0, -1, 0 },{ 0, -1, 0 },{ 0, 1, 0 },{ 0, 1, 0 },{ 0, 1, 0 },{ 0, 1, 0 },{ 1, 0, 0 },{ 1, 0, 0 },{ 1, 0, 0 },{ 1, 0, 0 },{ 0, 0, 1 },{ 0, 0, 1 },{ 0, 0, 1 },{ 0, 0, 1 },{ -1, 0, 0 },{ -1, 0, 0 },{ -1, 0, 0 },{ -1, 0, 0 },{ 0, 0, -1 },{ 0, 0, -1 },{ 0, 0, -1 },{ 0, 0, -1 } };
 static uint32_t CubeData_triangles[][3] = { { 0, 1, 2 },{ 3, 0, 2 },{ 4, 5, 6 },{ 7, 4, 6 },{ 8, 9, 10 },{ 11, 8, 10 },{ 12, 13, 14 },{ 15, 12, 14 },{ 16, 17, 18 },{ 19, 16, 18 },{ 20, 21, 22 },{ 23, 20, 22 } };
 
@@ -260,35 +275,38 @@ std::vector<std::shared_ptr<Triangle>> CreateCube(
     const Transform* w2o, 
     PropertyList &list) {
 
-    const int VertexNum = 24;
-    const int TriangleNum = 12;
-    std::vector<Point3f> Position(VertexNum);
-    std::vector<int> Indices(3 * TriangleNum);
-    std::vector<Normal3f> Normal(TriangleNum);
+    const int vertexNum = 24;
+    const int triangleNum = 12;
+    std::vector<Point3f>  vertices;  vertices.resize(vertexNum);
+    std::vector<Index>    indices;   indices.resize(3 * triangleNum);
+    std::vector<Normal3f> normals;   normals.resize(3 * triangleNum);
+    std::vector<Point2f>  texcoords; texcoords.resize(3 * triangleNum);
 
-    for (int i = 0; i < VertexNum; i++)
-        Position[i] = Point3f(CubeData_vertexPositions[i][0], 
-            CubeData_vertexPositions[i][1], 
-            CubeData_vertexPositions[i][2]);
-    for (int i = 0; i < TriangleNum; i++) {
+    for (int i = 0; i < vertexNum; i++)
+        vertices[i] = Point3f(CubeData_vertexverticess[i][0], 
+            CubeData_vertexverticess[i][1], 
+            CubeData_vertexverticess[i][2]);
+    for (int i = 0; i < triangleNum; i++) {
         int id1 = CubeData_triangles[i][0];
         int id2 = CubeData_triangles[i][1];
         int id3 = CubeData_triangles[i][2];
-        Indices[i * 3 + 0] = id1;
-        Indices[i * 3 + 1] = id2;
-        Indices[i * 3 + 2] = id3;
-        Normal3f n(Cross(Position[id2] - Position[id1], Position[id3] - Position[id1]));
+        indices[i * 3 + 0] = Index(id1, 0, 0);
+        indices[i * 3 + 1] = Index(id2, 0, 0);
+        indices[i * 3 + 2] = Index(id3, 0, 0);
+        Normal3f n(Cross(vertices[id2] - vertices[id1], vertices[id3] - vertices[id1]));
         //cout << n << endl;
-        Assert(n.SquareLength() != 0, "Length of Normal is Zero!");
-        Normal[i] = Normalize(n);
+        Assert(n.SquareLength() != 0, "Length of normals is Zero!");
+        normals[i] = Normalize(n);
     }
 
     std::shared_ptr<TriangleMesh> mesh =
-        std::make_shared<TriangleMesh>(o2w, VertexNum, TriangleNum, Position, Indices, Normal);
+        std::make_shared<TriangleMesh>(
+            o2w, vertexNum, triangleNum,
+            vertices, normals, texcoords, indices);
 
     std::vector<std::shared_ptr<Triangle>> tris;
-    tris.resize(TriangleNum);
-    for (int i = 0; i < mesh->TriangleNum; i++) {
+    tris.resize(triangleNum);
+    for (int i = 0; i < mesh->m_triangleNum; i++) {
         tris[i] = std::make_shared<Triangle>(mesh, i);
     }
 
