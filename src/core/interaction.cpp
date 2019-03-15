@@ -7,25 +7,14 @@ RAINBOW_NAMESPACE_BEGIN
 Point3f OffsetRayOrigin(const Point3f &p, const Vector3f &pError,
     const Normal3f &n, const Vector3f &w) {
     return p + w * Epsilon;
-    Float d = Dot(Abs(n), pError);
-#ifdef __DOUBLE_TYPE
-    // We have tons of precision; for now bump up the offset a bunch just
-    // to be extra sure that we start on the right side of the surface
-    // (In case of any bugs in the epsilons code...)
-    d *= 1024.;
-#endif
-    Vector3f offset = d * Vector3f(n);
-    if (Dot(w, n) < 0) offset = -offset;
-    Point3f po = p + offset;
-    // Round offset point _po_ away from _p_
-    for (int i = 0; i < 3; ++i) {
-        if (offset[i] > 0)
-            po[i] = NextFloatUp(po[i]);
-        else if (offset[i] < 0)
-            po[i] = NextFloatDown(po[i]);
-    }
-    return po;
 }
+
+Interaction::Interaction(
+    const Point3f&           p,
+    const Normal3f&          n,
+    const Vector3f&          wo,
+    const MediumInterface&   mediumInterface)
+    :p(p), n(n), wo(wo), mediumInterface(mediumInterface) {}
 
 Interaction::Interaction(
     const Point3f & m_p, const Vector3f & m_pError,
@@ -42,6 +31,18 @@ Interaction::Interaction(
     const Point3f & m_p,
     const MediumInterface & m_mediumInterface) :
     p(m_p), mediumInterface(m_mediumInterface) {}
+
+SurfaceInteraction::SurfaceInteraction(
+    const Point3f &   p,
+    const Point2f &   uv,
+    const Vector3f&   wo,
+    const Vector3f&   dpdu,
+    const Vector3f&   dpdv,
+    const Normal3f&   dndu,
+    const Normal3f&   dndv,
+    const Shape*      shape)
+    : Interaction(p, Normal3f(Normalize(Cross(dpdu, dpdv))), wo, nullptr),
+    uv(uv), dpdu(dpdu), dpdv(dpdv), dndu(dndu), dndv(dndv), shape(shape){}
 
 SurfaceInteraction::SurfaceInteraction(
     const Point3f & m_p, const Vector3f & m_pError,

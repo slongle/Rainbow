@@ -6,6 +6,7 @@
 #include "bsdf.h"
 #include "ray.h"
 #include "medium.h"
+#include <cmath>
 
 RAINBOW_NAMESPACE_BEGIN
 
@@ -15,6 +16,12 @@ Point3f OffsetRayOrigin(const Point3f &p, const Vector3f &pError,
 class Interaction {
 public:
 	Interaction() {}
+    Interaction(
+        const Point3f&           p,
+        const Normal3f&          n,
+        const Vector3f&          wo,
+        const MediumInterface&   mediumInterface);
+
     Interaction(
         const Point3f& m_p, const Vector3f& m_pError,
         const Normal3f& m_n, const Vector3f& m_wo, 
@@ -30,7 +37,7 @@ public:
 	
     Ray SpawnToRay(const Vector3f& d) const {
         Point3f o = OffsetRayOrigin(p, pError, n, d);        
-        return Ray(o, d, Float(INFINITE), GetMedium(d));
+        return Ray(o, d, Float(INFINITY), GetMedium(d));
 	}
 
 	Ray SpawnToRay(const Interaction& it) const {        
@@ -56,16 +63,32 @@ public:
 class SurfaceInteraction :public Interaction {
 public:
 	SurfaceInteraction() {}
-	SurfaceInteraction(const Point3f& m_p, const Vector3f& m_pError, 
+    SurfaceInteraction(
+        const Point3f&    p,
+        const Point2f&    uv,
+        const Vector3f&   wo,
+        const Vector3f&   dpdu,
+        const Vector3f&   dpdv,
+        const Normal3f&   dndu,
+        const Normal3f&   dndv,
+        const Shape*      shape
+    );
+	SurfaceInteraction(
+        const Point3f& m_p, const Vector3f& m_pError, 
         const Normal3f& m_n, const Vector3f& m_wo, const Shape *m_shape);
 
 	void ComputeScatteringFunctions(MemoryArena& arena);
 	
 	RGBSpectrum Le(const Vector3f& w) const;
 
+    Point2f uv;
+    Vector3f dpdu, dpdv;
+    Normal3f dndu, dndv;
+
 	const Shape *shape = nullptr;
 	const Primitive *primitive = nullptr;
-	BSDF *bsdf = nullptr;
+	
+    BSDF *bsdf = nullptr;
 };
 
 class MediumInteraction :public Interaction {

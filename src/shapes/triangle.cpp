@@ -11,16 +11,16 @@ TriangleMesh::TriangleMesh(
     const std::vector<Normal3f>& normals,
     const std::vector<Point2f>&  texcoords,
     const std::vector<Index>&    indices) : 
-    m_triangleNum(triangleNum), m_vertexNum(vertexNum), m_indices(indices) {
-    
+    m_triangleNum(triangleNum), m_vertexNum(vertexNum), 
+    m_texcoords(texcoords), m_indices(indices) 
+{    
     m_vertices.resize(m_vertexNum);
     for (int i = 0; i < m_vertexNum; i++)
         m_vertices[i] = (*ObjectToWorld)(vertices[i]);
     
     m_normals.resize(normals.size());
     for (int i = 0; i < normals.size(); i++)
-        m_normals[i] = (*ObjectToWorld)(normals[i]);
-
+        m_normals[i] = (*ObjectToWorld)(normals[i]);    
 }
 
 Triangle::Triangle(
@@ -52,11 +52,14 @@ bool Triangle::IntersectP(const Ray & ray, Float * tHit, SurfaceInteraction* int
     const Point3f &p1 = m_mesh->m_vertices[m_index[1].vertexIndex];
     const Point3f &p2 = m_mesh->m_vertices[m_index[2].vertexIndex];
 
+    // Transform the ray origin at the origin of the coordinate system
 	Point3f tp0(p0), tp1(p1), tp2(p2);
 	tp0 -= ray.o;
 	tp1 -= ray.o;
 	tp2 -= ray.o;
 
+    // Make the ray's z axis is non-zero and largest
+    // Permute the tp0, tp1, tp2 as it, too
 	int kz = MaxDimension(Abs(ray.d));
 	int kx = kz + 1; if (kx == 3) kx = 0;
 	int ky = kx + 1; if (ky == 3) ky = 0;
@@ -65,9 +68,10 @@ bool Triangle::IntersectP(const Ray & ray, Float * tHit, SurfaceInteraction* int
 	tp1 = Permute(tp1, kx, ky, kz);
 	tp2 = Permute(tp2, kx, ky, kz);
 
+    // Transform the ray to (0, 0, 1, 0)
 	Float Sx = -d.x / d.z;
 	Float Sy = -d.y / d.z;
-	Float Sz = 1 / d.z;
+	Float Sz =   1. / d.z;
 	tp0.x += Sx * tp0.z;
 	tp0.y += Sy * tp0.z;
 	tp1.x += Sx * tp1.z;
@@ -75,96 +79,126 @@ bool Triangle::IntersectP(const Ray & ray, Float * tHit, SurfaceInteraction* int
 	tp2.x += Sx * tp2.z;
 	tp2.y += Sy * tp2.z;
 
-	Float e0 = tp1.x*tp2.y - tp2.x*tp1.y;
-	Float e1 = tp2.x*tp0.y - tp0.x*tp2.y;
-	Float e2 = tp0.x*tp1.y - tp1.x*tp0.y;
+    // Edge function
+    // Left-hand 
+	Float e0 = tp1.x * tp2.y - tp2.x * tp1.y;
+	Float e1 = tp2.x * tp0.y - tp0.x * tp2.y;
+	Float e2 = tp0.x * tp1.y - tp1.x * tp0.y;
 
+    // Different side
 	if ((e0 > 0 || e1 > 0 || e2 > 0) && (e0 < 0 || e1 < 0 || e2 < 0))
 		return false;
-	
+
+    // Edge-on
 	Float det = e0 + e1 + e2;
 	if (det == 0) return false;
 
+    // Transform the ray to (0, 0, 1, 0)
 	tp0.z *= Sz;
 	tp1.z *= Sz;
 	tp2.z *= Sz;
+
+    // Out of [0, tMax] range
 	Float sum = e0 * tp0.z + e1 * tp1.z + e2 * tp2.z;
 	if (det > 0 && (sum <= 0 || sum > ray.tMax * det))
 		return false;
 	else if (det < 0 && (sum >= 0 || sum < ray.tMax *det))
 		return false;
-	
+
+    // Barycentric coordinate
 	Float invDet = 1 / det;
 	Float b0 = e0 * invDet;
 	Float b1 = e1 * invDet;
 	Float b2 = e2 * invDet;
-	//Float t = sum * invDet;
+	Float t = sum * invDet;
 
-	*tHit = sum * invDet;
-	Point3f pHit = ray(*tHit);
-	Normal3f nHit;
+    // Get vertices' uv coordinate
+    Point2f uv[3];
+    GetUV(uv);
 
-    nHit = Normal3f(Cross(p1 - p0, p2 - p0));
-    //nHit = m_mesh->m_normals[m_triNumber];
-
-    // Compute error bounds for triangle intersection
-    Float xAbsSum =
-        (std::abs(b0 * p0.x) + std::abs(b1 * p1.x) + std::abs(b2 * p2.x));
-    Float yAbsSum =
-        (std::abs(b0 * p0.y) + std::abs(b1 * p1.y) + std::abs(b2 * p2.y));
-    Float zAbsSum =
-        (std::abs(b0 * p0.z) + std::abs(b1 * p1.z) + std::abs(b2 * p2.z));
-    Vector3f pError = gamma(7) * Vector3f(xAbsSum, yAbsSum, zAbsSum);
+    Vector3f dpdu, dpdv;
+    Vector3f dp02 = p0 - p2, dp12 = p1 - p2;
+    Vector2f duv02 = uv[0] - uv[2], duv12 = uv[1] - uv[2];
+    Float determinant = (duv02[0] * duv12[1]) * (duv02[1] - duv12[0]);
+    if (determinant == 0) {
+        CoordinateSystem(Normal3f(Cross(p1 - p0, p2 - p0)), &dpdu, &dpdv);
+    }
+    else {
+        Float invDet = 1. / determinant;
+        dpdu = ( duv12[1] * dp02 - duv02[1] * dp12) * invDet;
+        dpdv = (-duv12[0] * dp02 + duv02[0] * dp12) * invDet;
+    }
     
-	*inter = SurfaceInteraction(pHit, pError, nHit, -ray.d, this);
+    
+    Point3f pHit = b0 * p0 + b1 * p1 + b2 * p2;
+    Point2f uvHit = b0 * uv[0] + b1 * uv[1] + b2 * uv[2];
+	
+    *inter = 
+        SurfaceInteraction(pHit, uvHit, -ray.d, dpdu, dpdv, Normal3f(0, 0, 0), Normal3f(0, 0, 0), this);
 
+    *tHit = t;
 	return true;
 }
 
 bool Triangle::Intersect(const Ray & ray) const {
+    /* Get Triangle's Vertices p0, p1, p2*/
     const Point3f &p0 = m_mesh->m_vertices[m_index[0].vertexIndex];
     const Point3f &p1 = m_mesh->m_vertices[m_index[1].vertexIndex];
     const Point3f &p2 = m_mesh->m_vertices[m_index[2].vertexIndex];
 
-	Point3f tp0(p0), tp1(p1), tp2(p2);
-	tp0 -= ray.o;
-	tp1 -= ray.o;
-	tp2 -= ray.o;
+    // Transform the ray origin at the origin of the coordinate system
+    Point3f tp0(p0), tp1(p1), tp2(p2);
+    tp0 -= ray.o;
+    tp1 -= ray.o;
+    tp2 -= ray.o;
 
-	int kz = MaxDimension(Abs(ray.d));
-	int kx = kz + 1; if (kx == 3) kx = 0;
-	int ky = kx + 1; if (ky == 3) ky = 0;
-	Vector3f d = Permute(ray.d, kx, ky, kz);
-	tp0 = Permute(tp0, kx, ky, kz);
-	tp1 = Permute(tp1, kx, ky, kz);
-	tp2 = Permute(tp2, kx, ky, kz);
+    // Make the ray's z axis is non-zero and largest
+    // Permute the tp0, tp1, tp2 as it, too
+    int kz = MaxDimension(Abs(ray.d));
+    int kx = kz + 1; if (kx == 3) kx = 0;
+    int ky = kx + 1; if (ky == 3) ky = 0;
+    Vector3f d = Permute(ray.d, kx, ky, kz);
+    tp0 = Permute(tp0, kx, ky, kz);
+    tp1 = Permute(tp1, kx, ky, kz);
+    tp2 = Permute(tp2, kx, ky, kz);
 
-	Float Sx = -d.x / d.z;
-	Float Sy = -d.y / d.z;
-	Float Sz = 1 / d.z;
-	tp0.x += Sx * tp0.z;
-	tp0.y += Sy * tp0.z;
-	tp1.x += Sx * tp1.z;
-	tp1.y += Sy * tp1.z;
-	tp2.x += Sx * tp2.z;
-	tp2.y += Sy * tp2.z;
+    // Transform the ray to (0, 0, 1, 0)
+    Float Sx = -d.x / d.z;
+    Float Sy = -d.y / d.z;
+    Float Sz = 1. / d.z;
+    tp0.x += Sx * tp0.z;
+    tp0.y += Sy * tp0.z;
+    tp1.x += Sx * tp1.z;
+    tp1.y += Sy * tp1.z;
+    tp2.x += Sx * tp2.z;
+    tp2.y += Sy * tp2.z;
 
-	Float e0 = tp1.x*tp2.y - tp2.x*tp1.y;
-	Float e1 = tp2.x*tp0.y - tp0.x*tp2.y;
-	Float e2 = tp0.x*tp1.y - tp1.x*tp0.y;
+    // Edge function
+    // Left-hand 
+    Float e0 = tp1.x * tp2.y - tp2.x * tp1.y;
+    Float e1 = tp2.x * tp0.y - tp0.x * tp2.y;
+    Float e2 = tp0.x * tp1.y - tp1.x * tp0.y;
 
-	if ((e0 > 0 || e1 > 0 || e2 > 0) && (e0 < 0 || e1 < 0 || e2 < 0))
-		return false;
+    // Different side
+    if ((e0 > 0 || e1 > 0 || e2 > 0) && (e0 < 0 || e1 < 0 || e2 < 0))
+        return false;
 
-	Float det = e0 + e1 + e2;
-	if (det == 0) return false;
+    // Edge-on
+    Float det = e0 + e1 + e2;
+    if (det == 0) return false;
 
-	Float sum = (e0 * tp0.z + e1 * tp1.z + e2 * tp2.z) * Sz;
-	if (det > 0 && (sum <= 0 || sum > ray.tMax * det))
-		return false;
-	else if (det < 0 && (sum >= 0 || sum < ray.tMax *det))
-		return false;
-	return true;
+    // Transform the ray to (0, 0, 1, 0)
+    tp0.z *= Sz;
+    tp1.z *= Sz;
+    tp2.z *= Sz;
+
+    // Out of [0, tMax] range
+    Float sum = e0 * tp0.z + e1 * tp1.z + e2 * tp2.z;
+    if (det > 0 && (sum <= 0 || sum > ray.tMax * det))
+        return false;
+    else if (det < 0 && (sum >= 0 || sum < ray.tMax *det))
+        return false;
+    return true;
 }
 
 Interaction Triangle::Sample(const Point3f &p, const Point2f & sample, Float * pdf) const {
@@ -244,12 +278,12 @@ std::vector<std::shared_ptr<Triangle>> CreateRectangle(
     vertices[2] = Point3f(1, 1, 0);
     vertices[3] = Point3f(-1, 1, 0);
 
-    indices[0] = Index(0, 0, 0);
-    indices[1] = Index(1, 0, 0);
-    indices[2] = Index(2, 0, 0);
-    indices[3] = Index(2, 0, 0);
-    indices[4] = Index(3, 0, 0);
-    indices[5] = Index(0, 0, 0);
+    indices[0] = Index(0, -1, -1);
+    indices[1] = Index(1, -1, -1);
+    indices[2] = Index(2, -1, -1);
+    indices[3] = Index(2, -1, -1);
+    indices[4] = Index(3, -1, -1);
+    indices[5] = Index(0, -1, -1);
 
     normals[0] = normals[1] = Normal3f(0, 0, 1);
 
@@ -291,9 +325,9 @@ std::vector<std::shared_ptr<Triangle>> CreateCube(
         int id1 = CubeData_triangles[i][0];
         int id2 = CubeData_triangles[i][1];
         int id3 = CubeData_triangles[i][2];
-        indices[i * 3 + 0] = Index(id1, 0, 0);
-        indices[i * 3 + 1] = Index(id2, 0, 0);
-        indices[i * 3 + 2] = Index(id3, 0, 0);
+        indices[i * 3 + 0] = Index(id1, -1, -1);
+        indices[i * 3 + 1] = Index(id2, -1, -1);
+        indices[i * 3 + 2] = Index(id3, -1, -1);
         Normal3f n(Cross(vertices[id2] - vertices[id1], vertices[id3] - vertices[id1]));
         //cout << n << endl;
         Assert(n.SquareLength() != 0, "Length of normals is Zero!");
@@ -312,7 +346,6 @@ std::vector<std::shared_ptr<Triangle>> CreateCube(
     }
 
     return tris;
-
 }
 
 RAINBOW_NAMESPACE_END

@@ -60,6 +60,19 @@ private:
 	std::shared_ptr<TriangleMesh> m_mesh;
 	const Index*                  m_index = nullptr;
 	const int                     m_triNumber = 0;
+
+    void GetUV(Point2f* uv) const {
+        if (m_index[0].texcoordIndex != -1) {
+            uv[0] = m_mesh->m_texcoords[m_index[0].texcoordIndex];
+            uv[1] = m_mesh->m_texcoords[m_index[1].texcoordIndex];
+            uv[2] = m_mesh->m_texcoords[m_index[2].texcoordIndex];
+        }
+        else {
+            uv[0] = Point2f(0, 0);
+            uv[1] = Point2f(1, 0);
+            uv[2] = Point2f(1, 1);
+        }
+    }
 };
 
 std::vector<std::shared_ptr<Triangle>> CreateWavefrontOBJ(
