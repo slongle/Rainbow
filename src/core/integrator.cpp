@@ -235,7 +235,7 @@ void SamplerIntegrator::RenderTileEyeLight(const Scene &scene, Sampler& sampler,
 void SamplerIntegrator::Render(const Scene &scene) {    
     std::shared_ptr<Film> film = camera->film;
     std::vector<FilmTile> tiles;
-    tiles = FilmTile::GenerateTiles(camera->film->resolution, RAINBOW_TILE_SIZE);
+    tiles = FilmTile::GenerateTiles(camera->film->resolution, RAINBOW_TILE_SIZE, film->filter);
 
     cout << sampleNum << endl;
     cout << "Rendering .. \n";
@@ -295,7 +295,7 @@ void SamplerIntegrator::Render(const Scene &scene) {
 void SamplerIntegrator::RenderAdaptive(const Scene &scene) {
     std::shared_ptr<Film> film = camera->film;
     std::vector<FilmTile> tiles;
-    tiles = FilmTile::GenerateTiles(camera->film->resolution, RAINBOW_TILE_SIZE);
+    tiles = FilmTile::GenerateTiles(camera->film->resolution, RAINBOW_TILE_SIZE, film->filter);
 
     cout << sampleNum << endl;
     cout << "Rendering .. \n";
@@ -351,7 +351,7 @@ void SamplerIntegrator::RenderAdaptive(const Scene &scene) {
 void SamplerIntegrator::RenderEyeLight(const Scene &scene) {
     std::shared_ptr<Film> film = camera->film;
     std::vector<FilmTile> tiles;
-    tiles = FilmTile::GenerateTiles(camera->film->resolution, RAINBOW_TILE_SIZE);
+    tiles = FilmTile::GenerateTiles(camera->film->resolution, RAINBOW_TILE_SIZE, film->filter);
 
     cout << sampleNum << endl;
     cout << "Rendering .. \n";

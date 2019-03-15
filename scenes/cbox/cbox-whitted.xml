@@ -18,6 +18,8 @@
             <string name="filename" value="sphere-cornell-box_2.png"/>
 			      <integer name="height" value="600"/>
 			      <integer name="width" value="800"/>
+		        <hide type="gaussian" />
+		        <rfilter type="box" />
 		    </film>
 	  </sensor>
     <shape type="sphere">

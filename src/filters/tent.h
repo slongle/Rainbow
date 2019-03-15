@@ -1,7 +1,7 @@
 #ifndef __TENTFILTER
 #define __TENTFILTER
 
-#include "../core/filter.h"
+#include "src/core/filter.h"
 
 RAINBOW_NAMESPACE_BEGIN
 

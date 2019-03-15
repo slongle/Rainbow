@@ -294,6 +294,9 @@
     <ClCompile Include="..\src\lights\point.cpp">
       <Filter>Source Files\lights</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\filters\gaussian.cpp">
+      <Filter>Source Files\filters</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\core\bbox.h">
@@ -505,6 +508,9 @@
     </ClInclude>
     <ClInclude Include="..\src\lights\point.h">
       <Filter>Source Files\lights</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\filters\gaussian.h">
+      <Filter>Source Files\filters</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

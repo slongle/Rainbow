@@ -32,6 +32,11 @@
 
 #include "src/lights/spot.h"
 #include "src/lights/point.h"
+#include "src/filters/gaussian.h"
+
+#include "src/filters/box.h"
+#include "src/filters/tent.h"
+#include "src/filters/gaussian.h"
 
 RAINBOW_NAMESPACE_BEGIN
 
@@ -54,7 +59,7 @@ struct RenderOptions {
 	Scene* MakeScene();
 	Camera* MakeCamera();
 	Film* MakeFilm();
-	Aggregate* MakeAggregate();	
+	Aggregate* MakeAggregate();
 
     std::string RenderMode;
 
@@ -74,6 +79,7 @@ struct RenderOptions {
 	std::vector<std::shared_ptr<Light>> lights;
 	std::shared_ptr<Material> CurrentMaterial;
     std::map<std::string, std::shared_ptr<Material>> MaterialMap;
+    std::shared_ptr<Filter> filter;
 
     Medium *CurrentMediumInter, *CurrentMediumExter;
 };
@@ -187,6 +193,20 @@ void RainbowSampler(const std::string & type, const PropertyList & list) {
 	renderOptions->SamplerProperty = list;
 }
 
+void RainbowFilter(
+    const std::string&   type, 
+    PropertyList&        list) 
+{
+    if (type == "gaussian") 
+    {
+        renderOptions->filter = CreateGaussianFilter(list);
+    }
+    else if (type == "box") 
+    {
+        renderOptions->filter = CreateBoxFilter(list);
+    }
+}
+
 void RainbowFilm(const std::string & type, const PropertyList & list) {
 	renderOptions->FilmType = type;
 	renderOptions->FilmProperty = list;
@@ -287,7 +307,7 @@ Scene* RenderOptions::MakeScene() {
 Film* RenderOptions::MakeFilm() {
 	Film* film = nullptr;
     if (FilmType == "hdrfilm" || FilmType == "ldrfilm") {
-		film = CreateFilm(FilmProperty);
+		film = CreateFilm(FilmProperty, renderOptions->filter);
 	}
 	return film;
 }

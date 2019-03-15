@@ -32,7 +32,7 @@ int main(int argc, char *argv[]) {
     scenes[6] = "light-test/scene.xml";
     scenes[7] = "rainbow/scene.xml";
 
-    const std::string filename(solutionDir + scenes[1]);
+    const std::string filename(solutionDir + scenes[0]);
 
 	RainbowInit();	
 	filesystem::path path(filename);

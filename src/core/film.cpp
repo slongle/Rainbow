@@ -2,37 +2,72 @@
 
 RAINBOW_NAMESPACE_BEGIN
 
-Film::Film(const std::string & m_filename, const Point2i & m_resolution) :
-    filename(m_filename), resolution(m_resolution), 
-    aspect(static_cast<Float>(resolution.x) / resolution.y) {
+void FilmTile::AddSample(
+    const Point2f&       pixelSample,
+    const RGBSpectrum&   L,
+    const int&           num)
+{
+    FilmTilePixel &pixel = GetPixel(Point2i(pixelSample.x, pixelSample.y));
+    pixel.contribSum += L;
+    pixel.filterWeightSum += num;
+}
+
+void FilmTile::AddSample(
+    const Point2i&       position,
+    const Point2f&       sample,
+    const RGBSpectrum&   L)
+{
+    FilmTilePixel &pixel = GetPixel(position);
+    Float scale = filter->Evaluate(sample);
+    pixel.contribSum += L * scale;
+    pixel.filterWeightSum += scale;
+}
+
+Film::Film(
+    const std::string&               m_filename, 
+    const Point2i&                   m_resolution,
+    const std::shared_ptr<Filter>&   m_filter) :
+    filename(m_filename), resolution(m_resolution), filter(m_filter), 
+    aspect(static_cast<Float>(resolution.x) / resolution.y) 
+{
 	pixels = std::unique_ptr<Pixel[]>(new Pixel[resolution.x * resolution.y]);
 }
 
-void Film::MergeFilmTile(const FilmTile & tile) {
+void Film::MergeFilmTile(const FilmTile & tile) 
+{
     for (int y = tile.bounds.pMin.y; y < tile.bounds.pMax.y; y++)
-        for (int x = tile.bounds.pMin.x; x < tile.bounds.pMax.x; x++)
-            GetPixel(Point2i(x,y)) = tile.GetPixel(Point2i(x, y));
+        for (int x = tile.bounds.pMin.x; x < tile.bounds.pMax.x; x++) 
+        {
+            Pixel& pixel = GetPixel(Point2i(x, y));
+            FilmTilePixel tilePixel = tile.GetPixel(Point2i(x, y));
+            for (int i = 0; i < 3; i++)
+                pixel.rgb[i] = tilePixel.contribSum[i];
+            pixel.filterWeightSum = tilePixel.filterWeightSum;            
+        }
 }
 
-void Film::AddPixel(const Point2i & p, const RGBSpectrum & L, const int &num) const {
+void Film::AddPixel(
+    const Point2i & p, 
+    const RGBSpectrum & L, 
+    const int &num) const 
+{
     Pixel &pixel = GetPixel(p);
-    //if (!L.IsBlack())std::cout << L << std::endl;
     for (int i = 0; i < 3; i++)
         pixel.rgb[i] += L[i];
-    pixel.sampleNum += num;
+    pixel.filterWeightSum += num;
 }
 
 void Film::SetPixel(const Point2i & p, const RGBSpectrum & L) const {
 	Pixel &pixel = GetPixel(p);
 	for (int i = 0; i < 3; i++)
 		pixel.rgb[i] = L[i];
-    pixel.sampleNum = 1;
+    pixel.filterWeightSum = 1;
 }
 
 RGBSpectrum Film::RetPixel(const Point2i & p) const {
     Pixel &pixel = GetPixel(p);
     RGBSpectrum rgb;
-    Float invWeight = Float(1) / pixel.sampleNum;
+    Float invWeight = Float(1) / pixel.filterWeightSum;
     for (int i = 0; i < 3; i++)
         rgb[i] = pixel.rgb[i] * invWeight;
     return rgb;
@@ -66,11 +101,11 @@ void Film::SaveHeatMapImage(const std::string & name) const {
 }
 
 void Film::ExportToHeatMapUnsignedCharPointer(unsigned char * data) const {
-    int midVal, maxVal = pixels[0].sampleNum, minVal = pixels[0].sampleNum;
+    int midVal, maxVal = pixels[0].filterWeightSum, minVal = pixels[0].filterWeightSum;
     for (int i = 1; i < resolution.x*resolution.y; i++) {
-        if (pixels[i].sampleNum == 0) break;
-        maxVal = std::max(maxVal, pixels[i].sampleNum);
-        minVal = std::min(minVal, pixels[i].sampleNum);
+        if (pixels[i].filterWeightSum == 0) break;
+        maxVal = std::max(maxVal, (int)pixels[i].filterWeightSum);
+        minVal = std::min(minVal, (int)pixels[i].filterWeightSum);
     }
     midVal = (maxVal + minVal) / 2;
     int halfLen = midVal - minVal;
@@ -79,14 +114,14 @@ void Film::ExportToHeatMapUnsignedCharPointer(unsigned char * data) const {
     int idx = 0;
     for (int i = 0; i < resolution.x*resolution.y; i++) {
         Float r, g, b;
-        if (pixels[i].sampleNum == 0) break;
-        if (pixels[i].sampleNum <= midVal) {
+        if (pixels[i].filterWeightSum == 0) break;
+        if (pixels[i].filterWeightSum <= midVal) {
             r = 0;
-            g = Float(pixels[i].sampleNum - minVal) / halfLen;
+            g = Float(pixels[i].filterWeightSum - minVal) / halfLen;
             b = 1 - g;
         }
         else {
-            r = Float(pixels[i].sampleNum - midVal) / halfLen;
+            r = Float(pixels[i].filterWeightSum - midVal) / halfLen;
             g = 1 - r;
             b = 0;
         }
@@ -105,7 +140,7 @@ void Film::ExportToUnsignedCharPointer(unsigned char* data) const {
     for (int y = 0; y < resolution.y; y++) {
         for (int x = 0; x < resolution.x; x++) {
             Pixel &pixel = GetPixel(Point2i(x, y));
-            Float invWeight = Float(1) / pixel.sampleNum;
+            Float invWeight = Float(1) / pixel.filterWeightSum;
 #define TO_BYTE(v) (uint8_t) Clamp(255.f * GammaCorrect(v) + 0.5f, 0.f, 255.f)
             data[idx + 0] = (TO_BYTE(pixel.rgb[0] * invWeight));
             data[idx + 1] = (TO_BYTE(pixel.rgb[1] * invWeight));
@@ -120,7 +155,7 @@ void Film::ExportToUnsignedCharPointer(unsigned char* data) const {
 void Film::UpdateToUnsignedCharPointer(unsigned char* data, const int &x, const int &y) const {
     int idx = 4 * (y*resolution.x + x);
     Pixel &pixel = GetPixel(Point2i(x, y));
-    Float invWeight = Float(1) / pixel.sampleNum;
+    Float invWeight = Float(1) / pixel.filterWeightSum;
 #define TO_BYTE(v) (uint8_t) Clamp(255.f * GammaCorrect(v) + 0.5f, 0.f, 255.f)
     data[idx + 0] = (TO_BYTE(pixel.rgb[0] * invWeight));
     data[idx + 1] = (TO_BYTE(pixel.rgb[1] * invWeight));
@@ -129,20 +164,15 @@ void Film::UpdateToUnsignedCharPointer(unsigned char* data, const int &x, const 
 #undef TO_BYTE
 }
 
-Film *CreateFilm(PropertyList & list) {
+Film *CreateFilm(
+    PropertyList&                    list, 
+    const std::shared_ptr<Filter>&   filter) 
+{
 	std::string filename = list.getString("filename", "output.png");
 	Point2i resolution;
 	resolution.x = list.getInteger("width" , 1280);
 	resolution.y = list.getInteger("height", 720);
-	return new Film(filename, resolution);
-}
-
-void FilmTile::AddSample(const Point2f & pixelSample, const RGBSpectrum & L, const int &num) {
-    //Pixel &pixel = GetPixel(Point2i(std::floor(pixelSample.x), std::floor(pixelSample.y)));
-    Pixel &pixel = GetPixel(Point2i(pixelSample.x, pixelSample.y));
-    for (int i = 0; i < 3; i++)
-        pixel.rgb[i] += L[i];
-    pixel.sampleNum += num;
+	return new Film(filename, resolution, filter);
 }
 
 RAINBOW_NAMESPACE_END

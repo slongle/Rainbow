@@ -1,7 +1,7 @@
 #ifndef __BOXFILTER_H
 #define __BOXFILTER_H
 
-#include "../core/filter.h"
+#include "src/core/filter.h"
 
 RAINBOW_NAMESPACE_BEGIN
 
@@ -10,6 +10,8 @@ public:
 	BoxFilter(const Vector2f &radius) :Filter(radius) {}
 	Float Evaluate(const Point2f &p) const;
 };
+
+std::shared_ptr<BoxFilter> CreateBoxFilter(PropertyList& list);
 
 RAINBOW_NAMESPACE_END
 

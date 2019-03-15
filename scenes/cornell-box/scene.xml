@@ -28,7 +28,7 @@
 			<string name="pixelFormat" value="rgb" />
 			<float name="gamma" value="2.2" />
 			<boolean name="banner" value="false" />
-			<rfilter type="tent" />
+			<rfilter type="gaussian" />
 		</film>
 	</sensor>
 	<bsdf type="twosided" id="LeftWall" >

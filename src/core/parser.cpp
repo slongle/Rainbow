@@ -183,6 +183,9 @@ void ParserXMLFile(const std::string & filename) {
 				case ELight:
 					RainbowLight(type, m_list);
 					break;
+                case ERFilter:
+                    RainbowFilter(type, m_list);
+                    break;
                 case EBSDFMap:
                     m_list.setString("id", node.attribute("id").value());
                     RainbowBSDFMap(type, m_list);
