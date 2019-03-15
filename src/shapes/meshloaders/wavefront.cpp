@@ -6,7 +6,7 @@
 RAINBOW_NAMESPACE_BEGIN
 
 void ParseWavefrontOBJ(
-    const std::string&       filename,         // input filename
+    const std::string&       name,         // input filename
     int*                     vertexNum,    // the number of vertex
     int*                     triangleNum,  // the number of triangle
     std::vector<Point3f>*    vertices,     // v
@@ -22,10 +22,14 @@ void ParseWavefrontOBJ(
     // Clear Data
     *vertexNum = 0;
     *triangleNum = 0;
-    vertices->clear();
+    vertices->clear(); 
+    vertices->resize(0);
     normals->clear();
+    normals->resize(0);
     texcoords->clear();
+    texcoords->resize(0);
     indices->clear();
+    indices->resize(0);
 
     //std::string filename = "F:/Document/Graphics/code/Rainbow/scenes/rainbow/meshes/rainbow.obj";
     tinyobj::attrib_t attrib;
@@ -34,7 +38,8 @@ void ParseWavefrontOBJ(
 
     std::string warn;
     std::string err;
-    bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, filename.c_str());
+    filesystem::path filename = getFileResolver()->resolve(name);
+    bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, filename.str().c_str());
 
     if (!err.empty()) 
     {
@@ -53,12 +58,15 @@ void ParseWavefrontOBJ(
         Float z = attrib.vertices[i + 2];
         vertices->emplace_back(x, y, z);
     }
+    *vertexNum = vertices->size();
+
     for (int i = 0; i < attrib.normals.size(); i += 3) {
         Float x = attrib.normals[i];
         Float y = attrib.normals[i + 1];
         Float z = attrib.normals[i + 2];
         normals->emplace_back(x, y, z);
-    }
+    }    
+
     for (int i = 0; i < attrib.texcoords.size(); i += 2) {
         Float x = attrib.texcoords[i];
         Float y = attrib.texcoords[i + 1];        
@@ -68,6 +76,7 @@ void ParseWavefrontOBJ(
     // Loop over shapes
     for (int s = 0; s < shapes.size(); s++) 
     {
+        *triangleNum += shapes[s].mesh.num_face_vertices.size();
         // Loop over faces (polygon)
         int index_offset = 0;
         for (int f = 0; f < shapes[s].mesh.num_face_vertices.size(); f++) 

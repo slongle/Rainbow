@@ -15,11 +15,12 @@ TriangleMesh::TriangleMesh(
     
     m_vertices.resize(m_vertexNum);
     for (int i = 0; i < m_vertexNum; i++)
-        m_vertices[i] = (*ObjectToWorld)(m_vertices[i]);
+        m_vertices[i] = (*ObjectToWorld)(vertices[i]);
     
-    m_normals.resize(m_triangleNum);
-    for (int i = 0; i < triangleNum; i++)
-        m_normals[i] = (*ObjectToWorld)(m_normals[i]);
+    m_normals.resize(normals.size());
+    for (int i = 0; i < normals.size(); i++)
+        m_normals[i] = (*ObjectToWorld)(normals[i]);
+
 }
 
 Triangle::Triangle(
@@ -103,7 +104,8 @@ bool Triangle::IntersectP(const Ray & ray, Float * tHit, SurfaceInteraction* int
 	Point3f pHit = ray(*tHit);
 	Normal3f nHit;
 
-    nHit = m_mesh->m_normals[m_triNumber];
+    nHit = Normal3f(Cross(p1 - p0, p2 - p0));
+    //nHit = m_mesh->m_normals[m_triNumber];
 
     // Compute error bounds for triangle intersection
     Float xAbsSum =
@@ -113,8 +115,7 @@ bool Triangle::IntersectP(const Ray & ray, Float * tHit, SurfaceInteraction* int
     Float zAbsSum =
         (std::abs(b0 * p0.z) + std::abs(b1 * p1.z) + std::abs(b2 * p2.z));
     Vector3f pError = gamma(7) * Vector3f(xAbsSum, yAbsSum, zAbsSum);
-
-    nHit = Normalize(nHit);
+    
 	*inter = SurfaceInteraction(pHit, pError, nHit, -ray.d, this);
 
 	return true;

@@ -20,9 +20,6 @@ void foo() {
 }
 
 int main(int argc, char *argv[]) {
-
-    
-
     std::string solutionDir("F:/Document/Graphics/code/Rainbow/scenes/");
     //std::string solutionDir("C:/Users/Administrator/Desktop/Rainbow/scenes/");
     std::vector<std::string> scenes(100);
@@ -35,7 +32,7 @@ int main(int argc, char *argv[]) {
     scenes[6] = "light-test/scene.xml";
     scenes[7] = "rainbow/scene.xml";
 
-    const std::string filename(solutionDir + scenes[7]);
+    const std::string filename(solutionDir + scenes[1]);
 
 	RainbowInit();	
 	filesystem::path path(filename);
