@@ -205,6 +205,10 @@ void RainbowFilter(
     {
         renderOptions->filter = CreateBoxFilter(list);
     }
+    else if (type == "triangle" || type == "tent") 
+    {
+        renderOptions->filter = CreateTentFilter(list);
+    }
 }
 
 void RainbowFilm(const std::string & type, const PropertyList & list) {

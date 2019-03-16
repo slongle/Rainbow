@@ -204,11 +204,12 @@ void SamplerIntegrator::RenderTile(const Scene &scene, Sampler& sampler, FilmTil
         for (int x = tile.bounds.pMin.x; x < tile.bounds.pMax.x; x++) {            
             RGBSpectrum L(0.);
             for (int i = 0; i < delta; i++) {
-                Point2f pixelSample = Point2f(x, y) + sampler.Get2D();
+                Point2f sample = sampler.Get2D();
+                Point2f pixelSample = Point2f(x, y) + sample;
                 RGBSpectrum weight = camera->GenerateRay(&ray, pixelSample);
-                L += weight * Li(arena, ray, scene, sampler, 0);
-            }
-            tile.AddSample(Point2f(x, y), L, delta);
+                L = weight * Li(arena, ray, scene, sampler, 0);
+                tile.AddSample(Point2i(x, y), sample, L);
+            }            
         }                
     }
 }

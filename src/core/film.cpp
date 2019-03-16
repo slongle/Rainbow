@@ -18,7 +18,7 @@ void FilmTile::AddSample(
     const RGBSpectrum&   L)
 {
     FilmTilePixel &pixel = GetPixel(position);
-    Float scale = filter->Evaluate(sample);
+    Float scale = filter->Evaluate(sample - Vector2f(0.5));
     pixel.contribSum += L * scale;
     pixel.filterWeightSum += scale;
 }

@@ -3,7 +3,7 @@
 	  <integrator type="path">
 		    <integer name="maxDepth" value="50"/>
         <integer name="sampleNum" value="1000"/>
-        <integer name="delta" value="1"/>
+        <integer name="delta" value="100"/>
 	  </integrator>
 	  <sensor type="perspective">
 		    <float name="fov" value="19.5"/>
@@ -15,11 +15,10 @@
 	          <integer name="sampleCount" value="512"/>
 	      </sampler>
 		    <film type="hdrfilm">
-            <string name="filename" value="sphere-cornell-box_2.png"/>
+            <string name="filename" value="sphere-cornell-box_gaussian_2.png"/>
 			      <integer name="height" value="600"/>
 			      <integer name="width" value="800"/>
-		        <hide type="gaussian" />
-		        <rfilter type="box" />
+		        <rfilter type="gaussian" />
 		    </film>
 	  </sensor>
     <shape type="sphere">
@@ -30,13 +29,13 @@
         <bsdf type="mirror"/>
     </shape>
 
-    <hide type="sphere">
+    <shape type="sphere">
         <transform name="toWorld">
             <translate value="0.4456, 0.3301, 0.3767"/>
         </transform>
         <float name="radius" value="0.3261"/>
         <bsdf type="glass"/>
-    </hide>
+    </shape>
 
 	  <shape type="obj">
 		    <string name="filename" value="meshes/walls.obj"/>

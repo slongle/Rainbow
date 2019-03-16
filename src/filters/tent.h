@@ -11,6 +11,8 @@ public:
 	Float Evaluate(const Point2f &p) const;
 };
 
+std::shared_ptr<TentFilter> CreateTentFilter(PropertyList& list);
+
 RAINBOW_NAMESPACE_END
 
 #endif // !__TENTFILTER
