@@ -128,13 +128,16 @@ bool Triangle::IntersectP(const Ray & ray, Float * tHit, SurfaceInteraction* int
         dpdu = ( duv12[1] * dp02 - duv02[1] * dp12) * invDet;
         dpdv = (-duv12[0] * dp02 + duv02[0] * dp12) * invDet;
     }
-    
-    
+        
     Point3f pHit = b0 * p0 + b1 * p1 + b2 * p2;
     Point2f uvHit = b0 * uv[0] + b1 * uv[1] + b2 * uv[2];
 	
     *inter = 
         SurfaceInteraction(pHit, uvHit, -ray.d, dpdu, dpdv, Normal3f(0, 0, 0), Normal3f(0, 0, 0), this);
+    inter->n = inter->shading.n = Normal3f(Normalize(Cross(dp02, dp12)));
+
+    if (m_index->normalIndex != -1)
+        inter->n = FaceForward(inter->n, inter->shading.n);
 
     *tHit = t;
 	return true;
@@ -278,14 +281,14 @@ std::vector<std::shared_ptr<Triangle>> CreateRectangle(
     vertices[2] = Point3f(1, 1, 0);
     vertices[3] = Point3f(-1, 1, 0);
 
-    indices[0] = Index(0, -1, -1);
-    indices[1] = Index(1, -1, -1);
-    indices[2] = Index(2, -1, -1);
-    indices[3] = Index(2, -1, -1);
-    indices[4] = Index(3, -1, -1);
-    indices[5] = Index(0, -1, -1);
+    indices[0] = Index(0, 0, -1);
+    indices[1] = Index(1, 0, -1);
+    indices[2] = Index(2, 0, -1);
+    indices[3] = Index(2, 0, -1);
+    indices[4] = Index(3, 0, -1);
+    indices[5] = Index(0, 0, -1);
 
-    normals[0] = normals[1] = Normal3f(0, 0, 1);
+    normals[0] = Normal3f(0, 0, 1);
 
     std::shared_ptr<TriangleMesh> mesh =
         std::make_shared<TriangleMesh>(

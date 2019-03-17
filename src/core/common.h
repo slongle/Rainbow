@@ -88,8 +88,23 @@ inline filesystem::resolver *getFileResolver() {
 	return resolver;
 }
 
-inline std::string indent(const std::string &str, const int &num) {
-	return std::string(num, ' ') + str;
+inline std::string indent(const std::string &string, const int &num) {
+	//return std::string(num, ' ') + str;    
+    /* This could probably be done faster (it's not
+       really speed-critical though) */
+    std::istringstream iss(string);
+    std::ostringstream oss;
+    std::string spacer(num, ' ');
+    bool firstLine = true;
+    for (std::string line; std::getline(iss, line); ) {
+        if (!firstLine)
+            oss << spacer;
+        oss << line;
+        if (!iss.eof())
+            oss << endl;
+        firstLine = false;
+    }
+    return oss.str();    
 }
 
 inline bool toBoolean(const std::string &str) {

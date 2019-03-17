@@ -21,6 +21,16 @@ public:
         Sampler &sampler, 
         int depth) override;
 
+    std::string toString() const 
+    {
+        return tfm::format(
+            "Path Integrator[\n"
+            "    MaxDepth : %d,\n"
+            "]", 
+            maxDepth
+        );
+    }
+
     const int maxDepth;
 };
 

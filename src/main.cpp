@@ -32,9 +32,8 @@ int main(int argc, char *argv[]) {
     scenes[6] = "light-test/scene.xml";
     scenes[7] = "rainbow/scene.xml";
 
-    const std::string filename(solutionDir + scenes[0]);
+    const std::string filename(solutionDir + scenes[7]);
 
-	RainbowInit();	
 	filesystem::path path(filename);
 	getFileResolver()->prepend(path.parent_path());
 	ParserXMLFile(filename);

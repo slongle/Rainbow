@@ -4,8 +4,8 @@
   <mode type="final"/>
 	<integrator type="path" >
 		<integer name="maxDepth" value="65" />
-        <integer name="sampleNum" value="1000"/>
-        <integer name="delta" value="1"/>
+        <integer name="sampleNum" value="100"/>
+        <integer name="delta" value="100"/>
 		<boolean name="strictNormals" value="true" />
 	</integrator>
 	<sensor type="perspective" >
@@ -21,7 +21,7 @@
 	    <integer name="sampleCount" value="512"/>
 	  </sampler>
 		<film type="ldrfilm" >
-      <string name="filename" value="cornell-box_2.png"/>
+      <string name="filename" value="cornell-box_1.png"/>
 			<integer name="width" value="1024" />
 			<integer name="height" value="1024" />
 			<string name="fileFormat" value="png" />

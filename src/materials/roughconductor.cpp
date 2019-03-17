@@ -22,7 +22,9 @@ RoughConductorMaterial::RoughConductorMaterial(
     alphaU(m_alpha), alphaV(m_alpha), distributionType(m_distributionType) {}
 
 void RoughConductorMaterial::ComputeScatteringFunctions(
-    MemoryArena & arena, SurfaceInteraction * it) {
+    MemoryArena&          arena, 
+    SurfaceInteraction*   it) 
+{
     it->bsdf = ARENA_ALLOCA(arena, BSDF)(it->n);
     Fresnel* fresnel = ARENA_ALLOCA(arena, FresnelConductor)(RGBSpectrum(1.), eta, k);
     MicrofacetDistribution* distribution;
@@ -33,7 +35,8 @@ void RoughConductorMaterial::ComputeScatteringFunctions(
     it->bsdf->Add(ARENA_ALLOCA(arena, MicrofacetReflection)(R, distribution, fresnel));
 }
 
-RoughConductorMaterial * CreateRoughConductorMaterial(PropertyList & list) {
+RoughConductorMaterial * CreateRoughConductorMaterial(PropertyList & list) 
+{
     RGBSpectrum R = list.getColor("specularReflectance", RGBSpectrum(1.));
     RGBSpectrum eta = list.getColor("eta", RGBSpectrum(0.200438, 0.924033, 1.10221));
     RGBSpectrum k = list.getColor("k", RGBSpectrum(3.91295, 2.45285, 2.14219));

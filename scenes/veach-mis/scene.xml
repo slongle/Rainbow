@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <scene version="0.5.0" >
-  <mode type="adaptive"/>
+  <mode type="eye"/>
   <integrator type="path" >
     <integer name="maxDepth" value="5" />
     <integer name="sampleNum" value="10000"/>
@@ -21,7 +21,7 @@
 	    <integer name="sampleCount" value="512"/>
 	  </sampler>
 		<film type="ldrfilm" >
-		  <string name="filename" value="veach-mis.png"/>
+		  <string name="filename" value="veach-mis_2.png"/>
       <integer name="width" value="1280" />
 			<integer name="height" value="720" />
 			<string name="fileFormat" value="png" />

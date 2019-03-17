@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <scene version="0.5.0" >
-  <mode type="test"/>
+  <mode type="eye"/>
   <integrator type="path" >
 		<integer name="maxDepth" value="7" />
     <integer name="sampleNum" value="5000"/>
@@ -18,7 +18,7 @@
 			<integer name="sampleCount" value="64" />
 		</sampler>
 		<film type="ldrfilm" >
-		  <string name="filename" value="veach-bidir_2.png"/>
+		  <string name="filename" value="veach-bidir_eye_2.png"/>
       <integer name="width" value="1024" />
 			<integer name="height" value="1024" />
 			<string name="fileFormat" value="png" />

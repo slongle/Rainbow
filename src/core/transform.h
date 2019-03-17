@@ -54,14 +54,19 @@ public:
 		return ret;
 	}
 
-	std::string toString(const int &spaceNum = 0) const {
-		return
-		indent("[\n", spaceNum) +
-			indent(tfm::format("[%.3f, %.3f, %.3f, %.3f],\n", m[0][0], m[0][1], m[0][2], m[0][3]), spaceNum + 4) +
-			indent(tfm::format("[%.3f, %.3f, %.3f, %.3f],\n", m[1][0], m[1][1], m[1][2], m[1][3]), spaceNum + 4) +
-			indent(tfm::format("[%.3f, %.3f, %.3f, %.3f],\n", m[2][0], m[2][1], m[2][2], m[2][3]), spaceNum + 4) +
-			indent(tfm::format("[%.3f, %.3f, %.3f, %.3f],\n", m[3][0], m[3][1], m[3][2], m[3][3]), spaceNum + 4) +
-		indent("]", spaceNum);
+	std::string toString() const {
+        return tfm::format(
+            "[\n"
+            "    [%.3f, %.3f, %.3f, %.3f],\n"
+            "    [%.3f, %.3f, %.3f, %.3f],\n"
+            "    [%.3f, %.3f, %.3f, %.3f],\n"
+            "    [%.3f, %.3f, %.3f, %.3f],\n"
+            "]"
+            , m[0][0], m[0][1], m[0][2], m[0][3]
+            , m[1][0], m[1][1], m[1][2], m[1][3]
+            , m[2][0], m[2][1], m[2][2], m[2][3]
+            , m[3][0], m[3][1], m[3][2], m[3][3]
+        );	    	  	    
 	}
 
 	friend Matrix4x4 Transpose(const Matrix4x4 &m1);
@@ -69,14 +74,6 @@ public:
 
 	friend std::ostream &operator << (std::ostream &os, const Matrix4x4 &m1) {
 		os << m1.toString();
-
-		/*os.setf(std::ios::fixed);						
-		os << "Matrix[\n" << std::setprecision(4) <<
-			  "  [" << m1.m[0][0] << "\t, " << m1.m[0][1] << "\t, " << m1.m[0][2] << "\t, " << m1.m[0][3] << "],\n" <<
-			  "  [" << m1.m[1][0] << "\t, " << m1.m[1][1] << "\t, " << m1.m[1][2] << "\t, " << m1.m[1][3] << "],\n" <<
-			  "  [" << m1.m[2][0] << "\t, " << m1.m[2][1] << "\t, " << m1.m[2][2] << "\t, " << m1.m[2][3] << "],\n" <<
-			  "  [" << m1.m[3][0] << "\t, " << m1.m[3][1] << "\t, " << m1.m[3][2] << "\t, " << m1.m[3][3] << "],\n" <<
-			  "]";*/
 		return os;
 	}
 
@@ -135,12 +132,15 @@ public:
     SurfaceInteraction operator() (const SurfaceInteraction &si) const;
 
 
-	std::string toString(const int &spaceNum = 0) const {
-		return 
-		indent("[\n", spaceNum) +
-			m.toString(spaceNum + 4) + "\n" +
-			mInv.toString(spaceNum + 4) + "\n" +
-		indent("]", spaceNum);		
+	std::string toString() const {
+        return tfm::format(
+            "Transform[\n"
+            "    M    : %s,\n"
+            "    MInv : %s,\n"
+            "]"
+            , indent(m.toString(), 11)
+            , indent(mInv.toString(),11)
+        );
 	}
 
 	friend Transform Inverse(const Transform &t) {

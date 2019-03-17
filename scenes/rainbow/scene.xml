@@ -17,7 +17,7 @@
 			<integer name="sampleCount" value="64" />
 		</sampler>
 		<film type="ldrfilm" >
-            <string name="filename" value="rainbow_3.png"/>
+            <string name="filename" value="rainbow_gaussian_1.png"/>
 			<integer name="width" value="2048" />
 			<integer name="height" value="1024" />
 			<string name="fileFormat" value="png" />

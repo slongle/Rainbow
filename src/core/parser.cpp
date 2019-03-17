@@ -143,8 +143,6 @@ void ParserXMLFile(const std::string & filename) {
 			ParserTag(child, m_list, num + 4);
 		}
 
-		
-
 		bool isObject = tag < EBoolean;
 
 		if (isObject) {
@@ -221,6 +219,7 @@ void ParserXMLFile(const std::string & filename) {
 			    case EColor: {
 			    	if (strcmp(node.name(), "spectrum") == 0) {
 			    		// TODO: Fix Spectrum declared with wavelength
+                        Assert(false, "No implemented!");
 			    	}
 			    	else if (strcmp(node.name(), "rgb") == 0 || strcmp(node.name(), "color") == 0) {
 			    		list.setColor(node.attribute("name").value(), toColor(node.attribute("value").value()));
@@ -241,23 +240,11 @@ void ParserXMLFile(const std::string & filename) {
 			    }
 			    case ETranslate: {
 			    	Vector3f delta = toVector(node.attribute("value").value());
-			    	/*for (pugi::xml_attribute &attribute : node.attributes()) {
-			    		//cout << attribute.name() << ' ' << attribute.value() << endl;
-			    		if (strcmp(attribute.name(), "x") == 0) delta.x = toFloat(attribute.value());
-			    		if (strcmp(attribute.name(), "y") == 0) delta.y = toFloat(attribute.value());
-			    		if (strcmp(attribute.name(), "z") == 0) delta.z = toFloat(attribute.value());
-			    	}*/
 			    	m_transform *= Translate(delta);
 			    	break;
 			    }
 			    case EScale: {
                     Vector3f scale = toVector(node.attribute("value").value());
-                    /*for (pugi::xml_attribute &attribute : node.attributes()) {                        
-                        if (strcmp(attribute.name(), "x") == 0) scale.x = toFloat(attribute.value());
-                        if (strcmp(attribute.name(), "y") == 0) scale.y = toFloat(attribute.value());
-                        if (strcmp(attribute.name(), "z") == 0) scale.z = toFloat(attribute.value());
-                    }*/
-                    cout << scale << endl;
 			    	Transform s = Scale(scale);
 			    	m_transform *= Scale(scale);
 			    	break;
@@ -283,10 +270,12 @@ void ParserXMLFile(const std::string & filename) {
 		}
 	};
 
+    RainbowSceneBegin();
+
 	PropertyList prop;
 	ParserTag(*doc.begin(), prop, 0);
-
-	RainbowWorld();
+    
+    RainbowSceneEnd();
 }
 
 RAINBOW_NAMESPACE_END

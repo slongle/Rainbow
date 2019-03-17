@@ -9,6 +9,15 @@ class BoxFilter : public Filter {
 public:
 	BoxFilter(const Vector2f &radius) :Filter(radius) {}
 	Float Evaluate(const Point2f &p) const;
+
+    std::string toString() const override {
+        return tfm::format(
+            "BoxFiltr[\n"
+            "    Radius : %f * %f,\n"
+            "]"
+            , m_radius.x, m_radius.y
+        );
+    }
 };
 
 std::shared_ptr<BoxFilter> CreateBoxFilter(PropertyList& list);

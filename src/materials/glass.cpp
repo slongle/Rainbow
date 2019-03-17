@@ -2,10 +2,13 @@
 
 RAINBOW_NAMESPACE_BEGIN
 
-void GlassMaterial::ComputeScatteringFunctions(MemoryArena& arena, SurfaceInteraction * intersection) {
+void GlassMaterial::ComputeScatteringFunctions(
+    MemoryArena&          arena, 
+    SurfaceInteraction*   intersection) 
+{
     intersection->bsdf = ARENA_ALLOCA(arena, BSDF)(intersection->n);
     Fresnel* fresnel= ARENA_ALLOCA(arena, FresnelDielectric)(etaI, etaT);
-    intersection->bsdf->Add(ARENA_ALLOCA(arena, SpecularReflection)(R, fresnel));    
+    intersection->bsdf->Add(ARENA_ALLOCA(arena, SpecularReflection)(R, fresnel));
     intersection->bsdf->Add(ARENA_ALLOCA(arena, SpecularTransmission)(T, etaI, etaT));
 }
 

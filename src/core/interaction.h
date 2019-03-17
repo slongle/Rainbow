@@ -77,6 +77,7 @@ public:
         const Point3f& m_p, const Vector3f& m_pError, 
         const Normal3f& m_n, const Vector3f& m_wo, const Shape *m_shape);
 
+    void SetShadingGeometry();
 	void ComputeScatteringFunctions(MemoryArena& arena);
 	
 	RGBSpectrum Le(const Vector3f& w) const;
@@ -85,7 +86,11 @@ public:
     Vector3f dpdu, dpdv;
     Normal3f dndu, dndv;
 
-	const Shape *shape = nullptr;
+    struct {
+        Normal3f n;
+    } shading;
+	
+    const Shape *shape = nullptr;
 	const Primitive *primitive = nullptr;
 	
     BSDF *bsdf = nullptr;

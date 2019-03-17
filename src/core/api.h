@@ -5,8 +5,8 @@
 
 RAINBOW_NAMESPACE_BEGIN
 
-void RainbowInit();
-void RainbowWorld();
+void RainbowSceneBegin();
+void RainbowSceneEnd();
 
 void RainbowRenderMode(const std::string& type);
 void RainbowIntegrator(const std::string& type, const PropertyList& list);

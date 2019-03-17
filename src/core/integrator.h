@@ -33,6 +33,10 @@ public:
         Assert(false, "Eyelight Render No Implement!");
     }
 
+    virtual std::string toString() const {
+        Assert(false, "No Implement");
+    }
+
 	std::shared_ptr<Camera> camera;
 	std::shared_ptr<Sampler> sampler;
 };
@@ -66,10 +70,6 @@ public:
     void RenderAdaptive(const Scene &scene);
     void RenderEyeLight(const Scene &scene);
     virtual RGBSpectrum Li(MemoryArena& arena, const Ray &ray, const Scene& scene, Sampler &sampler, int depth) = 0;
-
-
-    void AdaptiveProgressiveRender(const Scene &scene, const int& x, const int & y);
-    void ProgressiveRender(const Scene &scene, const int& x, const int & y, bool reset = false);
 
     int sampleNum, delta;
 };

@@ -108,6 +108,19 @@ public:
     void ExportToUnsignedCharPointer(unsigned char* data) const;
     void UpdateToUnsignedCharPointer(unsigned char* data, const int &x, const int &y) const;    
 
+    std::string toString() const {
+        return tfm::format(
+            "Film [\n"
+            "    Filename : %s,\n"
+            "    Resolution : %d * %d,\n"
+            "    Filter : %s,\n"
+            "]"
+            , filename
+            , resolution.x, resolution.y
+            , indent(filter->toString(), 13)
+        );
+    }
+
 	const std::string filename;
 	const Point2i resolution;
 	const Float aspect;
