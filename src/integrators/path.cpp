@@ -10,6 +10,7 @@ RGBSpectrum PathIntegrator::Li(
     int depth) 
 {
     RGBSpectrum L(0.f), beta(1);
+    Float etaScale = 1;
     bool SpecularBounce = false;
     Ray ray(r);
 
@@ -44,11 +45,16 @@ RGBSpectrum PathIntegrator::Li(
         beta *= f * AbsDot(wi, inter.n) / BSDFPdf;
 
         SpecularBounce = (BSDFType & BSDF_SPECULAR) != 0;
+        if ((BSDFType & BSDF_SPECULAR) && (BSDFType & BSDF_TRANSMISSION)) {
+            Float eta = inter.bsdf->eta;
+            etaScale *= (Dot(wo, inter.n) > 0) ? (eta*eta) : 1 / (eta*eta);
+        }
 
         ray = inter.SpawnToRay(wi);
 
+        RGBSpectrum rrBeta = beta * etaScale;
         if (bounce > 3) {
-            Float q = std::min(1.0f, beta.MaxComponent());
+            Float q = std::min(1.0f, rrBeta.MaxComponent());
             if (sampler.Get1D() >= q)
                 break;
             beta /= q;  

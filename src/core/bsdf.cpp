@@ -34,8 +34,12 @@ Float FrDielectric(Float cosThetaI, Float etaI, Float etaT) {
 	return Fr;
 }
 
-RGBSpectrum FrConductor(Float cosThetaI, const RGBSpectrum &etai,
-    const RGBSpectrum &etat, const RGBSpectrum &k) {
+RGBSpectrum FrConductor(
+    Float                cosThetaI, 
+    const RGBSpectrum&   etai,
+    const RGBSpectrum&   etat, 
+    const RGBSpectrum&   k) 
+{
     cosThetaI = Clamp(cosThetaI, -1, 1);
     RGBSpectrum eta = etat / etai;
     RGBSpectrum etak = k / etai;
@@ -59,7 +63,12 @@ RGBSpectrum FrConductor(Float cosThetaI, const RGBSpectrum &etai,
     return 0.5 * (Rp + Rs);
 }
 
-inline bool Refract(const Vector3f & wi, const Normal3f & n, Float eta, Vector3f* wt) {
+inline bool Refract(
+    const Vector3f&   wi, 
+    const Normal3f&   n, 
+    Float             eta, 
+    Vector3f*         wt) 
+{
 	Float cosThetaI = Dot(wi, n);
 	Float sin2ThetaI = std::max(0.f, 1.f - cosThetaI * cosThetaI);
 	Float sin2ThetaT = eta * eta * sin2ThetaI;
@@ -79,7 +88,11 @@ int BSDF::NumComponents(const BxDFType& flags) const {
     return num;
 }
 
-RGBSpectrum BSDF::f(const Vector3f& woWorld, const Vector3f& wiWorld, const BxDFType& type) {
+RGBSpectrum BSDF::f(
+    const Vector3f&   woWorld, 
+    const Vector3f&   wiWorld, 
+    const BxDFType&   type) 
+{
     Vector3f woLocal = frame.toLocal(woWorld), wiLocal= frame.toLocal(wiWorld);
     bool reflect = Dot(frame.n, wiWorld)*Dot(frame.n, woWorld) > 0;
     RGBSpectrum f(0.);
@@ -93,7 +106,11 @@ RGBSpectrum BSDF::f(const Vector3f& woWorld, const Vector3f& wiWorld, const BxDF
     return f;
 }
 
-Float BSDF::Pdf(const Vector3f& woWorld, const Vector3f& wiWorld, const BxDFType& type) {
+Float BSDF::Pdf(
+    const Vector3f&   woWorld, 
+    const Vector3f&   wiWorld, 
+    const BxDFType&   type) 
+{
     if (nBxDFs == 0) return 0;
     Vector3f woLocal = frame.toLocal(woWorld), wiLocal = frame.toLocal(wiWorld);
     Float pdf = 0;
@@ -116,9 +133,14 @@ Float BSDF::Pdf(const Vector3f& woWorld, const Vector3f& wiWorld, const BxDFType
  * Param sampleType
  * the BxDF type gotten
  */
-RGBSpectrum BSDF::SampleF(const Vector3f& woWorld, Vector3f* wiWorld, const Point2f& sample,
-    Float* pdf, const BxDFType& type, BxDFType* sampleType) {    
-
+RGBSpectrum BSDF::SampleF(
+    const Vector3f&   woWorld, 
+    Vector3f*         wiWorld, 
+    const Point2f&    sample,
+    Float*            pdf, 
+    const BxDFType&   type, 
+    BxDFType*         sampleType) 
+{    
     int matchComp = NumComponents(type);
     if (matchComp == 0) {
         *pdf = 0;
@@ -187,7 +209,12 @@ RGBSpectrum SpecularReflection::f(const Vector3f & wo, const Vector3f & wi) {
 	return RGBSpectrum(0.0);
 }
 
-RGBSpectrum SpecularReflection::SampleF(const Vector3f & wo, Vector3f * wi, const Point2f & sample, Float * pdf) {
+RGBSpectrum SpecularReflection::SampleF(
+    const Vector3f&   wo, 
+    Vector3f*         wi, 
+    const Point2f&    sample, 
+    Float*            pdf) 
+{
 	*pdf = 1;
 	*wi = Vector3f(-wo.x, -wo.y, wo.z);
 	return fresnel->Evaluate(Frame::CosTheta(*wi)) * R / Frame::AbsCosTheta(*wi);
@@ -201,16 +228,22 @@ RGBSpectrum SpecularTransmission::f(const Vector3f & wo, const Vector3f & wi) {
 	return RGBSpectrum(0.0);
 }
 
-RGBSpectrum SpecularTransmission::SampleF(const Vector3f & wo, Vector3f * wi, const Point2f & sample, Float * pdf) {
+RGBSpectrum SpecularTransmission::SampleF(
+    const Vector3f&   wo, 
+    Vector3f*         wi, 
+    const Point2f&    sample, 
+    Float*            pdf) 
+{
 	bool enter = Frame::CosTheta(wo) > 0;
-    //cout << enter << endl;
+    
 	Float etaI = enter ? etaA : etaB;	
 	Float etaT = enter ? etaB : etaA;
 
 	if (!Refract(wo, FaceForward(Normal3f(0, 0, 1), wo), etaI / etaT, wi))
 		return RGBSpectrum(0.0);
+    RGBSpectrum Ft = T * (RGBSpectrum(1.0) - fresnel.Evaluate(Frame::CosTheta(*wi)));
 	*pdf = 1;
-	return (etaI*etaI) / (etaT*etaT) * (RGBSpectrum(1.0) - fresnel.Evaluate(Frame::CosTheta(*wi))) * T / Frame::AbsCosTheta(*wi);
+	return (etaI*etaI) / (etaT*etaT) * Ft / Frame::AbsCosTheta(*wi);
 }
 
 Float SpecularTransmission::Pdf(const Vector3f & wo, const Vector3f & wi) {
@@ -222,7 +255,12 @@ RGBSpectrum LambertianReflection::f(const Vector3f & wo, const Vector3f & wi) {
 	return R * INV_PI;
 }
 
-RGBSpectrum LambertianReflection::SampleF(const Vector3f & wo, Vector3f * wi, const Point2f & sample, Float * pdf) {	
+RGBSpectrum LambertianReflection::SampleF(
+    const Vector3f&   wo, 
+    Vector3f*         wi, 
+    const Point2f&    sample, 
+    Float*            pdf) 
+{	
     *wi = CosineSampleHemisphere(sample);
 	if (wo.z < 0) (*wi).z *= -1;
 	*pdf = Frame::SameHemisphere(wo, *wi) ? Frame::AbsCosTheta(*wi) * INV_PI : 0;
@@ -233,7 +271,10 @@ Float LambertianReflection::Pdf(const Vector3f & wo, const Vector3f & wi) {
     return INV_TWOPI;
 }
 
-RGBSpectrum MicrofacetReflection::f(const Vector3f & wo, const Vector3f & wi) {
+RGBSpectrum MicrofacetReflection::f(
+    const Vector3f&   wo, 
+    const Vector3f&   wi) 
+{
     Float cosThetaI = Frame::AbsCosTheta(wi), cosThetaO = Frame::AbsCosTheta(wo);
     Vector3f wh = wi + wo;
     if (cosThetaI == 0 || cosThetaO == 0) return RGBSpectrum(0.);
@@ -243,8 +284,12 @@ RGBSpectrum MicrofacetReflection::f(const Vector3f & wo, const Vector3f & wi) {
     return distribution->D(wh)*distribution->G(wo, wi)*F / (4 * cosThetaI*cosThetaO);
 }
 
-RGBSpectrum MicrofacetReflection::SampleF(const Vector3f & wo, Vector3f * wi, 
-    const Point2f & sample, Float * pdf) {
+RGBSpectrum MicrofacetReflection::SampleF(
+    const Vector3f&   wo, 
+    Vector3f*         wi, 
+    const Point2f&    sample, 
+    Float*            pdf) 
+{
     if (wo.z == 0) return 0.;
     Vector3f wh = distribution->SampleWh(wo, sample);
     *wi = Reflect(wo, wh);
@@ -254,7 +299,10 @@ RGBSpectrum MicrofacetReflection::SampleF(const Vector3f & wo, Vector3f * wi,
     return f(wo, *wi);
 }
 
-Float MicrofacetReflection::Pdf(const Vector3f & wo, const Vector3f & wi) {    
+Float MicrofacetReflection::Pdf(
+    const Vector3f& wo, 
+    const Vector3f& wi) 
+{    
     if (!Frame::SameHemisphere(wo, wi)) return 0;
     Vector3f wh = Normalize(wi + wo);
     return  distribution->Pdf(wo, wh) * (4 * Dot(wo, wh));    

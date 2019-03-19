@@ -63,7 +63,10 @@ enum BxDFType {
 
 class BSDF {
 public:
-    BSDF(const Normal3f& m_n) :nBxDFs(0), frame(m_n) {}
+    BSDF(
+        const Normal3f&   m_n,
+        const Float&      m_eta = 1)
+    : frame(m_n), nBxDFs(0), eta(m_eta) {}
 
     void Add(BxDF* bxdf) {        
         Assert(nBxDFs < MaxBxDFs, "Too many BxDFs!");
@@ -89,6 +92,7 @@ public:
         const Vector3f&   wiWorld, 
         const BxDFType&   type = BSDF_ALL);
 
+    Float eta;
 private:
     static constexpr int MaxBxDFs = 4;
     int nBxDFs;
@@ -127,9 +131,12 @@ public:
 
 class SpecularTransmission :public BxDF {
 public:
-	SpecularTransmission(const RGBSpectrum& m_T, const Float& m_etaA, const Float& m_etaB) :
-		T(m_T), etaA(m_etaA), etaB(m_etaB), fresnel(etaA, etaB),
-		BxDF(BxDFType(BSDF_TRANSMISSION | BSDF_SPECULAR)) {}
+	SpecularTransmission(
+        const RGBSpectrum&   m_T, 
+        const Float&         m_etaA, 
+        const Float&         m_etaB) 
+    : T(m_T), etaA(m_etaA), etaB(m_etaB), fresnel(etaA, etaB),
+      BxDF(BxDFType(BSDF_TRANSMISSION | BSDF_SPECULAR)) {}
 	RGBSpectrum f(const Vector3f& wo, const Vector3f& wi);
 	RGBSpectrum SampleF(const Vector3f& wo, Vector3f* wi, const Point2f &sample, Float *pdf);
     Float Pdf(const Vector3f& wo, const Vector3f& wi);

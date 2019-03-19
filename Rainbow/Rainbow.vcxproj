@@ -292,7 +292,7 @@
     <None Include="..\log\20181120.md" />
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="..\scenes\cbox\cbox-whitted.xml">
+    <Xml Include="..\scenes\cbox\cbox.xml">
       <SubType>Designer</SubType>
     </Xml>
     <Xml Include="..\scenes\cornell-box\scene.xml">

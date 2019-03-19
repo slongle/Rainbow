@@ -558,9 +558,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="..\scenes\cbox\cbox-whitted.xml">
-      <Filter>Resource Files\scenes\cbox</Filter>
-    </Xml>
     <Xml Include="..\scenes\cornell-box\scene.xml">
       <Filter>Resource Files\scenes\cornell-box</Filter>
     </Xml>
@@ -581,6 +578,9 @@
     </Xml>
     <Xml Include="..\scenes\rainbow\scene.xml">
       <Filter>Resource Files\scenes\rainbow</Filter>
+    </Xml>
+    <Xml Include="..\scenes\cbox\cbox.xml">
+      <Filter>Resource Files\scenes\cbox</Filter>
     </Xml>
   </ItemGroup>
   <ItemGroup>
