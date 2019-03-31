@@ -18,7 +18,7 @@ using std::endl;
 #include "logger.h"
 #include "memory.h"
 
-#ifndef NDEBUG
+//#ifndef NDEBUG
 
 #define Log(message) do { \
 		(tfm::format)(std::cerr,"%s", message); \
@@ -28,6 +28,6 @@ using std::endl;
 		if (!(cond)) std::cerr<<std::endl<<"Assertion occoured at "<<std::endl<<__FUNCTION__<<" "<<__FILE__<<" "<<__LINE__<<" ( "<<explanation<<" )", throw std::runtime_error(explanation); \
 	} while (0)
 
-#endif // NDEBUG
+//#endif // NDEBUG
 
 #endif // !__RAINBOW_H

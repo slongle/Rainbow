@@ -27,7 +27,7 @@ RGBSpectrum VolPathIntegrator::Li(
             L += beta * UniformSampleOneLight(mi, scene, sampler, true);
 
             Vector3f wo = -ray.d, wi;
-            mi.phase->SampleP(wo, &wi, sampler.Get2D());
+            mi.phase->SampleP(wo, &wi, sampler.Next2D());
             ray = mi.SpawnToRay(wi);
             SpecularBounce = false;
         }
@@ -52,7 +52,7 @@ RGBSpectrum VolPathIntegrator::Li(
             Vector3f wo = -ray.d, wi;
             Float BSDFPdf;
             BxDFType BSDFType;
-            RGBSpectrum f = inter.bsdf->SampleF(wo, &wi, sampler.Get2D(), &BSDFPdf, BSDF_ALL, &BSDFType);
+            RGBSpectrum f = inter.bsdf->SampleF(wo, &wi, sampler.Next2D(), &BSDFPdf, BSDF_ALL, &BSDFType);
             if (BSDFPdf == 0. || f.IsBlack()) break;
             beta *= f * AbsDot(wi, inter.n) / BSDFPdf;
 
@@ -64,7 +64,7 @@ RGBSpectrum VolPathIntegrator::Li(
         // Russian roulette
         if (bounce > 3) {
             Float q = std::min((Float)0.95, beta.MaxComponent());
-            if (sampler.Get1D() >= q)
+            if (sampler.Next1D() >= q)
                 break;
             beta /= q;
         }

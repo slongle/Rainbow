@@ -3,9 +3,7 @@
 
 #include "filter.h"
 #include "spectrum.h"
-#include "vector.h"
 #include "imageio.h"
-#include "object.h"
 
 RAINBOW_NAMESPACE_BEGIN
 
@@ -92,8 +90,8 @@ private:
 class Film{
 public:	
 	Film(
-        const std::string&               ilename, 
-        const Point2i&                   esolution,
+        const std::string&               filename, 
+        const Point2i&                   resolution,
         const std::shared_ptr<Filter>&   filter);
 
     void MergeFilmTile(const FilmTile &tile);

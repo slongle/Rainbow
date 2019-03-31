@@ -261,6 +261,17 @@ inline T Clamp(const T &val, const U &low, const V &up) {
 	return val;
 }
 
+inline float InverseLerp(float a, float b, float x)
+{
+    return (x - a) / (b - a);
+}
+
+/* Cubic interpolation between b and c, a and d are the previous and next point. */
+inline float CubicInterp(float a, float b, float c, float d, float x)
+{
+    return 0.5f*(((d + 3.0f*(b - c) - a)*x + (2.0f*a - 5.0f*b + 4.0f*c - d))*x + (c - a))*x + b;
+}
+
 RAINBOW_NAMESPACE_END
 
 #endif // !__COMMON_H

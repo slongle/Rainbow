@@ -69,7 +69,7 @@ struct pcg32 {
 
     /// Generate a uniformly distributed number, r, where 0 <= r < bound
     uint32_t nextUInt(uint32_t bound) {
-        // To avoid bias, we need to make the range of the RNG a multiple of
+        // To avoid bias, we need to make the range of the random a multiple of
         // bound, which we do by dropping output less than a threshold.
         // A naive scheme to calculate the threshold would be to do
         //
@@ -202,8 +202,8 @@ struct pcg32 {
     /// Inequality operator
     bool operator!=(const pcg32 &other) const { return state != other.state || inc != other.inc; }
 
-    uint64_t state;  // RNG state.  All values are possible.
-    uint64_t inc;    // Controls which RNG sequence (stream) is selected. Must *always* be odd.
+    uint64_t state;  // random state.  All values are possible.
+    uint64_t inc;    // Controls which random sequence (stream) is selected. Must *always* be odd.
 };
 
 #endif // __PCG32_H

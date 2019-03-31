@@ -189,6 +189,8 @@
     <ClCompile Include="..\src\integrators\path.cpp" />
     <ClCompile Include="..\src\integrators\volpath.cpp" />
     <ClCompile Include="..\src\integrators\whitted.cpp" />
+    <ClCompile Include="..\src\lights\ies\ieslight.cpp" />
+    <ClCompile Include="..\src\lights\ies\iesparser.cpp" />
     <ClCompile Include="..\src\lights\point.cpp" />
     <ClCompile Include="..\src\lights\spot.cpp" />
     <ClCompile Include="..\src\main.cpp" />
@@ -263,6 +265,8 @@
     <ClInclude Include="..\src\integrators\path.h" />
     <ClInclude Include="..\src\integrators\volpath.h" />
     <ClInclude Include="..\src\integrators\whitted.h" />
+    <ClInclude Include="..\src\lights\ies\ieslight.h" />
+    <ClInclude Include="..\src\lights\ies\iesparser.h" />
     <ClInclude Include="..\src\lights\point.h" />
     <ClInclude Include="..\src\lights\spot.h" />
     <ClInclude Include="..\src\materials\matte.h" />

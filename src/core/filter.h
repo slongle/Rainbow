@@ -1,8 +1,6 @@
 #ifndef __FILTER_H
 #define __FILTER_H
 
-#include "common.h"
-#include "vector.h"
 #include "propertylist.h"
 
 RAINBOW_NAMESPACE_BEGIN

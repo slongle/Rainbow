@@ -19,7 +19,8 @@ RGBSpectrum SpotLight::SampleLi(
     *wi = Normalize(pLight - intersection.p);
     *pdf = 1;
     *vis = Visibility(intersection, Interaction(pLight, mediumInterface));
-    return I * Falloff(-*wi) / DistanceSquare(intersection.p, pLight);
+    Vector3f woLocal = WorldToLight(-*wi);
+    return I * Falloff(woLocal) / DistanceSquare(intersection.p, pLight);
 }
 
 Float SpotLight::Falloff(const Vector3f& wo) const {

@@ -26,7 +26,7 @@ RGBSpectrum WhittedIntegrator::Li(MemoryArena& arena, const Ray & ray, const Sce
 	    Vector3f wi;
 	    Float pdf;
 	    Visibility vis;
-	    RGBSpectrum Li = light->SampleLi(intersection, sampler.Get2D(), &wi, &pdf, &vis);
+	    RGBSpectrum Li = light->SampleLi(intersection, sampler.Next2D(), &wi, &pdf, &vis);
 	    if (Li.IsBlack() || pdf == 0) continue;		
 	    RGBSpectrum f = intersection.bsdf->f(wo, wi);
 	    if (!f.IsBlack() && !vis.Occluded(scene)) {			

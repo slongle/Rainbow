@@ -13,8 +13,8 @@ RGBSpectrum HomogeneousMedium::Sample(
     const Ray & ray, Sampler & sampler, MemoryArena & arena, 
     MediumInteraction * mi) const 
 {
-    int channel = std::min((int)(3 * sampler.Get1D()), 2);
-    Float dist = -std::log(1 - sampler.Get1D()) / sigma_t[channel];
+    int channel = std::min((int)(3 * sampler.Next1D()), 2);
+    Float dist = -std::log(1 - sampler.Next1D()) / sigma_t[channel];
     Float t = std::min(dist / ray.d.Length(), ray.tMax);
     bool sampledMedium = t < ray.tMax;
     if (sampledMedium)

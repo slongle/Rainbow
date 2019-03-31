@@ -6,17 +6,17 @@ RAINBOW_NAMESPACE_BEGIN
 std::unique_ptr<Sampler> Independent::Clone(const Point2i &seed) {
     std::unique_ptr<Independent> cloned(new Independent());
     cloned->sampleCount = sampleCount;
-    cloned->rng = rng;
-    cloned->rng.seed(seed.x, seed.y);
+    cloned->random = random;
+    cloned->random.seed(seed.x, seed.y);
     return std::move(cloned);
 }
 
-Float Independent::Get1D() {
-	return rng.nextFloat();
+Float Independent::Next1D() {
+	return random.nextFloat();
 }
 
-Point2f Independent::Get2D() {
-	return Point2f(rng.nextFloat(), rng.nextFloat());
+Point2f Independent::Next2D() {
+	return Point2f(random.nextFloat(), random.nextFloat());
 }
 
 Independent* CreateIndependentSampler(PropertyList & list) {

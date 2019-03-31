@@ -112,6 +112,9 @@
     <Filter Include="Resource Files\scenes\rainbow">
       <UniqueIdentifier>{81528d38-83f0-4a1f-addb-3e9cb9e6ad76}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\lights\ies">
+      <UniqueIdentifier>{fcfe2af1-20e5-49d4-bd02-646c103cf9fc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\core\bbox.cpp">
@@ -296,6 +299,12 @@
     </ClCompile>
     <ClCompile Include="..\src\filters\gaussian.cpp">
       <Filter>Source Files\filters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lights\ies\iesparser.cpp">
+      <Filter>Source Files\lights\ies</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lights\ies\ieslight.cpp">
+      <Filter>Source Files\lights\ies</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -511,6 +520,12 @@
     </ClInclude>
     <ClInclude Include="..\src\filters\gaussian.h">
       <Filter>Source Files\filters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\lights\ies\iesparser.h">
+      <Filter>Source Files\lights\ies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\lights\ies\ieslight.h">
+      <Filter>Source Files\lights\ies</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

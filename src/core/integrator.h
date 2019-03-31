@@ -6,6 +6,9 @@
 #include "sampler.h"
 #include "light.h"
 
+#include "C:\Users\del\Desktop\halton\halton_enum.h"
+#include "C:\Users\del\Desktop\halton\halton_sampler.h"
+
 RAINBOW_NAMESPACE_BEGIN
 
 class Integrator{
@@ -44,7 +47,10 @@ public:
 class SamplerIntegrator :public Integrator {
 public:
     SamplerIntegrator(const int& m_sampleNum, const int &m_delta = 1) :
-        sampleNum(m_sampleNum), delta(m_delta) {}
+        sampleNum(m_sampleNum), delta(m_delta) 
+    {
+        halton_sampler.init_faure();
+    }
 
     RGBSpectrum UniformSampleOneLight(
         const Interaction& inter,
@@ -72,6 +78,7 @@ public:
     virtual RGBSpectrum Li(MemoryArena& arena, const Ray &ray, const Scene& scene, Sampler &sampler, int depth) = 0;
 
     int sampleNum, delta;
+    Halton_sampler halton_sampler;
 };
 
 RAINBOW_NAMESPACE_END

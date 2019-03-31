@@ -1,22 +1,21 @@
 #ifndef __INDEPENDENT_H
 #define __INDEPENDENT_H
 
-#include "../core/sampler.h"
+#include "src/core/sampler.h"
 
 RAINBOW_NAMESPACE_BEGIN
 
 class Independent :public Sampler {
 public:
     Independent(){}
-	Independent(int m_sampleCount) :sampleCount(m_sampleCount)
-	{}
+	Independent(int m_sampleCount) 
+    : sampleCount(m_sampleCount) {}
     
-    std::unique_ptr<Sampler> Clone(const Point2i &seed);
-	Float Get1D();
-	Point2f Get2D();
+    std::unique_ptr<Sampler> Clone(const Point2i &seed) override;
+	Float Next1D() override;
+	Point2f Next2D() override;
 
-	int sampleCount;
-	pcg32 rng;
+	int sampleCount;	
 };
 
 Independent* CreateIndependentSampler(PropertyList& list);

@@ -16,7 +16,8 @@ public:
         :Light(m_LightToWorld, m_mediumInterface),
         I(m_I), pLight(LightToWorld(Point3f(0, 0, 0))),
         cosTotalWidth(std::cos(Radians(thetaTotalWidth))),
-        cosFalloffStart(std::cos(Radians(thetaFalloffStart))) {
+        cosFalloffStart(std::cos(Radians(thetaFalloffStart))) 
+    {
         //cout << pLight << endl;
     }
 

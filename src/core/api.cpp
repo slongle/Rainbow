@@ -30,8 +30,10 @@
 
 #include "src/media/homogeneous.h"
 
-#include "src/lights/spot.h"
 #include "src/lights/point.h"
+#include "src/lights/spot.h"
+#include "src/lights/ies/ieslight.h"
+
 #include "src/filters/gaussian.h"
 
 #include "src/filters/box.h"
@@ -311,6 +313,9 @@ void RainbowLight(
     }
     else if (type == "point") {
         renderOptions->lights.push_back(CreatePointLight(list));
+    }
+    else if (type == "ies") {
+        renderOptions->lights.push_back(CreateIESLight(list));
     }
     else if (type == "area") {
         renderOptions->LightType = type;

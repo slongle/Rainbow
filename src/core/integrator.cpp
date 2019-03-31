@@ -17,10 +17,10 @@ RGBSpectrum SamplerIntegrator::UniformSampleOneLight(
 {
     int lightNum = scene.lights.size();
     if (lightNum == 0) return RGBSpectrum(0.0);
-    int lightID = std::min(int(sampler.Get1D()*lightNum), lightNum - 1);    
+    int lightID = std::min(int(sampler.Next1D()*lightNum), lightNum - 1);    
     Float lightPdf = Float(1) / lightNum;
     std::shared_ptr<Light> light = scene.lights[lightID];
-    return EstimateDirectLight(inter, light, scene, sampler.Get2D(), sampler.Get2D(), handleMedium) / lightPdf;
+    return EstimateDirectLight(inter, light, scene, sampler.Next2D(), sampler.Next2D(), handleMedium) / lightPdf;
 }
 
 RGBSpectrum SamplerIntegrator::EstimateDirectLight(
@@ -37,7 +37,7 @@ RGBSpectrum SamplerIntegrator::EstimateDirectLight(
     Visibility visibility;
 
     // Sample Light with MSI
-    RGBSpectrum Li = light->SampleLi(inter, sampler->Get2D(), &wi, &lightPdf, &visibility);
+    RGBSpectrum Li = light->SampleLi(inter, sampler->Next2D(), &wi, &lightPdf, &visibility);
     if (lightPdf > 0 && !Li.IsBlack()) {
         RGBSpectrum f;
         // Estimate BSDF or Phase Function
@@ -133,7 +133,7 @@ RGBSpectrum SamplerIntegrator::SpecularReflect
     Vector3f wo = intersection.wo, wi;
     Float pdf;
 
-    RGBSpectrum f = intersection.bsdf->SampleF(wo, &wi, sampler->Get2D(), &pdf);
+    RGBSpectrum f = intersection.bsdf->SampleF(wo, &wi, sampler->Next2D(), &pdf);
     Normal3f n = intersection.n;
 
     if (pdf > 0.f && !f.IsBlack() && Dot(n, wi) != 0.f) {
@@ -160,7 +160,7 @@ void SamplerIntegrator::RenderTileAdaptive(const Scene &scene, Sampler& sampler,
             Float mean = 0, meanSqr = 0;
             int sampleCount;
             for (sampleCount = 1; sampleCount <= 10240; sampleCount++) {
-                RGBSpectrum weight = camera->GenerateRay(&ray, Point2f(x, y) + sampler.Get2D());
+                RGBSpectrum weight = camera->GenerateRay(&ray, Point2f(x, y) + sampler.Next2D());
                 RGBSpectrum li = weight * Li(arena, ray, scene, sampler, 0);
                 L += li;
 
@@ -197,7 +197,7 @@ void SamplerIntegrator::RenderTile(const Scene &scene, Sampler& sampler, FilmTil
         for (int x = tile.bounds.pMin.x; x < tile.bounds.pMax.x; x++) {            
             RGBSpectrum L(0.);
             for (int i = 0; i < delta; i++) {
-                Point2f sample = sampler.Get2D();
+                Point2f sample = sampler.Next2D();
                 Point2f pixelSample = Point2f(x, y) + sample;
                 RGBSpectrum weight = camera->GenerateRay(&ray, pixelSample);
                 L = weight * Li(arena, ray, scene, sampler, 0);
@@ -212,7 +212,7 @@ void SamplerIntegrator::RenderTileEyeLight(const Scene &scene, Sampler& sampler,
     MemoryArena arena;
     for (int y = tile.bounds.pMin.y; y < tile.bounds.pMax.y; y++) {
         for (int x = tile.bounds.pMin.x; x < tile.bounds.pMax.x; x++) {
-            Point2f pixelSample = Point2f(x, y) + sampler.Get2D();
+            Point2f pixelSample = Point2f(x, y) + sampler.Next2D();
             RGBSpectrum weight = camera->GenerateRay(&ray, pixelSample);
             SurfaceInteraction inter;
             if (scene.IntersectP(ray, &inter)) {
@@ -264,7 +264,8 @@ void SamplerIntegrator::Render(const Scene &scene) {
             }
         };
 
-        for (cnt = 1; cnt <= sampleNum / delta; cnt++) {
+        for (cnt = 1; cnt <= sampleNum / delta; cnt++)
+        {
             /// Uncomment the following line for single threaded rendering
             //map(range);
 
