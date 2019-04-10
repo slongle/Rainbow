@@ -2,7 +2,7 @@
 #ifndef __RAINBOW_IESLIGHT_H
 #define __RAINBOW_IESLIGHT_H
 
-#include "src/core/light.h"
+#include "core/light.h"
 #include "iesparser.h"
 
 RAINBOW_NAMESPACE_BEGIN

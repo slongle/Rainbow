@@ -2,7 +2,7 @@
 #ifndef __RAINBOW_ROUGHCONDUCTOR_H
 #define __RAINBOW_ROUGHCONDUCTOR_H
 
-#include "src/core/material.h"
+#include "core/material.h"
 
 RAINBOW_NAMESPACE_BEGIN
 

@@ -1,6 +1,6 @@
 #include <memory>
 
-#include "gui.h"
+//#include "gui.h"
 
 #include "api.h"
 #include "film.h"
@@ -9,36 +9,36 @@
 #include "material.h"
 #include "medium.h"
 
-#include "src/cameras/perspective.h"
+#include "cameras/perspective.h"
 
-#include "src/shapes/sphere.h"
-#include "src/shapes/triangle.h"
+#include "shapes/sphere.h"
+#include "shapes/triangle.h"
 
-#include "src/integrators/direct.h"
-#include "src/integrators/whitted.h"
-#include "src/integrators/path.h"
-#include "src/integrators/volpath.h"
+#include "integrators/direct.h"
+#include "integrators/whitted.h"
+#include "integrators/path.h"
+#include "integrators/volpath.h"
 
-#include "src/materials/matte.h"
-#include "src/materials/mirror.h"
-#include "src/materials/glass.h"
-#include "src/materials/roughconductor.h"
+#include "materials/matte.h"
+#include "materials/mirror.h"
+#include "materials/glass.h"
+#include "materials/roughconductor.h"
 
-#include "src/samplers/independent.h"
+#include "samplers/independent.h"
 
-#include "src/accelerators/bvh.h"
+#include "accelerators/bvh.h"
 
-#include "src/media/homogeneous.h"
+#include "media/homogeneous.h"
 
-#include "src/lights/point.h"
-#include "src/lights/spot.h"
-#include "src/lights/ies/ieslight.h"
+#include "lights/point.h"
+#include "lights/spot.h"
+#include "lights/ies/ieslight.h"
 
-#include "src/filters/gaussian.h"
+#include "filters/gaussian.h"
 
-#include "src/filters/box.h"
-#include "src/filters/tent.h"
-#include "src/filters/gaussian.h"
+#include "filters/box.h"
+#include "filters/tent.h"
+#include "filters/gaussian.h"
 
 RAINBOW_NAMESPACE_BEGIN
 
@@ -181,7 +181,7 @@ void RainbowSceneEnd()
 
     if (renderOptions->RenderMode == "progressive") {
         //show(integrator, scene);        
-        AdaptiveShow(integrator, scene);
+        //AdaptiveShow(integrator, scene);
     }
     else if (renderOptions->RenderMode == "final") {
         integrator->Render(*scene);        

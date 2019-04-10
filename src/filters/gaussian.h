@@ -2,7 +2,7 @@
 #ifndef __RAINBOW_GAUSSIANFILTER
 #define __RAINBOW_GAUSSIANFILTER
 
-#include "src/core/filter.h"
+#include "core/filter.h"
 
 RAINBOW_NAMESPACE_BEGIN
 

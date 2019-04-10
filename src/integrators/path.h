@@ -1,7 +1,7 @@
 #ifndef __RAINBOW_PATHTRACER_H
 #define __RAINBOW_PATHTRACER_H
 
-#include "src/core/integrator.h"
+#include "core/integrator.h"
 
 RAINBOW_NAMESPACE_BEGIN
 

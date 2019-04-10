@@ -1,7 +1,7 @@
 #ifndef __INDEPENDENT_H
 #define __INDEPENDENT_H
 
-#include "src/core/sampler.h"
+#include "core/sampler.h"
 
 RAINBOW_NAMESPACE_BEGIN
 

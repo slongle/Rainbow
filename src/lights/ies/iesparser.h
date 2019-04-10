@@ -56,6 +56,7 @@ public:
     const std::string& error() const;
 
     bool process();
+    bool process_type_b();
     bool process_type_c();
 
     float interp(float h_angle, float v_angle) const;

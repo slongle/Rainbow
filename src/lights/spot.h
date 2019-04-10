@@ -2,7 +2,7 @@
 #ifndef __RAINBOW_SPOT_H
 #define __RAINBOW_SPOT_H
 
-#include "src/core/light.h"
+#include "core/light.h"
 
 RAINBOW_NAMESPACE_BEGIN
 

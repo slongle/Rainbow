@@ -3,7 +3,7 @@
 
 #include "api.h"
 
-#include "../../ext/pugixml/pugixml.hpp"
+#include "ext/pugixml.hpp"
 
 RAINBOW_NAMESPACE_BEGIN
 

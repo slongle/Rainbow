@@ -1,8 +1,8 @@
 #ifndef __WAVEFRONT_H
 #define __WAVEFRONT_H
 
-#include "src/core/vector.h"
-#include "src/shapes/triangle.h"
+#include "core/vector.h"
+#include "shapes/triangle.h"
 
 RAINBOW_NAMESPACE_BEGIN
 

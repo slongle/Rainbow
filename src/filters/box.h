@@ -1,7 +1,7 @@
 #ifndef __BOXFILTER_H
 #define __BOXFILTER_H
 
-#include "src/core/filter.h"
+#include "core/filter.h"
 
 RAINBOW_NAMESPACE_BEGIN
 

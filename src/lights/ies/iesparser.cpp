@@ -46,8 +46,7 @@
 #include <iostream>
 
 #include "iesparser.h"
-#include "src/core/common.h"
-#include <minwindef.h>
+#include "core/common.h"
 
 IESFileInfo::IESFileInfo()
     : _cachedIntegral(std::numeric_limits<float>::max())
@@ -74,9 +73,10 @@ bool IESFileInfo::process()
     }
 
     if (typeOfPhotometric == 2) {
-        //if (!process_type_b()) {
-        //    return false;
-        //}
+        cout << '!' << endl;
+        if (!process_type_b()) {
+            return false;
+        }
     }
     else {
         assert(typeOfPhotometric == 1);
@@ -99,6 +99,95 @@ bool IESFileInfo::process()
 
     return true;
 }
+
+bool IESFileInfo::process_type_b()
+{
+    std::vector<std::vector<float> > new_candalaValues;
+    new_candalaValues.resize(_anglesV.size());
+    for (int i = 0; i < _anglesV.size(); i++) {
+        new_candalaValues[i].reserve(_anglesH.size());
+        for (int j = 0; j < _anglesH.size(); j++) {
+            new_candalaValues[i].push_back(_candalaValues[j][i]);
+        }
+    }
+    _candalaValues.swap(new_candalaValues);
+    _anglesH.swap(_anglesV);
+
+    float h_first = _anglesH[0], h_last = _anglesH[_anglesH.size() - 1];
+    if (h_last != 90.0f) {
+        return false;
+    }
+
+    if (h_first == 0.0f) {
+        /* The range in the file corresponds to 90бу-180бу, we need to mirror that to get the
+         * full 180бу range. */
+        std::vector<float> new__anglesH;
+        std::vector<std::vector<float> > new__candalaValues;
+        int hnum = _anglesH.size();
+        new__anglesH.reserve(2 * hnum - 1);
+        new__candalaValues.reserve(2 * hnum - 1);
+        for (int i = hnum - 1; i > 0; i--) {
+            new__anglesH.push_back(90.0f - _anglesH[i]);
+            new__candalaValues.push_back(_candalaValues[i]);
+        }
+        for (int i = 0; i < hnum; i++) {
+            new__anglesH.push_back(90.0f + _anglesH[i]);
+            new__candalaValues.push_back(_candalaValues[i]);
+        }
+        _anglesH.swap(new__anglesH);
+        _candalaValues.swap(new__candalaValues);
+    }
+    else if (h_first == -90.0f) {
+        /* We have full 180бу coverage, so just shift to match the angle range convention. */
+        for (int i = 0; i < _anglesH.size(); i++) {
+            _anglesH[i] += 90.0f;
+        }
+    }
+    /* To get correct results with the cubic interpolation in the kernel, the horizontal range
+     * has to cover all 360бу. Therefore, we copy the 0бу entry to 360бу to ensure full coverage
+     * and seamless interpolation. */
+    _anglesH.push_back(360.0f);
+    _candalaValues.push_back(_candalaValues[0]);
+
+    float v_first = _anglesV[0], v_last = _anglesV[_anglesV.size() - 1];
+    if (v_last != 90.0f) {
+        return false;
+    }
+
+    if (v_first == 0.0f) {
+        /* The range in the file corresponds to 90бу-180бу, we need to mirror that to get the
+         * full 180бу range. */
+        std::vector<float> new__anglesV;
+        int hnum = _anglesH.size();
+        int vnum = _anglesV.size();
+        new__anglesV.reserve(2 * vnum - 1);
+        for (int i = vnum - 1; i > 0; i--) {
+            new__anglesV.push_back(90.0f - _anglesV[i]);
+        }
+        for (int i = 0; i < vnum; i++) {
+            new__anglesV.push_back(90.0f + _anglesV[i]);
+        }
+        for (int i = 0; i < hnum; i++) {
+            std::vector<float> new__candalaValues;
+            new__candalaValues.reserve(2 * vnum - 1);
+            for (int j = vnum - 2; j >= 0; j--) {
+                new__candalaValues.push_back(_candalaValues[i][j]);
+            }
+            new__candalaValues.insert(new__candalaValues.end(), _candalaValues[i].begin(), _candalaValues[i].end());
+            _candalaValues[i].swap(new__candalaValues);
+        }
+        _anglesV.swap(new__anglesV);
+    }
+    else if (v_first == -90.0f) {
+        /* We have full 180бу coverage, so just shift to match the angle range convention. */
+        for (int i = 0; i < _anglesV.size(); i++) {
+            _anglesV[i] += 90.0f;
+        }
+    }
+
+    return true;
+}
+
 
 bool IESFileInfo::process_type_c() 
 {

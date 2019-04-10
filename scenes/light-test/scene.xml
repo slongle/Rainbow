@@ -18,7 +18,7 @@
 	    <integer name="sampleCount" value="512"/>
 	  </sampler>
 		<film type="ldrfilm" >
-      <string name="filename" value="IES_6.png"/>
+      <string name="filename" value="RIO_1.png"/>
 		  <integer name="width" value="1024" />
 		  <integer name="height" value="1024" />
 		  <rfilter type="tent" />
@@ -34,7 +34,7 @@
 
   <hide type="spot">
     <transform name="toWorld">
-      <lookat target="-0.0050, -0.7961, -0.9300" origin="-0.0050, 1.3961, -0.9300" up="0, 0, 1"/>      
+      <lookat target="-0.0050, -0.7961, 3.9300" origin="-0.0050, 1.3961, 3.9300" up="0, 0, 1"/>      
     </transform>
     <rgb name="intensity" value="5, 5, 5"/>
     <float name="totalAngle" value="20"/>
@@ -43,12 +43,14 @@
 
   <emitter type="ies">
     <transform name="toWorld">
-      <lookat target="-0.0050, 2.3961, -0.9300" origin="-0.0050, 1.3961, -0.9300" up="0, 0, -1"/>
+      <lookat target="-0.0050, -0.7961, -0.0300" origin="-0.0050, 1.3961, -0.0300" up="0, 0, -1"/>
       <hide target="-0.0050, -0.7961, -0.9300" origin="-0.0050, 1.3961, -0.9300" up="0, 0, 1"/>
     </transform>
     <rgb name="intensity" value="5, 5, 5"/>
-    <string name="path" value="F:/Document/Graphics/TODO/1.IES Light/RIO_1.ies"/>
-    <hide name="path" value="F:/Document/Graphics/TODO/1.IES Light/LTL11041.ies"/>
+    <hide name="path" value="F:/Document/Graphics/code/Rainbow/scenes/light-test/ACP_17M_76.ies"/>
+    <hide name="path" value="F:/Document/Graphics/code/Rainbow/scenes/light-test/245L_10LEDE10_XXXX_3K_R2_PY.ies"/>    
+    <string name="path" value="F:/Document/Graphics/TODO/1.1.IES Light/RIO_1.ies"/>
+    <hide name="path" value="F:/Document/Graphics/TODO/1.1.IES Light/LTL11041.ies"/>
   </emitter>
 
   <bsdf type="twosided" id="LeftWall" >

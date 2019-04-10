@@ -2,7 +2,7 @@
 #ifndef __RAINBOW_POINTLIGHT_H
 #define __RAINBOW_POINTLIGHT_H
 
-#include "src/core/light.h"
+#include "core/light.h"
 
 RAINBOW_NAMESPACE_BEGIN
 

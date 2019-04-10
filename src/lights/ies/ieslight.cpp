@@ -26,6 +26,7 @@ IESLight::IESLight(
     if (!IESLoader.load(path, info)) 
     {
         std::cerr << "Can't load ies file." << std::endl;
+        std::cerr << info.error() << std::endl;
         exit(1);
     }
     

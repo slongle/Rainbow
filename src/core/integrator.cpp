@@ -2,8 +2,8 @@
 #include <atomic>
 #include <thread>
 #include <mutex>
-#include <ext/tbb/include/tbb/parallel_for.h>
-#include <ext/tbb/include/tbb/blocked_range.h>
+//#include <ext/tbb/include/tbb/parallel_for.h>
+//#include <ext/tbb/include/tbb/blocked_range.h>
 
 #include "integrator.h"
 
@@ -238,13 +238,16 @@ void SamplerIntegrator::Render(const Scene &scene) {
 
     std::thread renderThread([&] {
 
-        tbb::blocked_range<int> range(0, tiles.size());
+        //tbb::blocked_range<int> range(0, tiles.size());
+        std::vector<int> range(tiles.size(),0);
         int cnt = 1;
         int area = (film->resolution.x)*(film->resolution.y);
         std::atomic<int> finishedTiles = 0;
 
-        auto map = [&](const tbb::blocked_range<int> &range) {
-            for (int i = range.begin(); i < range.end(); ++i) {
+        //auto map = [&](const tbb::blocked_range<int> &range) {
+        auto map = [&](const std::vector<int> &range) {
+            //for (int i = range.begin(); i < range.end(); ++i) {
+            for (int i = 0; i < range.size(); i++) {                
                 /* Request an image block from the block generator */
                 FilmTile &tile = tiles[i];
 
@@ -267,10 +270,10 @@ void SamplerIntegrator::Render(const Scene &scene) {
         for (cnt = 1; cnt <= sampleNum / delta; cnt++)
         {
             /// Uncomment the following line for single threaded rendering
-            //map(range);
+            map(range);
 
             /// Default: parallel rendering
-            tbb::parallel_for(range, map);
+            //tbb::parallel_for(range, map);
 
             std::string tmpName = filename;
             tmpName.insert(film->filename.find_last_of('.'), "_" + std::to_string(cnt * delta) + "spp");
@@ -298,12 +301,14 @@ void SamplerIntegrator::RenderAdaptive(const Scene &scene) {
 
     std::thread renderThread([&] {
 
-        tbb::blocked_range<int> range(0, tiles.size());
+        //tbb::blocked_range<int> range(0, tiles.size());
+        std::vector<int> range(tiles.size(), 0);
         std::atomic<int> cnt = 0;
         int area = (film->resolution.x)*(film->resolution.y);
 
-        auto map = [&](const tbb::blocked_range<int> &range) {
-            for (int i = range.begin(); i < range.end(); ++i) {
+        auto map = [&](const std::vector<int> &range) {
+            //for (int i = range.begin(); i < range.end(); ++i) {
+            for (int i = 0; i < range.size(); i++) {                
                 /* Request an image block from the block generator */
                 FilmTile &tile = tiles[i];
 
@@ -325,10 +330,10 @@ void SamplerIntegrator::RenderAdaptive(const Scene &scene) {
             }
         };        
         /// Uncomment the following line for single threaded rendering
-        //map(range);
+        map(range);
 
         /// Default: parallel rendering
-        tbb::parallel_for(range, map);
+        //tbb::parallel_for(range, map);
     });
 
     renderThread.join();
@@ -351,13 +356,16 @@ void SamplerIntegrator::RenderEyeLight(const Scene &scene) {
 
     std::thread renderThread([&] {
 
-        tbb::blocked_range<int> range(0, tiles.size());
+        //tbb::blocked_range<int> range(0, tiles.size());
+        std::vector<int> range(tiles.size(), 0);
         int cnt = 1;
         int area = (film->resolution.x)*(film->resolution.y);
         std::atomic<int> finishedTiles = 0;
 
-        auto map = [&](const tbb::blocked_range<int> &range) {
-            for (int i = range.begin(); i < range.end(); ++i) {
+        //auto map = [&](const tbb::blocked_range<int> &range) {
+        auto map = [&](const std::vector<int> &range) {
+            //for (int i = range.begin(); i < range.end(); ++i) {
+            for (int i = 0; i < range.size(); i++) {                
                 /* Request an image block from the block generator */
                 FilmTile &tile = tiles[i];
 
@@ -377,10 +385,10 @@ void SamplerIntegrator::RenderEyeLight(const Scene &scene) {
             }
         };        
         /// Uncomment the following line for single threaded rendering
-        //map(range);
+        map(range);
 
         /// Default: parallel rendering
-        tbb::parallel_for(range, map);
+        //tbb::parallel_for(range, map);
     });
 
     renderThread.join();

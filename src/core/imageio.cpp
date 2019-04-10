@@ -2,7 +2,7 @@
 
 #include "vector.h"
 
-#include "../../ext/lodepng/lodepng.h"
+#include "ext/lodepng.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "ext/stb_images/stb_image.h"

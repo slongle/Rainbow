@@ -1,7 +1,7 @@
 #include "homogeneous.h"
-#include "src/core/propertylist.h"
-#include "src/core/sampler.h"
-#include "src/core/interaction.h"
+#include "core/propertylist.h"
+#include "core/sampler.h"
+#include "core/interaction.h"
 
 RAINBOW_NAMESPACE_BEGIN
 

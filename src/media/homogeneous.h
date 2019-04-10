@@ -2,7 +2,7 @@
 #ifndef __RAINBOW_HOMOGENEOUS_H
 #define __RAINBOW_HOMOGENEOUS_H
 
-#include "src/core/medium.h"
+#include "core/medium.h"
 
 RAINBOW_NAMESPACE_BEGIN
 

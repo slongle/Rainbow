@@ -1,7 +1,7 @@
 #define TINYOBJLOADER_IMPLEMENTATION
 #include "ext/tinyobjloader/tiny_obj_loader.h"
 
-#include "src/shapes/triangle.h"
+#include "shapes/triangle.h"
 
 RAINBOW_NAMESPACE_BEGIN
 
