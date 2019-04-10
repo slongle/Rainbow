@@ -2,12 +2,12 @@
 My renderer for learning  
 
 ## Building Rainbow
-
-'''bash  
+Now I just test building on Windows. 
+```bash  
 $ mkdir build  
 $ cd build  
 $ cmake ..  
-'''  
+``` 
 
 [Project Website](https://slongle.github.io/projects/rainbow)
 
