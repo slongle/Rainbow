@@ -2,12 +2,14 @@
 My renderer for learning  
 
 ## Building Rainbow
-Now I just test building on Windows. 
-```bash  
-$ mkdir build  
-$ cd build  
-$ cmake ..  
-``` 
+Now I just test building on Windows.   
+Please build as x64 platform like
+```bash
+mkdir build
+cd build
+cmake -G "Visual Studio 15 2017 Win64" ..
+```
+Or use `./setup_builds.bat`. 
 
 [Project Website](https://slongle.github.io/projects/rainbow)
 

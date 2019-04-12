@@ -1,0 +1,444 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|x64">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|x64">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{85F9D625-351C-3208-989B-50A5FED66B93}</ProjectGuid>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <Keyword>Win32Proj</Keyword>
+    <Platform>x64</Platform>
+    <ProjectName>Rainbow</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
+    <UseIntelTBB>true</UseIntelTBB>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
+    <UseIntelTBB>true</UseIntelTBB>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">F:\Document\Graphics\code\Rainbow\build\Debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Rainbow.dir\Debug\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Rainbow</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">F:\Document\Graphics\code\Rainbow\build\Release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Rainbow.dir\Release\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Rainbow</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">F:\Document\Graphics\code\Rainbow\build\MinSizeRel\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Rainbow.dir\MinSizeRel\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Rainbow</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">F:\Document\Graphics\code\Rainbow\build\RelWithDebInfo\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Rainbow.dir\RelWithDebInfo\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Rainbow</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">true</GenerateManifest>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>F:\Document\Graphics\code\Rainbow\src\ext\embree3\include;F:\Document\Graphics\code\Rainbow\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>Debug/</AssemblerListingLocation>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;CMAKE_INTDIR="Debug";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;CMAKE_INTDIR=\"Debug\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>F:\Document\Graphics\code\Rainbow\src\ext\embree3\include;F:\Document\Graphics\code\Rainbow\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>F:\Document\Graphics\code\Rainbow\src\ext\embree3\include;F:\Document\Graphics\code\Rainbow\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>..\src\ext\embree3\lib\embree3.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>F:/Document/Graphics/code/Rainbow/build/Debug/Rainbow.lib</ImportLibrary>
+      <ProgramDataBaseFile>F:/Document/Graphics/code/Rainbow/build/Debug/Rainbow.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>F:\Document\Graphics\code\Rainbow\src\ext\embree3\include;F:\Document\Graphics\code\Rainbow\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>Release/</AssemblerListingLocation>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"Release\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>F:\Document\Graphics\code\Rainbow\src\ext\embree3\include;F:\Document\Graphics\code\Rainbow\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>F:\Document\Graphics\code\Rainbow\src\ext\embree3\include;F:\Document\Graphics\code\Rainbow\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>..\src\ext\embree3\lib\embree3.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>F:/Document/Graphics/code/Rainbow/build/Release/Rainbow.lib</ImportLibrary>
+      <ProgramDataBaseFile>F:/Document/Graphics/code/Rainbow/build/Release/Rainbow.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>F:\Document\Graphics\code\Rainbow\src\ext\embree3\include;F:\Document\Graphics\code\Rainbow\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>MinSizeRel/</AssemblerListingLocation>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <Optimization>MinSpace</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR="MinSizeRel";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"MinSizeRel\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>F:\Document\Graphics\code\Rainbow\src\ext\embree3\include;F:\Document\Graphics\code\Rainbow\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>F:\Document\Graphics\code\Rainbow\src\ext\embree3\include;F:\Document\Graphics\code\Rainbow\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>..\src\ext\embree3\lib\embree3.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>F:/Document/Graphics/code/Rainbow/build/MinSizeRel/Rainbow.lib</ImportLibrary>
+      <ProgramDataBaseFile>F:/Document/Graphics/code/Rainbow/build/MinSizeRel/Rainbow.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>F:\Document\Graphics\code\Rainbow\src\ext\embree3\include;F:\Document\Graphics\code\Rainbow\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>RelWithDebInfo/</AssemblerListingLocation>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR="RelWithDebInfo";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"RelWithDebInfo\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>F:\Document\Graphics\code\Rainbow\src\ext\embree3\include;F:\Document\Graphics\code\Rainbow\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>F:\Document\Graphics\code\Rainbow\src\ext\embree3\include;F:\Document\Graphics\code\Rainbow\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>..\src\ext\embree3\lib\embree3.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>F:/Document/Graphics/code/Rainbow/build/RelWithDebInfo/Rainbow.lib</ImportLibrary>
+      <ProgramDataBaseFile>F:/Document/Graphics/code/Rainbow/build/RelWithDebInfo/Rainbow.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="F:\Document\Graphics\code\Rainbow\CMakeLists.txt">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule F:/Document/Graphics/code/Rainbow/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+F:\SOFT\CMake\bin\cmake.exe -SF:/Document/Graphics/code/Rainbow -BF:/Document/Graphics/code/Rainbow/build --check-stamp-file F:/Document/Graphics/code/Rainbow/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">F:/Document/Graphics/code/Rainbow/CMakeLists.txt;F:\Document\Graphics\code\Rainbow\CMakeLists.txt;F:\Document\Graphics\code\Rainbow\build\CMakeFiles\3.14.0-rc2\CMakeCCompiler.cmake;F:\Document\Graphics\code\Rainbow\build\CMakeFiles\3.14.0-rc2\CMakeCXXCompiler.cmake;F:\Document\Graphics\code\Rainbow\build\CMakeFiles\3.14.0-rc2\CMakeRCCompiler.cmake;F:\Document\Graphics\code\Rainbow\build\CMakeFiles\3.14.0-rc2\CMakeSystem.cmake;F:\Document\Graphics\code\Rainbow\build\CMakeFiles\feature_tests.c;F:\Document\Graphics\code\Rainbow\build\CMakeFiles\feature_tests.cxx;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeCCompiler.cmake.in;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeCCompilerABI.c;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeCInformation.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeCXXCompiler.cmake.in;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeCXXCompilerABI.cpp;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeCXXInformation.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeCommonLanguageInclude.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeCompilerIdDetection.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeDetermineCCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeDetermineCXXCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeDetermineCompileFeatures.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeDetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeDetermineCompilerABI.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeDetermineCompilerId.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeDetermineRCCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeDetermineSystem.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeFindBinUtils.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeGenericSystem.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeInitializeConfigs.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeLanguageInformation.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeParseImplicitIncludeInfo.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeParseImplicitLinkInfo.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeRCCompiler.cmake.in;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeRCInformation.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeSystem.cmake.in;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeSystemSpecificInformation.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeSystemSpecificInitialize.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeTestCCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeTestCXXCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeTestCompilerCommon.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeTestRCCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\ADSP-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\ARMCC-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\AppleClang-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\Borland-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\Bruce-C-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\CMakeCommonCompilerMacros.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\Clang-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\Comeau-CXX-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\Compaq-C-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\Compaq-CXX-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\Cray-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\Embarcadero-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\Fujitsu-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\GHS-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\GNU-C-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\GNU-CXX-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\HP-C-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\HP-CXX-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\IAR-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\Intel-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\MIPSpro-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\MSVC-C-FeatureTests.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\MSVC-C.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\MSVC-CXX-FeatureTests.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\MSVC-CXX.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\MSVC-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\NVIDIA-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\PGI-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\PathScale-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\SCO-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\SDCC-C-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\SunPro-C-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\SunPro-CXX-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\TI-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\TinyCC-C-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\VisualAge-C-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\VisualAge-CXX-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\Watcom-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\XL-C-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\XL-CXX-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\zOS-C-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\zOS-CXX-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CompilerId\VS-10.vcxproj.in;F:\SOFT\CMake\share\cmake-3.14\Modules\Internal\FeatureTesting.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Platform\Windows-Determine-CXX.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Platform\Windows-MSVC-C.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Platform\Windows-MSVC-CXX.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Platform\Windows-MSVC.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Platform\Windows.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Platform\WindowsPaths.cmake;F:\Document\Graphics\code\Rainbow\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">F:\Document\Graphics\code\Rainbow\build\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule F:/Document/Graphics/code/Rainbow/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+F:\SOFT\CMake\bin\cmake.exe -SF:/Document/Graphics/code/Rainbow -BF:/Document/Graphics/code/Rainbow/build --check-stamp-file F:/Document/Graphics/code/Rainbow/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">F:/Document/Graphics/code/Rainbow/CMakeLists.txt;F:\Document\Graphics\code\Rainbow\CMakeLists.txt;F:\Document\Graphics\code\Rainbow\build\CMakeFiles\3.14.0-rc2\CMakeCCompiler.cmake;F:\Document\Graphics\code\Rainbow\build\CMakeFiles\3.14.0-rc2\CMakeCXXCompiler.cmake;F:\Document\Graphics\code\Rainbow\build\CMakeFiles\3.14.0-rc2\CMakeRCCompiler.cmake;F:\Document\Graphics\code\Rainbow\build\CMakeFiles\3.14.0-rc2\CMakeSystem.cmake;F:\Document\Graphics\code\Rainbow\build\CMakeFiles\feature_tests.c;F:\Document\Graphics\code\Rainbow\build\CMakeFiles\feature_tests.cxx;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeCCompiler.cmake.in;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeCCompilerABI.c;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeCInformation.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeCXXCompiler.cmake.in;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeCXXCompilerABI.cpp;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeCXXInformation.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeCommonLanguageInclude.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeCompilerIdDetection.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeDetermineCCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeDetermineCXXCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeDetermineCompileFeatures.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeDetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeDetermineCompilerABI.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeDetermineCompilerId.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeDetermineRCCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeDetermineSystem.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeFindBinUtils.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeGenericSystem.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeInitializeConfigs.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeLanguageInformation.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeParseImplicitIncludeInfo.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeParseImplicitLinkInfo.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeRCCompiler.cmake.in;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeRCInformation.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeSystem.cmake.in;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeSystemSpecificInformation.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeSystemSpecificInitialize.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeTestCCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeTestCXXCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeTestCompilerCommon.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeTestRCCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\ADSP-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\ARMCC-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\AppleClang-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\Borland-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\Bruce-C-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\CMakeCommonCompilerMacros.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\Clang-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\Comeau-CXX-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\Compaq-C-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\Compaq-CXX-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\Cray-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\Embarcadero-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\Fujitsu-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\GHS-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\GNU-C-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\GNU-CXX-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\HP-C-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\HP-CXX-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\IAR-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\Intel-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\MIPSpro-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\MSVC-C-FeatureTests.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\MSVC-C.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\MSVC-CXX-FeatureTests.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\MSVC-CXX.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\MSVC-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\NVIDIA-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\PGI-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\PathScale-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\SCO-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\SDCC-C-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\SunPro-C-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\SunPro-CXX-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\TI-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\TinyCC-C-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\VisualAge-C-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\VisualAge-CXX-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\Watcom-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\XL-C-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\XL-CXX-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\zOS-C-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\zOS-CXX-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CompilerId\VS-10.vcxproj.in;F:\SOFT\CMake\share\cmake-3.14\Modules\Internal\FeatureTesting.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Platform\Windows-Determine-CXX.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Platform\Windows-MSVC-C.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Platform\Windows-MSVC-CXX.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Platform\Windows-MSVC.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Platform\Windows.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Platform\WindowsPaths.cmake;F:\Document\Graphics\code\Rainbow\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">F:\Document\Graphics\code\Rainbow\build\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule F:/Document/Graphics/code/Rainbow/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
+F:\SOFT\CMake\bin\cmake.exe -SF:/Document/Graphics/code/Rainbow -BF:/Document/Graphics/code/Rainbow/build --check-stamp-file F:/Document/Graphics/code/Rainbow/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">F:/Document/Graphics/code/Rainbow/CMakeLists.txt;F:\Document\Graphics\code\Rainbow\CMakeLists.txt;F:\Document\Graphics\code\Rainbow\build\CMakeFiles\3.14.0-rc2\CMakeCCompiler.cmake;F:\Document\Graphics\code\Rainbow\build\CMakeFiles\3.14.0-rc2\CMakeCXXCompiler.cmake;F:\Document\Graphics\code\Rainbow\build\CMakeFiles\3.14.0-rc2\CMakeRCCompiler.cmake;F:\Document\Graphics\code\Rainbow\build\CMakeFiles\3.14.0-rc2\CMakeSystem.cmake;F:\Document\Graphics\code\Rainbow\build\CMakeFiles\feature_tests.c;F:\Document\Graphics\code\Rainbow\build\CMakeFiles\feature_tests.cxx;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeCCompiler.cmake.in;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeCCompilerABI.c;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeCInformation.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeCXXCompiler.cmake.in;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeCXXCompilerABI.cpp;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeCXXInformation.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeCommonLanguageInclude.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeCompilerIdDetection.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeDetermineCCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeDetermineCXXCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeDetermineCompileFeatures.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeDetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeDetermineCompilerABI.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeDetermineCompilerId.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeDetermineRCCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeDetermineSystem.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeFindBinUtils.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeGenericSystem.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeInitializeConfigs.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeLanguageInformation.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeParseImplicitIncludeInfo.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeParseImplicitLinkInfo.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeRCCompiler.cmake.in;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeRCInformation.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeSystem.cmake.in;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeSystemSpecificInformation.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeSystemSpecificInitialize.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeTestCCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeTestCXXCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeTestCompilerCommon.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeTestRCCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\ADSP-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\ARMCC-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\AppleClang-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\Borland-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\Bruce-C-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\CMakeCommonCompilerMacros.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\Clang-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\Comeau-CXX-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\Compaq-C-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\Compaq-CXX-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\Cray-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\Embarcadero-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\Fujitsu-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\GHS-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\GNU-C-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\GNU-CXX-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\HP-C-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\HP-CXX-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\IAR-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\Intel-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\MIPSpro-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\MSVC-C-FeatureTests.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\MSVC-C.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\MSVC-CXX-FeatureTests.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\MSVC-CXX.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\MSVC-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\NVIDIA-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\PGI-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\PathScale-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\SCO-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\SDCC-C-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\SunPro-C-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\SunPro-CXX-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\TI-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\TinyCC-C-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\VisualAge-C-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\VisualAge-CXX-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\Watcom-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\XL-C-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\XL-CXX-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\zOS-C-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\zOS-CXX-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CompilerId\VS-10.vcxproj.in;F:\SOFT\CMake\share\cmake-3.14\Modules\Internal\FeatureTesting.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Platform\Windows-Determine-CXX.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Platform\Windows-MSVC-C.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Platform\Windows-MSVC-CXX.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Platform\Windows-MSVC.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Platform\Windows.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Platform\WindowsPaths.cmake;F:\Document\Graphics\code\Rainbow\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">F:\Document\Graphics\code\Rainbow\build\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule F:/Document/Graphics/code/Rainbow/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
+F:\SOFT\CMake\bin\cmake.exe -SF:/Document/Graphics/code/Rainbow -BF:/Document/Graphics/code/Rainbow/build --check-stamp-file F:/Document/Graphics/code/Rainbow/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">F:/Document/Graphics/code/Rainbow/CMakeLists.txt;F:\Document\Graphics\code\Rainbow\CMakeLists.txt;F:\Document\Graphics\code\Rainbow\build\CMakeFiles\3.14.0-rc2\CMakeCCompiler.cmake;F:\Document\Graphics\code\Rainbow\build\CMakeFiles\3.14.0-rc2\CMakeCXXCompiler.cmake;F:\Document\Graphics\code\Rainbow\build\CMakeFiles\3.14.0-rc2\CMakeRCCompiler.cmake;F:\Document\Graphics\code\Rainbow\build\CMakeFiles\3.14.0-rc2\CMakeSystem.cmake;F:\Document\Graphics\code\Rainbow\build\CMakeFiles\feature_tests.c;F:\Document\Graphics\code\Rainbow\build\CMakeFiles\feature_tests.cxx;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeCCompiler.cmake.in;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeCCompilerABI.c;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeCInformation.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeCXXCompiler.cmake.in;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeCXXCompilerABI.cpp;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeCXXInformation.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeCommonLanguageInclude.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeCompilerIdDetection.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeDetermineCCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeDetermineCXXCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeDetermineCompileFeatures.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeDetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeDetermineCompilerABI.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeDetermineCompilerId.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeDetermineRCCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeDetermineSystem.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeFindBinUtils.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeGenericSystem.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeInitializeConfigs.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeLanguageInformation.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeParseImplicitIncludeInfo.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeParseImplicitLinkInfo.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeRCCompiler.cmake.in;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeRCInformation.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeSystem.cmake.in;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeSystemSpecificInformation.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeSystemSpecificInitialize.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeTestCCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeTestCXXCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeTestCompilerCommon.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CMakeTestRCCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\ADSP-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\ARMCC-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\AppleClang-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\Borland-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\Bruce-C-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\CMakeCommonCompilerMacros.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\Clang-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\Comeau-CXX-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\Compaq-C-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\Compaq-CXX-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\Cray-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\Embarcadero-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\Fujitsu-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\GHS-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\GNU-C-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\GNU-CXX-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\HP-C-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\HP-CXX-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\IAR-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\Intel-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\MIPSpro-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\MSVC-C-FeatureTests.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\MSVC-C.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\MSVC-CXX-FeatureTests.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\MSVC-CXX.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\MSVC-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\NVIDIA-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\PGI-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\PathScale-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\SCO-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\SDCC-C-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\SunPro-C-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\SunPro-CXX-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\TI-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\TinyCC-C-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\VisualAge-C-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\VisualAge-CXX-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\Watcom-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\XL-C-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\XL-CXX-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\zOS-C-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Compiler\zOS-CXX-DetermineCompiler.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\CompilerId\VS-10.vcxproj.in;F:\SOFT\CMake\share\cmake-3.14\Modules\Internal\FeatureTesting.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Platform\Windows-Determine-CXX.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Platform\Windows-MSVC-C.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Platform\Windows-MSVC-CXX.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Platform\Windows-MSVC.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Platform\Windows.cmake;F:\SOFT\CMake\share\cmake-3.14\Modules\Platform\WindowsPaths.cmake;F:\Document\Graphics\code\Rainbow\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">F:\Document\Graphics\code\Rainbow\build\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\accelerators\bvh.cpp" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\accelerators\bvh.h" />
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\cameras\perspective.cpp" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\cameras\perspective.h" />
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\core\api.cpp" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\core\api.h" />
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\core\bbox.cpp" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\core\bbox.h" />
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\core\bsdf.cpp" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\core\bsdf.h" />
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\core\camera.cpp" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\core\camera.h" />
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\core\common.cpp" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\core\common.h" />
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\core\film.cpp" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\core\film.h" />
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\core\filter.cpp" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\core\filter.h" />
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\core\frame.cpp" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\core\frame.h" />
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\core\imageio.cpp" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\core\imageio.h" />
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\core\integrator.cpp" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\core\integrator.h" />
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\core\interaction.cpp" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\core\interaction.h" />
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\core\light.cpp" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\core\light.h" />
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\core\logger.cpp" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\core\logger.h" />
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\core\material.cpp" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\core\material.h" />
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\core\medium.cpp" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\core\medium.h" />
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\core\memory.cpp" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\core\memory.h" />
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\core\microfacet.cpp" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\core\microfacet.h" />
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\core\object.cpp" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\core\object.h" />
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\core\parser.cpp" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\core\parser.h" />
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\core\primitive.cpp" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\core\primitive.h" />
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\core\propertylist.cpp" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\core\propertylist.h" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\core\rainbow.h" />
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\core\ray.cpp" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\core\ray.h" />
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\core\sampler.cpp" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\core\sampler.h" />
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\core\sampling.cpp" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\core\sampling.h" />
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\core\scene.cpp" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\core\scene.h" />
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\core\shape.cpp" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\core\shape.h" />
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\core\spectrum.cpp" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\core\spectrum.h" />
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\core\timer.cpp" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\core\timer.h" />
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\core\transform.cpp" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\core\transform.h" />
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\core\vector.cpp" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\core\vector.h" />
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\ext\lodepng.cpp" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\ext\lodepng.h" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\ext\pugiconfig.hpp" />
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\ext\pugixml.cpp" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\ext\pugixml.hpp" />
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\filters\box.cpp" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\filters\box.h" />
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\filters\gaussian.cpp" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\filters\gaussian.h" />
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\filters\tent.cpp" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\filters\tent.h" />
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\integrators\direct.cpp" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\integrators\direct.h" />
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\integrators\path.cpp" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\integrators\path.h" />
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\integrators\volpath.cpp" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\integrators\volpath.h" />
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\integrators\whitted.cpp" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\integrators\whitted.h" />
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\lights\ies\ieslight.cpp" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\lights\ies\ieslight.h" />
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\lights\ies\iesparser.cpp" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\lights\ies\iesparser.h" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\lights\iesparser.h" />
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\lights\point.cpp" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\lights\point.h" />
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\lights\spot.cpp" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\lights\spot.h" />
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\materials\glass.cpp" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\materials\glass.h" />
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\materials\matte.cpp" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\materials\matte.h" />
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\materials\mirror.cpp" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\materials\mirror.h" />
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\materials\roughconductor.cpp" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\materials\roughconductor.h" />
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\media\homogeneous.cpp" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\media\homogeneous.h" />
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\rainbow.cpp" />
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\samplers\independent.cpp" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\samplers\independent.h" />
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\shapes\cube.cpp" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\shapes\cube.h" />
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\shapes\meshloaders\wavefront.cpp" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\shapes\meshloaders\wavefront.h" />
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\shapes\sphere.cpp" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\shapes\sphere.h" />
+    <ClCompile Include="F:\Document\Graphics\code\Rainbow\src\shapes\triangle.cpp" />
+    <ClInclude Include="F:\Document\Graphics\code\Rainbow\src\shapes\triangle.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="F:\Document\Graphics\code\Rainbow\build\ZERO_CHECK.vcxproj">
+      <Project>{548028C5-920C-3F08-B909-D7E7366E9365}</Project>
+      <Name>ZERO_CHECK</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -18,20 +18,24 @@ endmacro(source_group_by_dir)
 cmake_minimum_required (VERSION 3.1)
 
 # The project name
-project (Rainbow)
+PROJECT (Rainbow)
 
-# The version number.
-set (Tutorial_VERSION_MAJOR 1)
-set (Tutorial_VERSION_MINOR 0)
+# Embree
+SET(EMBREE_ROOT_DIRS ${PROJECT_SOURCE_DIR}/src/ext/embree3)
+SET(EMBREE_INCLUDE_DIRS ${EMBREE_ROOT_DIRS}/include)
+SET(EMBREE_LIBRARY_DIRS ${EMBREE_ROOT_DIRS}/lib)
+INCLUDE_DIRECTORIES(${EMBREE_INCLUDE_DIRS})
+FILE(GLOB EMBREE_LIBRARY
+    ${EMBREE_LIBRARY_DIRS}/embree3.lib)   
 
 # Set the include directory
-include_directories( ${PROJECT_SOURCE_DIR}/src )
+INCLUDE_DIRECTORIES( ${PROJECT_SOURCE_DIR}/src )
 MESSAGE(STATUS ${PROJECT_SOURCE_DIR})
 
 # Use folder
 SET_PROPERTY(GLOBAL PROPERTY USE_FOLDERS ON)
 
-file(GLOB RAINBOW_SOURCE
+FILE(GLOB RAINBOW_SOURCE
     "src/rainbow.cpp"
     "src/ext/*.cpp"
     "src/ext/*.h"
@@ -61,11 +65,13 @@ file(GLOB RAINBOW_SOURCE
     "src/shapes/meshloaders/*.cpp"
     "src/shapes/meshloaders/*.h")
     
-set(ALL_FILES 
+SET(ALL_FILES 
     ${RAINBOW_SOURCE})
 
 source_group_by_dir(RAINBOW_SOURCE)
+    
+ADD_EXECUTABLE(Rainbow
+    ${RAINBOW_SOURCE})
 
-add_executable(Rainbow
-    ${RAINBOW_SOURCE}
-)
+TARGET_LINK_LIBRARIES(Rainbow 
+    ${EMBREE_LIBRARY}) 

@@ -1,0 +1,3 @@
+F:/Document/Graphics/code/Rainbow/build/CMakeFiles/Rainbow.dir
+F:/Document/Graphics/code/Rainbow/build/CMakeFiles/ALL_BUILD.dir
+F:/Document/Graphics/code/Rainbow/build/CMakeFiles/ZERO_CHECK.dir

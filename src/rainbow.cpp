@@ -2,6 +2,9 @@
 #include "core/parser.h"
 #include "ext/filesystem/filesystem/path.h"
 
+#include <embree3/rtcore.h>
+#include <embree3/rtcore_scene.h>
+
 #include "core/film.h"
 #include "core/memory.h"
 #include "materials/glass.h"
@@ -105,7 +108,24 @@ using namespace rainbow;
     film->SaveImage();
 }*/
 
+
 int main(int argc, char *argv[]) {
+
+    RTCDevice embree_device;
+    RTCScene embree_scene;
+    embree_device = rtcNewDevice(NULL);
+    embree_scene = rtcNewScene(embree_device);
+
+    RTCGeometry geometry = rtcNewGeometry(embree_device, RTC_GEOMETRY_TYPE_TRIANGLE);
+
+    rtcCommitGeometry(geometry);
+    unsigned geomID = rtcAttachGeometry(embree_scene, geometry);
+    rtcReleaseGeometry(geometry);
+    
+
+    rtcCommitScene(embree_scene);
+
+
     std::string solutionDir("F:/Document/Graphics/code/Rainbow/scenes/");
     //std::string solutionDir("C:/Users/Administrator/Desktop/Rainbow/scenes/");
     std::vector<std::string> scenes(100);
