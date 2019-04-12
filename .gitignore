@@ -11,6 +11,7 @@
 *.userprefs
 
 # Build results
+[Bb]uild/
 [Dd]ebug/
 [Dd]ebugPublic/
 [Rr]elease/
@@ -50,7 +51,7 @@ artifacts/
 *_i.h
 *.ilk
 *.meta
-*.obj
+# *.obj
 *.pch
 *.pdb
 *.pgc
