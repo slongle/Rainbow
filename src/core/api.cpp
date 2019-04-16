@@ -25,6 +25,7 @@
 #include "materials/roughconductor.h"
 
 #include "samplers/independent.h"
+#include "samplers/halton.h"
 
 #include "accelerators/bvh.h"
 
@@ -58,7 +59,7 @@ private:
 
 struct RenderOptions {
 	Integrator*   MakeIntegrator();
-	Sampler*      MakeSampler();
+	Sampler*      MakeSampler(const Camera& camera);
 	Scene*        MakeScene();
 	Camera*       MakeCamera();
 	Film*         MakeFilm();
@@ -394,13 +395,16 @@ Camera* RenderOptions::MakeCamera()
 	return camera;
 }
 
-Sampler* RenderOptions::MakeSampler() 
+Sampler* RenderOptions::MakeSampler(const Camera& camera)
 {
 	Sampler* sampler = nullptr;
 	if (SamplerType == "independent") 
     {
 		sampler = CreateIndependentSampler(SamplerProperty);
 	}
+    else if (SamplerType == "halton") {
+        sampler = CreateHaltonSampler(SamplerProperty, camera.film->resolution);
+    }
 	return sampler;
 }
 
@@ -409,7 +413,7 @@ Integrator* RenderOptions::MakeIntegrator()
 	std::shared_ptr<Camera> camera(MakeCamera());
 	Assert(camera != nullptr, "Unable to create camera!");
 	
-	std::shared_ptr<Sampler> sampler(MakeSampler());
+	std::shared_ptr<Sampler> sampler(MakeSampler(*camera));
 	Assert(sampler != nullptr, "Unable to create sampler!");	
 
 	Integrator* integrator = nullptr;

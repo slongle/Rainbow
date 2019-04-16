@@ -20,7 +20,9 @@ RGBSpectrum SamplerIntegrator::UniformSampleOneLight(
     int lightID = std::min(int(sampler.Next1D()*lightNum), lightNum - 1);    
     Float lightPdf = Float(1) / lightNum;
     std::shared_ptr<Light> light = scene.lights[lightID];
-    return EstimateDirectLight(inter, light, scene, sampler.Next2D(), sampler.Next2D(), handleMedium) / lightPdf;
+    return EstimateDirectLight(
+        inter, light, scene, sampler.Next2D(), sampler.Next2D(), 
+        sampler, handleMedium) / lightPdf;
 }
 
 RGBSpectrum SamplerIntegrator::EstimateDirectLight(
@@ -29,6 +31,7 @@ RGBSpectrum SamplerIntegrator::EstimateDirectLight(
     const Scene& scene,
     const Point2f& scatteru,
     const Point2f& lightu,
+    Sampler&       sampler,
     const bool handleMedia)
 {
     RGBSpectrum Ld(0.0);
@@ -37,7 +40,7 @@ RGBSpectrum SamplerIntegrator::EstimateDirectLight(
     Visibility visibility;
 
     // Sample Light with MSI
-    RGBSpectrum Li = light->SampleLi(inter, sampler->Next2D(), &wi, &lightPdf, &visibility);
+    RGBSpectrum Li = light->SampleLi(inter, lightu, &wi, &lightPdf, &visibility);
     if (lightPdf > 0 && !Li.IsBlack()) {
         RGBSpectrum f;
         // Estimate BSDF or Phase Function
@@ -57,7 +60,7 @@ RGBSpectrum SamplerIntegrator::EstimateDirectLight(
         if (!f.IsBlack()) {
             // Visibility test
             if (handleMedia) {
-                Li *= visibility.Tr(scene, *sampler);
+                Li *= visibility.Tr(scene, sampler);
             }
             else {
                 if (visibility.Occluded(scene))
@@ -109,7 +112,7 @@ RGBSpectrum SamplerIntegrator::EstimateDirectLight(
             SurfaceInteraction lightInter;
             RGBSpectrum Tr(1.);
             bool foundIntersection =
-                handleMedia ? scene.IntersectTr(ray, *sampler, &lightInter, &Tr) :
+                handleMedia ? scene.IntersectTr(ray, sampler, &lightInter, &Tr) :
                               scene.IntersectP(ray, &lightInter);
 
             // Compute Le contribute
@@ -156,11 +159,13 @@ void SamplerIntegrator::RenderTileAdaptive(const Scene &scene, Sampler& sampler,
     Float quantile = 1.95996;
     for (int y = tile.bounds.pMin.y; y < tile.bounds.pMax.y; y++) {
         for (int x = tile.bounds.pMin.x; x < tile.bounds.pMax.x; x++) {
+            sampler.SetPixel(Point2i(x, y));
             RGBSpectrum L(0.0);
             Float mean = 0, meanSqr = 0;
             int sampleCount;
-            for (sampleCount = 1; sampleCount <= 10240; sampleCount++) {
-                RGBSpectrum weight = camera->GenerateRay(&ray, Point2f(x, y) + sampler.Next2D());
+            for (sampleCount = 1; sampleCount <= 1024; sampleCount++) {
+                Point2f cameraSample = sampler.GetCameraSample();
+                RGBSpectrum weight = camera->GenerateRay(&ray, cameraSample);
                 RGBSpectrum li = weight * Li(arena, ray, scene, sampler, 0);
                 L += li;
 
@@ -169,7 +174,7 @@ void SamplerIntegrator::RenderTileAdaptive(const Scene &scene, Sampler& sampler,
                 mean += delta / sampleCount;
                 meanSqr += delta * (sampleLuminance - mean);
 
-                if (sampleCount>64) {                    
+                if (sampleCount % 64 == 0) {                    
                     const Float variance = meanSqr / (sampleCount - 1);
 
                     Float stdError = std::sqrt(variance / sampleCount);
@@ -184,25 +189,29 @@ void SamplerIntegrator::RenderTileAdaptive(const Scene &scene, Sampler& sampler,
                     if (ciWidth <= maxError * base)
                         break;
                 }
+                sampler.StartNextSample();
             }
             tile.AddSample(Point2f(x, y), L, sampleCount);
         }
     }
 }
 
-void SamplerIntegrator::RenderTile(const Scene &scene, Sampler& sampler, FilmTile &tile) {    
+void SamplerIntegrator::RenderTile(const Scene &scene, Sampler& sampler, FilmTile &tile, const int& preSampleSum) {
     Ray ray;
     MemoryArena arena;
     for (int y = tile.bounds.pMin.y; y < tile.bounds.pMax.y; y++) {
         for (int x = tile.bounds.pMin.x; x < tile.bounds.pMax.x; x++) {            
             RGBSpectrum L(0.);
+            sampler.SetPixel(Point2i(x, y));
+            sampler.SetSampleNumber(preSampleSum);
             for (int i = 0; i < delta; i++) {
-                Point2f sample = sampler.Next2D();
-                Point2f pixelSample = Point2f(x, y) + sample;
-                RGBSpectrum weight = camera->GenerateRay(&ray, pixelSample);
+                Point2f cameraSample = sampler.GetCameraSample();
+                RGBSpectrum weight = camera->GenerateRay(&ray, cameraSample);
                 L = weight * Li(arena, ray, scene, sampler, 0);
-                tile.AddSample(Point2i(x, y), sample, L);
-            }            
+                tile.AddSample(Point2i(x, y), Point2f(cameraSample.x - x, cameraSample.y - y), L);
+                sampler.StartNextSample();
+            }
+            //return;
         }                
     }
 }
@@ -212,8 +221,9 @@ void SamplerIntegrator::RenderTileEyeLight(const Scene &scene, Sampler& sampler,
     MemoryArena arena;
     for (int y = tile.bounds.pMin.y; y < tile.bounds.pMax.y; y++) {
         for (int x = tile.bounds.pMin.x; x < tile.bounds.pMax.x; x++) {
-            Point2f pixelSample = Point2f(x, y) + sampler.Next2D();
-            RGBSpectrum weight = camera->GenerateRay(&ray, pixelSample);
+            sampler.SetPixel(Point2i(x, y));
+            Point2f cameraSample = sampler.GetCameraSample();
+            RGBSpectrum weight = camera->GenerateRay(&ray, cameraSample);
             SurfaceInteraction inter;
             if (scene.IntersectP(ray, &inter)) {
                 Float dotLN = Dot(-ray.d, inter.n);
@@ -239,15 +249,13 @@ void SamplerIntegrator::Render(const Scene &scene) {
     std::thread renderThread([&] {
 
         tbb::blocked_range<int> range(0, tiles.size());
-        //std::vector<int> range(tiles.size(),0);
         int cnt = 1;
         int area = (film->resolution.x)*(film->resolution.y);
         std::atomic<int> finishedTiles = 0;
 
-        auto map = [&](const tbb::blocked_range<int> &range) {
-        //auto map = [&](const std::vector<int> &range) {
-            for (int i = range.begin(); i < range.end(); ++i) {
-            //for (int i = 0; i < range.size(); i++) {                
+        int preSumSample = 0;
+        auto map = [&](const tbb::blocked_range<int> &range) {        
+            for (int i = range.begin(); i < range.end(); ++i) {        
                 /* Request an image block from the block generator */
                 FilmTile &tile = tiles[i];
 
@@ -258,7 +266,7 @@ void SamplerIntegrator::Render(const Scene &scene) {
                 std::unique_ptr<Sampler> clonedSampler(sampler->Clone(seed));
 
                 /* Render all contained pixels */
-                RenderTile(scene, *clonedSampler, tile);
+                RenderTile(scene, *clonedSampler, tile, preSumSample);
 
                 film->MergeFilmTile(tile);
 
@@ -270,10 +278,12 @@ void SamplerIntegrator::Render(const Scene &scene) {
         for (cnt = 1; cnt <= sampleNum / delta; cnt++)
         {
             /// Uncomment the following line for single threaded rendering
-            //map(range);
+            map(range);
 
             /// Default: parallel rendering
-            tbb::parallel_for(range, map);
+            //tbb::parallel_for(range, map);
+
+            preSumSample += delta;
 
             std::string tmpName = filename;
             tmpName.insert(film->filename.find_last_of('.'), "_" + std::to_string(cnt * delta) + "spp");
@@ -301,14 +311,12 @@ void SamplerIntegrator::RenderAdaptive(const Scene &scene) {
 
     std::thread renderThread([&] {
 
-        //tbb::blocked_range<int> range(0, tiles.size());
-        std::vector<int> range(tiles.size(), 0);
+        tbb::blocked_range<int> range(0, tiles.size());
         std::atomic<int> cnt = 0;
         int area = (film->resolution.x)*(film->resolution.y);
 
-        auto map = [&](const std::vector<int> &range) {
-            //for (int i = range.begin(); i < range.end(); ++i) {
-            for (int i = 0; i < range.size(); i++) {                
+        auto map = [&](const tbb::blocked_range<int> &range) {
+            for (int i = range.begin(); i < range.end(); ++i) {                  
                 /* Request an image block from the block generator */
                 FilmTile &tile = tiles[i];
 
@@ -330,10 +338,10 @@ void SamplerIntegrator::RenderAdaptive(const Scene &scene) {
             }
         };        
         /// Uncomment the following line for single threaded rendering
-        map(range);
+        //map(range);
 
         /// Default: parallel rendering
-        //tbb::parallel_for(range, map);
+        tbb::parallel_for(range, map);
     });
 
     renderThread.join();
@@ -356,16 +364,13 @@ void SamplerIntegrator::RenderEyeLight(const Scene &scene) {
 
     std::thread renderThread([&] {
 
-        //tbb::blocked_range<int> range(0, tiles.size());
-        std::vector<int> range(tiles.size(), 0);
+        tbb::blocked_range<int> range(0, tiles.size());        
         int cnt = 1;
         int area = (film->resolution.x)*(film->resolution.y);
         std::atomic<int> finishedTiles = 0;
 
-        //auto map = [&](const tbb::blocked_range<int> &range) {
-        auto map = [&](const std::vector<int> &range) {
-            //for (int i = range.begin(); i < range.end(); ++i) {
-            for (int i = 0; i < range.size(); i++) {                
+        auto map = [&](const tbb::blocked_range<int> &range) {        
+            for (int i = range.begin(); i < range.end(); ++i) {                 
                 /* Request an image block from the block generator */
                 FilmTile &tile = tiles[i];
 
@@ -385,10 +390,10 @@ void SamplerIntegrator::RenderEyeLight(const Scene &scene) {
             }
         };        
         /// Uncomment the following line for single threaded rendering
-        map(range);
+        //map(range);
 
         /// Default: parallel rendering
-        //tbb::parallel_for(range, map);
+        tbb::parallel_for(range, map);
     });
 
     renderThread.join();

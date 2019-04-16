@@ -37,6 +37,7 @@ SET_PROPERTY(GLOBAL PROPERTY USE_FOLDERS ON)
 
 FILE(GLOB RAINBOW_SOURCE
     "src/rainbow.cpp"
+    "src/ext/halton/*.h"
     "src/ext/*.cpp"
     "src/ext/*.h"
     "src/ext/*.hpp"

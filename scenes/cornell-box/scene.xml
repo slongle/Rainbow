@@ -5,7 +5,7 @@
 	<integrator type="path" >
 		<integer name="maxDepth" value="65" />
         <integer name="sampleNum" value="100"/>
-        <integer name="delta" value="100"/>
+        <integer name="delta" value="10"/>
 		<boolean name="strictNormals" value="true" />
 	</integrator>
 	<sensor type="perspective" >
@@ -17,11 +17,11 @@
 		<hide type="sobol" >
 			<integer name="sampleCount" value="64" />
 		</hide>
-	  <sampler type="independent">
+	  <sampler type="halton">
 	    <integer name="sampleCount" value="512"/>
 	  </sampler>
 		<film type="ldrfilm" >
-      <string name="filename" value="cornell-box_1.png"/>
+      <string name="filename" value="cornell-box_3.png"/>
 			<integer name="width" value="1024" />
 			<integer name="height" value="1024" />
 			<string name="fileFormat" value="png" />

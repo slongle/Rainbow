@@ -1,5 +1,4 @@
 #include "independent.h"
-#include "core/propertylist.h"
 
 RAINBOW_NAMESPACE_BEGIN
 

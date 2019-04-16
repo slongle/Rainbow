@@ -288,6 +288,8 @@ public:
 	Point2(const T _v = 0) { x = y = _v; Assert(!HasNaNs(), "Point2 has NaN"); }
 	Point2(const T _x, const T _y) :x(_x), y(_y) { Assert(!HasNaNs(), "Point2 has NaN"); }
 	explicit Point2(const Point3<T> &u) :x(u.x), y(u.y) { Assert(!HasNaNs(), "Point2 has NaN"); }
+    template<typename U>
+    explicit Point2(const Point2<U> &u) :x(T(u.x)), y(T(u.y)) { Assert(!HasNaNs(), "Point2 has NaN"); }
 
 	T operator [] (const int& i) const {
 		Assert(0 <= i && i <= 1, "Access Violation!");

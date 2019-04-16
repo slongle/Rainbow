@@ -64,6 +64,7 @@ public:
         const Scene& scene,
         const Point2f& scatteru,
         const Point2f& lightu,
+        Sampler& sampler,
         const bool handleMedia = false);
 
     RGBSpectrum SpecularReflect(MemoryArena& arena, const Ray&ray, const Scene& scene, int depth, SurfaceInteraction intersection);
@@ -71,7 +72,7 @@ public:
 
     void RenderTileEyeLight(const Scene &scene, Sampler& sampler, FilmTile &tile);
     void RenderTileAdaptive(const Scene &scene, Sampler& sampler, FilmTile &tile);
-    void RenderTile(const Scene &scene, Sampler& sampler, FilmTile &tile);
+    void RenderTile(const Scene &scene, Sampler& sampler, FilmTile &tile, const int& preSampleSum = 0);
 	void Render (const Scene &scene);
     void RenderAdaptive(const Scene &scene);
     void RenderEyeLight(const Scene &scene);
