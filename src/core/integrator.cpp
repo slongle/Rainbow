@@ -9,6 +9,12 @@
 
 RAINBOW_NAMESPACE_BEGIN
 
+RGBSpectrum Clamp(RGBSpectrum a, RGBSpectrum b) {
+    for (int i = 0; i < 3; i++)
+        if (a[i] > b[i]) a[i] = b[i];
+    return a;
+}
+
 RGBSpectrum SamplerIntegrator::UniformSampleOneLight(
     const Interaction& inter,
     const Scene& scene,
@@ -152,7 +158,7 @@ RGBSpectrum SamplerIntegrator::SpecularRefract
     return RGBSpectrum();
 }
 
-void SamplerIntegrator::RenderTileAdaptive(const Scene &scene, Sampler& sampler, FilmTile &tile) {
+void SamplerIntegrator::RenderTileAdaptive(const Scene &scene, Sampler& sampler, FilmTile &tile, bool clamp) {
     Ray ray;
     MemoryArena arena;
     Float maxError = 0.05, pValue = 0.05;
@@ -167,6 +173,8 @@ void SamplerIntegrator::RenderTileAdaptive(const Scene &scene, Sampler& sampler,
                 Point2f cameraSample = sampler.GetCameraSample();
                 RGBSpectrum weight = camera->GenerateRay(&ray, cameraSample);
                 RGBSpectrum li = weight * Li(arena, ray, scene, sampler, 0);
+                if (clamp)
+                    li = Clamp(li, RGBSpectrum(1));
                 L += li;
 
                 Float sampleLuminance = li.Luma();
@@ -196,7 +204,7 @@ void SamplerIntegrator::RenderTileAdaptive(const Scene &scene, Sampler& sampler,
     }
 }
 
-void SamplerIntegrator::RenderTile(const Scene &scene, Sampler& sampler, FilmTile &tile, const int& preSampleSum) {
+void SamplerIntegrator::RenderTile(const Scene &scene, Sampler& sampler, FilmTile &tile, bool clamp, const int& preSampleSum) {
     Ray ray;
     MemoryArena arena;
     for (int y = tile.bounds.pMin.y; y < tile.bounds.pMax.y; y++) {
@@ -208,10 +216,11 @@ void SamplerIntegrator::RenderTile(const Scene &scene, Sampler& sampler, FilmTil
                 Point2f cameraSample = sampler.GetCameraSample();
                 RGBSpectrum weight = camera->GenerateRay(&ray, cameraSample);
                 L = weight * Li(arena, ray, scene, sampler, 0);
+                if (clamp)
+                    L = Clamp(L, RGBSpectrum(1));
                 tile.AddSample(Point2i(x, y), Point2f(cameraSample.x - x, cameraSample.y - y), L);
                 sampler.StartNextSample();
             }
-            //return;
         }                
     }
 }
@@ -266,7 +275,7 @@ void SamplerIntegrator::Render(const Scene &scene) {
                 std::unique_ptr<Sampler> clonedSampler(sampler->Clone(seed));
 
                 /* Render all contained pixels */
-                RenderTile(scene, *clonedSampler, tile, preSumSample);
+                RenderTile(scene, *clonedSampler, tile, false, preSumSample);
 
                 film->MergeFilmTile(tile);
 
@@ -278,10 +287,10 @@ void SamplerIntegrator::Render(const Scene &scene) {
         for (cnt = 1; cnt <= sampleNum / delta; cnt++)
         {
             /// Uncomment the following line for single threaded rendering
-            map(range);
+            //map(range);
 
             /// Default: parallel rendering
-            //tbb::parallel_for(range, map);
+            tbb::parallel_for(range, map);
 
             preSumSample += delta;
 

@@ -23,6 +23,7 @@ RGBSpectrum PathIntegrator::Li(
                 L += beta * inter.Le(-ray.d);
             }
         }
+        //L = Clamp(L, RGBSpectrum(1, 1, 1));
 
         if (!foundIntersect || bounce >= maxDepth) break;                
 
@@ -36,6 +37,8 @@ RGBSpectrum PathIntegrator::Li(
         if (inter.bsdf->NumComponents(BxDFType(BSDF_ALL & ~BSDF_SPECULAR)) > 0) {
             L += beta * UniformSampleOneLight(inter, scene, sampler);       
         }
+
+        //L = Clamp(L, RGBSpectrum(1, 1, 1));
 
         Vector3f wo = -ray.d, wi;
         Float BSDFPdf;
