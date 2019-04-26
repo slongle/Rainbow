@@ -5,7 +5,7 @@
 #include "camera.h"
 #include "sampler.h"
 #include "light.h"
-
+#include "statistic.h"
 //#include "C:\Users\del\Desktop\halton\halton_enum.h"
 //#include "C:\Users\del\Desktop\halton\halton_sampler.h"
 
@@ -79,6 +79,7 @@ public:
     virtual RGBSpectrum Li(MemoryArena& arena, const Ray &ray, const Scene& scene, Sampler &sampler, int depth) = 0;
 
     int sampleNum, delta;
+    Statistic statistic;
     //Halton_sampler halton_sampler;
 };
 

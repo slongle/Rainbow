@@ -52,7 +52,7 @@ public:
 
 enum BxDFType {
     BSDF_REFLECTION = 1 << 0,
-    BSDF_TRANSMISSION = 1 << 1,
+    BSDF_REFRACTION = 1 << 1,
 
     BSDF_DIFFUSE = 1 << 2,
     BSDF_GLOSSY = 1 << 3,
@@ -121,38 +121,58 @@ public:
 		R(m_R), fresnel(m_fresnel),
 		BxDF(BxDFType(BSDF_REFLECTION | BSDF_SPECULAR)) {}
 
-	RGBSpectrum f(const Vector3f& wo, const Vector3f& wi);
-	RGBSpectrum SampleF(const Vector3f& wo, Vector3f* wi, const Point2f &sample, Float *pdf);
-    Float Pdf(const Vector3f& wo, const Vector3f& wi);
+    RGBSpectrum f(const Vector3f& wo, const Vector3f& wi) override { return RGBSpectrum(0.); }
+    RGBSpectrum SampleF(const Vector3f& wo, Vector3f* wi, const Point2f &sample, Float *pdf) override;
+    Float Pdf(const Vector3f& wo, const Vector3f& wi) override { return 0; }
 
 	const RGBSpectrum R;
 	const Fresnel *fresnel;
 };
 
-class SpecularTransmission :public BxDF {
+class SpecularRefract :public BxDF {
 public:
-	SpecularTransmission(
+	SpecularRefract(
         const RGBSpectrum&   m_T, 
         const Float&         m_etaA, 
         const Float&         m_etaB) 
     : T(m_T), etaA(m_etaA), etaB(m_etaB), fresnel(etaA, etaB),
-      BxDF(BxDFType(BSDF_TRANSMISSION | BSDF_SPECULAR)) {}
-	RGBSpectrum f(const Vector3f& wo, const Vector3f& wi);
-	RGBSpectrum SampleF(const Vector3f& wo, Vector3f* wi, const Point2f &sample, Float *pdf);
-    Float Pdf(const Vector3f& wo, const Vector3f& wi);
+      BxDF(BxDFType(BSDF_REFRACTION | BSDF_SPECULAR)) {}
+
+    RGBSpectrum f(const Vector3f& wo, const Vector3f& wi) override { return RGBSpectrum(0.); }
+    RGBSpectrum SampleF(const Vector3f& wo, Vector3f* wi, const Point2f &sample, Float *pdf) override;
+    Float Pdf(const Vector3f& wo, const Vector3f& wi) override { return 0; }
 
 	const RGBSpectrum T;
 	const Float etaA, etaB;
 	const FresnelDielectric fresnel;
 };
 
+class SpecularTransmission :public BxDF {
+public:
+    SpecularTransmission(
+        const RGBSpectrum&   m_R,
+        const RGBSpectrum&   m_T,
+        const Float&         m_etaA,
+        const Float&         m_etaB)
+    : R(m_R), T(m_T), etaA(m_etaA), etaB(m_etaB), fresnel(etaA, etaB),
+      BxDF(BxDFType(BSDF_REFLECTION | BSDF_REFRACTION | BSDF_SPECULAR)) {}
+
+    RGBSpectrum f(const Vector3f& wo, const Vector3f& wi) override { return RGBSpectrum(0.); }
+    RGBSpectrum SampleF(const Vector3f& wo, Vector3f* wi, const Point2f& sample, Float* pdf) override;
+    Float Pdf(const Vector3f& wo, const Vector3f& wi) override { return 0; }
+
+    const RGBSpectrum R, T;
+    const Float etaA, etaB;
+    const FresnelDielectric fresnel;
+};
+
 class LambertianReflection :public BxDF {
 public:
 	LambertianReflection(const RGBSpectrum& m_R) :
 		BxDF(BxDFType(BSDF_REFLECTION | BSDF_DIFFUSE)), R(m_R) {}
-	RGBSpectrum f(const Vector3f& wo, const Vector3f& wi) override;
+    RGBSpectrum f(const Vector3f& wo, const Vector3f& wi) override { return R * INV_PI; }
 	RGBSpectrum SampleF(const Vector3f& wo, Vector3f* wi, const Point2f &sample, Float *pdf) override;
-    Float Pdf(const Vector3f& wo, const Vector3f& wi) override;
+    Float Pdf(const Vector3f& wo, const Vector3f& wi) override { return INV_TWOPI; }
 
 	const RGBSpectrum R;
 };

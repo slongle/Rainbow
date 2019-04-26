@@ -99,7 +99,7 @@ RGBSpectrum BSDF::f(
     for (int i = 0; i < nBxDFs; i++) {
         if (bxdfs[i]->MatchFlags(type) && 
             ((reflect && (bxdfs[i]->type & BxDFType::BSDF_REFLECTION)) ||
-           ((!reflect && (bxdfs[i]->type & BxDFType::BSDF_TRANSMISSION))))) {
+           ((!reflect && (bxdfs[i]->type & BxDFType::BSDF_REFRACTION))))) {
             f += bxdfs[i]->f(woLocal, wiLocal);
         }
     }
@@ -188,7 +188,7 @@ RGBSpectrum BSDF::SampleF(
         for (int i = 0; i < nBxDFs; i++) {
             if (bxdfs[i]->MatchFlags(type) &&
                 ((reflect && (bxdf->type & BxDFType::BSDF_REFLECTION)) ||
-                ((!reflect && (bxdf->type & BxDFType::BSDF_TRANSMISSION))))) {
+                ((!reflect && (bxdf->type & BxDFType::BSDF_REFRACTION))))) {
                 f += bxdf->f(woLocal, wiLocal);
             }
         }
@@ -205,10 +205,6 @@ RGBSpectrum FresnelConductor::Evaluate(Float cosThetaI) const {
     return FrConductor(cosThetaI, etaI, etaT, k);
 }
 
-RGBSpectrum SpecularReflection::f(const Vector3f & wo, const Vector3f & wi) {
-	return RGBSpectrum(0.0);
-}
-
 RGBSpectrum SpecularReflection::SampleF(
     const Vector3f&   wo, 
     Vector3f*         wi, 
@@ -220,15 +216,7 @@ RGBSpectrum SpecularReflection::SampleF(
 	return fresnel->Evaluate(Frame::CosTheta(*wi)) * R / Frame::AbsCosTheta(*wi);
 }
 
-Float SpecularReflection::Pdf(const Vector3f & wo, const Vector3f & wi) {
-    return 0;
-}
-
-RGBSpectrum SpecularTransmission::f(const Vector3f & wo, const Vector3f & wi) {
-	return RGBSpectrum(0.0);
-}
-
-RGBSpectrum SpecularTransmission::SampleF(
+RGBSpectrum SpecularRefract::SampleF(
     const Vector3f&   wo, 
     Vector3f*         wi, 
     const Point2f&    sample, 
@@ -246,13 +234,44 @@ RGBSpectrum SpecularTransmission::SampleF(
 	return (etaI*etaI) / (etaT*etaT) * Ft / Frame::AbsCosTheta(*wi);
 }
 
-Float SpecularTransmission::Pdf(const Vector3f & wo, const Vector3f & wi) {
-    return 0;
-}
+RGBSpectrum SpecularTransmission::SampleF(
+    const Vector3f& wo, 
+    Vector3f* wi, 
+    const Point2f& sample, 
+    Float* pdf) 
+{
+    Float F = FrDielectric(Frame::CosTheta(wo), etaA, etaB);
+    if (sample[0] < F) {
+        // Compute specular reflection for _FresnelSpecular_
 
+        // Compute perfect specular reflection direction
+        *wi = Vector3f(-wo.x, -wo.y, wo.z);
+        //if (sampledType)
+        //    *sampledType = BxDFType(BSDF_SPECULAR | BSDF_REFLECTION);
+        *pdf = F;
+        return F * R / Frame::AbsCosTheta(*wi);
+    }
+    else {
+        // Compute specular transmission for _FresnelSpecular_
 
-RGBSpectrum LambertianReflection::f(const Vector3f & wo, const Vector3f & wi) {
-	return R * INV_PI;
+        // Figure out which $\eta$ is incident and which is transmitted
+        bool entering = Frame::CosTheta(wo) > 0;
+        Float etaI = entering ? etaA : etaB;
+        Float etaT = entering ? etaB : etaA;
+
+        // Compute ray direction for specular transmission
+        if (!Refract(wo, FaceForward(Normal3f(0, 0, 1), wo), etaI / etaT, wi))
+            return RGBSpectrum(0.);
+        RGBSpectrum ft = T * (1 - F);
+
+        // Account for non-symmetry with transmission to different medium
+        //if (mode == TransportMode::Radiance)
+            ft *= (etaI * etaI) / (etaT * etaT);
+        //if (sampledType)
+        //    *sampledType = BxDFType(BSDF_SPECULAR | BSDF_REFRACTION);
+        *pdf = 1 - F;
+        return ft / Frame::AbsCosTheta(*wi);
+    }
 }
 
 RGBSpectrum LambertianReflection::SampleF(
@@ -265,10 +284,6 @@ RGBSpectrum LambertianReflection::SampleF(
 	if (wo.z < 0) (*wi).z *= -1;
 	*pdf = Frame::SameHemisphere(wo, *wi) ? Frame::AbsCosTheta(*wi) * INV_PI : 0;
 	return R * INV_PI;
-}
-
-Float LambertianReflection::Pdf(const Vector3f & wo, const Vector3f & wi) {
-    return INV_TWOPI;
 }
 
 RGBSpectrum MicrofacetReflection::f(

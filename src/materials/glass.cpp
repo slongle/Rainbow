@@ -7,9 +7,10 @@ void GlassMaterial::ComputeScatteringFunctions(
     SurfaceInteraction*   intersection) 
 {
     intersection->bsdf = ARENA_ALLOCA(arena, BSDF)(intersection->n, etaI / etaT);
-    Fresnel* fresnel= ARENA_ALLOCA(arena, FresnelDielectric)(etaI, etaT);
+    intersection->bsdf->Add(ARENA_ALLOCA(arena, SpecularTransmission)(R, T, etaI, etaT));
+    /*Fresnel* fresnel= ARENA_ALLOCA(arena, FresnelDielectric)(etaI, etaT);
     intersection->bsdf->Add(ARENA_ALLOCA(arena, SpecularReflection)(R, fresnel));
-    intersection->bsdf->Add(ARENA_ALLOCA(arena, SpecularTransmission)(T, etaI, etaT));
+    intersection->bsdf->Add(ARENA_ALLOCA(arena, SpecularRefract)(T, etaI, etaT));*/
 }
 
 GlassMaterial* CreateGlassMaterial(PropertyList& list) {

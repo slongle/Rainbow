@@ -13,8 +13,9 @@ RGBSpectrum PathIntegrator::Li(
     Float etaScale = 1;
     bool SpecularBounce = false;
     Ray ray(r);
+    int bounce;
 
-    for (int bounce = 0;; bounce++) {        
+    for (bounce = 0;; bounce++) {        
         SurfaceInteraction inter;
         bool foundIntersect = scene.IntersectP(ray, &inter);
 
@@ -48,7 +49,7 @@ RGBSpectrum PathIntegrator::Li(
         beta *= f * AbsDot(wi, inter.n) / BSDFPdf;
 
         SpecularBounce = (BSDFType & BSDF_SPECULAR) != 0;
-        if ((BSDFType & BSDF_SPECULAR) && (BSDFType & BSDF_TRANSMISSION)) {
+        if ((BSDFType & BSDF_SPECULAR) && (BSDFType & BSDF_REFRACTION)) {
             Float eta = inter.bsdf->eta;
             etaScale *= (Dot(wo, inter.n) > 0) ? (eta*eta) : 1 / (eta*eta);
         }
@@ -56,13 +57,25 @@ RGBSpectrum PathIntegrator::Li(
         ray = inter.SpawnToRay(wi);
 
         RGBSpectrum rrBeta = beta * etaScale;
-        if (bounce > 3) {
-            Float q = std::min(1.0f, rrBeta.MaxComponent());
+        /*
+        if (bounce > 5) {
+             *Float q = std::min(1.0f, rrBeta.MaxComponent());
             if (sampler.Next1D() >= q)
                 break;
-            beta /= q;  
+            beta /= q;
+        }
+        */
+
+        if (rrBeta.MaxComponent() < 1 && bounce > 3) {
+            Float q = std::max((Float).05, 1 - rrBeta.MaxComponent());
+            if (sampler.Next1D() < q) break;
+            beta /= 1 - q;            
         }
     }
+
+    statistic.pathNum++;
+    statistic.pathBounce += bounce;
+
     return L;
 }
 

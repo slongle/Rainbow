@@ -298,6 +298,7 @@ void SamplerIntegrator::Render(const Scene &scene) {
             tmpName.insert(film->filename.find_last_of('.'), "_" + std::to_string(cnt * delta) + "spp");
             std::cout << tmpName << std::endl;
             film->SaveImage(tmpName);
+            statistic.ShowStatistic();
         }
 
     });
