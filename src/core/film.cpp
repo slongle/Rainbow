@@ -1,5 +1,7 @@
 #include "film.h"
 
+#include "utility/string.h"
+
 RAINBOW_NAMESPACE_BEGIN
 
 void FilmTile::AddSample(
@@ -73,17 +75,35 @@ RGBSpectrum Film::RetPixel(const Point2i & p) const {
     return rgb;
 }
 
-void Film::SaveImage() const {
-    unsigned char *rgba = new unsigned char[4 * resolution.x * resolution.y];
-    ExportToUnsignedCharPointer(rgba);
-    ExportToPNG(filename, rgba, resolution.x, resolution.y);
+void Film::SaveImage() const
+{
+    std::string extension = utility::GetExtension(filename);
+    if (extension == "PNG" || extension == "png") {
+        unsigned char *rgba = new unsigned char[4 * resolution.x * resolution.y];
+        ExportToUnsignedCharPointer(rgba);
+        ExportToPNG(filename, rgba, resolution.x, resolution.y);        
+    }
+    else if (extension == "HDR" || extension == "hdr") {
+        float* rgb = new float[3 * resolution.x * resolution.y];
+        ExportToLinearFloat(rgb);
+        ExportToHDR(filename, rgb, resolution.x, resolution.y);
+    }
 }
 
-
-void Film::SaveImage(const std::string &name) const {
-	unsigned char *rgba = new unsigned char[4 * resolution.x * resolution.y];
-    ExportToUnsignedCharPointer(rgba);
-    ExportToPNG(name, rgba, resolution.x, resolution.y);
+void Film::SaveImage(
+    const std::string& name) const 
+{
+    std::string extension = utility::GetExtension(name);
+    if (extension == "PNG" || extension == "png") {
+        unsigned char *rgba = new unsigned char[4 * resolution.x * resolution.y];
+        ExportToUnsignedCharPointer(rgba);
+        ExportToPNG(name, rgba, resolution.x, resolution.y);
+    }
+    else if (extension == "HDR" || extension == "hdr") {
+        float* rgb = new float[3 * resolution.x * resolution.y];
+        ExportToLinearFloat(rgb);
+        ExportToHDR(name, rgb, resolution.x, resolution.y);
+    }
 }
 
 void Film::SaveHeatMapImage() const {
@@ -92,12 +112,25 @@ void Film::SaveHeatMapImage() const {
     ExportToPNG(filename, rgba, resolution.x, resolution.y);
 }
 
-
-
 void Film::SaveHeatMapImage(const std::string & name) const {
     unsigned char *rgba = new unsigned char[4 * resolution.x * resolution.y];
     ExportToHeatMapUnsignedCharPointer(rgba);
     ExportToPNG(name, rgba, resolution.x, resolution.y);
+}
+
+void Film::ExportToLinearFloat(float* data) const 
+{
+    int idx = 0;
+    for (int y = 0; y < resolution.y; y++) {
+        for (int x = 0; x < resolution.x; x++) {
+            Pixel &pixel = GetPixel(Point2i(x, y));
+            const Float invWeight = Float(1) / pixel.filterWeightSum;
+            data[idx + 0] = (pixel.rgb[0] * invWeight);
+            data[idx + 1] = (pixel.rgb[1] * invWeight);
+            data[idx + 2] = (pixel.rgb[2] * invWeight);
+            idx += 3;
+        }
+    }
 }
 
 void Film::ExportToHeatMapUnsignedCharPointer(unsigned char * data) const {

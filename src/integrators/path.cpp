@@ -73,8 +73,12 @@ RGBSpectrum PathIntegrator::Li(
         }
     }
 
+    if (L.IsBlack())
+        statistic.zeroPath++;
     statistic.pathNum++;
-    statistic.pathBounce += bounce;
+    statistic.sumBounce += bounce;
+    statistic.maxBounce = std::max(statistic.maxBounce, static_cast<unsigned long long>(bounce));
+    statistic.minBounce = std::min(statistic.minBounce, static_cast<unsigned long long>(bounce));
 
     return L;
 }
