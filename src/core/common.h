@@ -12,6 +12,7 @@
 	#undef Assert
 #endif
 
+#include "utility/math.h"
 #include "rainbow.h"
 #include "ext/filesystem/filesystem/resolver.h"
 

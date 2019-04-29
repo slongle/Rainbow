@@ -300,7 +300,10 @@ public:
 	bool HasNaNs() { return isNaN(x) || isNaN(y); }
 
 	Point2<T> operator + (const Point2<T>& u) const { return Point2<T>(x + u.x, y + u.y); }
+    Point2<T> operator + (const Vector2<T>& u) const { return Point2<T>(x + u.x, y + u.y); }
+    Point2<T> operator - (const Vector2<T>& u) const { return Point2<T>(x - u.x, y - u.y); }
     Vector2<T> operator - (const Point2<T>& u) const { return Vector2<T>(x - u.x, y - u.y); }
+    
     Point2<T> &operator -= (const Point2<T> &p) { x -= p.x; y -= p.y; return *this; }
 
 	friend Point2<T> operator * (const T& u, const Point2<T>& v) { return Point2<T>(u*v.x, u*v.y); }
@@ -318,8 +321,54 @@ public:
 };
 
 template<typename T>
-Point2<T> operator - (const Point2<T>& u,const Vector2<T>& v){
+inline Point2<T> operator - (const Point2<T>& u,const Vector2<T>& v){
 	return Point2<T>(u.x - v.x, u.y - v.y);
+}
+
+inline Point2f operator - (const Point2i& u,const Point2f& v) {
+    return Point2f(u.x - v.x, u.y - v.y);
+}
+
+inline Point2f operator + (const Point2i& u, const Point2f& v) {
+    return Point2f(u.x + v.x, u.y + v.y);
+}
+
+template<typename T>
+inline Point2<T> Abs(const Point2<T> &p) {
+    return Point2<T>(std::abs(p.x), std::abs(p.y));
+}
+
+template<typename T>
+inline Point2<T> Min(const Point2<T> &p1, const Point2<T> &p2) {
+    return Point2<T>(std::min(p1.x, p2.x),
+        std::min(p1.y, p2.y));
+}
+
+template<typename T, typename U>
+inline Point2f Min(const Point2<T> &p1, const Point2<U> &p2) {
+    return Point2f(utility::min(p1.x, p2.x),
+                   utility::min(p1.y, p2.y));
+}
+
+
+template<typename T>
+inline Point2<T> Max(const Point2<T> &p1, const Point2<T> &p2) {
+    return Point2<T>(std::max(p1.x, p2.x),
+                     std::max(p1.y, p2.y));
+}
+
+template<typename T, typename U>
+inline Point2f Max(const Point2<T> &p1, const Point2<U> &p2) {
+    return Point2f(utility::max(p1.x, p2.x),
+                   utility::max(p1.y, p2.y));
+}
+
+inline Point2f Floor(const Point2f& p1) {
+    return Point2f(std::floor(p1.x), std::floor(p1.y));
+}
+
+inline Point2f Ceil(const Point2f& p1) {
+    return Point2f(std::ceil(p1.x), std::ceil(p1.y));
 }
 
 template<typename T>
@@ -383,10 +432,10 @@ public:
 		return indent(tfm::format("[ %.4f, %.4f, %.4f ]", x, y, z), spaceNum);
 	}
 
-	template<typename U, typename T>
-	friend Point3<T> operator * (const U& f, const Point3<T>& p) {
-		return Point3<T>(f*p.x, f*p.y, f*p.z);
-	}
+	//template<typename U, typename T>
+	//friend Point3<T> operator * (const U& f, const Point3<T>& p) {
+	//	return Point3<T>(f*p.x, f*p.y, f*p.z);
+	//}
 
 	friend std::ostream &operator << (std::ostream &os, const Point3<T> u) {
 		os << u.toString();
@@ -395,6 +444,11 @@ public:
 
 	T x, y, z;
 };
+
+template<typename U, typename T>
+Point3<T> operator * (const U& f, const Point3<T>& p) {
+    return Point3<T>(f*p.x, f*p.y, f*p.z);
+}
 
 template<typename T>
 inline Point3<T> Abs(const Point3<T> &p) {

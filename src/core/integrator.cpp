@@ -163,8 +163,8 @@ void SamplerIntegrator::RenderTileAdaptive(const Scene &scene, Sampler& sampler,
     MemoryArena arena;
     Float maxError = 0.05, pValue = 0.05;
     Float quantile = 1.95996;
-    for (int y = tile.bounds.pMin.y; y < tile.bounds.pMax.y; y++) {
-        for (int x = tile.bounds.pMin.x; x < tile.bounds.pMax.x; x++) {
+    for (int y = tile.sampleBounds.pMin.y; y < tile.sampleBounds.pMax.y; y++) {
+        for (int x = tile.sampleBounds.pMin.x; x < tile.sampleBounds.pMax.x; x++) {
             sampler.SetPixel(Point2i(x, y));
             RGBSpectrum L(0.0);
             Float mean = 0, meanSqr = 0;
@@ -197,18 +197,25 @@ void SamplerIntegrator::RenderTileAdaptive(const Scene &scene, Sampler& sampler,
                     if (ciWidth <= maxError * base)
                         break;
                 }
+                tile.AddSample(Point2i(x, y), Point2f(x, y), L);
                 sampler.StartNextSample();
             }
-            tile.AddSample(Point2f(x, y), L, sampleCount);
+            //tile.AddSample(Point2f(x, y), L, sampleCount);
         }
     }
 }
 
-void SamplerIntegrator::RenderTile(const Scene &scene, Sampler& sampler, FilmTile &tile, bool clamp, const int& preSampleSum) {
+void SamplerIntegrator::RenderTile(
+    const Scene&   scene, 
+    Sampler&       sampler, 
+    FilmTile&      tile, 
+    bool           clamp, 
+    const int&     preSampleSum) 
+{
     Ray ray;
     MemoryArena arena;
-    for (int y = tile.bounds.pMin.y; y < tile.bounds.pMax.y; y++) {
-        for (int x = tile.bounds.pMin.x; x < tile.bounds.pMax.x; x++) {            
+    for (int y = tile.sampleBounds.pMin.y; y < tile.sampleBounds.pMax.y; y++) {
+        for (int x = tile.sampleBounds.pMin.x; x < tile.sampleBounds.pMax.x; x++) {            
             RGBSpectrum L(0.);
             sampler.SetPixel(Point2i(x, y));
             sampler.SetSampleNumber(preSampleSum);
@@ -218,7 +225,7 @@ void SamplerIntegrator::RenderTile(const Scene &scene, Sampler& sampler, FilmTil
                 L = weight * Li(arena, ray, scene, sampler, 0);
                 if (clamp)
                     L = Clamp(L, RGBSpectrum(1));
-                tile.AddSample(Point2i(x, y), Point2f(cameraSample.x - x, cameraSample.y - y), L);
+                tile.AddSample(Point2i(x, y), cameraSample, L);
                 sampler.StartNextSample();
             }
         }                
@@ -228,8 +235,8 @@ void SamplerIntegrator::RenderTile(const Scene &scene, Sampler& sampler, FilmTil
 void SamplerIntegrator::RenderTileEyeLight(const Scene &scene, Sampler& sampler, FilmTile &tile) {
     Ray ray;
     MemoryArena arena;
-    for (int y = tile.bounds.pMin.y; y < tile.bounds.pMax.y; y++) {
-        for (int x = tile.bounds.pMin.x; x < tile.bounds.pMax.x; x++) {
+    for (int y = tile.sampleBounds.pMin.y; y < tile.sampleBounds.pMax.y; y++) {
+        for (int x = tile.sampleBounds.pMin.x; x < tile.sampleBounds.pMax.x; x++) {
             sampler.SetPixel(Point2i(x, y));
             Point2f cameraSample = sampler.GetCameraSample();
             RGBSpectrum weight = camera->GenerateRay(&ray, cameraSample);
@@ -270,7 +277,7 @@ void SamplerIntegrator::Render(const Scene &scene) {
 
                 /* Inform the sampler about the block to be rendered */
                 Point2i seed = Point2i((cnt - 1)*area, (cnt - 1)*area) + 
-                               tile.bounds.pMin;
+                               tile.pixelBounds.pMin;
                 
                 std::unique_ptr<Sampler> clonedSampler(sampler->Clone(seed));
 
@@ -332,7 +339,7 @@ void SamplerIntegrator::RenderAdaptive(const Scene &scene) {
 
                 /* Inform the sampler about the block to be rendered */
                 Point2i seed = Point2i((cnt - 1)*area, (cnt - 1)*area) +
-                    tile.bounds.pMin;
+                    tile.pixelBounds.pMin;
 
                 std::unique_ptr<Sampler> clonedSampler(sampler->Clone(seed));
 
@@ -386,7 +393,7 @@ void SamplerIntegrator::RenderEyeLight(const Scene &scene) {
 
                 /* Inform the sampler about the block to be rendered */
                 Point2i seed = Point2i((cnt - 1)*area, (cnt - 1)*area) +
-                    tile.bounds.pMin;
+                    tile.pixelBounds.pMin;
 
                 std::unique_ptr<Sampler> clonedSampler(sampler->Clone(seed));
 

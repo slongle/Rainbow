@@ -19,10 +19,16 @@ void FilmTile::AddSample(
     const Point2f&       sample,
     const RGBSpectrum&   L)
 {
-    FilmTilePixel &pixel = GetPixel(position);
-    Float scale = filter->Evaluate(sample - Vector2f(0.5));
-    pixel.contribSum += L * scale;
-    pixel.filterWeightSum += scale;
+    Point2i p0(Max(pixelBounds.pMin, Floor(sample + Vector2f(0.5) - filter->m_radius)));
+    Point2i p1(Min(pixelBounds.pMax, Ceil (sample - Vector2f(0.5) + filter->m_radius)));
+    for (int x = p0.x; x < p1.x; x++) {
+        for (int y = p0.y; y < p1.y; y++) {
+            FilmTilePixel &pixel = GetPixel(Point2i(x, y));
+            Float scale = filter->Evaluate(sample - Vector2f(x + 0.5, y + 0.5));
+            pixel.contribSum += L * scale;
+            pixel.filterWeightSum += scale;            
+        }        
+    }
 }
 
 Film::Film(
@@ -37,8 +43,8 @@ Film::Film(
 
 void Film::MergeFilmTile(const FilmTile & tile) 
 {
-    for (int y = tile.bounds.pMin.y; y < tile.bounds.pMax.y; y++)
-        for (int x = tile.bounds.pMin.x; x < tile.bounds.pMax.x; x++) 
+    for (int y = tile.pixelBounds.pMin.y; y < tile.pixelBounds.pMax.y; y++)
+        for (int x = tile.pixelBounds.pMin.x; x < tile.pixelBounds.pMax.x; x++) 
         {
             Pixel& pixel = GetPixel(Point2i(x, y));
             FilmTilePixel tilePixel = tile.GetPixel(Point2i(x, y));

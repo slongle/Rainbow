@@ -1,7 +1,7 @@
 <scene>
     <mode type="final"/>
 	  <integrator type="path">
-		    <integer name="maxDepth" value="500000"/>
+		    <integer name="maxDepth" value="50"/>
         <integer name="sampleNum" value="5000"/>
         <integer name="delta" value="100"/>
 	  </integrator>
@@ -11,14 +11,14 @@
 		        <scale value="-1,1,1"/>
                 <lookat target="0, 0.893051, 4.41198" origin="0, 0.919769, 5.41159" up="0, 1, 0"/>
 		    </transform>
-	      <sampler type="halton">
+	      <sampler type="independent">
 	          <integer name="sampleCount" value="512"/>
 	      </sampler>
 		    <film type="hdrfilm">
-            <string name="filename" value="sphere-cornell-box.hdr"/>
+            <string name="filename" value="sphere-cornell-box_box.hdr"/>
 			      <integer name="height" value="600"/>
 			      <integer name="width" value="800"/>
-		        <rfilter type="gaussian"/>
+		        <rfilter type="box"/>
 		    </film>
 	  </sensor>
     <shape type="sphere">

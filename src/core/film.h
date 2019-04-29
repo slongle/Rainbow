@@ -22,11 +22,12 @@ struct FilmTilePixel {
 class FilmTile {
 public:
     FilmTile(
-        const Bounds2i&                 bounds, 
+        const Bounds2i&                 pixelBounds,
+        const Bounds2i&                 sampleBounds,
         const std::shared_ptr<Filter>   filter) 
-    : bounds(bounds), filter(filter),
-      size(bounds.pMax.x - bounds.pMin.x, bounds.pMax.y - bounds.pMin.y) 
-    {
+    : pixelBounds(pixelBounds), sampleBounds(sampleBounds), filter(filter),
+      size(pixelBounds.pMax.x - pixelBounds.pMin.x, pixelBounds.pMax.y - pixelBounds.pMin.y)
+    {       
         pixels = std::unique_ptr<FilmTilePixel[]>(new FilmTilePixel[size.x * size.y]);
     }
 
@@ -48,18 +49,20 @@ public:
         Point2i numTiles(std::ceil(resolution.x / static_cast<Float>(tileSize)),
             std::ceil(resolution.y / static_cast<Float>(tileSize)));
         std::vector<FilmTile> tiles;
-        Point2i position(0, 0);
+        Point2i p0(0, 0);
         for (int i = 0; i < numTiles.x * numTiles.y; i++) {
-            Point2i diag(std::min(position.x + tileSize, resolution.x),
-                std::min(position.y + tileSize, resolution.y));
-            Bounds2i tileBounds(position, diag);
-            tiles.emplace_back(tileBounds, filter);
-            if (diag.x == resolution.x) {
-                position.x = 0;
-                position.y = diag.y;
+            Point2i p1 = Min(p0 + Point2i(tileSize), resolution);
+            Bounds2i tilePixelBounds(p0, p1);
+            Bounds2i tileSampleBounds(
+                Point2i(Floor(p0 + Point2f(0.5) - filter->m_radius)),
+                Point2i(Ceil (p1 - Point2f(0.5) + filter->m_radius)));
+            tiles.emplace_back(tilePixelBounds, tileSampleBounds, filter);
+            if (p1.x == resolution.x) {
+                p0.x = 0;
+                p0.y = p1.y;
             }
             else {
-                position.x = diag.x;
+                p0.x = p1.x;
             }
         }
         return tiles;
@@ -67,12 +70,13 @@ public:
 
     FilmTilePixel &GetPixel(const Point2i &p) const 
     {
-        Assert(bounds.pMin.x <= p.x && p.x < bounds.pMax.x
-            && bounds.pMin.y <= p.y && p.y < bounds.pMax.y, "Access Violation");
-        return pixels[(p.y - bounds.pMin.y)*size.x + p.x - bounds.pMin.x];
+        Assert(pixelBounds.pMin.x <= p.x && p.x < pixelBounds.pMax.x
+            && pixelBounds.pMin.y <= p.y && p.y < pixelBounds.pMax.y, "Access Violation");
+        return pixels[(p.y - pixelBounds.pMin.y)*size.x + p.x - pixelBounds.pMin.x];
     }
 
-    const Bounds2i bounds;
+    const Bounds2i pixelBounds;    //[)
+    const Bounds2i sampleBounds;   //[)
     const Point2i  size;
 private:    
 

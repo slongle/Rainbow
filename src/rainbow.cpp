@@ -17,15 +17,17 @@
 #include "core/embreescene.h"
 #include "utility/string.h"
 
+#include <VersionHelpers.h>
+
+
 using namespace rainbow;
 
 int main(int argc, char *argv[]) {
-
     //EmbreeSceneMain();
     //return 0;
 
-    //std::string solutionDir("F:/Document/Graphics/code/Rainbow/scenes/");
-    std::string solutionDir("C:/Users/Administrator/Desktop/a/Rainbow/scenes/");
+    std::string solutionDir("F:/Document/Graphics/code/Rainbow/scenes/");
+    //std::string solutionDir("C:/Users/Administrator/Desktop/a/Rainbow/scenes/");
     std::vector<std::string> scenes(100);
     scenes[0] = "cbox/cbox.xml";
     scenes[1] = "cornell-box/scene2.xml";
