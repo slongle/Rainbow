@@ -9,6 +9,9 @@
 #include "material.h"
 #include "medium.h"
 
+#include "scene/rainbowscene.h"
+#include "scene/embreescene.h"
+
 #include "cameras/perspective.h"
 
 #include "shapes/sphere.h"
@@ -80,6 +83,9 @@ struct RenderOptions {
 	std::string LightType;
 	PropertyList LightProperty;
 	std::vector<std::shared_ptr<Primitive>> primitives;
+    std::vector<std::vector<std::shared_ptr<Primitive>>> embreePrimitives;
+    std::vector<std::shared_ptr<TriangleMesh>> embreeMeshes;
+
 	std::vector<std::shared_ptr<Light>> lights;
 	std::shared_ptr<Material> CurrentMaterial;
     std::map<std::string, std::shared_ptr<Material>> MaterialMap;
@@ -90,6 +96,25 @@ struct RenderOptions {
 
 static std::shared_ptr<RenderOptions> renderOptions;
 static std::shared_ptr<TransformPool> transformPool;
+
+std::shared_ptr<TriangleMesh> MakeMesh(
+    const std::string&   type,
+    const Transform*     o2w,
+    const Transform*     w2o,
+    PropertyList&        list)
+{
+    std::shared_ptr<TriangleMesh> mesh = nullptr;
+    if (type == "obj") {
+        mesh = CreateWavefrontOBJMesh(o2w, w2o, list);
+    }
+    else if (type == "rectangle") {
+        mesh = CreateRectangleMesh(o2w, w2o, list);
+    }
+    else if (type == "cube") {
+        mesh = CreateCubeMesh(o2w, w2o, list);
+    }
+    return mesh;
+}
 
 std::vector<std::shared_ptr<Shape>> MakeShapes(
     const std::string&   type,
@@ -169,6 +194,7 @@ void RainbowShowSettings(
 {
     cout << integrator->toString() << endl;
     cout << integrator->camera->toString() << endl;
+    cout << scene->toString() << endl;
 }
 
 void RainbowSceneEnd() 
@@ -251,7 +277,7 @@ void RainbowFilm(
 	renderOptions->FilmProperty = list;
 }
 
-void RainbowShape(
+void RainbowOldShape(
     const std::string&   type, 
     PropertyList&        list) 
 {
@@ -285,12 +311,60 @@ void RainbowShape(
 	renderOptions->CurrentTransform = Transform();
 }
 
+void RainbowShape(
+    const std::string&   type,
+    PropertyList&        list)
+{
+    Assert(type == "obj" || type == "rectangle" || type == "cube", "Only support triangle mesh");
+
+    Transform* ObjectToWorld = transformPool->insert(renderOptions->CurrentTransform);
+    Transform* WorldToObject = transformPool->insert(Inverse(renderOptions->CurrentTransform));
+
+    std::vector<std::shared_ptr<Primitive>> prims;
+    std::vector<std::shared_ptr<Shape>> shapes = MakeShapes(type, ObjectToWorld, WorldToObject, list);
+    std::shared_ptr<TriangleMesh> mesh = MakeMesh(type, ObjectToWorld, WorldToObject, list);
+
+    
+
+    std::vector<std::shared_ptr<Light>> lights;
+    std::shared_ptr<Material> mtl = renderOptions->CurrentMaterial;
+    renderOptions->CurrentMaterial = nullptr;
+    MediumInterface mi = MediumInterface(renderOptions->CurrentMediumInter,
+        renderOptions->CurrentMediumExter);
+    renderOptions->CurrentMediumInter = nullptr;
+    renderOptions->CurrentMediumExter = nullptr;
+
+    if (shapes.empty()) return;
+    for (auto s : shapes) {
+        std::shared_ptr<AreaLight> area;
+        if (!renderOptions->LightType.empty()) {
+            area = MakeAreaLight(renderOptions->LightProperty, s, mi);
+            lights.push_back(area);
+        }
+        prims.push_back(std::make_shared<Primitive>(s, mtl, area, mi));
+    }
+
+    renderOptions->primitives.insert(renderOptions->primitives.end(), prims.begin(), prims.end());
+    renderOptions->embreeMeshes.push_back(mesh);
+    renderOptions->embreePrimitives.push_back(prims);
+
+    if (!lights.empty()) {
+        renderOptions->lights.insert(renderOptions->lights.end(), lights.begin(), lights.end());
+        renderOptions->LightType = "";
+    }
+    renderOptions->CurrentTransform = Transform();
+}
+
 void RainbowMaterial(
     const std::string&   type, 
     PropertyList&        list) 
 {
 	std::shared_ptr<Material> material = MakeMaterial(type, list);
 	renderOptions->CurrentMaterial = material;
+    if (list.findString("id")) {
+        renderOptions->MaterialMap[list.getString("id")] = renderOptions->CurrentMaterial;
+        renderOptions->CurrentMaterial = nullptr;
+    }
 }
 
 void RainbowMedium(
@@ -324,13 +398,13 @@ void RainbowLight(
     }
 }
 
-void RainbowBSDFMap(
+/*void RainbowBSDFMap(
     const std::string&   type, 
     PropertyList&        list) 
 {
     renderOptions->MaterialMap[list.getString("id")] = renderOptions->CurrentMaterial;
     renderOptions->CurrentMaterial = NULL;
-}
+}*/
 
 void RainbowRef(
     const std::string&   type, 
@@ -360,9 +434,19 @@ Aggregate* RenderOptions::MakeAggregate()
 
 Scene* RenderOptions::MakeScene() 
 {
-	std::shared_ptr<Aggregate> aggregate(MakeAggregate());
-	Scene* scene = new Scene(aggregate, lights);
+    Scene* scene = nullptr;
+    bool embree = true;
 
+    if (embree) {        
+        scene = new EmbreeScene(embreeMeshes, embreePrimitives, lights);
+    }
+    else {        
+	    std::shared_ptr<Aggregate> aggregate(MakeAggregate());    
+        scene = new RainbowScene(aggregate, lights);
+    }
+
+    embreeMeshes.clear();
+    embreePrimitives.clear();
 	primitives.clear();
 	lights.clear();
 

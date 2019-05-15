@@ -14,7 +14,6 @@
 #include "filters/box.h"
 #include "samplers/independent.h"
 
-#include "core/embreescene.h"
 #include "utility/string.h"
 
 #include <VersionHelpers.h>
@@ -30,15 +29,16 @@ int main(int argc, char *argv[]) {
     //std::string solutionDir("C:/Users/Administrator/Desktop/a/Rainbow/scenes/");
     std::vector<std::string> scenes(100);
     scenes[0] = "cbox/cbox.xml";
-    scenes[1] = "cornell-box/scene2.xml";
+    scenes[1] = "cornell-box/scene3.xml";
     scenes[2] = "veach-mis/scene.xml";
     scenes[3] = "veach-bidir/scene.xml";
     scenes[4] = "volumetric-caustic/scene.xml";
     scenes[5] = "water-caustic/scene.xml";
     scenes[6] = "light-test/scene.xml";
     scenes[7] = "rainbow/scene.xml";
+    scenes[8] = "dragon/scene.xml";
 
-    const std::string filename(solutionDir + scenes[0]);
+    const std::string filename(solutionDir + scenes[8]);
 
 	filesystem::path path(filename);
 	getFileResolver()->prepend(path.parent_path());

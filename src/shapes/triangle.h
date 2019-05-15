@@ -88,6 +88,18 @@ std::vector<std::shared_ptr<Triangle>> CreateCube(
     const Transform* w2o, 
     PropertyList&    list);
 
+std::shared_ptr<TriangleMesh> CreateWavefrontOBJMesh(
+    const Transform* o2w,
+    const Transform* w2o,
+    PropertyList&    list);
+std::shared_ptr<TriangleMesh> CreateRectangleMesh(
+    const Transform* o2w,
+    const Transform* w2o,
+    PropertyList&    list);
+std::shared_ptr<TriangleMesh> CreateCubeMesh(
+    const Transform* o2w,
+    const Transform* w2o,
+    PropertyList&    list);
 
 RAINBOW_NAMESPACE_END
 

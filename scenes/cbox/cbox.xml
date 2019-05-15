@@ -2,8 +2,8 @@
     <mode type="final"/>
 	  <integrator type="path">
 		    <integer name="maxDepth" value="50"/>
-        <integer name="sampleNum" value="5000"/>
-        <integer name="delta" value="100"/>
+        <integer name="sampleNum" value="50000"/>
+        <integer name="delta" value="1000"/>
 	  </integrator>
 	  <sensor type="perspective">
 		    <float name="fov" value="19.5"/>

@@ -30,6 +30,7 @@ public:
         const Point2f& sample, Vector3f* wi, Float* pdf, 
         Visibility* vis) const = 0;
     virtual bool IsDeltaLight() const = 0;
+    virtual std::string toString() const = 0;
 
     const MediumInterface mediumInterface;
     const Transform LightToWorld, WorldToLight;
@@ -54,6 +55,13 @@ public:
         Visibility *vis) const override;
 
     bool IsDeltaLight() const override { return false; }
+    std::string toString() const override {
+        return tfm::format(
+            "Area Light[\n"
+            "    radiance : %s,\n"
+            "]", 
+            I.toString());
+    }
 
     RGBSpectrum I;
 	std::shared_ptr<Shape> shape;

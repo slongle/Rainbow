@@ -26,6 +26,11 @@ public:
     bool IntersectP(const Ray & ray, SurfaceInteraction*inter) const;
     bool Intersect(const Ray & ray) const;
 
+    std::string toString() const override {
+        return tfm::format(
+            "# of shapes : %d"            
+            , primitives.size());
+    }
 
     int maxPrimsInNode;
     SplitMethod splitMethod;

@@ -31,6 +31,12 @@ public:
         return true;
     }
 
+    std::string toString() const override {
+        return tfm::format(
+            "IESLight[]"
+        );
+    }
+
 private:
     const RGBSpectrum   I;
     const Point3f       pLight;

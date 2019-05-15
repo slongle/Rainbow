@@ -3,7 +3,7 @@
 <scene version="0.5.0" >
     <mode type="final"/>
 	<integrator type="path" >
-		<integer name="maxDepth" value="65" />
+		<integer name="maxDepth" value="10" />
         <integer name="sampleNum" value="100000"/>
         <integer name="delta" value="10"/>
 		<boolean name="strictNormals" value="true" />
@@ -17,7 +17,7 @@
 			<integer name="sampleCount" value="64" />
 		</sampler>
 		<film type="ldrfilm" >
-            <string name="filename" value="rainbow_1.png"/>
+            <string name="filename" value="rainbow_2.png"/>
 			<integer name="width" value="2048" />
 			<integer name="height" value="1024" />
 			<string name="fileFormat" value="png" />

@@ -351,4 +351,101 @@ std::vector<std::shared_ptr<Triangle>> CreateCube(
     return tris;
 }
 
+std::shared_ptr<TriangleMesh>
+CreateWavefrontOBJMesh(
+    const Transform* o2w, 
+    const Transform* w2o, 
+    PropertyList& list) 
+{
+    std::string filename = list.getString("filename");
+    int vertexNum = 0, triangleNum = 0;
+    std::vector<Point3f>  vertices;
+    std::vector<Normal3f> normals;
+    std::vector<Point2f>  texcoords;
+    std::vector<Index>    indices;
+    ParseWavefrontOBJ(
+        filename, &vertexNum, &triangleNum,
+        &vertices, &normals, &texcoords, &indices);
+
+    std::shared_ptr<TriangleMesh> mesh =
+        std::make_shared<TriangleMesh>(
+            o2w, vertexNum, triangleNum,
+            vertices, normals, texcoords, indices);
+
+    return mesh;
+}
+
+std::shared_ptr<TriangleMesh> 
+CreateRectangleMesh(
+    const Transform* o2w, 
+    const Transform* w2o, 
+    PropertyList& list) 
+{
+    const int vertexNum = 4;
+    const int triangleNum = 2;
+    std::vector<Point3f>  vertices;  vertices.resize(vertexNum);
+    std::vector<Index>    indices;   indices.resize(3 * triangleNum);
+    std::vector<Normal3f> normals;   normals.resize(3 * triangleNum);
+    std::vector<Point2f>  texcoords; texcoords.resize(3 * triangleNum);
+
+    vertices[0] = Point3f(-1, -1, 0);
+    vertices[1] = Point3f(1, -1, 0);
+    vertices[2] = Point3f(1, 1, 0);
+    vertices[3] = Point3f(-1, 1, 0);
+
+    indices[0] = Index(0, 0, -1);
+    indices[1] = Index(1, 0, -1);
+    indices[2] = Index(2, 0, -1);
+    indices[3] = Index(2, 0, -1);
+    indices[4] = Index(3, 0, -1);
+    indices[5] = Index(0, 0, -1);
+
+    normals[0] = Normal3f(0, 0, 1);
+
+    std::shared_ptr<TriangleMesh> mesh =
+        std::make_shared<TriangleMesh>(
+            o2w, vertexNum, triangleNum,
+            vertices, normals, texcoords, indices);
+
+    return mesh;
+}
+
+std::shared_ptr<TriangleMesh> 
+CreateCubeMesh(
+    const Transform* o2w, 
+    const Transform* w2o, 
+    PropertyList& list) 
+{
+    const int vertexNum = 24;
+    const int triangleNum = 12;
+    std::vector<Point3f>  vertices;  vertices.resize(vertexNum);
+    std::vector<Index>    indices;   indices.resize(3 * triangleNum);
+    std::vector<Normal3f> normals;   normals.resize(3 * triangleNum);
+    std::vector<Point2f>  texcoords; texcoords.resize(3 * triangleNum);
+
+    for (int i = 0; i < vertexNum; i++)
+        vertices[i] = Point3f(CubeData_vertexverticess[i][0],
+            CubeData_vertexverticess[i][1],
+            CubeData_vertexverticess[i][2]);
+    for (int i = 0; i < triangleNum; i++) {
+        int id1 = CubeData_triangles[i][0];
+        int id2 = CubeData_triangles[i][1];
+        int id3 = CubeData_triangles[i][2];
+        indices[i * 3 + 0] = Index(id1, -1, -1);
+        indices[i * 3 + 1] = Index(id2, -1, -1);
+        indices[i * 3 + 2] = Index(id3, -1, -1);
+        Normal3f n(Cross(vertices[id2] - vertices[id1], vertices[id3] - vertices[id1]));
+        //cout << n << endl;
+        Assert(n.SquareLength() != 0, "Length of normals is Zero!");
+        normals[i] = Normalize(n);
+    }
+
+    std::shared_ptr<TriangleMesh> mesh =
+        std::make_shared<TriangleMesh>(
+            o2w, vertexNum, triangleNum,
+            vertices, normals, texcoords, indices);
+
+    return mesh;
+}
+
 RAINBOW_NAMESPACE_END

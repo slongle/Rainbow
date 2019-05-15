@@ -26,6 +26,13 @@ public:
         return true;
     }
 
+    std::string toString() const override {
+        return tfm::format(
+            "Point Light[\n"
+            "    radiance : %s\n"
+            "]", I.toString());
+    }
+
 private:
     const RGBSpectrum I;
     const Point3f pLight;

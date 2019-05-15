@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<scene version="0.5.0" >
+    <mode type="eye"/>
+	<integrator type="path" >
+		<integer name="maxDepth" value="17" />
+        <integer name="sampleNum" value="100"/>
+        <integer name="delta" value="1"/>
+		<boolean name="strictNormals" value="true" />
+	</integrator>
+	<sensor type="perspective" >
+		<float name="fov" value="20" />
+		<transform name="toWorld" >
+			<matrix value="-0.678116 -0.167853 -0.715531 58.206 -4.39487e-008 0.973571 -0.228385 24.9284 0.734955 -0.154871 -0.660194 52.9501 0 0 0 1"/>
+            <scale value="-1 1 1"/>
+		</transform>
+		<sampler type="halton" >
+			<integer name="sampleCount" value="64" />
+		</sampler>
+		<film type="ldrfilm" >
+            <string name="filename" value="dragon_fov_embree.png"/>
+			<integer name="width" value="1280" />
+			<integer name="height" value="720" />
+			<string name="fileFormat" value="png" />
+			<string name="pixelFormat" value="rgb" />
+			<float name="gamma" value="2.2" />
+			<boolean name="banner" value="false" />
+			<rfilter type="tent" />
+		</film>
+	</sensor>
+    
+	<bsdf type="diffuse" id="GroundInner">
+		<rgb name="reflectance" value="0.456263, 0.456263, 0.456263"/>
+	</bsdf>
+	<bsdf type="diffuse" id="GroundOuter">
+		<rgb name="reflectance" value="0.456263, 0.456263, 0.456263"/>
+	</bsdf>
+	<bsdf type="diffuse" id="Cloth">
+		<rgb name="reflectance" value="0.456263, 0.456263, 0.456263"/>
+	</bsdf>
+	<bsdf type="diffuse" id="Dragon">
+		<rgb name="reflectance" value="0.79311, 0.79311, 0.79311"/>
+	</bsdf>
+	<bsdf type="diffuse" id="Blade">
+		<rgb name="reflectance" value="0.79311, 0.79311, 0.79311"/>
+	</bsdf>
+	<bsdf type="diffuse" id="Sword">
+		<rgb name="reflectance" value="0.79311, 0.79311, 0.79311"/>
+	</bsdf>
+	<bsdf type="diffuse" id="Deco">
+		<rgb name="reflectance" value="0.79311, 0.79311, 0.79311"/>
+	</bsdf>
+	<bsdf type="diffuse" id="Diamond">
+		<rgb name="reflectance" value="0.79311, 0.79311, 0.79311"/>
+	</bsdf>
+	<bsdf type="diffuse" id="Deco2">
+		<rgb name="reflectance" value="0.79311, 0.79311, 0.79311"/>
+	</bsdf>
+        
+	<shape type="obj" >
+		<string name="filename" value="models/Mesh011.obj" />
+		<transform name="toWorld" >
+			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
+		</transform>
+		<ref id="GroundOuter" />
+	</shape>
+	<shape type="obj" >
+		<string name="filename" value="models/Mesh010.obj" />
+		<transform name="toWorld" >
+			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
+		</transform>
+		<ref id="Cloth" />
+	</shape>
+	<shape type="obj" >
+		<string name="filename" value="models/Mesh005.obj" />
+		<transform name="toWorld" >
+			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
+		</transform>
+		<ref id="GroundOuter" />
+	</shape>
+	<shape type="obj" >
+		<string name="filename" value="models/Mesh006.obj" />
+		<transform name="toWorld" >
+			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
+		</transform>
+		<ref id="GroundOuter" />
+	</shape>
+	<shape type="obj" >
+		<string name="filename" value="models/Mesh012.obj" />
+		<transform name="toWorld" >
+			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
+		</transform>
+		<ref id="GroundInner" />
+	</shape>
+	<shape type="obj" >
+		<string name="filename" value="models/Mesh007.obj" />
+		<transform name="toWorld" >
+			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
+		</transform>
+		<ref id="GroundOuter" />
+	</shape>
+	<shape type="obj" >
+		<string name="filename" value="models/Mesh008.obj" />
+		<transform name="toWorld" >
+			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
+		</transform>
+		<ref id="Dragon" />
+	</shape>
+	<shape type="obj" >
+		<string name="filename" value="models/Mesh013.obj" />
+		<transform name="toWorld" >
+			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
+		</transform>
+		<ref id="Dragon" />
+	</shape>
+	<shape type="obj" >
+		<string name="filename" value="models/Mesh014.obj" />
+		<transform name="toWorld" >
+			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
+		</transform>
+		<ref id="Dragon" />
+	</shape>
+	<shape type="obj" >
+		<string name="filename" value="models/Mesh015.obj" />
+		<transform name="toWorld" >
+			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
+		</transform>
+		<ref id="Dragon" />
+	</shape>
+	<shape type="obj" >
+		<string name="filename" value="models/Mesh004.obj" />
+		<transform name="toWorld" >
+			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
+		</transform>
+		<ref id="Blade" />
+	</shape>
+	<shape type="obj" >
+		<string name="filename" value="models/Mesh009.obj" />
+		<transform name="toWorld" >
+			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
+		</transform>
+		<ref id="Sword" />
+	</shape>
+	<shape type="obj" >
+		<string name="filename" value="models/Mesh003.obj" />
+		<transform name="toWorld" >
+			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
+		</transform>
+		<ref id="Deco" />
+	</shape>
+	<shape type="obj" >
+		<string name="filename" value="models/Mesh002.obj" />
+		<transform name="toWorld" >
+			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
+		</transform>
+		<ref id="Diamond" />
+	</shape>
+	<shape type="obj" >
+		<string name="filename" value="models/Mesh001.obj" />
+		<transform name="toWorld" >
+			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
+		</transform>
+		<ref id="Deco2" />
+	</shape>
+	<shape type="obj" >
+		<string name="filename" value="models/Mesh000.obj" />
+		<transform name="toWorld" >
+			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
+		</transform>
+		<ref id="Deco2" />
+	</shape>
+	<hide type="sun" >
+		<vector name="sunDirection" x="-0.18862" y="0.692312" z="0.69651" />
+		<float name="scale" value="8" />
+		<float name="sunRadiusScale" value="37.9165" />
+	</hide>
+</scene>

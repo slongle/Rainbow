@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <scene version="0.5.0" >
-  <mode type="final"/>
 	<integrator type="path" >
 		<integer name="maxDepth" value="65" />
         <integer name="sampleNum" value="100"/>
@@ -11,17 +10,14 @@
 	<sensor type="perspective" >
 		<float name="fov" value="19.5" />
 		<transform name="toWorld" >
-      <scale value="-1 1 1"/>
+      <scale x="-1" y="1" z="1"/>
 		  <matrix value="-1 0 0 0 0 1 0 1 0 0 -1 6.8 0 0 0 1"/>
 		</transform>
-		<hide type="sobol" >
-			<integer name="sampleCount" value="64" />
-		</hide>
 	  <sampler type="halton">
 	    <integer name="sampleCount" value="512"/>
 	  </sampler>
 		<film type="ldrfilm" >
-      <string name="filename" value="cornell-box_1.png"/>
+            <string name="filename" value="cornell-box_1.png"/>
 			<integer name="width" value="1024" />
 			<integer name="height" value="1024" />
 			<string name="fileFormat" value="png" />
@@ -57,10 +53,14 @@
 		    </bsdf>
 	</bsdf>
 	<bsdf type="twosided" id="ShortBox" >
-		<bsdf type="glass"/>		
+		<bsdf type="diffuse">
+			      <rgb name="reflectance" value="0.725 0.71 0.68"/>
+		    </bsdf>	
 	</bsdf>
 	<bsdf type="twosided" id="TallBox" >
-		<bsdf type="mirror"/>
+		<bsdf type="diffuse">
+			      <rgb name="reflectance" value="0.725 0.71 0.68"/>
+		    </bsdf>
 	</bsdf>
 	<bsdf type="twosided" id="Light" >
 		<bsdf type="diffuse" >
@@ -110,23 +110,6 @@
 		<ref id="TallBox" />
 	</shape>
 
-  <hide type="point">
-    <transform name="toWorld">
-      <matrix value="0.235 -1.66103e-008 -7.80685e-009 -0.005 -2.05444e-008 3.90343e-009 -0.0893 1.98 2.05444e-008 0.19 8.30516e-009 -0.03 0 0 0 1"/>
-      <translate value="0, 0, 0.5"/>
-    </transform>
-    <rgb name="intensity" value="1, 1, 1"/>
-  </hide>
-
-  <hide type="point">
-    <transform name="toWorld">
-      <matrix value="0.235 -1.66103e-008 -7.80685e-009 -0.005 -2.05444e-008 3.90343e-009 -0.0893 1.98 2.05444e-008 0.19 8.30516e-009 -0.03 0 0 0 1"/>
-      <translate value="0, 0, 0.5"/>
-    </transform>
-    <rgb name="intensity" value="1, 1, 1"/>
-    <float name="totalAngle" value="10"/>
-    <float name="falloffAngle" value="5"/>
-  </hide>
 
 	<shape type="rectangle" >
 		<transform name="toWorld" >

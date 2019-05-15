@@ -235,8 +235,8 @@ void SamplerIntegrator::RenderTile(
 void SamplerIntegrator::RenderTileEyeLight(const Scene &scene, Sampler& sampler, FilmTile &tile) {
     Ray ray;
     MemoryArena arena;
-    for (int y = tile.sampleBounds.pMin.y; y < tile.sampleBounds.pMax.y; y++) {
-        for (int x = tile.sampleBounds.pMin.x; x < tile.sampleBounds.pMax.x; x++) {
+    for (int y = tile.pixelBounds.pMin.y; y < tile.pixelBounds.pMax.y; y++) {
+        for (int x = tile.pixelBounds.pMin.x; x < tile.pixelBounds.pMax.x; x++) {
             sampler.SetPixel(Point2i(x, y));
             Point2f cameraSample = sampler.GetCameraSample();
             RGBSpectrum weight = camera->GenerateRay(&ray, cameraSample);
@@ -407,10 +407,10 @@ void SamplerIntegrator::RenderEyeLight(const Scene &scene) {
             }
         };        
         /// Uncomment the following line for single threaded rendering
-        //map(range);
+        map(range);
 
         /// Default: parallel rendering
-        tbb::parallel_for(range, map);
+        //tbb::parallel_for(range, map);
     });
 
     renderThread.join();

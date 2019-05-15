@@ -167,9 +167,6 @@ void ParserXMLFile(const std::string & filename) {
 				case EFilm:
 					RainbowFilm(type, m_list);
 					break;
-				case EBSDF:
-                    RainbowMaterial(type, m_list);
-					break;
                 case EMedium: {                    
                     std::string name = static_cast<std::string>(node.attribute("name").value());
                     RainbowMedium(type, name, m_list);
@@ -177,6 +174,8 @@ void ParserXMLFile(const std::string & filename) {
                 }
 				case EShape:
 					RainbowShape(type, m_list);
+                    if (m_list.findString("filename"))
+                        cout << m_list.getString("filename") << endl;
 					break;
 				case ELight:
 					RainbowLight(type, m_list);
@@ -184,9 +183,12 @@ void ParserXMLFile(const std::string & filename) {
                 case ERFilter:
                     RainbowFilter(type, m_list);
                     break;
+                case EBSDF:
+                    RainbowMaterial(type, m_list);
+                    break;
                 case EBSDFMap:
                     m_list.setString("id", node.attribute("id").value());
-                    RainbowBSDFMap(type, m_list);
+                    RainbowMaterial(type, m_list);
                     break;
                 case ERef:
                     m_list.setString("id", node.attribute("id").value());

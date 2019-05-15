@@ -3,6 +3,7 @@
 #define __RAINBOW_SPOT_H
 
 #include "core/light.h"
+#include <cmath>
 
 RAINBOW_NAMESPACE_BEGIN
 
@@ -30,6 +31,13 @@ public:
     
     bool IsDeltaLight() const override {
         return true;
+    }
+    std::string toString() const override {
+        return tfm::format(
+            "Spot Light[\n"
+            "    radiance : %s\n"
+            "    thetaFalloff : %f\n"
+            "]", I.toString(), std::acos(cosFalloffStart));
     }
 
 private:

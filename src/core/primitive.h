@@ -32,6 +32,7 @@ public:
 	Aggregate(std::vector<std::shared_ptr<Primitive>>& m_primitives) : primitives(m_primitives) {}
 	virtual bool IntersectP(const Ray & ray, SurfaceInteraction*inter) const;
 	virtual bool Intersect(const Ray & ray) const;
+    virtual std::string toString() const = 0;
 
 	Bounds3f Bounds() const ;
 

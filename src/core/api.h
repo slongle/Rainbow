@@ -18,7 +18,7 @@ void RainbowMaterial(const std::string& type, PropertyList& list);
 void RainbowLight(const std::string& type, PropertyList& list);
 void RainbowFilter(const std::string& type, PropertyList& list);
 void RainbowRef(const std::string& type, PropertyList& list);
-void RainbowBSDFMap(const std::string& type, PropertyList& list);
+//void RainbowBSDFMap(const std::string& type, PropertyList& list);
 void RainbowMedium(const std::string& type, const std::string& name, PropertyList& list);
 
 void InitialTransform();
