@@ -81,6 +81,7 @@ class BxDF;
 class MicrofacetDistribution;
 class Medium;
 class MediumInteraction;
+class BSDF;
 
 static Float MachineEpsilon = (std::numeric_limits<Float>::epsilon() * 0.5);
 

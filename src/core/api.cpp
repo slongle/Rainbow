@@ -46,6 +46,8 @@
 
 RAINBOW_NAMESPACE_BEGIN
 
+bool embree = true;
+
 class TransformPool {
 public:
 	TransformPool() {}
@@ -434,8 +436,7 @@ Aggregate* RenderOptions::MakeAggregate()
 
 Scene* RenderOptions::MakeScene() 
 {
-    Scene* scene = nullptr;
-    bool embree = true;
+    Scene* scene = nullptr;    
 
     if (embree) {        
         scene = new EmbreeScene(embreeMeshes, embreePrimitives, lights);

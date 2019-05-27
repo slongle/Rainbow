@@ -31,6 +31,8 @@ bool Sphere::IntersectP(const Ray & ray, Float * tHit, SurfaceInteraction* inter
 	*inter = (*ObjectToWorld)(SurfaceInteraction(pHit, pError, 
         static_cast<Normal3f>(pHit / radius), -r.d, this));
 
+    inter->shading.n = inter->n;
+
 	*tHit = tShapeHit;
 
 	return true;

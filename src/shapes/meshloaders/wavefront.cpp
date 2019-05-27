@@ -82,7 +82,7 @@ void ParseWavefrontOBJ(
         for (int f = 0; f < shapes[s].mesh.num_face_vertices.size(); f++) 
         {
             int fv = shapes[s].mesh.num_face_vertices[f];
-
+            Assert(fv == 3, "Quad?");
             // Loop over vertices in the face.
             for (int v = 0; v < fv; v++) {
                 // access to vertex

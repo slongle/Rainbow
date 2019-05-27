@@ -1,5 +1,7 @@
 #include "triangle.h"
+#include "core/frame.h"
 #include "meshloaders/wavefront.h"
+
 
 RAINBOW_NAMESPACE_BEGIN
 
@@ -134,10 +136,20 @@ bool Triangle::IntersectP(const Ray & ray, Float * tHit, SurfaceInteraction* int
 	
     *inter = 
         SurfaceInteraction(pHit, uvHit, -ray.d, dpdu, dpdv, Normal3f(0, 0, 0), Normal3f(0, 0, 0), this);
-    inter->n = inter->shading.n = Normal3f(Normalize(Cross(dp02, dp12)));
+    
 
-    if (m_index->normalIndex != -1)
+    if (m_index->normalIndex != -1) {
+        Normal3f ns = Normalize(
+            b0 * m_mesh->m_normals[m_index[0].normalIndex] +
+            b1 * m_mesh->m_normals[m_index[1].normalIndex] +
+            b2 * m_mesh->m_normals[m_index[2].normalIndex]);
+        inter->shading.n = ns;
         inter->n = FaceForward(inter->n, inter->shading.n);
+        //inter->n = inter->shading.n;
+    }
+    else {
+        inter->n = inter->shading.n = Normal3f(Normalize(Cross(dp02, dp12)));        
+    }
 
     *tHit = t;
 	return true;
