@@ -6,7 +6,8 @@ void MirrorMaterial::ComputeScatteringFunctions(
     MemoryArena&          arena, 
     SurfaceInteraction*   intersection) 
 {    
-    intersection->bsdf = ARENA_ALLOCA(arena, BSDF)(intersection->n);
+    //intersection->bsdf = ARENA_ALLOCA(arena, BSDF)(intersection->n);
+    intersection->bsdf = ARENA_ALLOCA(arena, BSDF)(*intersection);
     intersection->bsdf->Add(
         ARENA_ALLOCA(arena, SpecularReflection)(R, ARENA_ALLOCA(arena, FresnelNoOp)()));
 }

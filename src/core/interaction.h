@@ -3,7 +3,6 @@
 
 #include "vector.h"
 #include "spectrum.h"
-#include "bsdf.h"
 #include "ray.h"
 #include "medium.h"
 #include <cmath>

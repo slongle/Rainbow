@@ -94,7 +94,7 @@ RGBSpectrum BSDF::f(
     const BxDFType&   type) 
 {
     Vector3f woLocal = frame.toLocal(woWorld), wiLocal= frame.toLocal(wiWorld);
-    bool reflect = Dot(frame.n, wiWorld)*Dot(frame.n, woWorld) > 0;
+    bool reflect = Dot(ng, wiWorld)*Dot(ng, woWorld) > 0;
     RGBSpectrum f(0.);
     for (int i = 0; i < nBxDFs; i++) {
         if (bxdfs[i]->MatchFlags(type) && 
@@ -183,7 +183,7 @@ RGBSpectrum BSDF::SampleF(
     if (matchComp > 1) *pdf /= matchComp;
 
     if (!(bxdf->type & BSDF_SPECULAR)) {
-        bool reflect = Dot(frame.n, *wiWorld)*Dot(frame.n, woWorld) > 0;
+        bool reflect = Dot(ng, *wiWorld) * Dot(ng, woWorld) > 0;
         f = RGBSpectrum(0.);
         for (int i = 0; i < nBxDFs; i++) {
             if (bxdfs[i]->MatchFlags(type) &&

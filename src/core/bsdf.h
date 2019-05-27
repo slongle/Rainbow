@@ -5,6 +5,7 @@
 #include "spectrum.h"
 #include "sampling.h"
 #include "frame.h"
+#include "interaction.h"
 
 RAINBOW_NAMESPACE_BEGIN
 
@@ -66,7 +67,12 @@ public:
     BSDF(
         const Normal3f&   m_n,
         const Float&      m_eta = 1)
-    : frame(m_n), nBxDFs(0), eta(m_eta) {}
+        : frame(m_n), nBxDFs(0), eta(m_eta), ng(m_n), ns(m_n) {}
+
+    BSDF(
+        const SurfaceInteraction& m_si,
+        const Float& m_eta = 1)
+        : frame(m_si.shading.n), ns(m_si.shading.n), ng(m_si.n), nBxDFs(0), eta(m_eta) {}
 
     void Add(BxDF* bxdf) {        
         Assert(nBxDFs < MaxBxDFs, "Too many BxDFs!");
@@ -98,6 +104,7 @@ private:
     int nBxDFs;
     BxDF* bxdfs[MaxBxDFs];
     Frame frame;
+    const Normal3f ns, ng;
 };
 
 class BxDF{

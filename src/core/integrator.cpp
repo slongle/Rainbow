@@ -89,10 +89,11 @@ RGBSpectrum SamplerIntegrator::EstimateDirectLight(
     if (!light->IsDeltaLight()) {
         RGBSpectrum f;
         bool sampledSpecular = false;
+        //const SurfaceInteraction& a = static_cast<const SurfaceInteraction&>(inter);
         if (inter.IsSurfaceInteraction()) {
             // Sample BSDF
             BxDFType BSDFType;
-            const SurfaceInteraction& surfaceInter = static_cast<const SurfaceInteraction&>(inter);            
+            const SurfaceInteraction& surfaceInter = static_cast<const SurfaceInteraction&>(inter);
             f = surfaceInter.bsdf->SampleF(surfaceInter.wo, &wi, scatteru, 
                                            &scatterPdf, BSDF_ALL, &BSDFType);
             f *= AbsDot(wi, surfaceInter.n);      

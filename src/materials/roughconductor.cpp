@@ -25,7 +25,8 @@ void RoughConductorMaterial::ComputeScatteringFunctions(
     MemoryArena&          arena, 
     SurfaceInteraction*   it) 
 {
-    it->bsdf = ARENA_ALLOCA(arena, BSDF)(it->n);
+    //it->bsdf = ARENA_ALLOCA(arena, BSDF)(it->n);
+    it->bsdf = ARENA_ALLOCA(arena, BSDF)(*it);
     Fresnel* fresnel = ARENA_ALLOCA(arena, FresnelConductor)(RGBSpectrum(1.), eta, k);
     MicrofacetDistribution* distribution;
     if (distributionType == "beckmann") {
