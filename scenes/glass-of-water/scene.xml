@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<scene version="0.5.0" >
+    <mode type="final"/>
+	<integrator type="path" >
+		<integer name="maxDepth" value="33" />
+        <integer name="sampleNum" value="5000"/>
+        <integer name="delta" value="1"/>
+		<boolean name="strictNormals" value="true" />
+	</integrator>
+	<sensor type="perspective" >
+		<float name="fov" value="20" />
+		<transform name="toWorld" >
+            <scale value="-1 1 1"/>
+			<matrix value="-0.999993 -5.92355e-005 0.00373545 -0.0893585 3.638e-012 0.999874 0.0158556 2.69412 -0.00373592 0.0158555 -0.999867 25.6726 0 0 0 1"/>
+		</transform>
+		<sampler type="independent" >
+			<integer name="sampleCount" value="64" />
+		</sampler>
+		<film type="ldrfilm" >
+            <string name="filename" value="glass_of_water_final_2.png"/>
+			<integer name="width" value="1280" />
+			<integer name="height" value="720" />
+			<string name="fileFormat" value="png" />
+			<string name="pixelFormat" value="rgb" />
+			<float name="gamma" value="2.2" />
+			<boolean name="banner" value="false" />
+			<rfilter type="tent" />
+		</film>
+	</sensor>
+    
+	<bsdf type="roughconductor" id="Backdrop" >
+		<float name="alpha" value="0.1" />
+		<hide name="distribution" value="ggx" />
+        <string name="distribution" value="beckmann" />
+		<float name="extEta" value="1" />
+		<rgb name="specularReflectance" value="0.578596, 0.578596, 0.578596"/>
+		<rgb name="eta" value="4.27751, 3.51315, 2.76113"/>
+		<rgb name="k" value="3.49118, 2.88936, 3.1117"/>
+	</bsdf>
+       
+	<bsdf type="roughconductor" id="Floor" >
+		<float name="alpha" value="0.1" />
+		<hide name="distribution" value="ggx" />
+        <string name="distribution" value="beckmann" />
+		<float name="extEta" value="1" />
+		<rgb name="specularReflectance" value="0.578596, 0.578596, 0.578596"/>
+		<rgb name="eta" value="1.65746, 0.880369, 0.521229"/>
+		<rgb name="k" value="9.22387, 6.26952, 4.837"/>
+	</bsdf>
+        
+	<bsdf type="dielectric" id="WaterAir" >
+		<float name="intIOR" value="1.33" />
+		<float name="extIOR" value="1" />
+	</bsdf>
+	<bsdf type="dielectric" id="IceAir" >
+		<float name="intIOR" value="1.31" />
+		<float name="extIOR" value="1" />
+	</bsdf>
+	<bsdf type="dielectric" id="Glass" >
+		<float name="intIOR" value="1.5" />
+		<float name="extIOR" value="1" />
+	</bsdf>
+	<bsdf type="dielectric" id="AirIce" >
+		<float name="intIOR" value="0.763" />
+		<float name="extIOR" value="1" />
+	</bsdf>
+	<shape type="obj" >
+		<string name="filename" value="models/Mesh008.obj" />
+		<transform name="toWorld" >
+			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
+		</transform>
+		<ref id="WaterAir" />
+	</shape>
+	<shape type="obj" >
+		<string name="filename" value="models/Mesh005.obj" />
+		<transform name="toWorld" >
+			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
+		</transform>
+		<ref id="WaterAir" />
+	</shape>
+	<shape type="obj" >
+		<string name="filename" value="models/Mesh004.obj" />
+		<transform name="toWorld" >
+			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
+		</transform>
+		<ref id="IceAir" />
+	</shape>
+	<shape type="obj" >
+		<string name="filename" value="models/Mesh003.obj" />
+		<transform name="toWorld" >
+			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
+		</transform>
+		<boolean name="faceNormals" value="true" />
+		<ref id="AirIce" />
+	</shape>
+	<shape type="obj" >
+		<string name="filename" value="models/Mesh010.obj" />
+		<transform name="toWorld" >
+			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
+		</transform>
+		<ref id="IceAir" />
+	</shape>
+	<shape type="obj" >
+		<string name="filename" value="models/Mesh009.obj" />
+		<transform name="toWorld" >
+			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
+		</transform>
+		<boolean name="faceNormals" value="true" />
+		<ref id="AirIce" />
+	</shape>
+	<shape type="obj" >
+		<string name="filename" value="models/Mesh012.obj" />
+		<transform name="toWorld" >
+			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
+		</transform>
+		<boolean name="faceNormals" value="true" />
+		<ref id="AirIce" />
+	</shape>
+	<shape type="obj" >
+		<string name="filename" value="models/Mesh014.obj" />
+		<transform name="toWorld" >
+			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
+		</transform>
+		<ref id="IceAir" />
+	</shape>
+	<shape type="obj" >
+		<string name="filename" value="models/Mesh015.obj" />
+		<transform name="toWorld" >
+			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
+		</transform>
+		<boolean name="faceNormals" value="true" />
+		<ref id="AirIce" />
+	</shape>
+	<shape type="obj" >
+		<string name="filename" value="models/Mesh006.obj" />
+		<transform name="toWorld" >
+			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
+		</transform>
+		<ref id="IceAir" />
+	</shape>
+	<shape type="obj" >
+		<string name="filename" value="models/Mesh002.obj" />
+		<transform name="toWorld" >
+			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
+		</transform>
+		<boolean name="faceNormals" value="true" />
+		<ref id="AirIce" />
+	</shape>
+	<shape type="obj" >
+		<string name="filename" value="models/Mesh001.obj" />
+		<transform name="toWorld" >
+			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
+		</transform>
+		<ref id="IceAir" />
+	</shape>
+	<shape type="obj" >
+		<string name="filename" value="models/Mesh007.obj" />
+		<transform name="toWorld" >
+			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
+		</transform>
+		<boolean name="faceNormals" value="true" />
+		<ref id="Backdrop" />
+	</shape>
+	<shape type="obj" >
+		<string name="filename" value="models/Mesh011.obj" />
+		<transform name="toWorld" >
+			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
+		</transform>
+		<boolean name="faceNormals" value="true" />
+		<ref id="Floor" />
+	</shape>
+	<shape type="obj" >
+		<string name="filename" value="models/Mesh013.obj" />
+		<transform name="toWorld" >
+			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
+		</transform>
+		<ref id="Glass" />
+	</shape>
+	<shape type="obj" >
+		<string name="filename" value="models/Mesh000.obj" />
+		<transform name="toWorld" >
+			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
+		</transform>
+		<ref id="WaterAir" />
+	</shape>
+	<shape type="rectangle" >
+		<transform name="toWorld" >
+			<matrix value="5 4.86887e-007 1.77975e-007 -0.0384822 4.86887e-007 -3.82133 -3.22451 10.4809 -1.77975e-007 3.22451 -3.82133 26.1925 0 0 0 1"/>
+		</transform>
+		<bsdf type="twosided" >
+			<bsdf type="diffuse" >
+				<rgb name="reflectance" value="0, 0, 0"/>
+			</bsdf>
+		</bsdf>
+		<emitter type="area" >
+			<rgb name="radiance" value="15.9155, 27.0563, 31.831"/>
+		</emitter>
+	</shape>
+</scene>
