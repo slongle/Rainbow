@@ -4,16 +4,22 @@
 
 RAINBOW_NAMESPACE_BEGIN
 
-void SetRTCRay(RTCRayHit& query,const Ray& ray) {
-    query.ray.org_x = ray.o.x;
-    query.ray.org_y = ray.o.y;
-    query.ray.org_z = ray.o.z;
-    query.ray.dir_x = ray.d.x;
-    query.ray.dir_y = ray.d.y;
-    query.ray.dir_z = ray.d.z;
-    query.ray.tnear = Epsilon;
-    query.ray.tfar = ray.tMax;
-    query.ray.time = 0.0f;
+void SetRTCRay(RTCRay& ret, const Ray&ray) {
+    ret.org_x = ray.o.x;
+    ret.org_y = ray.o.y;
+    ret.org_z = ray.o.z;
+    ret.dir_x = ray.d.x;
+    ret.dir_y = ray.d.y;
+    ret.dir_z = ray.d.z;
+    ret.tnear = Epsilon;
+    ret.tfar = ray.tMax;
+    // TODO: set the time for ray
+    //ret.time = ray.time;    
+    ret.time = 0.;
+}
+
+void SetRTCRayHit(RTCRayHit& query,const Ray& ray) {
+    SetRTCRay(query.ray, ray);
     query.hit.geomID = RTC_INVALID_GEOMETRY_ID;
     query.hit.primID = RTC_INVALID_GEOMETRY_ID;
 }
@@ -51,7 +57,7 @@ bool EmbreeScene::IntersectP(
     rtcInitIntersectContext(&context);
     // create ray
     RTCRayHit query;
-    SetRTCRay(query, ray);
+    SetRTCRayHit(query, ray);
     // trace ray
     rtcIntersect1(scene, &context, &query);
     // hit data filled on hit
@@ -144,14 +150,14 @@ bool EmbreeScene::Intersect(
     // create intersection context
     RTCIntersectContext context;
     rtcInitIntersectContext(&context);
-    // create ray
-    RTCRayHit query;
-    SetRTCRay(query, ray);
+    // create shadow ray
+    RTCRay shadow;
+    SetRTCRay(shadow, ray);    
     // trace ray
-    rtcIntersect1(scene, &context, &query);
-    // hit data filled on hit
-    if (query.hit.geomID == RTC_INVALID_GEOMETRY_ID) return false;
-    return true;
+    rtcOccluded1(scene, &context, &shadow);
+    // check hit
+    //cout << shadow.tfar << " " << ray.tMax << endl;
+    return shadow.tfar < 0.;
 }
 
 void EmbreeScene::AddTriangleMesh(

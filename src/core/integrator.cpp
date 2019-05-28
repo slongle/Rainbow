@@ -295,10 +295,10 @@ void SamplerIntegrator::Render(const Scene &scene) {
         for (cnt = 1; cnt <= sampleNum / delta; cnt++)
         {
             /// Uncomment the following line for single threaded rendering
-            //map(range);
+            map(range);
 
             /// Default: parallel rendering
-            tbb::parallel_for(range, map);
+            //tbb::parallel_for(range, map);
 
             preSumSample += delta;
 

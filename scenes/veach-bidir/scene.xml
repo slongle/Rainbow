@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <scene version="0.5.0" >
-  <mode type="eye"/>
-  <integrator type="path" >
+    <mode type="final"/>
+    <integrator type="path" >
 		<integer name="maxDepth" value="7" />
-    <integer name="sampleNum" value="5000"/>
-    <integer name="delta" value="20"/>
+        <integer name="sampleNum" value="5000"/>
+        <integer name="delta" value="20"/>
 		<boolean name="strictNormals" value="true" />
 	</integrator>
 	<sensor type="perspective" >
@@ -18,8 +18,8 @@
 			<integer name="sampleCount" value="64" />
 		</sampler>
 		<film type="ldrfilm" >
-		  <string name="filename" value="veach-bidir_eye_2.png"/>
-      <integer name="width" value="1024" />
+            <string name="filename" value="veach-bidir_embree_final_5.png"/>
+            <integer name="width" value="1024" />
 			<integer name="height" value="1024" />
 			<string name="fileFormat" value="png" />
 			<string name="pixelFormat" value="rgb" />
@@ -28,69 +28,66 @@
 			<rfilter type="tent" />
 		</film>
 	</sensor>
-	<bsdf type="twosided" id="Diffuse" >
-		<bsdf type="diffuse" >
-			<rgb name="reflectance" value="0.5, 0.5, 0.5"/>
-		</bsdf>
+    
+    
+	<bsdf type="diffuse" id="Diffuse">
+		<rgb name="reflectance" value="0.5, 0.5, 0.5"/>
 	</bsdf>
-  <bsdf type ="" id ="Glass">
-	  <bsdf type="dielectric">
-	  	<float name="intIOR" value="1.5" />
+	
+    <bsdf type="dielectric" id ="Glass">
+        <float name="intIOR" value="1.5" />
 	  	<float name="extIOR" value="1" />
-	  </bsdf>
-  </bsdf>
-	<bsdf type="twosided" id="Lamp" >
-		<bsdf type="roughconductor" >
-			<float name="alpha" value="0.25" />
-			<string name="distribution" value="beckmann" />
-			<float name="extEta" value="1" />
-			<rgb name="specularReflectance" value="1, 1, 1"/>
-			<rgb name="eta" value="2.8656, 2.11918, 1.94008"/>
-			<rgb name="k" value="3.03233, 2.05611, 1.61629"/>
-		</bsdf>
 	</bsdf>
-	<bsdf type="twosided" id="Wood" >
-		<bsdf type="diffuse" >
-			<rgb name="reflectance" value="0.32963, 0.257976, 0.150292"/>
-		</bsdf>
+      
+	<bsdf type="roughconductor" id="Lamp">        
+		<float name="alpha" value="0.25" />
+		<string name="distribution" value="beckmann" />
+		<float name="extEta" value="1" />
+		<rgb name="specularReflectance" value="1, 1, 1"/>
+		<rgb name="eta" value="2.8656, 2.11918, 1.94008"/>
+		<rgb name="k" value="3.03233, 2.05611, 1.61629"/>
+	</bsdf>
+    
+	<bsdf type="diffuse" id="Wood" >
+		<rgb name="reflectance" value="0.32963, 0.257976, 0.150292"/>
 	</bsdf>
 
-  <shape type="rectangle" >
-    <transform name="toWorld" >
-      <matrix value="-0.0101082 0.067068 0.00138972 -2.69082 -0.0610016 -0.0070995 -0.00842772 5.10417 -0.0282857 -0.00865658 0.0176788 -3.77057 0 0 0 1"/>
-    </transform>
-    <ref id="Diffuse" />
-    <emitter type="area" >
-      <rgb name="radiance" value="12048.2, 8605.84, 6196.21"/>
-    </emitter>
-  </shape>
+    <shape type="rectangle" >
+        <transform name="toWorld" >
+            <matrix value="-0.0101082 0.067068 0.00138972 -2.69082 -0.0610016 -0.0070995 -0.00842772 5.10417 -0.0282857 -0.00865658 0.0176788 -3.77057 0 0 0 1"/>
+        </transform>
+        <ref id="Diffuse" />
+        <emitter type="area" >
+            <rgb name="radiance" value="12048.2, 8605.84, 6196.21"/>
+        </emitter>
+    </shape>
 
-  <shape type="obj" >
-    <string name="filename" value="models/Mesh004.obj" />
-    <transform name="toWorld" >
-      <matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
-    </transform>
-    <boolean name="faceNormals" value="true" />
-    <ref id="Diffuse" />
-  </shape>
+    <shape type="obj" >
+        <string name="filename" value="models/Mesh004.obj" />
+        <transform name="toWorld" >
+            <matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
+        </transform>
+        <boolean name="faceNormals" value="true" />
+        <ref id="Diffuse" />
+    </shape>
 
-  <shape type="obj" >
-    <string name="filename" value="models/Mesh008.obj" />
-    <transform name="toWorld" >
-      <matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
-    </transform>
-    <boolean name="faceNormals" value="true" />
-    <ref id="Diffuse" />
-  </shape>
+    <shape type="obj" >
+        <string name="filename" value="models/Mesh008.obj" />
+        <transform name="toWorld" >
+            <matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
+        </transform>
+        <boolean name="faceNormals" value="true" />
+        <ref id="Diffuse" />
+    </shape>
 
-  <shape type="obj" >
-    <string name="filename" value="models/Mesh010.obj" />
-    <transform name="toWorld" >
-      <matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
-    </transform>
-    <boolean name="faceNormals" value="true" />
-    <ref id="Diffuse" />
-  </shape>
+    <shape type="obj" >
+        <string name="filename" value="models/Mesh010.obj" />
+        <transform name="toWorld" >
+            <matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
+        </transform>
+        <boolean name="faceNormals" value="true" />
+        <ref id="Diffuse" />
+    </shape>
 	<shape type="obj" >
 		<string name="filename" value="models/Mesh007.obj" />
 		<transform name="toWorld" >
@@ -106,7 +103,8 @@
 		</transform>
 		<ref id="Diffuse" />
 		<emitter type="area" >
-			<rgb name="radiance" value="523.258, 523.258, 523.258"/>
+			<hide name="radiance" value="52.3258, 52.3258, 52.3258"/>
+            <rgb name="radiance" value="156.3258, 156.3258, 156.3258"/>
 		</emitter>
 	</shape>
 	
