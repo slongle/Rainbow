@@ -32,7 +32,7 @@ int main(int argc, char *argv[]) {
     std::string solutionDir("F:/Document/Graphics/code/Rainbow/scenes/");
     //std::string solutionDir("C:/Users/Administrator/Desktop/a/Rainbow/scenes/");
     std::vector<std::string> scenes(100);
-    scenes[0] = "cbox/cbox(mesh).xml";
+    scenes[0] = "cbox/cbox(sphere).xml";
     scenes[1] = "cornell-box/scene3.xml";
     scenes[2] = "veach-mis/scene.xml";
     scenes[3] = "veach-bidir/scene.xml";
@@ -43,7 +43,7 @@ int main(int argc, char *argv[]) {
     scenes[8] = "dragon/scene.xml";
     scenes[9] = "glass-of-water/scene.xml";
 
-    const std::string filename(solutionDir + scenes[0]);
+    const std::string filename(solutionDir + scenes[4]);
 
 	filesystem::path path(filename);
 	getFileResolver()->prepend(path.parent_path());

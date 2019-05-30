@@ -100,6 +100,10 @@ std::shared_ptr<TriangleMesh> CreateCubeMesh(
     const Transform* o2w,
     const Transform* w2o,
     PropertyList&    list);
+std::shared_ptr<TriangleMesh> CreateSphereTriangleMesh(
+    const Transform* o2w,
+    const Transform* w2o,
+    PropertyList&    list);
 
 RAINBOW_NAMESPACE_END
 

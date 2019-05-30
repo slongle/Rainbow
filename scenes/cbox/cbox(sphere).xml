@@ -15,7 +15,7 @@
 	          <integer name="sampleCount" value="512"/>
 	      </sampler>
 		    <film type="hdrfilm">
-            <string name="filename" value="sphere-cornell-box_rainbowscene.hdr"/>
+            <string name="filename" value="sphere-cornell-box_spheremesh_subdiv=50.hdr"/>
 			      <integer name="height" value="600"/>
 			      <integer name="width" value="800"/>
 		        <rfilter type="box"/>
@@ -25,6 +25,7 @@
         <transform name="toWorld">
             <translate value="-0.4219, 0.3301, -0.2796"/>
         </transform>
+        <integer name="subdiv" value="50"/>
         <float name="radius" value="0.3261"/>
         <bsdf type="mirror"/>
     </shape>
@@ -33,6 +34,7 @@
         <transform name="toWorld">
             <translate value="0.4456, 0.3301, 0.3767"/>
         </transform>
+        <integer name="subdiv" value="50"/>
         <float name="radius" value="0.3261"/>
         <bsdf type="glass"/>        
     </shape>

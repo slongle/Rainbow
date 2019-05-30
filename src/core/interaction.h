@@ -104,7 +104,7 @@ public:
 
     bool IsValid() const { return phase != nullptr; }
 
-    const PhaseFunction* phase;
+    const PhaseFunction* phase = nullptr;
 };
 
 RAINBOW_NAMESPACE_END

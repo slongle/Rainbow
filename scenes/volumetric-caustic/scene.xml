@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <scene version="0.5.0" >
-  <mode type="final"/>
-  <integrator type="volpath" >
+    <mode type="final"/>
+    <integrator type="volpath" >
 		<integer name="maxDepth" value="7" />
-    <integer name="sampleNum" value="100"/>
-    <integer name="delta" value="100"/>
+        <integer name="sampleNum" value="100"/>
+        <integer name="delta" value="1"/>
 		<boolean name="strictNormals" value="true" />
 	</integrator>
 	<sensor type="perspective" >
 		<float name="fov" value="19.5" />
 		<transform name="toWorld" >
-			<matrix value="-1 0 1.50996e-007 -1.05697e-006 0 1 0 1 -1.50996e-007 0 -1 7 0 0 0 1"/>
-		  <scale value="-1 1 1"/>
-		</transform>
+            <matrix value="-1 0 1.50996e-007 -1.05697e-006 0 1 0 1 -1.50996e-007 0 -1 7 0 0 0 1"/>
+            <scale value="-1 1 1"/>
+        </transform>
 		<sampler type="independent" >
 			<integer name="sampleCount" value="64" />
 		</sampler>
 		<film type="ldrfilm" >
-		  <string name="filename" value="vol-caustic_100spp.png"/>
-      <integer name="width" value="1024" />
+            <string name="filename" value="vol-caustic_1.png"/>
+            <integer name="width" value="1024" />
 			<integer name="height" value="1024" />
 			<string name="fileFormat" value="png" />
 			<string name="pixelFormat" value="rgb" />
@@ -28,37 +28,31 @@
 			<rfilter type="tent" />
 		</film>
 	</sensor>
-	<bsdf type="twosided" id="LeftWall" >
-		<bsdf type="diffuse" >
-			<rgb name="reflectance" value="0.63, 0.065, 0.05"/>
-		</bsdf>
-	</bsdf>
-	<bsdf type="twosided" id="RightWall" >
-		<bsdf type="diffuse" >
-			<rgb name="reflectance" value="0.14, 0.45, 0.091"/>
-		</bsdf>
-	</bsdf>
-	<bsdf type="twosided" id="Floor" >
-		<bsdf type="diffuse" >
-			<rgb name="reflectance" value="0.725, 0.71, 0.68"/>
-		</bsdf>
-	</bsdf>
-	<bsdf type="twosided" id="Ceiling" >
-		<bsdf type="diffuse" >
-			<rgb name="reflectance" value="0.725, 0.71, 0.68"/>
-		</bsdf>
-	</bsdf>
-	<bsdf type="twosided" id="BackWall" >
-		<bsdf type="diffuse" >
-			<rgb name="reflectance" value="0.725, 0.71, 0.68"/>
-		</bsdf>
+    
+	<bsdf type="diffuse" id="LeftWall">
+		<rgb name="reflectance" value="0.63, 0.065, 0.05"/>
 	</bsdf>
 	
-	<bsdf type="twosided" id="Light" >
-		<bsdf type="diffuse" >
-			<rgb name="reflectance" value="0, 0, 0"/>
-		</bsdf>
+	<bsdf type="diffuse" id="RightWall">
+		<rgb name="reflectance" value="0.14, 0.45, 0.091"/>
 	</bsdf>
+	
+    <bsdf type="diffuse" id="Floor">
+		<rgb name="reflectance" value="0.725, 0.71, 0.68"/>
+	</bsdf>
+	
+    <bsdf type="diffuse" id="Ceiling">
+		<rgb name="reflectance" value="0.725, 0.71, 0.68"/>
+	</bsdf>
+    
+	<bsdf type="diffuse" id="BackWall">
+		<rgb name="reflectance" value="0.725, 0.71, 0.68"/>
+	</bsdf>
+	
+	<bsdf type="diffuse" id="Light">
+		<rgb name="reflectance" value="0, 0, 0"/>
+	</bsdf>
+	
 	<shape type="rectangle" >
 		<transform name="toWorld" >
 			<matrix value="-4.37114e-008 1 4.37114e-008 0 0 -8.74228e-008 2 0 1 4.37114e-008 1.91069e-015 0 0 0 0 1"/>
@@ -94,6 +88,7 @@
 		</transform>
 		<ref id="RightWall" />
 	</shape>
+    
 	<shape type="rectangle" >
 		<transform name="toWorld" >
 			<matrix value="-4.37114e-008 8.74228e-008 -2 -1 1 3.82137e-015 -8.74228e-008 1 0 -1 -4.37114e-008 0 0 0 0 1"/>
@@ -102,14 +97,14 @@
 	</shape>
  
 	<shape type="sphere" >
-    <transform name="toWorld">
-      <translate value="-0.22827, 1.2, 0.152505"/>
-    </transform>
-    <float name ="radius" value="0.3"/>
-	  <bsdf type="dielectric">
-	    <float name="intIOR" value="1.5" />
-	    <float name="extIOR" value="1" />
-	  </bsdf>
+        <transform name="toWorld">
+            <translate value="-0.22827, 1.2, 0.152505"/>
+        </transform>
+        <float name ="radius" value="0.3"/>
+        <bsdf type="dielectric">
+            <float name="intIOR" value="1.5" />
+            <float name="extIOR" value="1" />
+        </bsdf>
 		<medium type="homogeneous" name="exterior" >
 			<rgb name="sigmaS" value="1, 1, 1"/>
 			<rgb name="sigmaA" value="0, 0, 0"/>

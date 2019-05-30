@@ -21,6 +21,10 @@ public:
         Sampler &sampler,
         int depth) override;
 
+    std::string toString() const override {
+        return tfm::format("VolPathTracer[\n]");
+    }
+
     const int maxDepth;
 };
 

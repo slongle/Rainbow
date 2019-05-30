@@ -101,11 +101,11 @@ public:
 	}
 
 	std::string toString(const int &spaceNum = 0) const {
-		return
-		indent("[\n", spaceNum) +
-			indent(tfm::format("pMin = %s,\n", pMin), spaceNum + 4) +
-			indent(tfm::format("pMax = %s,\n", pMax), spaceNum + 4) +
-		indent("]", spaceNum);
+        return
+            tfm::format("[\n"
+                "    pMin = %s,\n"
+                "    pMax = %s,\n"
+                "]", pMin, pMax);
 	}
 
 	friend std::ostream &operator << (std::ostream &os, const Bounds3<T> &bounds) {

@@ -460,4 +460,91 @@ CreateCubeMesh(
     return mesh;
 }
 
+std::shared_ptr<TriangleMesh> 
+CreateSphereTriangleMesh(
+    const Transform* o2w, 
+    const Transform* w2o,
+    PropertyList& list) 
+{
+    // setting
+    Float radius = list.getFloat("radius", 1.);
+    Point3f center(0, 0, 0);
+    int subdiv = list.getInteger("subdiv", 50);
+    int nLatitude = subdiv;
+    int nLongitude = subdiv * 2;
+    Float detLatitudeAngle = M_PI / nLatitude;
+    Float detLongitudeAngle = 2 * M_PI / nLongitude;
+
+    // container
+    const int vertexNum = nLongitude * (nLatitude - 1) + 2;
+    const int triangleNum = 2 * nLongitude + (nLatitude - 2)*nLongitude * 2;
+    std::vector<Point3f>  vertices;  
+    std::vector<Index>    indices;   
+    std::vector<Normal3f> normals;   
+    std::vector<Point2f>  texcoords; 
+
+    // v  px py pz and 
+    // vn nx ny nz
+    Point3f top = Point3f(0., 0., radius) + center;
+    vertices.push_back(top);
+    normals.emplace_back(0., 0., 1.);
+    for (int i = 1; i < nLatitude; i++) {
+        Float theta = i * detLatitudeAngle;
+        for (int j = 0; j < nLongitude; j++) {
+            Float phi = j * detLongitudeAngle;
+            Float x = sin(theta) * cos(phi);
+            Float y = sin(theta) * sin(phi);
+            Float z = cos(theta);
+            Normal3f n = Normal3f(x, y, z);
+            Point3f p = Point3f(x, y, z)* radius + center;
+            vertices.push_back(p);
+            normals.push_back(n);
+        }
+    }
+    Point3f bottom = Point3f(0., 0., -radius) + center;
+    vertices.push_back(bottom);
+    normals.emplace_back(0., 0., -1.);
+
+    // f v1//vn1 v2//vn2 v3//vn3
+    // counterclockwise
+    for (int i = 0; i < nLongitude; i++) {
+        int a = i + 1, b = a + 1;
+        if (i == nLongitude - 1) b = 1;
+        indices.emplace_back(a, a, -1);
+        indices.emplace_back(b, b, -1);
+        indices.emplace_back(0, 0, -1);
+    }
+
+    for (int i = 2; i < nLatitude; i++) {
+        for (int j = 0; j < nLongitude; j++) {
+            int a = (i - 1)*nLongitude + j + 1, b = a + 1, c = a - nLongitude, d = c + 1;
+            if (j == nLongitude - 1) b = (i - 1)*nLongitude + 1, d = b - nLongitude;
+            indices.emplace_back(a, a, -1);
+            indices.emplace_back(b, b, -1);
+            indices.emplace_back(c, c, -1);
+
+            indices.emplace_back(b, b, -1);
+            indices.emplace_back(d, d, -1);
+            indices.emplace_back(c, c, -1);
+        }
+    }
+
+    int bottomIdx = nLongitude * (nLatitude - 1) + 1;
+    for (int i = 0; i < nLongitude; i++) {
+        int a = (nLatitude - 2)*nLongitude + i + 1, b = a + 1;
+        if (i == nLongitude - 1) b = (nLatitude - 2)*nLongitude + 1;
+        indices.emplace_back(a, a, -1);
+        indices.emplace_back(bottomIdx, bottomIdx, -1);
+        indices.emplace_back(b, b, -1);
+    }
+
+    // create mesh
+    std::shared_ptr<TriangleMesh> mesh =
+        std::make_shared<TriangleMesh>(
+            o2w, vertexNum, triangleNum,
+            vertices, normals, texcoords, indices);
+
+    return mesh;
+}
+
 RAINBOW_NAMESPACE_END

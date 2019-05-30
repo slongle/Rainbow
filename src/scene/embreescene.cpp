@@ -1,6 +1,6 @@
 #include "embreescene.h"
 #include "shapes/triangle.h"
-#include <iostream>
+#include "shapes/sphere.h"
 
 RAINBOW_NAMESPACE_BEGIN
 
@@ -76,6 +76,7 @@ bool EmbreeScene::IntersectP(
 
 
     float t = query.ray.tfar;
+    ray.tMax = t;
     Point3f p = ray.o + ray.d * t;
 
     /*cout << p << endl;
@@ -204,6 +205,7 @@ void EmbreeScene::AddTriangleMesh(
     //    vertex, 0, sizeof(float) * 3, mesh->m_vertexNum);
     //rtcSetSharedGeometryBuffer(geom, RTC_BUFFER_TYPE_INDEX, 0, RTC_FORMAT_UINT3,
     //    index, 0, sizeof(int) * 3, mesh->m_triangleNum);
+
 
     rtcCommitGeometry(geom);    
 }

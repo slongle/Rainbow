@@ -40,13 +40,13 @@
 		    </bsdf>
 	  </shape>
 
-	  <shape type="obj">
-		    <string name="filename" value="meshes/rightwall.obj"/>
+	<shape type="obj">
+        <string name="filename" value="meshes/rightwall.obj"/>
         
-		    <bsdf type="diffuse">
-		      	<rgb name="reflectance" value="0.161 0.133 0.427"/>
-		    </bsdf>
-	  </shape>
+		<bsdf type="diffuse">
+		  	<rgb name="reflectance" value="0.161 0.133 0.427"/>
+		</bsdf>
+    </shape>
 
 	  <shape type="obj">
 		    <string name="filename" value="meshes/leftwall.obj"/>         

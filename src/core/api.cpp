@@ -115,6 +115,9 @@ std::shared_ptr<TriangleMesh> MakeMesh(
     else if (type == "cube") {
         mesh = CreateCubeMesh(o2w, w2o, list);
     }
+    else if (type=="sphere") {
+        mesh = CreateSphereTriangleMesh(o2w, w2o, list);
+    }
     return mesh;
 }
 
@@ -317,16 +320,20 @@ void RainbowShape(
     const std::string&   type,
     PropertyList&        list)
 {
-    Assert(type == "obj" || type == "rectangle" || type == "cube", "Only support triangle mesh");
+    Assert(type == "obj" || type == "rectangle" || type == "cube" || type == "sphere", 
+        "Only support triangle mesh");
 
     Transform* ObjectToWorld = transformPool->insert(renderOptions->CurrentTransform);
     Transform* WorldToObject = transformPool->insert(Inverse(renderOptions->CurrentTransform));
 
     std::vector<std::shared_ptr<Primitive>> prims;
-    std::vector<std::shared_ptr<Shape>> shapes = MakeShapes(type, ObjectToWorld, WorldToObject, list);
+    //std::vector<std::shared_ptr<Shape>> shapes = MakeShapes(type, ObjectToWorld, WorldToObject, list);
     std::shared_ptr<TriangleMesh> mesh = MakeMesh(type, ObjectToWorld, WorldToObject, list);
 
-    
+    std::vector<std::shared_ptr<Shape>> shapes;
+    for(int i=0;i<mesh->m_triangleNum;i++) {
+        shapes.push_back(std::make_shared<Triangle>(mesh, i));
+    }
 
     std::vector<std::shared_ptr<Light>> lights;
     std::shared_ptr<Material> mtl = renderOptions->CurrentMaterial;
