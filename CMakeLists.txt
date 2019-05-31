@@ -69,12 +69,16 @@ FILE(GLOB RAINBOW_SOURCE
     "src/media/*.h"
     "src/samplers/*.cpp"
     "src/samplers/*.h"
+    "src/scenes/*.cpp"
+    "src/scenes/*.h"
     "src/shapes/*.cpp"
     "src/shapes/*.h"
     "src/shapes/meshloaders/*.cpp"
     "src/shapes/meshloaders/*.h"
     "src/utility/*.cpp"
-    "src/utility/*.h")
+    "src/utility/*.h"
+    "src/volumes/*.cpp"
+    "src/volumes/*.h")
     
 SET(ALL_FILES 
     ${RAINBOW_SOURCE})

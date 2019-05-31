@@ -9,6 +9,8 @@ RAINBOW_NAMESPACE_BEGIN
 
 #define RAINBOW_TILE_SIZE 16
 
+
+
 struct FilmTilePixel {
     FilmTilePixel(
         const RGBSpectrum&   contribSum = RGBSpectrum(0.),
@@ -24,9 +26,12 @@ public:
     FilmTile(
         const Bounds2i&                 pixelBounds,
         const Bounds2i&                 sampleBounds,
-        const std::shared_ptr<Filter>   filter) 
-    : pixelBounds(pixelBounds), sampleBounds(sampleBounds), filter(filter),
-      size(pixelBounds.pMax.x - pixelBounds.pMin.x, pixelBounds.pMax.y - pixelBounds.pMin.y)
+        const std::shared_ptr<Filter>   filter,
+        const Point2i                   &resolution,
+        unsigned char                   *_guiImage)
+    : pixelBounds(pixelBounds), sampleBounds(sampleBounds), filter(filter), 
+      filmResolution(resolution), guiImage(_guiImage),
+      size(pixelBounds.pMax.x - pixelBounds.pMin.x, pixelBounds.pMax.y - pixelBounds.pMin.y)      
     {       
         pixels = std::unique_ptr<FilmTilePixel[]>(new FilmTilePixel[size.x * size.y]);
     }
@@ -43,9 +48,10 @@ public:
     );
 
     static std::vector<FilmTile> GenerateTiles(
-        const Point2i&                   resolution, 
-        const int&                       tileSize,
-        const std::shared_ptr<Filter>&   filter) {
+        const Point2i                   &resolution, 
+        const int                       &tileSize,
+        const std::shared_ptr<Filter>   &filter,
+        unsigned char                   *_guiImage = nullptr) {
         Point2i numTiles(std::ceil(resolution.x / static_cast<Float>(tileSize)),
             std::ceil(resolution.y / static_cast<Float>(tileSize)));
         std::vector<FilmTile> tiles;
@@ -56,7 +62,7 @@ public:
             Bounds2i tileSampleBounds(
                 Point2i(Floor(p0 + Point2f(0.5) - filter->m_radius)),
                 Point2i(Ceil (p1 - Point2f(0.5) + filter->m_radius)));
-            tiles.emplace_back(tilePixelBounds, tileSampleBounds, filter);
+            tiles.emplace_back(tilePixelBounds, tileSampleBounds, filter, resolution, _guiImage);
             if (p1.x == resolution.x) {
                 p0.x = 0;
                 p0.y = p1.y;
@@ -78,10 +84,14 @@ public:
     const Bounds2i pixelBounds;    //[)
     const Bounds2i sampleBounds;   //[)
     const Point2i  size;
+    
 private:    
 
     std::unique_ptr<FilmTilePixel[]>   pixels;
     std::shared_ptr<Filter>            filter;
+
+    unsigned char* guiImage = nullptr;
+    const Point2i filmResolution;
 };
 
 /*

@@ -5,12 +5,19 @@
 
 RAINBOW_NAMESPACE_BEGIN
 
-RGBSpectrum HomogeneousMedium::Tr(Ray ray, Sampler & sampler) const {
+RGBSpectrum 
+HomogeneousMedium::Tr(
+    Ray       ray, 
+    Sampler & sampler) const 
+{
     return Exp(-sigma_t * std::min(ray.tMax*ray.d.Length(), MAXFLOAT));
 }
 
-RGBSpectrum HomogeneousMedium::Sample(
-    const Ray & ray, Sampler & sampler, MemoryArena & arena, 
+RGBSpectrum 
+HomogeneousMedium::Sample(
+    const Ray         & ray, 
+    Sampler           & sampler, 
+    MemoryArena       & arena, 
     MediumInteraction * mi) const 
 {
     int channel = std::min((int)(3 * sampler.Next1D()), 2);

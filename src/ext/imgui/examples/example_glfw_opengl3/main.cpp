@@ -8,7 +8,7 @@
 #include <stdio.h>
 
 #define STB_IMAGE_IMPLEMENTATION
-#include "C:\Users\del\Desktop\std_image.h"
+#include "F:\Document\Graphics\code\Rainbow\src\ext\stb_images\stb_image.h"
 
 // About OpenGL function loaders: modern OpenGL doesn't have a standard header file and requires individual function pointers to be loaded manually. 
 // Helper libraries are often used for this purpose! Here we are supporting a few common ones: gl3w, glew, glad.
@@ -27,6 +27,7 @@
 #include <GLFW/glfw3.h> 
 #include <string>
 #include <iostream>
+#include <random>
 
 // [Win32] Our example includes a copy of glfw3.lib pre-compiled with VS2010 to maximize ease of testing and compatibility with old VS compilers.
 // To link with VS2010-era libraries, VS2015+ requires linking with legacy_stdio_definitions.lib, which we do using this pragma. 
@@ -38,6 +39,18 @@
 static void glfw_error_callback(int error, const char* description)
 {
     fprintf(stderr, "Glfw Error %d: %s\n", error, description);
+}
+
+std::default_random_engine e(1256214);    
+void Update(unsigned char* ptr,int width,int height) {
+    long long a = e(), b = e();
+    int w = a % width;
+    int h = b % height;
+    ptr[(h*width + w) * 4 + 0] = 255;
+    ptr[(h*width + w) * 4 + 1] = 0;
+    ptr[(h*width + w) * 4 + 2] = 0;
+    ptr[(h*width + w) * 4 + 3] = 255;
+    std::cout << w << ' ' << h << std::endl;
 }
 
 int main(int, char**)
@@ -121,7 +134,7 @@ int main(int, char**)
     bool show_another_window = false;
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
-    std::string filename("F:/Document/Graphics/code/Rainbow/Rainbow/pt_200spp_50b_15m42s.png");
+    std::string filename("F:/Document/Graphics/code/Rainbow/build/vol-caustic_3_3700spp.png");
     int image_width, image_height;
 
     unsigned char* image_data = stbi_load(filename.c_str(), &image_width, &image_height, NULL, 4);
@@ -148,10 +161,17 @@ int main(int, char**)
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();        
-
         
 
+        //ImGui::ShowDemoWindow(&show_demo_window);
+        Update(image_data, image_width, image_height);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image_width, image_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image_data);
+        ImGui::Begin("Image Test");
+        ImGui::Image((void*)(intptr_t)my_opengl_texture, ImVec2(image_width, image_height));
+        ImGui::End();
+
+
+        /*glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image_width, image_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image_data);
         ImGui::Begin("Image Test");
         ImGui::Image((void*)(intptr_t)my_opengl_texture, ImVec2(image_width, image_height));
         ImGui::End();
@@ -159,7 +179,7 @@ int main(int, char**)
         // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
         if (show_demo_window)
             ImGui::ShowDemoWindow(&show_demo_window);
-
+            */
         // 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
         {
             static float f = 0.0f;
@@ -184,14 +204,16 @@ int main(int, char**)
         }
 
         // 3. Show another simple window.
-        if (show_another_window)
+        /*if (show_another_window)
         {
             ImGui::Begin("Another Window", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
             ImGui::Text("Hello from another window!");
             if (ImGui::Button("Close Me"))
                 show_another_window = false;
             ImGui::End();
-        }
+        }*/
+
+
 
         // Rendering
         ImGui::Render();

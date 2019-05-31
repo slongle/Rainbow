@@ -22,7 +22,11 @@ public:
         int depth) override;
 
     std::string toString() const override {
-        return tfm::format("VolPathTracer[\n]");
+        return tfm::format(
+            "Volumetric Path Integrator[\n"
+            "    MaxDepth : %d,\n"
+            "]",
+            maxDepth);
     }
 
     const int maxDepth;

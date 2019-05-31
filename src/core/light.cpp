@@ -64,8 +64,9 @@ std::shared_ptr<AreaLight> CreateAreaLight(
     const std::shared_ptr<Shape>& shape,
     const MediumInterface& mediumInterface) {
     Transform lightToWorld;
+    Float scale = list.getFloat("scale", 1.);
 	RGBSpectrum L = list.getColor("radiance", RGBSpectrum(1.0));
-    return std::make_shared<AreaLight>(lightToWorld, mediumInterface, L, shape);
+    return std::make_shared<AreaLight>(lightToWorld, mediumInterface, L*scale, shape);
 }
 
 RAINBOW_NAMESPACE_END

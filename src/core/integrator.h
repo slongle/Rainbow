@@ -14,7 +14,7 @@ RAINBOW_NAMESPACE_BEGIN
 class Integrator{
 public:
 	Integrator() {}
-	virtual void Render(const Scene &scene) = 0;
+	virtual void Render(const Scene &scene, unsigned char* guiImage = nullptr) = 0;
 
     virtual void AdaptiveProgressiveRender(const Scene &scene, const int& x, const int & y)
     {
@@ -73,7 +73,7 @@ public:
     void RenderTileEyeLight(const Scene &scene, Sampler& sampler, FilmTile &tile);
     void RenderTileAdaptive(const Scene &scene, Sampler& sampler, FilmTile &tile, bool clamp = false);
     void RenderTile(const Scene &scene, Sampler& sampler, FilmTile &tile, bool clamp = false, const int& preSampleSum = 0);
-	void Render (const Scene &scene);
+    void Render(const Scene &scene, unsigned char* guiImage = nullptr);
     void RenderAdaptive(const Scene &scene);
     void RenderEyeLight(const Scene &scene);
     virtual RGBSpectrum Li(MemoryArena& arena, const Ray &ray, const Scene& scene, Sampler &sampler, int depth) = 0;

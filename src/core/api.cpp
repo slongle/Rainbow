@@ -9,8 +9,8 @@
 #include "material.h"
 #include "medium.h"
 
-#include "scene/rainbowscene.h"
-#include "scene/embreescene.h"
+#include "scenes/rainbowscene.h"
+#include "scenes/embreescene.h"
 
 #include "cameras/perspective.h"
 

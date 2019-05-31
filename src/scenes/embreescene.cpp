@@ -27,8 +27,9 @@ void SetRTCRayHit(RTCRayHit& query,const Ray& ray) {
 EmbreeScene::EmbreeScene(
     std::vector<std::shared_ptr<TriangleMesh>>&            m_meshes,
     std::vector<std::vector<std::shared_ptr<Primitive>>>&  m_primitives,
-    std::vector<std::shared_ptr<Light>>&                   m_lights) 
-    : Scene(m_lights), meshes(m_meshes), primitives(m_primitives) 
+    std::vector<std::shared_ptr<Light>>&                   m_lights)
+    : Scene(m_lights), meshes(m_meshes), primitives(m_primitives), 
+      triangleMeshNum(meshes.size()), triangleNum(0)
 {
     device = rtcNewDevice(nullptr);
     scene = rtcNewScene(device);
@@ -38,6 +39,7 @@ EmbreeScene::EmbreeScene(
 
     for(int i=0;i<meshes.size();i++) {
         AddTriangleMesh(meshes[i], i);
+        triangleNum += meshes[i]->m_triangleNum;
     }
 
     rtcCommitScene(scene);

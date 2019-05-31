@@ -21,9 +21,12 @@ public:
     bool Intersect(const Ray& ray) const override;
     
     std::string toString() const override {
-        std::string ret = tfm::format("EmbreeScene[\n");
-        ret += "]";
-        return ret;
+        return tfm::format(
+            "Embree Scene[\n"
+            "    Triangle Mesh Number : %d,\n"
+            "    Triangle Number : %d,\n"
+            "]"
+            ,triangleMeshNum, triangleNum);
     }
 
 private:
@@ -34,6 +37,7 @@ private:
     
     std::vector<std::shared_ptr<TriangleMesh>> meshes;
     std::vector<std::vector<std::shared_ptr<Primitive>>> primitives;
+    int triangleMeshNum, triangleNum;
 };
 
 void EmbreeSceneMain();

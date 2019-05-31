@@ -253,10 +253,10 @@ void SamplerIntegrator::RenderTileEyeLight(const Scene &scene, Sampler& sampler,
     }
 }
 
-void SamplerIntegrator::Render(const Scene &scene) {    
+void SamplerIntegrator::Render(const Scene &scene, unsigned char* guiImage) {
     std::shared_ptr<Film> film = camera->film;
     std::vector<FilmTile> tiles;
-    tiles = FilmTile::GenerateTiles(camera->film->resolution, RAINBOW_TILE_SIZE, film->filter);
+    tiles = FilmTile::GenerateTiles(camera->film->resolution, RAINBOW_TILE_SIZE, film->filter, guiImage);
     
     cout << "Rendering .. \n";
     cout.flush();
@@ -302,11 +302,16 @@ void SamplerIntegrator::Render(const Scene &scene) {
 
             preSumSample += delta;
 
-            std::string tmpName = filename;
-            tmpName.insert(film->filename.find_last_of('.'), "_" + std::to_string(cnt * delta) + "spp");
+            std::string outputName = filename;
+            outputName.insert(film->filename.find_last_of('.'), "_" + std::to_string(cnt * delta) + "spp");
             //std::cout << tmpName << std::endl;
-            film->SaveImage(tmpName);
-            statistic.ShowStatistic();
+            
+            film->SaveImage(outputName);
+
+            fprintf(stderr, "\r%dspp        \n", cnt*delta);
+            statistic.ShowStatistic(stderr);
+
+            finishedTiles = 0;
         }
 
     });

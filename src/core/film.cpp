@@ -26,7 +26,17 @@ void FilmTile::AddSample(
             FilmTilePixel &pixel = GetPixel(Point2i(x, y));
             Float scale = filter->Evaluate(sample - Vector2f(x + 0.5, y + 0.5));
             pixel.contribSum += L * scale;
-            pixel.filterWeightSum += scale;            
+            pixel.filterWeightSum += scale;
+            if (guiImage != nullptr) {
+                RGBSpectrum output = pixel.contribSum / pixel.filterWeightSum;
+#define TO_BYTE(v) (uint8_t) Clamp(255.f * GammaCorrect(v) + 0.5f, 0.f, 255.f)
+                int bas = (y*filmResolution.x + x) * 4;
+                guiImage[bas + 0] = TO_BYTE(output.r);
+                guiImage[bas + 1] = TO_BYTE(output.g);
+                guiImage[bas + 2] = TO_BYTE(output.b);
+                guiImage[bas + 3] = 255;
+#undef TO_BYTE
+            }
         }        
     }
 }

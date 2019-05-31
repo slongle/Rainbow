@@ -13,7 +13,8 @@ RGBSpectrum VolPathIntegrator::Li(
     Ray ray(r);
     bool SpecularBounce = false;
 
-    for (int bounce = 0;; bounce++) {
+    int bounce;
+    for (bounce = 0;; bounce++) {
         SurfaceInteraction inter;
         bool foundIntersect = scene.IntersectP(ray, &inter);
 
@@ -69,6 +70,14 @@ RGBSpectrum VolPathIntegrator::Li(
             beta /= q;
         }
     }
+
+    if (L.IsBlack())
+        statistic.zeroPath++;
+    statistic.pathNum++;
+    statistic.sumBounce += bounce;
+    statistic.maxBounce = std::max(statistic.maxBounce, static_cast<unsigned long long>(bounce));
+    statistic.minBounce = std::min(statistic.minBounce, static_cast<unsigned long long>(bounce));
+
     return L;
 }
 

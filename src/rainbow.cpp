@@ -42,6 +42,7 @@ int main(int argc, char *argv[]) {
     scenes[7] = "rainbow/scene.xml";
     scenes[8] = "dragon/scene.xml";
     scenes[9] = "glass-of-water/scene.xml";
+    scenes[10] = "hetvol/hetvol.xml";
 
     const std::string filename(solutionDir + scenes[4]);
 
