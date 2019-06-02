@@ -13,7 +13,10 @@ RAINBOW_NAMESPACE_BEGIN
 
 class Integrator{
 public:
-	Integrator() {}
+    Integrator(
+        std::shared_ptr<Camera>    camera,
+        std::shared_ptr<Sampler>   sampler)
+        :m_camera(camera), m_sampler(sampler) {}
 	virtual void Render(const Scene &scene, unsigned char* guiImage = nullptr) = 0;
 
     virtual void AdaptiveProgressiveRender(const Scene &scene, const int& x, const int & y)
@@ -40,14 +43,19 @@ public:
         Assert(false, "No Implement");
     }
 
-	std::shared_ptr<Camera> camera;
-	std::shared_ptr<Sampler> sampler;
+	std::shared_ptr<Camera> m_camera;
+	std::shared_ptr<Sampler> m_sampler;
 };
 
 class SamplerIntegrator :public Integrator {
 public:
-    SamplerIntegrator(const int& m_sampleNum, const int &m_delta = 1) :
-        sampleNum(m_sampleNum), delta(m_delta) 
+    SamplerIntegrator(
+        std::shared_ptr<Camera>    camera,
+        std::shared_ptr<Sampler>   sampler,
+        const int                 &m_sampleNum,
+        const int                 &m_sampleDelta = 1) :
+        Integrator(camera, sampler), 
+        sampleNum(m_sampleNum), sampleDelta(m_sampleDelta)
     {
         //halton_sampler.init_faure();
     }
@@ -78,7 +86,7 @@ public:
     void RenderEyeLight(const Scene &scene);
     virtual RGBSpectrum Li(MemoryArena& arena, const Ray &ray, const Scene& scene, Sampler &sampler, int depth) = 0;
 
-    int sampleNum, delta;
+    int sampleNum, sampleDelta;
     Statistic statistic;
     //Halton_sampler halton_sampler;
 };

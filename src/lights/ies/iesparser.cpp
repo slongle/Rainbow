@@ -123,7 +123,7 @@ bool IESFileInfo::process_type_b()
          * full 180бу range. */
         std::vector<float> new__anglesH;
         std::vector<std::vector<float> > new__candalaValues;
-        int hnum = _anglesH.size();
+        int hnum = (int)_anglesH.size();
         new__anglesH.reserve(2 * hnum - 1);
         new__candalaValues.reserve(2 * hnum - 1);
         for (int i = hnum - 1; i > 0; i--) {
@@ -158,8 +158,8 @@ bool IESFileInfo::process_type_b()
         /* The range in the file corresponds to 90бу-180бу, we need to mirror that to get the
          * full 180бу range. */
         std::vector<float> new__anglesV;
-        int hnum = _anglesH.size();
-        int vnum = _anglesV.size();
+        int hnum = (int)_anglesH.size();
+        int vnum = (int)_anglesV.size();
         new__anglesV.reserve(2 * vnum - 1);
         for (int i = vnum - 1; i > 0; i--) {
             new__anglesV.push_back(90.0f - _anglesV[i]);
@@ -211,32 +211,32 @@ bool IESFileInfo::process_type_c()
         /* Only one quadrant is defined, so we need to mirror twice (from one to two, then to four).
          * Since the two->four mirroring step might also be required if we get an input of two quadrants,
          * we only do the first mirror here and later do the second mirror in either case. */
-        int hnum = _anglesH.size();
+        int hnum = (int)_anglesH.size();
         for (int i = hnum - 2; i >= 0; i--) {
             _anglesH.push_back(180.0f - _anglesH[i]);
             _candalaValues.push_back(_candalaValues[i]);
         }
-        anglesNumH = _anglesH.size();
+        anglesNumH = (int)_anglesH.size();
     }
 
     if (_anglesH[_anglesH.size() - 1] == 180.0f) {
         /* Mirror half to the full range. */
-        int hnum = _anglesH.size();
+        int hnum = (int)_anglesH.size();
         for (int i = hnum - 2; i >= 0; i--) {
             _anglesH.push_back(360.0f - _anglesH[i]);
             _candalaValues.push_back(_candalaValues[i]);
         }
-        anglesNumH = _anglesH.size();
+        anglesNumH = (int)_anglesH.size();
     }
 
     /* Some files skip the 360бу entry (contrary to standard) because it's supposed to be identical to the 0бу entry.
      * If the file has a discernible order in its spacing, just fix this. */
     if (_anglesH[_anglesH.size() - 1] != 360.0f) {
-        int hnum = _anglesH.size();
+        int hnum = (int)_anglesH.size();
         float last_step = _anglesH[hnum - 1] - _anglesH[hnum - 2];
         float first_step = _anglesH[1] - _anglesH[0];
         float difference = 360.0f - _anglesH[hnum - 1];
-        anglesNumH = _anglesH.size();
+        anglesNumH = (int)_anglesH.size();
         if (last_step == difference || first_step == difference) {
             _anglesH.push_back(360.0f);
             _candalaValues.push_back(_candalaValues[0]);
@@ -250,7 +250,7 @@ bool IESFileInfo::process_type_c()
     if (v_first == 90.0f) {
         if (v_last == 180.0f) {
             /* Flip to ensure that vertical angles always start at 0бу. */
-            for (int i = 0; i < _anglesV.size(); i++) {
+            for (int i = 0; i < (int)_anglesV.size(); i++) {
                 _anglesV[i] = 180.0f - _anglesV[i];
             }
         }
@@ -616,7 +616,7 @@ IESLoadHelper::saveAsPreview(const IESFileInfo& info, std::uint8_t* data, std::u
     assert(info.valid());
 
     std::vector<float> ies(256);
-    if (!this->saveAs1D(info, ies.data(), ies.size(), 1))
+    if (!this->saveAs1D(info, ies.data(), (int)ies.size(), 1))
         return false;
 
     float maxValue = this->computeInvMax(info._candalaValues);
@@ -632,9 +632,9 @@ IESLoadHelper::saveAsPreview(const IESFileInfo& info, std::uint8_t* data, std::u
         return ((x*(A*x + C * B) + D * E) / (x*(A*x + B) + D * F)) - E / F;
     };
 
-    for (int y = 0; y < height; y++)
+    for (int y = 0; y < (int)height; y++)
     {
-        for (int x = 0; x < width; x++)
+        for (int x = 0; x < (int)width; x++)
         {
             float u = ((float)x / width) * 2.0f - 1.0f;
             float v = 1.0f - ((float)y / height) * 2.0f - 1.0f;

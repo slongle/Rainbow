@@ -34,10 +34,14 @@ RGBSpectrum DirectLightIntegrator::Li(MemoryArena& arena, const Ray & ray, const
     return L;
 }
 
-DirectLightIntegrator * CreateDirectLightIntegrator(PropertyList & list) {
+DirectLightIntegrator * CreateDirectLightIntegrator(
+    PropertyList              &list,
+    std::shared_ptr<Camera>    camera,
+    std::shared_ptr<Sampler>   sampler) 
+{
     int maxDepth = list.getInteger("maxDepth", 3);
     int sampleNum = list.getInteger("sampleNum", 10);
-    return new DirectLightIntegrator(maxDepth, sampleNum);
+    return new DirectLightIntegrator(camera, sampler, maxDepth, sampleNum);
 }
 
 RAINBOW_NAMESPACE_END

@@ -21,7 +21,7 @@ RGBSpectrum SamplerIntegrator::UniformSampleOneLight(
     Sampler& sampler,
     const bool handleMedium) 
 {
-    int lightNum = scene.lights.size();
+    int lightNum = (int)scene.lights.size();
     if (lightNum == 0) return RGBSpectrum(0.0);
     int lightID = std::min(int(sampler.Next1D()*lightNum), lightNum - 1);    
     Float lightPdf = Float(1) / lightNum;
@@ -32,54 +32,56 @@ RGBSpectrum SamplerIntegrator::UniformSampleOneLight(
 }
 
 RGBSpectrum SamplerIntegrator::EstimateDirectLight(
-    const Interaction& inter,
-    const std::shared_ptr<Light>& light,
-    const Scene& scene,
-    const Point2f& scatteru,
-    const Point2f& lightu,
-    Sampler&       sampler,
-    const bool handleMedia)
+    const Interaction&             inter,
+    const std::shared_ptr<Light>  &light,
+    const Scene                   &scene,
+    const Point2f                 &scatteru,
+    const Point2f                 &lightu,
+    Sampler                       &sampler,
+    const bool                     handleMedia)
 {
-    RGBSpectrum Ld(0.0);
+    RGBSpectrum ld(0.0);
     Float lightPdf = 0, scatterPdf = 0;
     Vector3f wi;
     Visibility visibility;
 
     // Sample Light with MSI
-    RGBSpectrum Li = light->SampleLi(inter, lightu, &wi, &lightPdf, &visibility);
-    if (lightPdf > 0 && !Li.IsBlack()) {
-        RGBSpectrum f;
-        // Estimate BSDF or Phase Function
-        if (inter.IsSurfaceInteraction()) {
-            // Sample BSDF
-            const SurfaceInteraction& surfaceInter = static_cast<const SurfaceInteraction&>(inter);
-            f = surfaceInter.bsdf->f(inter.wo, wi) * AbsDot(wi, inter.n);
-            scatterPdf = surfaceInter.bsdf->Pdf(inter.wo, wi);
-        }
-        else {
-            // Sample Phase Function
-            const MediumInteraction& mediumInter = static_cast<const MediumInteraction&>(inter);
-            Float p = mediumInter.phase->P(mediumInter.wo, wi);
-            f = RGBSpectrum(p);
-            scatterPdf = p;
-        }
-        if (!f.IsBlack()) {
-            // Visibility test
-            if (handleMedia) {
-                Li *= visibility.Tr(scene, sampler);
+    {        
+        RGBSpectrum li = light->SampleLi(inter, lightu, &wi, &lightPdf, &visibility);
+        if (lightPdf > 0 && !li.IsBlack()) {
+            RGBSpectrum f;
+            // Estimate BSDF or Phase Function
+            if (inter.IsSurfaceInteraction()) {
+                // Sample BSDF
+                const SurfaceInteraction& surfaceInter = static_cast<const SurfaceInteraction&>(inter);
+                f = surfaceInter.bsdf->f(inter.wo, wi) * AbsDot(wi, inter.n);
+                scatterPdf = surfaceInter.bsdf->Pdf(inter.wo, wi);
             }
             else {
-                if (visibility.Occluded(scene))
-                    Li = RGBSpectrum(0.0);                
+                // Sample Phase Function
+                const MediumInteraction& mediumInter = static_cast<const MediumInteraction&>(inter);
+                Float p = mediumInter.phase->P(mediumInter.wo, wi);
+                f = RGBSpectrum(p);
+                scatterPdf = p;
             }
-            // Compute Le contribute
-            if (!Li.IsBlack()) {
-                if (light->IsDeltaLight()) {
-                    Ld += Li * f / lightPdf;
+            if (!f.IsBlack()) {
+                // Visibility test
+                if (handleMedia) {
+                    li *= visibility.Tr(scene, sampler);
                 }
                 else {
-                    Float weight = PowerHeuristic(1, lightPdf, 1, scatterPdf);
-                    Ld += Li * f * weight / lightPdf;
+                    if (visibility.Occluded(scene))
+                        li = RGBSpectrum(0.0);                
+                }
+                // Compute Le contribute
+                if (!li.IsBlack()) {
+                    if (light->IsDeltaLight()) {
+                        ld += li * f / lightPdf;
+                    }
+                    else {
+                        Float weight = PowerHeuristic(1, lightPdf, 1, scatterPdf);
+                        ld += li * f * weight / lightPdf;
+                    }
                 }
             }
         }
@@ -110,7 +112,7 @@ RGBSpectrum SamplerIntegrator::EstimateDirectLight(
             Float weight = 1;
             if (!sampledSpecular) {
                 lightPdf = light->PdfLi(inter, wi);
-                if (lightPdf == 0) return Ld;
+                if (lightPdf == 0) return ld;
                 weight = PowerHeuristic(1, scatterPdf, 1, lightPdf);
             }
 
@@ -123,47 +125,63 @@ RGBSpectrum SamplerIntegrator::EstimateDirectLight(
                               scene.IntersectP(ray, &lightInter);
 
             // Compute Le contribute
-            RGBSpectrum Li(0.);
+            RGBSpectrum li(0.);
             if (foundIntersection) {
                 if (lightInter.primitive->getAreaLight() == light.get())
-                    Li = lightInter.Le(-wi);
+                    li = lightInter.Le(-wi);
             }
             else {
                 //Le = light.Le(ray);
             }
-            if (!Li.IsBlack())
-                Ld += f * Li * weight / scatterPdf;
+            if (!li.IsBlack())
+                ld += f * li * weight / scatterPdf;
         }
     }
-    return Ld;
+    return ld;
 }
 
-RGBSpectrum SamplerIntegrator::SpecularReflect
-(MemoryArena& arena, const Ray & ray, const Scene & scene, int depth, SurfaceInteraction intersection) {
+RGBSpectrum SamplerIntegrator::SpecularReflect(
+    MemoryArena         &arena, 
+    const Ray           &ray, 
+    const Scene         &scene, 
+    int                  depth, 
+    SurfaceInteraction   intersection) 
+{
     Vector3f wo = intersection.wo, wi;
     Float pdf;
 
-    RGBSpectrum f = intersection.bsdf->SampleF(wo, &wi, sampler->Next2D(), &pdf);
+    RGBSpectrum f = intersection.bsdf->SampleF(wo, &wi, m_sampler->Next2D(), &pdf);
     Normal3f n = intersection.n;
 
     if (pdf > 0.f && !f.IsBlack() && Dot(n, wi) != 0.f) {
         Ray r = intersection.SpawnToRay(wi);
-        return f * Li(arena, r, scene, *sampler, depth + 1) * AbsDot(wi, n) / pdf;
+        return f * Li(arena, r, scene, *m_sampler, depth + 1) * AbsDot(wi, n) / pdf;
     }
     else
         return RGBSpectrum(0.f);
 }
 
-RGBSpectrum SamplerIntegrator::SpecularRefract
-(MemoryArena& arena, const Ray & ray, const Scene & scene, int depth, SurfaceInteraction intersection) {
+RGBSpectrum SamplerIntegrator::SpecularRefract(
+    MemoryArena          &arena, 
+    const Ray            &ray, 
+    const Scene          &scene, 
+    int                   depth, 
+    SurfaceInteraction    intersection) 
+{
     return RGBSpectrum();
 }
 
-void SamplerIntegrator::RenderTileAdaptive(const Scene &scene, Sampler& sampler, FilmTile &tile, bool clamp) {
+void SamplerIntegrator::RenderTileAdaptive(
+    const Scene   &scene, 
+    Sampler       &sampler, 
+    FilmTile      &tile, 
+    bool           clamp) 
+{
     Ray ray;
     MemoryArena arena;
-    Float maxError = 0.05, pValue = 0.05;
-    Float quantile = 1.95996;
+    Float maxError = (Float)0.05;
+    //Float pValue = (Float)0.05;
+    Float quantile = (Float)1.95996;
     for (int y = tile.sampleBounds.pMin.y; y < tile.sampleBounds.pMax.y; y++) {
         for (int x = tile.sampleBounds.pMin.x; x < tile.sampleBounds.pMax.x; x++) {
             sampler.SetPixel(Point2i(x, y));
@@ -172,19 +190,19 @@ void SamplerIntegrator::RenderTileAdaptive(const Scene &scene, Sampler& sampler,
             int sampleCount;
             for (sampleCount = 1; sampleCount <= 1024; sampleCount++) {
                 Point2f cameraSample = sampler.GetCameraSample();
-                RGBSpectrum weight = camera->GenerateRay(&ray, cameraSample);
+                RGBSpectrum weight = m_camera->GenerateRay(&ray, cameraSample);
                 RGBSpectrum li = weight * Li(arena, ray, scene, sampler, 0);
                 if (clamp)
                     li = Clamp(li, RGBSpectrum(1));
                 L += li;
 
                 Float sampleLuminance = li.Luma();
-                const Float delta = sampleLuminance - mean;
+                Float delta = sampleLuminance - mean;
                 mean += delta / sampleCount;
                 meanSqr += delta * (sampleLuminance - mean);
 
                 if (sampleCount % 64 == 0) {                    
-                    const Float variance = meanSqr / (sampleCount - 1);
+                    Float variance = meanSqr / (sampleCount - 1);
 
                     Float stdError = std::sqrt(variance / sampleCount);
 
@@ -220,9 +238,9 @@ void SamplerIntegrator::RenderTile(
             RGBSpectrum L(0.);
             sampler.SetPixel(Point2i(x, y));
             sampler.SetSampleNumber(preSampleSum);
-            for (int i = 0; i < delta; i++) {
+            for (int i = 0; i < sampleDelta; i++) {
                 Point2f cameraSample = sampler.GetCameraSample();
-                RGBSpectrum weight = camera->GenerateRay(&ray, cameraSample);
+                RGBSpectrum weight = m_camera->GenerateRay(&ray, cameraSample);
                 L = weight * Li(arena, ray, scene, sampler, 0);
                 if (clamp)
                     L = Clamp(L, RGBSpectrum(1));
@@ -240,7 +258,7 @@ void SamplerIntegrator::RenderTileEyeLight(const Scene &scene, Sampler& sampler,
         for (int x = tile.pixelBounds.pMin.x; x < tile.pixelBounds.pMax.x; x++) {
             sampler.SetPixel(Point2i(x, y));
             Point2f cameraSample = sampler.GetCameraSample();
-            RGBSpectrum weight = camera->GenerateRay(&ray, cameraSample);
+            RGBSpectrum weight = m_camera->GenerateRay(&ray, cameraSample);
             SurfaceInteraction inter;
             if (scene.IntersectP(ray, &inter)) {
                 Float dotLN = Dot(-ray.d, inter.n);
@@ -254,9 +272,10 @@ void SamplerIntegrator::RenderTileEyeLight(const Scene &scene, Sampler& sampler,
 }
 
 void SamplerIntegrator::Render(const Scene &scene, unsigned char* guiImage) {
-    std::shared_ptr<Film> film = camera->film;
+    std::shared_ptr<Film> film = m_camera->film;
     std::vector<FilmTile> tiles;
-    tiles = FilmTile::GenerateTiles(camera->film->resolution, RAINBOW_TILE_SIZE, film->filter, guiImage);
+    tiles = FilmTile::GenerateTiles(
+        m_camera->film->resolution, RAINBOW_TILE_SIZE, film->filter, guiImage);
     
     cout << "Rendering .. \n";
     cout.flush();
@@ -265,7 +284,7 @@ void SamplerIntegrator::Render(const Scene &scene, unsigned char* guiImage) {
 
     std::thread renderThread([&] {
 
-        tbb::blocked_range<int> range(0, tiles.size());
+        tbb::blocked_range<int> range(0, (int)tiles.size());
         int cnt = 1;
         int area = (film->resolution.x)*(film->resolution.y);
         std::atomic<int> finishedTiles = 0;
@@ -280,7 +299,7 @@ void SamplerIntegrator::Render(const Scene &scene, unsigned char* guiImage) {
                 Point2i seed = Point2i((cnt - 1)*area, (cnt - 1)*area) + 
                                tile.pixelBounds.pMin;
                 
-                std::unique_ptr<Sampler> clonedSampler(sampler->Clone(seed));
+                std::unique_ptr<Sampler> clonedSampler(m_sampler->Clone(seed));
 
                 /* Render all contained pixels */
                 RenderTile(scene, *clonedSampler, tile, false, preSumSample);
@@ -292,7 +311,7 @@ void SamplerIntegrator::Render(const Scene &scene, unsigned char* guiImage) {
             }
         };
 
-        for (cnt = 1; cnt <= sampleNum / delta; cnt++)
+        for (cnt = 1; cnt <= sampleNum / sampleDelta; cnt++)
         {
             /// Uncomment the following line for single threaded rendering
             //map(range);
@@ -300,15 +319,16 @@ void SamplerIntegrator::Render(const Scene &scene, unsigned char* guiImage) {
             /// Default: parallel rendering
             tbb::parallel_for(range, map);
 
-            preSumSample += delta;
+            //preSumSample += sampleDelta;
 
             std::string outputName = filename;
-            outputName.insert(film->filename.find_last_of('.'), "_" + std::to_string(cnt * delta) + "spp");
+            outputName.insert(film->filename.find_last_of('.'), 
+                "_" + std::to_string(cnt * sampleDelta) + "spp");
             //std::cout << tmpName << std::endl;
             
             film->SaveImage(outputName);
 
-            fprintf(stderr, "\r%dspp        \n", cnt*delta);
+            fprintf(stderr, "\r%dspp        \n", cnt * sampleDelta);
             statistic.ShowStatistic(stderr);
 
             finishedTiles = 0;
@@ -323,9 +343,9 @@ void SamplerIntegrator::Render(const Scene &scene, unsigned char* guiImage) {
 
 
 void SamplerIntegrator::RenderAdaptive(const Scene &scene) {
-    std::shared_ptr<Film> film = camera->film;
+    std::shared_ptr<Film> film = m_camera->film;
     std::vector<FilmTile> tiles;
-    tiles = FilmTile::GenerateTiles(camera->film->resolution, RAINBOW_TILE_SIZE, film->filter);
+    tiles = FilmTile::GenerateTiles(m_camera->film->resolution, RAINBOW_TILE_SIZE, film->filter);
     
     cout << "Rendering .. \n";
     cout.flush();
@@ -334,7 +354,7 @@ void SamplerIntegrator::RenderAdaptive(const Scene &scene) {
 
     std::thread renderThread([&] {
 
-        tbb::blocked_range<int> range(0, tiles.size());
+        tbb::blocked_range<int> range(0, (int)tiles.size());
         std::atomic<int> cnt = 0;
         int area = (film->resolution.x)*(film->resolution.y);
 
@@ -347,7 +367,7 @@ void SamplerIntegrator::RenderAdaptive(const Scene &scene) {
                 Point2i seed = Point2i((cnt - 1)*area, (cnt - 1)*area) +
                     tile.pixelBounds.pMin;
 
-                std::unique_ptr<Sampler> clonedSampler(sampler->Clone(seed));
+                std::unique_ptr<Sampler> clonedSampler(m_sampler->Clone(seed));
 
                 /* Render all contained pixels */
                 RenderTileAdaptive(scene, *clonedSampler, tile);
@@ -376,9 +396,9 @@ void SamplerIntegrator::RenderAdaptive(const Scene &scene) {
 }
 
 void SamplerIntegrator::RenderEyeLight(const Scene &scene) {
-    std::shared_ptr<Film> film = camera->film;
+    std::shared_ptr<Film> film = m_camera->film;
     std::vector<FilmTile> tiles;
-    tiles = FilmTile::GenerateTiles(camera->film->resolution, RAINBOW_TILE_SIZE, film->filter);
+    tiles = FilmTile::GenerateTiles(m_camera->film->resolution, RAINBOW_TILE_SIZE, film->filter);
     
     cout << "Rendering .. \n";
     cout.flush();
@@ -387,7 +407,7 @@ void SamplerIntegrator::RenderEyeLight(const Scene &scene) {
 
     std::thread renderThread([&] {
 
-        tbb::blocked_range<int> range(0, tiles.size());        
+        tbb::blocked_range<int> range(0, (int)tiles.size());
         int cnt = 1;
         int area = (film->resolution.x)*(film->resolution.y);
         std::atomic<int> finishedTiles = 0;
@@ -401,7 +421,7 @@ void SamplerIntegrator::RenderEyeLight(const Scene &scene) {
                 Point2i seed = Point2i((cnt - 1)*area, (cnt - 1)*area) +
                     tile.pixelBounds.pMin;
 
-                std::unique_ptr<Sampler> clonedSampler(sampler->Clone(seed));
+                std::unique_ptr<Sampler> clonedSampler(m_sampler->Clone(seed));
 
                 /* Render all contained pixels */
                 RenderTileEyeLight(scene, *clonedSampler, tile);
@@ -413,10 +433,10 @@ void SamplerIntegrator::RenderEyeLight(const Scene &scene) {
             }
         };        
         /// Uncomment the following line for single threaded rendering
-        map(range);
+        //map(range);
 
         /// Default: parallel rendering
-        //tbb::parallel_for(range, map);
+        tbb::parallel_for(range, map);
     });
 
     renderThread.join();

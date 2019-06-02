@@ -126,9 +126,9 @@ bool Triangle::IntersectP(const Ray & ray, Float * tHit, SurfaceInteraction* int
         CoordinateSystem(Normal3f(Cross(p1 - p0, p2 - p0)), &dpdu, &dpdv);
     }
     else {
-        Float invDet = 1. / determinant;
-        dpdu = ( duv12[1] * dp02 - duv02[1] * dp12) * invDet;
-        dpdv = (-duv12[0] * dp02 + duv02[0] * dp12) * invDet;
+        Float inv = 1. / determinant;
+        dpdu = ( duv12[1] * dp02 - duv02[1] * dp12) * inv;
+        dpdv = (-duv12[0] * dp02 + duv02[0] * dp12) * inv;
     }
         
     Point3f pHit = b0 * p0 + b1 * p1 + b2 * p2;

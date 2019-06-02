@@ -18,6 +18,9 @@ RGBSpectrum VolPathIntegrator::Li(
         SurfaceInteraction inter;
         bool foundIntersect = scene.IntersectP(ray, &inter);
 
+        // TODO:delete
+        if (!foundIntersect) break;
+
         MediumInteraction mi;
         if (ray.medium) beta *= ray.medium->Sample(ray, sampler, arena, &mi);
         if (beta.IsBlack()) break;
@@ -82,11 +85,15 @@ RGBSpectrum VolPathIntegrator::Li(
 }
 
 
-VolPathIntegrator * CreateVolPathIntegrator(PropertyList & list) {
+VolPathIntegrator * CreateVolPathIntegrator(
+    PropertyList              &list,
+    std::shared_ptr<Camera>    camera,
+    std::shared_ptr<Sampler>   sampler) 
+{
     int maxDepth = list.getInteger("maxDepth", 5);
     int sampleNum = list.getInteger("sampleNum", 10);
     int delta = list.getInteger("delta", 1);
-    return new VolPathIntegrator(maxDepth, sampleNum, delta);
+    return new VolPathIntegrator(camera, sampler, maxDepth, sampleNum, delta);
 }
 
 RAINBOW_NAMESPACE_END

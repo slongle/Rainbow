@@ -2,10 +2,10 @@
 
 <scene version="0.5.0" >
     <mode type="final"/>
-    <integrator type="volpath" >
+    <integrator type="path" >
 		<integer name="maxDepth" value="7" />
         <integer name="sampleNum" value="10000"/>
-        <integer name="delta" value="100"/>
+        <integer name="delta" value="1"/>
 		<boolean name="strictNormals" value="true" />
 	</integrator>
 	<sensor type="perspective" >
@@ -18,7 +18,7 @@
 			<integer name="sampleCount" value="64" />
 		</sampler>
 		<film type="ldrfilm" >
-            <string name="filename" value="vol-caustic_6.hdr"/>
+            <string name="filename" value="vol-caustic_3.hdr"/>
             <integer name="width" value="1024" />
 			<integer name="height" value="1024" />
 			<string name="fileFormat" value="png" />
@@ -37,11 +37,11 @@
 		<rgb name="reflectance" value="0.14, 0.45, 0.091"/>
 	</bsdf>
 	
-    <bsdf type="diffuse" id="Floor">
+	<bsdf type="diffuse" id="Floor">
 		<rgb name="reflectance" value="0.725, 0.71, 0.68"/>
 	</bsdf>
 	
-    <bsdf type="diffuse" id="Ceiling">
+	<bsdf type="diffuse" id="Ceiling">
 		<rgb name="reflectance" value="0.725, 0.71, 0.68"/>
 	</bsdf>
     
@@ -97,15 +97,15 @@
 	</shape>
  
 	<shape type="sphere" >
-        <integer name="subdiv" value="200"/>
-        <transform name="toWorld">
-            <translate value="-0.22827, 1.2, 0.152505"/>
-        </transform>
-        <float name ="radius" value="0.3"/>
-        <bsdf type="dielectric">
-            <float name="intIOR" value="1.5" />
-            <float name="extIOR" value="1" />
-        </bsdf>
+		<integer name="subdiv" value="200"/>
+		<transform name="toWorld">
+			<translate value="-0.22827, 1.2, 0.152505"/>
+		</transform>
+		<float name ="radius" value="0.3"/>
+		<bsdf type="dielectric">
+			<float name="intIOR" value="1.5" />
+			<float name="extIOR" value="1" />
+		</bsdf>
 		<medium type="homogeneous" name="exterior" >
 			<rgb name="sigmaS" value="1, 1, 1"/>
 			<rgb name="sigmaA" value="0, 0, 0"/>
@@ -122,7 +122,7 @@
 			<rgb name="sigmaA" value="0, 0, 0"/>
 		</medium>
 		<emitter type="area" >
-            <float name="scale" value="5"/>                                        
+			<float name="scale" value="5"/>                                        
 			<rgb name="radiance" value="54112.7, 38197.2, 12732.4"/>
 		</emitter>
 	</shape>

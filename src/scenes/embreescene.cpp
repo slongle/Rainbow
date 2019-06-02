@@ -29,7 +29,7 @@ EmbreeScene::EmbreeScene(
     std::vector<std::vector<std::shared_ptr<Primitive>>>&  m_primitives,
     std::vector<std::shared_ptr<Light>>&                   m_lights)
     : Scene(m_lights), meshes(m_meshes), primitives(m_primitives), 
-      triangleMeshNum(meshes.size()), triangleNum(0)
+      triangleMeshNum((int)meshes.size()), triangleNum(0)
 {
     device = rtcNewDevice(nullptr);
     scene = rtcNewScene(device);

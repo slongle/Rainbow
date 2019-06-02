@@ -84,11 +84,15 @@ RGBSpectrum PathIntegrator::Li(
 }
 
 
-PathIntegrator * CreatePathIntegrator(PropertyList & list) {
+PathIntegrator * CreatePathIntegrator(
+    PropertyList              &list,
+    std::shared_ptr<Camera>    camera,
+    std::shared_ptr<Sampler>   sampler)
+{
     int maxDepth = list.getInteger("maxDepth", 5);
     int sampleNum = list.getInteger("sampleNum", 10);
     int delta = list.getInteger("delta", 1);
-    return new PathIntegrator(maxDepth, sampleNum, delta); 
+    return new PathIntegrator(camera, sampler, maxDepth, sampleNum, delta);
 }
 
 RAINBOW_NAMESPACE_END

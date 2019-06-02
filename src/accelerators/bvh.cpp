@@ -13,7 +13,7 @@ struct BVHPrimitiveInfo {
 };
 
 struct BVHBuildNode {
-    void InitLeaf(const Bounds3f& m_bounds, const size_t &m_firstPrimOffset, const int& m_nPrimitives) {
+    void InitLeaf(const Bounds3f& m_bounds, const int &m_firstPrimOffset, const int& m_nPrimitives) {
         bounds = m_bounds;
         firstPrimOffset = m_firstPrimOffset;
         nPrimitives = m_nPrimitives;
@@ -70,7 +70,7 @@ BVHAccelerator::BVHAccelerator(std::vector<std::shared_ptr<Primitive>>& m_primit
     std::vector<std::shared_ptr<Primitive>> orderedPrims;
     orderedPrims.resize(primitives.size());
     BVHBuildNode *root;
-    root = RecursiveBuild(arena, primitiveInfo, 0, primitives.size(), &totalNodes, orderedPrims);
+    root = RecursiveBuild(arena, primitiveInfo, 0, (int)primitives.size(), &totalNodes, orderedPrims);
     primitives.swap(orderedPrims);
     orderedPrims.resize(0);
 
@@ -94,7 +94,7 @@ BVHBuildNode * BVHAccelerator::RecursiveBuild(MemoryArena& arena, std::vector<BV
     int nPrimitives = end - begin;
     if (nPrimitives == 1) {
         // Create leaf node
-        size_t firstPrimOffset = orderedPrims.size();
+        int firstPrimOffset = (int)orderedPrims.size();
         for (int i = begin; i < end; i++) {
             int idx = primitiveInfo[i].idx;
             orderedPrims.push_back(primitives[idx]);
@@ -112,7 +112,7 @@ BVHBuildNode * BVHAccelerator::RecursiveBuild(MemoryArena& arena, std::vector<BV
         int mid = (begin + end) >> 1;
         if (centroidBounds.pMin[dim] == centroidBounds.pMax[dim]) {
             // Create leaf node
-            size_t firstPrimOffset = orderedPrims.size();
+            int firstPrimOffset = (int)orderedPrims.size();
             for (int i = begin; i < end; i++) {
                 int idx = primitiveInfo[i].idx;
                 orderedPrims.push_back(primitives[idx]);
@@ -208,7 +208,7 @@ BVHBuildNode * BVHAccelerator::RecursiveBuild(MemoryArena& arena, std::vector<BV
                     }
                     else {
                         // Create leaf node
-                        size_t firstPrimOffset = orderedPrims.size();
+                        int firstPrimOffset = (int)orderedPrims.size();
                         for (int i = begin; i < end; i++) {
                             int idx = primitiveInfo[i].idx;
                             orderedPrims.push_back(primitives[idx]);

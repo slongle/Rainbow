@@ -58,7 +58,7 @@ void ParseWavefrontOBJ(
         Float z = attrib.vertices[i + 2];
         vertices->emplace_back(x, y, z);
     }
-    *vertexNum = vertices->size();
+    *vertexNum = (int)vertices->size();
 
     for (int i = 0; i < attrib.normals.size(); i += 3) {
         Float x = attrib.normals[i];
@@ -76,7 +76,7 @@ void ParseWavefrontOBJ(
     // Loop over shapes
     for (int s = 0; s < shapes.size(); s++) 
     {
-        *triangleNum += shapes[s].mesh.num_face_vertices.size();
+        *triangleNum += (int)shapes[s].mesh.num_face_vertices.size();
         // Loop over faces (polygon)
         int index_offset = 0;
         for (int f = 0; f < shapes[s].mesh.num_face_vertices.size(); f++) 

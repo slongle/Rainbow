@@ -198,7 +198,7 @@ void RainbowShowSettings(
     Scene*        scene) 
 {
     cout << integrator->toString() << endl;
-    cout << integrator->camera->toString() << endl;
+    cout << integrator->m_camera->toString() << endl;
     cout << scene->toString() << endl;
 }
 
@@ -510,19 +510,17 @@ Integrator* RenderOptions::MakeIntegrator()
 
 	Integrator* integrator = nullptr;
 	if (IntegratorType == "whitted") {
-		integrator = CreateWhittedIntegrator(IntegratorProperty);
+        integrator = CreateWhittedIntegrator(IntegratorProperty, camera, sampler);
 	}
     else if (IntegratorType == "direct") {
-        integrator = CreateDirectLightIntegrator(IntegratorProperty);
+        integrator = CreateDirectLightIntegrator(IntegratorProperty, camera, sampler);
     }
     else if (IntegratorType == "path") {
-        integrator = CreatePathIntegrator(IntegratorProperty);
+        integrator = CreatePathIntegrator(IntegratorProperty, camera, sampler);
     }
     else if (IntegratorType == "volpath") {
-        integrator = CreateVolPathIntegrator(IntegratorProperty);
+        integrator = CreateVolPathIntegrator(IntegratorProperty, camera, sampler);
     }
-	integrator->camera = camera;
-	integrator->sampler = sampler;
 	return integrator;
 }
 

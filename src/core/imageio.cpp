@@ -24,7 +24,8 @@ void ExportToHDR(
     const int&          width, 
     const int&          height) 
 {
-    int status = stbi_write_hdr(filename.c_str(), width, height, 3, rgb);
+    stbi_write_hdr(filename.c_str(), width, height, 3, rgb);
+    //int status = stbi_write_hdr(filename.c_str(), width, height, 3, rgb);
 }
 
 void ExportToPNG(const std::string& filename, const unsigned char* rgba, const int& width, const int& height) {

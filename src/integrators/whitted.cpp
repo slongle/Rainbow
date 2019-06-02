@@ -48,10 +48,14 @@ RGBSpectrum WhittedIntegrator::Li(MemoryArena& arena, const Ray & ray, const Sce
 	return L;
 }
 
-WhittedIntegrator* CreateWhittedIntegrator(PropertyList &list) {
+WhittedIntegrator* CreateWhittedIntegrator(
+    PropertyList              &list,
+    std::shared_ptr<Camera>    camera,
+    std::shared_ptr<Sampler>   sampler) 
+{
     int maxDepth = list.getInteger("maxDepth", 1);
     int sampleNum = list.getInteger("sampleNum", 10);
-    return new WhittedIntegrator(maxDepth, sampleNum);
+    return new WhittedIntegrator(camera, sampler, maxDepth, sampleNum);
 }
 
 RAINBOW_NAMESPACE_END

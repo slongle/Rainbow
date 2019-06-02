@@ -8,10 +8,12 @@ RAINBOW_NAMESPACE_BEGIN
 class PathIntegrator :public SamplerIntegrator {
 public:
     PathIntegrator(
-        const int &m_maxDepth, 
-        const int &m_sampleNum,
-        const int &m_delta) :
-        SamplerIntegrator(m_sampleNum, m_delta), 
+        std::shared_ptr<Camera>    camera,
+        std::shared_ptr<Sampler>   sampler,
+        const int                 &m_maxDepth,
+        const int                 &m_sampleNum,
+        const int                 &m_delta) :
+        SamplerIntegrator(camera, sampler, m_sampleNum, m_delta), 
         maxDepth(m_maxDepth) {}
 
     RGBSpectrum Li(
@@ -34,7 +36,10 @@ public:
     const int maxDepth;
 };
 
-PathIntegrator* CreatePathIntegrator(PropertyList& list);
+PathIntegrator* CreatePathIntegrator(
+    PropertyList              &list,
+    std::shared_ptr<Camera>    camera,
+    std::shared_ptr<Sampler>   sampler);
 
 RAINBOW_NAMESPACE_END
 
