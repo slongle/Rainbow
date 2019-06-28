@@ -84,7 +84,7 @@ Float GridDensityVolume::LookUpFloat(
     const Float& y, 
     const Float& z) const 
 {
-    
+    return 0.;
 }
 
 RGBSpectrum GridDensityVolume::LookUpSpectrum(
@@ -92,7 +92,7 @@ RGBSpectrum GridDensityVolume::LookUpSpectrum(
     const Float& y, 
     const Float& z) const 
 {
-    
+    return RGBSpectrum(0.);
 }
 
 
