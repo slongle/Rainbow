@@ -1,6 +1,7 @@
 #include "film.h"
 
 #include "utility/string.h"
+#include <tbb/pipeline.h>
 
 RAINBOW_NAMESPACE_BEGIN
 
@@ -14,31 +15,42 @@ void FilmTile::AddSample(
     pixel.filterWeightSum += num;
 }
 
+/**
+ * position is the position of pixel, not the real position
+ * sample is the real position, not in [0,1]^2
+ */
 void FilmTile::AddSample(
     const Point2i&       position,
     const Point2f&       sample,
     const RGBSpectrum&   L)
 {
-    Point2i p0(Max(pixelBounds.pMin, Floor(sample + Vector2f(0.5) - filter->m_radius)));
-    Point2i p1(Min(pixelBounds.pMax, Ceil (sample - Vector2f(0.5) + filter->m_radius)));
+    Point2i p0(Max(pixelBounds.pMin, Ceil(sample - Vector2f(0.5) - filterRadius)));
+    Point2i p1(Min(pixelBounds.pMax, Floor(sample + Vector2f(0.5) + filterRadius)));    
+    
+    int* xIndex = ALLOCA(int, p1.x - p0.x);
+    for (int x = p0.x; x < p1.x; x++) {
+        Float px = std::abs((x - sample.x) * invFilterRadius.x * filterTableWidth - 0.5);
+        xIndex[x - p0.x] = std::min((int)std::floor(px), filterTableWidth - 1);
+    }
+
+    int* yIndex = ALLOCA(int, p1.y - p0.y);
+    for (int y = p0.y; y < p1.y; y++) {
+        Float py = std::abs((y - sample.y) * invFilterRadius.y * filterTableWidth - 0.5);
+        yIndex[y - p0.y] = std::min((int)std::floor(py), filterTableWidth - 1);
+    }
+
     for (int x = p0.x; x < p1.x; x++) {
         for (int y = p0.y; y < p1.y; y++) {
-            FilmTilePixel &pixel = GetPixel(Point2i(x, y));
-            Float scale = filter->Evaluate(sample - Vector2f(x + 0.5, y + 0.5));
+            FilmTilePixel &pixel = GetPixel(Point2i(x, y));            
+
+            int offset = (xIndex[x - p0.x])*filterTableWidth + yIndex[y - p0.y];
+            Float scale = filterTable[offset];
+
             pixel.contribSum += L * scale;
             pixel.filterWeightSum += scale;
-            if (guiImage != nullptr) {
-                RGBSpectrum output = pixel.contribSum / pixel.filterWeightSum;
-#define TO_BYTE(v) (uint8_t) Clamp(255.f * GammaCorrect(v) + 0.5f, 0.f, 255.f)
-                int bas = (y*filmResolution.x + x) * 4;
-                guiImage[bas + 0] = TO_BYTE(output.r);
-                guiImage[bas + 1] = TO_BYTE(output.g);
-                guiImage[bas + 2] = TO_BYTE(output.b);
-                guiImage[bas + 3] = 255;
-#undef TO_BYTE
-            }
         }        
     }
+
 }
 
 Film::Film(
@@ -48,7 +60,52 @@ Film::Film(
     filename(m_filename), resolution(m_resolution), filter(m_filter), 
     aspect(static_cast<Float>(resolution.x) / resolution.y) 
 {
-	pixels = std::unique_ptr<Pixel[]>(new Pixel[resolution.x * resolution.y]);
+	pixels = std::unique_ptr<Pixel[]>(new Pixel[resolution.x * resolution.y]);    
+    int offset = 0;
+    for (int x = 0; x < filterTableWidth; x++) {
+        for (int y = 0; y < filterTableWidth; y++, offset++) {
+            Point2f p;
+            p.x = (x + 0.5) * invFilterTableWidth * filter->m_radius.x;
+            p.y = (y + 0.5) * invFilterTableWidth * filter->m_radius.y;
+            filterTable[offset] = filter->Evaluate(p);
+        }
+    }
+}
+
+std::vector<FilmTile> Film::GenerateTiles(
+    const int       &tileSize)
+{
+
+    Point2i numTiles(std::ceil(resolution.x / static_cast<Float>(tileSize)),
+        std::ceil(resolution.y / static_cast<Float>(tileSize)));
+
+    std::vector<FilmTile> tiles;
+
+    Point2i p0(0, 0);
+    for (int i = 0; i < numTiles.x * numTiles.y; i++) {
+        Point2i p1 = Min(p0 + Point2i(tileSize), resolution);
+        Bounds2i tilePixelBounds(p0, p1);
+        Bounds2i tileSampleBounds(
+            Point2i(Floor(p0 + Point2f(0.5) - filter->m_radius)),
+            Point2i(Ceil(p1 - Point2f(0.5) + filter->m_radius)));
+        tileSampleBounds.pMin.x = std::max(0, tileSampleBounds.pMin.x);
+        tileSampleBounds.pMin.y = std::max(0, tileSampleBounds.pMin.y);
+        tileSampleBounds.pMax.x = std::min(resolution.x, tileSampleBounds.pMax.x);
+        tileSampleBounds.pMax.y = std::min(resolution.y, tileSampleBounds.pMax.y);
+
+        tiles.emplace_back(tilePixelBounds, tileSampleBounds, resolution,
+            filter->m_radius, filter->m_invRadius,
+            filterTable, filterTableWidth, invFilterTableWidth);
+
+        if (p1.x == resolution.x) {
+            p0.x = 0;
+            p0.y = p1.y;
+        }
+        else {
+            p0.x = p1.x;
+        }
+    }
+    return tiles;
 }
 
 void Film::MergeFilmTile(const FilmTile & tile) 

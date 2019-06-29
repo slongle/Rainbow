@@ -274,8 +274,7 @@ void SamplerIntegrator::RenderTileEyeLight(const Scene &scene, Sampler& sampler,
 void SamplerIntegrator::Render(const Scene &scene, unsigned char* guiImage) {
     std::shared_ptr<Film> film = m_camera->film;
     std::vector<FilmTile> tiles;
-    tiles = FilmTile::GenerateTiles(
-        m_camera->film->resolution, RAINBOW_TILE_SIZE, film->filter, guiImage);
+    tiles = film->GenerateTiles(RAINBOW_TILE_SIZE);
     
     cout << "Rendering .. \n";
     cout.flush();
@@ -319,7 +318,7 @@ void SamplerIntegrator::Render(const Scene &scene, unsigned char* guiImage) {
             /// Default: parallel rendering
             tbb::parallel_for(range, map);
 
-            //preSumSample += sampleDelta;
+            preSumSample += sampleDelta;
 
             std::string outputName = filename;
             outputName.insert(film->filename.find_last_of('.'), 
@@ -345,7 +344,7 @@ void SamplerIntegrator::Render(const Scene &scene, unsigned char* guiImage) {
 void SamplerIntegrator::RenderAdaptive(const Scene &scene) {
     std::shared_ptr<Film> film = m_camera->film;
     std::vector<FilmTile> tiles;
-    tiles = FilmTile::GenerateTiles(m_camera->film->resolution, RAINBOW_TILE_SIZE, film->filter);
+    tiles = film->GenerateTiles(RAINBOW_TILE_SIZE);
     
     cout << "Rendering .. \n";
     cout.flush();
@@ -398,7 +397,7 @@ void SamplerIntegrator::RenderAdaptive(const Scene &scene) {
 void SamplerIntegrator::RenderEyeLight(const Scene &scene) {
     std::shared_ptr<Film> film = m_camera->film;
     std::vector<FilmTile> tiles;
-    tiles = FilmTile::GenerateTiles(m_camera->film->resolution, RAINBOW_TILE_SIZE, film->filter);
+    tiles = film->GenerateTiles(RAINBOW_TILE_SIZE);
     
     cout << "Rendering .. \n";
     cout.flush();

@@ -24,14 +24,18 @@ struct FilmTilePixel {
 class FilmTile {
 public:
     FilmTile(
-        const Bounds2i&                 pixelBounds,
-        const Bounds2i&                 sampleBounds,
-        const std::shared_ptr<Filter>   filter,
-        const Point2i                   &resolution,
-        unsigned char                   *_guiImage)
-    : pixelBounds(pixelBounds), sampleBounds(sampleBounds), filter(filter), 
-      filmResolution(resolution), guiImage(_guiImage),
-      size(pixelBounds.pMax.x - pixelBounds.pMin.x, pixelBounds.pMax.y - pixelBounds.pMin.y)      
+        const Bounds2i  &pixelBounds,
+        const Bounds2i  &sampleBounds,
+        const Point2i   &resolution,
+        const Vector2f  &filterRadius,
+        const Vector2f  &invFilterRadius,
+        const Float     *filterTable,
+        const int       &filterTableWidth,
+        const double    &invFilterTableWidth)
+        : pixelBounds(pixelBounds), sampleBounds(sampleBounds), filmResolution(resolution),
+        filterRadius(filterRadius), invFilterRadius(invFilterRadius), filterTable(filterTable),
+        filterTableWidth(filterTableWidth), invFilterTableWidth(invFilterTableWidth),
+        size(pixelBounds.pMax.x - pixelBounds.pMin.x, pixelBounds.pMax.y - pixelBounds.pMin.y)
     {       
         pixels = std::unique_ptr<FilmTilePixel[]>(new FilmTilePixel[size.x * size.y]);
     }
@@ -47,32 +51,7 @@ public:
         const RGBSpectrum&   L
     );
 
-    static std::vector<FilmTile> GenerateTiles(
-        const Point2i                   &resolution, 
-        const int                       &tileSize,
-        const std::shared_ptr<Filter>   &filter,
-        unsigned char                   *_guiImage = nullptr) {
-        Point2i numTiles(std::ceil(resolution.x / static_cast<Float>(tileSize)),
-            std::ceil(resolution.y / static_cast<Float>(tileSize)));
-        std::vector<FilmTile> tiles;
-        Point2i p0(0, 0);
-        for (int i = 0; i < numTiles.x * numTiles.y; i++) {
-            Point2i p1 = Min(p0 + Point2i(tileSize), resolution);
-            Bounds2i tilePixelBounds(p0, p1);
-            Bounds2i tileSampleBounds(
-                Point2i(Floor(p0 + Point2f(0.5) - filter->m_radius)),
-                Point2i(Ceil (p1 - Point2f(0.5) + filter->m_radius)));
-            tiles.emplace_back(tilePixelBounds, tileSampleBounds, filter, resolution, _guiImage);
-            if (p1.x == resolution.x) {
-                p0.x = 0;
-                p0.y = p1.y;
-            }
-            else {
-                p0.x = p1.x;
-            }
-        }
-        return tiles;
-    }    
+      
 
     FilmTilePixel &GetPixel(const Point2i &p) const 
     {
@@ -88,10 +67,13 @@ public:
 private:    
 
     std::unique_ptr<FilmTilePixel[]>   pixels;
-    std::shared_ptr<Filter>            filter;
-
-    unsigned char* guiImage = nullptr;
     const Point2i filmResolution;
+
+    const Vector2f filterRadius, invFilterRadius;
+    const Float* filterTable;
+    int filterTableWidth;
+    double invFilterTableWidth;
+
 };
 
 /*
@@ -121,6 +103,7 @@ public:
     void ExportToHeatMapUnsignedCharPointer(unsigned char* data) const;
     void ExportToUnsignedCharPointer(unsigned char* data) const;
     void UpdateToUnsignedCharPointer(unsigned char* data, const int &x, const int &y) const;    
+    std::vector<FilmTile> GenerateTiles(const int &tileSize);
 
     std::string toString() const {
         return tfm::format(
@@ -155,6 +138,10 @@ private:
 	}
 
 	std::unique_ptr<Pixel[]> pixels;
+
+    static const int filterTableWidth = 16;
+    static constexpr  double invFilterTableWidth = 1. / filterTableWidth;
+    Float filterTable[filterTableWidth * filterTableWidth];
 };
 
 Film * CreateFilm(

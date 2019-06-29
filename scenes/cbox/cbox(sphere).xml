@@ -15,7 +15,7 @@
 	          <integer name="sampleCount" value="512"/>
 	      </sampler>
 		    <film type="hdrfilm">
-            <string name="filename" value="sphere-cornell-box_halton.hdr"/>
+            <string name="filename" value="sphere-cornell-box_box.hdr"/>
 			      <integer name="height" value="600"/>
 			      <integer name="width" value="800"/>
 		        <rfilter type="box"/>

@@ -5,7 +5,7 @@
 #include <list>
 #include <algorithm>
 
-#define ALLOCA(TYPE, COUNT) (TYPE*)alloca(COUNT * sizeof(TYPE))
+#define ALLOCA(TYPE, COUNT) (TYPE*)alloca((COUNT) * sizeof(TYPE))
 
 #define ARENA_ALLOCA(ARENA, TYPE) new ((ARENA).Alloc(sizeof(TYPE))) TYPE
 
