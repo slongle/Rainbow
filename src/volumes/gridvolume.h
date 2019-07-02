@@ -9,9 +9,11 @@ RAINBOW_NAMESPACE_BEGIN
 class GridDensityVolume :public Volume {
 public:
     GridDensityVolume(){}
-    void LoadFile(const std::string& filename) override;
     Float LookUpFloat(const Float& x, const Float& y, const Float& z) const override;
     RGBSpectrum LookUpSpectrum(const Float& x, const Float& y, const Float& z) const override;
+    Float GetMaxFloatValue() const override;
+private:
+    void LoadFile(const std::string& filename);
 };
 
 RAINBOW_NAMESPACE_END

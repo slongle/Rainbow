@@ -1,4 +1,4 @@
-#include "grid.h"
+#include "gridvolume.h"
 
 RAINBOW_NAMESPACE_BEGIN
 
@@ -93,6 +93,12 @@ RGBSpectrum GridDensityVolume::LookUpSpectrum(
     const Float& z) const 
 {
     return RGBSpectrum(0.);
+}
+
+Float GridDensityVolume::GetMaxFloatValue() const 
+{
+    // Todo
+    return Float(0.);
 }
 
 

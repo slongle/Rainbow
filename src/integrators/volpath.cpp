@@ -19,7 +19,7 @@ RGBSpectrum VolPathIntegrator::Li(
         bool foundIntersect = scene.IntersectP(ray, &inter);
 
         // TODO:delete
-        if (!foundIntersect) break;
+        //if (!foundIntersect) break;
 
         MediumInteraction mi;
         if (ray.medium) beta *= ray.medium->Sample(ray, sampler, arena, &mi);
