@@ -15,7 +15,7 @@ Float GaussianFilter::Evaluate(const Point2f& p) const
     return Gaussian(p.x, m_expX)*Gaussian(p.y, m_expY);
 }
 
-std::shared_ptr<GaussianFilter> CreateGaussianFilter(PropertyList& list) 
+std::shared_ptr<GaussianFilter> CreateGaussianFilter(const PropertyList& list) 
 {   
     Float radius = list.getFloat("radius", 2.0f);
     /* Standard deviation of the Gaussian */

@@ -40,40 +40,40 @@ struct Property {
 
 class PropertyList {
 public:
-	void setBoolean(const std::string &name, const bool &value);
-	bool getBoolean(const std::string &name);
-	bool getBoolean(const std::string &name, const bool &defaultValue);
-    bool findBoolean(const std::string &name);
+	void setBoolean(const std::string &name, const bool &value);	
+	bool getBoolean(const std::string &name) const;
+	bool getBoolean(const std::string &name, const bool &defaultValue) const;
+    bool findBoolean(const std::string &name) const;
 
-	void setInteger(const std::string &name, const int &value);
-	int  getInteger(const std::string &name);
-	int  getInteger(const std::string &name, const int &defaultValue);
-    bool findInteger(const std::string &name);
+	void setInteger(const std::string &name, const int &value);	
+	int  getInteger(const std::string &name) const;
+	int  getInteger(const std::string &name, const int &defaultValue) const;
+    bool findInteger(const std::string &name) const;
 
-	void  setFloat(const std::string &name, const Float &value);
-	Float getFloat(const std::string &name);
-	Float getFloat(const std::string &name, const Float &defaultValue);
-    bool findFloat(const std::string &name);
+	void  setFloat(const std::string &name, const Float &value);	
+	Float getFloat(const std::string &name) const;
+	Float getFloat(const std::string &name, const Float &defaultValue) const;
+    bool findFloat(const std::string &name) const;
 
-	void setString(const std::string &name, const std::string &value);
-	std::string getString(const std::string &name);
-	std::string getString(const std::string &name, const std::string &defaultValue);
-    bool findString(const std::string &name);
+	void setString(const std::string &name, const std::string &value);	
+	std::string getString(const std::string &name) const;
+	std::string getString(const std::string &name, const std::string &defaultValue) const;
+    bool findString(const std::string &name) const;
 
 	void setVector(const std::string &name, const Vector3f &value);
-	Vector3f getVector(const std::string &name);
-	Vector3f getVector(const std::string &name, const Vector3f &defaultValue);
-    bool findVector(const std::string &name);
+	Vector3f getVector(const std::string &name) const;
+	Vector3f getVector(const std::string &name, const Vector3f &defaultValue) const;
+    bool findVector(const std::string &name) const;
 
-	void setColor(const std::string &name, const RGBSpectrum &value);
-	RGBSpectrum getColor(const std::string &name);
-	RGBSpectrum getColor(const std::string &name, const RGBSpectrum &defaultValue);
-    bool findColor(const std::string &name);
+	void setColor(const std::string &name, const RGBSpectrum &value);	
+	RGBSpectrum getColor(const std::string &name) const;
+	RGBSpectrum getColor(const std::string &name, const RGBSpectrum &defaultValue) const;
+    bool findColor(const std::string &name) const;
 
 	void setTransform(const std::string &name, const Transform &value);
-	Transform getTransform(const std::string &name);
-	Transform getTransform(const std::string &name, const Transform &defaultValue);
-    bool findTransform(const std::string &name);
+	Transform getTransform(const std::string &name) const;
+	Transform getTransform(const std::string &name, const Transform &defaultValue) const;
+    bool findTransform(const std::string &name) const;
 
 private:
 	std::map<std::string, Property> list;

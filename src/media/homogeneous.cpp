@@ -40,7 +40,7 @@ HomogeneousMedium::Sample(
     return sampledMedium ? (Tr * sigma_s / pdf) : (Tr / pdf);
 }
 
-Medium * CreateHomogeneousMedium(PropertyList & list) {
+Medium * CreateHomogeneousMedium(const PropertyList & list) {
     RGBSpectrum sigma_a = list.getColor("sigmaA", RGBSpectrum(0.));
     RGBSpectrum sigma_s = list.getColor("sigmaS", RGBSpectrum(1.));
     Float g = list.getFloat("g", 0.);

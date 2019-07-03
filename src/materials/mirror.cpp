@@ -12,7 +12,7 @@ void MirrorMaterial::ComputeScatteringFunctions(
         ARENA_ALLOCA(arena, SpecularReflection)(R, ARENA_ALLOCA(arena, FresnelNoOp)()));
 }
 
-MirrorMaterial* CreateMirrorMaterial(PropertyList& list) {
+MirrorMaterial* CreateMirrorMaterial(const PropertyList& list) {
     RGBSpectrum R = list.getColor("reflectance", RGBSpectrum(1));
     return new MirrorMaterial(R);
 }

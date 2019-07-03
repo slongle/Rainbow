@@ -70,7 +70,7 @@ RGBSpectrum IESLight::SampleLi(
     return att * I / DistanceSquare(intersection.p, pLight);
 }
 
-std::shared_ptr<IESLight> CreateIESLight(PropertyList & list)
+std::shared_ptr<IESLight> CreateIESLight(const PropertyList & list)
 {
     Transform lightToWorld = list.getTransform("toWorld", Transform());
     MediumInterface mediumInterface;

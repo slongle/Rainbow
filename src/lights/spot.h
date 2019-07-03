@@ -48,7 +48,7 @@ private:
     Float Falloff(const Vector3f& wo) const;
 };
 
-std::shared_ptr<SpotLight> CreateSpotLight(PropertyList& list);
+std::shared_ptr<SpotLight> CreateSpotLight(const PropertyList& list);
 
 RAINBOW_NAMESPACE_END
 

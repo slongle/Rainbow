@@ -8,7 +8,7 @@ Float TentFilter::Evaluate(const Point2f & p) const {
 }
 
 
-std::shared_ptr<TentFilter> CreateTentFilter(PropertyList& list)
+std::shared_ptr<TentFilter> CreateTentFilter(const PropertyList& list)
 {
     Float radius = list.getFloat("radius", 1.);
     return std::make_shared<TentFilter>(Vector2f(radius));

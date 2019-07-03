@@ -11,7 +11,7 @@ void MatteMaterial::ComputeScatteringFunctions(
     intersection->bsdf->Add(ARENA_ALLOCA(arena, LambertianReflection)(R));
 }
 
-MatteMaterial* CreateMatteMaterial(PropertyList & list) {
+MatteMaterial* CreateMatteMaterial(const PropertyList & list) {
 	RGBSpectrum R = list.getColor("reflectance", RGBSpectrum(0.5));
 	return new MatteMaterial(R);
 }

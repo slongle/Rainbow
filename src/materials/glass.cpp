@@ -14,7 +14,7 @@ void GlassMaterial::ComputeScatteringFunctions(
     intersection->bsdf->Add(ARENA_ALLOCA(arena, SpecularRefract)(T, etaI, etaT));*/
 }
 
-GlassMaterial* CreateGlassMaterial(PropertyList& list) {
+GlassMaterial* CreateGlassMaterial(const PropertyList& list) {
     Float etaI;
     if (list.findFloat("etaI")) etaI = list.getFloat("etaI", Float(1));
     else etaI = list.getFloat("extIOR", Float(1));

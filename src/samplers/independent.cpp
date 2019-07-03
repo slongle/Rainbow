@@ -18,7 +18,7 @@ Point2f Independent::Next2D() {
 	return Point2f(random.nextFloat(), random.nextFloat());
 }
 
-Independent* CreateIndependentSampler(PropertyList & list) {
+Independent* CreateIndependentSampler(const PropertyList & list) {
 	int sampleCount = list.getInteger("sampleCount");
 	return new Independent(sampleCount);
 }

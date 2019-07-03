@@ -14,7 +14,7 @@ public:
 	RGBSpectrum R;
 };
 
-MatteMaterial* CreateMatteMaterial(PropertyList& list);
+MatteMaterial* CreateMatteMaterial(const PropertyList& list);
 
 RAINBOW_NAMESPACE_END
 

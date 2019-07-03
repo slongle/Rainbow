@@ -20,11 +20,13 @@ using std::endl;
 
 //#ifndef NDEBUG
 
-#define Log(message) do { \
+#define Log(message) \
+    do { \
 		(tfm::format)(std::cerr,"%s", message); \
 	} while(0)
 
-#define Assert(cond, explanation) do { \
+#define Assert(cond, explanation) \
+    do { \
 		if (!(cond)) std::cerr<<std::endl<<"Assertion occoured at "<<std::endl<<__FUNCTION__<<" "<<__FILE__<<" "<<__LINE__<<" ( "<<explanation<<" )", throw std::runtime_error(explanation); \
 	} while (0)
 

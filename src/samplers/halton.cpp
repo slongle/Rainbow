@@ -37,7 +37,7 @@ Point2f HaltonSampler::GetCameraSample() {
     return Point2f(rx, ry);
 }
 
-HaltonSampler* CreateHaltonSampler(PropertyList& list, const Point2i& resolution) {
+HaltonSampler* CreateHaltonSampler(const PropertyList& list, const Point2i& resolution) {
     //int sampleCount = list.getInteger("sampleCount");
     return new HaltonSampler(resolution);
 }

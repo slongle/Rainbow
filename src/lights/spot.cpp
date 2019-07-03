@@ -32,7 +32,7 @@ Float SpotLight::Falloff(const Vector3f& wo) const {
     return (ret*ret)*(ret*ret);
 }
 
-std::shared_ptr<SpotLight> CreateSpotLight(PropertyList & list)
+std::shared_ptr<SpotLight> CreateSpotLight(const PropertyList & list)
 {
     Transform lightToWorld = list.getTransform("toWorld", Transform());
     MediumInterface mediumInterface;

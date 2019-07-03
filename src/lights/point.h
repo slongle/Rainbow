@@ -38,7 +38,7 @@ private:
     const Point3f pLight;
 };
 
-std::shared_ptr<PointLight> CreatePointLight(PropertyList& list);
+std::shared_ptr<PointLight> CreatePointLight(const PropertyList& list);
 
 RAINBOW_NAMESPACE_END
 

@@ -23,7 +23,10 @@ private:
 	Float radius;
 };
 
-std::shared_ptr<Sphere> CreateSphere(const Transform* o2w, const Transform* w2o, PropertyList &list);
+std::shared_ptr<Sphere> CreateSphere(
+    const Transform* o2w, 
+    const Transform* w2o, 
+    const PropertyList &list);
 
 RAINBOW_NAMESPACE_END
 

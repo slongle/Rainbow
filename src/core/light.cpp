@@ -60,9 +60,9 @@ RGBSpectrum AreaLight::SampleLi(const Interaction& ref, const Point2f& sample,
 }
 
 std::shared_ptr<AreaLight> CreateAreaLight(
-    PropertyList& list, 
-    const std::shared_ptr<Shape>& shape,
-    const MediumInterface& mediumInterface) {
+    const PropertyList           &list, 
+    const std::shared_ptr<Shape> &shape,
+    const MediumInterface        &mediumInterface) {
     Transform lightToWorld;
     Float scale = list.getFloat("scale", 1.);
 	RGBSpectrum L = list.getColor("radiance", RGBSpectrum(1.0));

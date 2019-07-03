@@ -68,9 +68,9 @@ public:
 };
 
 std::shared_ptr<AreaLight> CreateAreaLight(
-    PropertyList& list, 
-    const std::shared_ptr<Shape>& shape,
-    const MediumInterface& mediumInterface);
+    const PropertyList           &list, 
+    const std::shared_ptr<Shape> &shape,
+    const MediumInterface        &mediumInterface);
 
 RAINBOW_NAMESPACE_END
 

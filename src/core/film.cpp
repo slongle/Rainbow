@@ -271,8 +271,8 @@ void Film::UpdateToUnsignedCharPointer(unsigned char* data, const int &x, const 
 }
 
 Film *CreateFilm(
-    PropertyList&                    list, 
-    const std::shared_ptr<Filter>&   filter) 
+    const PropertyList                &list, 
+    const std::shared_ptr<Filter>     &filter) 
 {
 	std::string filename = list.getString("filename", "output.png");
 	Point2i resolution;

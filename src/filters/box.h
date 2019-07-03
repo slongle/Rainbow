@@ -20,7 +20,7 @@ public:
     }
 };
 
-std::shared_ptr<BoxFilter> CreateBoxFilter(PropertyList& list);
+std::shared_ptr<BoxFilter> CreateBoxFilter(const PropertyList& list);
 
 RAINBOW_NAMESPACE_END
 

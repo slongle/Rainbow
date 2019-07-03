@@ -27,7 +27,7 @@ public:
     const Float g;
 };
 
-Medium *CreateHomogeneousMedium(PropertyList& list);
+Medium *CreateHomogeneousMedium(const PropertyList& list);
 
 RAINBOW_NAMESPACE_END
 

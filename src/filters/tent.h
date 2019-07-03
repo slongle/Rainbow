@@ -20,7 +20,7 @@ public:
     }
 };
 
-std::shared_ptr<TentFilter> CreateTentFilter(PropertyList& list);
+std::shared_ptr<TentFilter> CreateTentFilter(const PropertyList& list);
 
 RAINBOW_NAMESPACE_END
 

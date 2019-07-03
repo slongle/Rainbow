@@ -34,7 +34,7 @@ RGBSpectrum PerspectiveCamera::GenerateRay(Ray* r, const Point2f & p) const {
 
 PerspectiveCamera * CreatePerspectiveCamera(
     const Transform&        CameraToWorld, 
-    PropertyList&           list, 
+    const PropertyList&           list, 
     std::shared_ptr<Film>   film) 
 {
 	Float fov = list.getFloat("fov", 30.0);

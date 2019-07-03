@@ -14,7 +14,7 @@ private:
     RGBSpectrum R;
 };
 
-MirrorMaterial* CreateMirrorMaterial(PropertyList& list);
+MirrorMaterial* CreateMirrorMaterial(const PropertyList& list);
 
 RAINBOW_NAMESPACE_END
 

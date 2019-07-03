@@ -31,7 +31,7 @@ private:
     }
 };
 
-std::shared_ptr<GaussianFilter> CreateGaussianFilter(PropertyList& list);
+std::shared_ptr<GaussianFilter> CreateGaussianFilter(const PropertyList& list);
 
 RAINBOW_NAMESPACE_END
 

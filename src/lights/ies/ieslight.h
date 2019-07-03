@@ -45,7 +45,7 @@ private:
     IESLoadHelper       IESLoader;
 };
 
-std::shared_ptr<IESLight> CreateIESLight(PropertyList & list);
+std::shared_ptr<IESLight> CreateIESLight(const PropertyList & list);
 
 RAINBOW_NAMESPACE_END
 

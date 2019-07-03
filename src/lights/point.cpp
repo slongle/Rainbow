@@ -22,7 +22,7 @@ RGBSpectrum PointLight::SampleLi(
     return I / DistanceSquare(intersection.p, pLight);
 }
 
-std::shared_ptr<PointLight> CreatePointLight(PropertyList & list)
+std::shared_ptr<PointLight> CreatePointLight(const PropertyList & list)
 {
     Transform lightToWorld = list.getTransform("toWorld", Transform());
     MediumInterface mediumInterface;

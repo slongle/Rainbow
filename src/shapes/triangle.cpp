@@ -251,7 +251,7 @@ Float Triangle::Area() const {
 std::vector<std::shared_ptr<Triangle>> CreateWavefrontOBJ(
     const Transform* o2w, 
     const Transform* w2o, 
-	PropertyList & list) {
+    const PropertyList & list) {
 	
 	std::string filename = list.getString("filename");
 	int vertexNum = 0, triangleNum = 0;
@@ -279,7 +279,7 @@ std::vector<std::shared_ptr<Triangle>> CreateWavefrontOBJ(
 std::vector<std::shared_ptr<Triangle>> CreateRectangle(
     const Transform* o2w, 
     const Transform* w2o, 
-    PropertyList &list) {
+    const PropertyList &list) {
 
     const int vertexNum = 4;
     const int triangleNum = 2;
@@ -323,7 +323,7 @@ static uint32_t CubeData_triangles[][3] = { { 0, 1, 2 },{ 3, 0, 2 },{ 4, 5, 6 },
 std::vector<std::shared_ptr<Triangle>> CreateCube(
     const Transform* o2w, 
     const Transform* w2o, 
-    PropertyList &list) {
+    const PropertyList &list) {
 
     const int vertexNum = 24;
     const int triangleNum = 12;
@@ -367,7 +367,7 @@ std::shared_ptr<TriangleMesh>
 CreateWavefrontOBJMesh(
     const Transform* o2w, 
     const Transform* w2o, 
-    PropertyList& list) 
+    const PropertyList& list)
 {
     std::string filename = list.getString("filename");
     int vertexNum = 0, triangleNum = 0;
@@ -391,7 +391,7 @@ std::shared_ptr<TriangleMesh>
 CreateRectangleMesh(
     const Transform* o2w, 
     const Transform* w2o, 
-    PropertyList& list) 
+    const PropertyList& list)
 {
     const int vertexNum = 4;
     const int triangleNum = 2;
@@ -426,7 +426,7 @@ std::shared_ptr<TriangleMesh>
 CreateCubeMesh(
     const Transform* o2w, 
     const Transform* w2o, 
-    PropertyList& list) 
+    const PropertyList& list)
 {
     const int vertexNum = 24;
     const int triangleNum = 12;
@@ -464,7 +464,7 @@ std::shared_ptr<TriangleMesh>
 CreateSphereTriangleMesh(
     const Transform* o2w, 
     const Transform* w2o,
-    PropertyList& list) 
+    const PropertyList& list)
 {
     // setting
     Float radius = list.getFloat("radius", 1.);

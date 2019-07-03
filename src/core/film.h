@@ -145,8 +145,8 @@ private:
 };
 
 Film * CreateFilm(
-    PropertyList&                    list, 
-    const std::shared_ptr<Filter>&   filter);
+    const PropertyList              &list, 
+    const std::shared_ptr<Filter>   &filter);
 
 RAINBOW_NAMESPACE_END
 

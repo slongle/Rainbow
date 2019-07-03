@@ -16,7 +16,7 @@ public:
     RGBSpectrum T, R;
 };
 
-GlassMaterial* CreateGlassMaterial(PropertyList& list);
+GlassMaterial* CreateGlassMaterial(const PropertyList& list);
 
 RAINBOW_NAMESPACE_END
 

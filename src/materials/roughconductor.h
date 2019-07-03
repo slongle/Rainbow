@@ -20,7 +20,7 @@ public:
     std::string distributionType;
 };
 
-RoughConductorMaterial* CreateRoughConductorMaterial(PropertyList& list);
+RoughConductorMaterial* CreateRoughConductorMaterial(const PropertyList& list);
 
 RAINBOW_NAMESPACE_END
 

@@ -45,9 +45,9 @@ private:
 };
 
 PerspectiveCamera* CreatePerspectiveCamera(
-    const Transform&        CameraToWorld, 
-    PropertyList&           list, 
-    std::shared_ptr<Film>   film);
+    const Transform         &CameraToWorld, 
+    const PropertyList      &list, 
+    std::shared_ptr<Film>    film);
 
 RAINBOW_NAMESPACE_END
 

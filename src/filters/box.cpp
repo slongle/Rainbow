@@ -6,7 +6,7 @@ Float BoxFilter::Evaluate(const Point2f & p) const {
 	return 1.;
 }
 
-std::shared_ptr<BoxFilter> CreateBoxFilter(PropertyList& list) 
+std::shared_ptr<BoxFilter> CreateBoxFilter(const PropertyList& list) 
 {
     return std::make_shared<BoxFilter>(Vector2f(1));
 }

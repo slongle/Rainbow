@@ -18,7 +18,7 @@ public:
 	int sampleCount;	
 };
 
-Independent* CreateIndependentSampler(PropertyList& list);
+Independent* CreateIndependentSampler(const PropertyList& list);
 
 RAINBOW_NAMESPACE_END
 

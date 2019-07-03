@@ -23,7 +23,7 @@ private:
     unsigned maxSampleNum;
 };
 
-HaltonSampler* CreateHaltonSampler(PropertyList& list, const Point2i& resolution);
+HaltonSampler* CreateHaltonSampler(const PropertyList& list, const Point2i& resolution);
 
 RAINBOW_NAMESPACE_END
 
