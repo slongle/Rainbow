@@ -80,17 +80,13 @@ void GridDensityVolume::LoadFile(const std::string& filename) {
 }
 
 Float GridDensityVolume::LookUpFloat(
-    const Float& x, 
-    const Float& y, 
-    const Float& z) const 
+    const Point3f& p) const
 {
     return 0.;
 }
 
 RGBSpectrum GridDensityVolume::LookUpSpectrum(
-    const Float& x, 
-    const Float& y, 
-    const Float& z) const 
+    const Point3f& p) const
 {
     return RGBSpectrum(0.);
 }

@@ -20,6 +20,8 @@ HomogeneousMedium::Sample(
     MemoryArena       & arena, 
     MediumInteraction * mi) const 
 {
+    Assert(std::abs(ray.d.LengthSquare() - 1) < DBL_EPSILON, "No Normalizeing");
+
     int channel = std::min((int)(3 * sampler.Next1D()), 2);
     Float dist = -std::log(1 - sampler.Next1D()) / sigma_t[channel];
     Float t = std::min(dist / ray.d.Length(), ray.tMax);

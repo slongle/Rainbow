@@ -3,17 +3,13 @@
 RAINBOW_NAMESPACE_BEGIN
 
 Float ConstDensityVolume::LookUpFloat(
-    const Float& x, 
-    const Float& y, 
-    const Float& z) const 
+    const Point3f& p) const
 {
     return value[0];
 }
 
 RGBSpectrum ConstDensityVolume::LookUpSpectrum(
-    const Float& x, 
-    const Float& y, 
-    const Float& z) const 
+    const Point3f& p) const
 {
     return value;
 }

@@ -27,7 +27,7 @@ public:
 
 private:
 
-    const Transform WorldToMedium;
+    const Transform WorldToMedium, MediumToWorld;
 
     /*
      * albedo = sigma_s / sigma_t
@@ -46,6 +46,8 @@ private:
 
     // g is for phase function
     Float g;
+
+    Bounds3f box;
 };
 
 RAINBOW_NAMESPACE_END

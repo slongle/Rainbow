@@ -14,11 +14,11 @@
             <matrix value="-1 0 1.50996e-007 -1.05697e-006 0 1 0 1 -1.50996e-007 0 -1 7 0 0 0 1"/>
             <scale value="-1 1 1"/>
         </transform>
-		<sampler type="independent" >
+		<sampler type="halton" >
 			<integer name="sampleCount" value="64" />
 		</sampler>
 		<film type="ldrfilm" >
-            <string name="filename" value="vol-caustic_3.hdr"/>
+            <string name="filename" value="vol-caustic_4.hdr"/>
             <integer name="width" value="1024" />
 			<integer name="height" value="1024" />
 			<string name="fileFormat" value="png" />
