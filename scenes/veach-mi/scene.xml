@@ -4,13 +4,37 @@
      after a file by Steve Marschner (CS667)
 -->
 <scene version="0.5.0">
+    <mode type="final"/>
 	<integrator type="path">
 		<integer name="maxDepth" value="5"/>
 		<integer name="sampleNum" value="10000"/>
-		<integer name="delta" value="100"/>
+		<integer name="delta" value="1"/>
 	</integrator>
 
-	<shape type="sphere">
+	<sensor type="perspective">
+		<string name="fovAxis" value="smaller"/>
+		<transform name="toWorld">
+			<scale value="-1, 1, 1"/>
+			<lookAt origin="0, 2, 15" target="0, -2, 2.5" up="0, 1, 0"/>
+		</transform>
+		<float name="fov" value="28"/>
+
+		<sampler type="independent">
+			<integer name="sampleCount" value="16"/>
+			<integer name="dimension" value="1"/>
+		</sampler>
+
+		<film type="hdrfilm">
+			<string name="filename" value="veach-mis_test.png"/>
+			<integer name="width" value="768"/>
+			<integer name="height" value="512"/>
+			<boolean name="banner" value="true"/>
+
+			<rfilter type="gaussian"/>
+		</film>
+	</sensor>
+	
+    <shape type="sphere">
 		<transform name="toWorld">
 			<translate value="10, 10, 4"/>
 		</transform>
@@ -145,26 +169,4 @@
 		</bsdf>
 	</shape>
 
-	<sensor type="perspective">
-		<string name="fovAxis" value="smaller"/>
-		<transform name="toWorld">
-			<scale value="-1, 1, 1"/>
-			<lookAt origin="0, 2, 15" target="0, -2, 2.5" up="0, 1, 0"/>
-		</transform>
-		<float name="fov" value="28"/>
-
-		<sampler type="independent">
-			<integer name="sampleCount" value="16"/>
-			<integer name="dimension" value="1"/>
-		</sampler>
-
-		<film type="hdrfilm">
-			<string name="filename" value="veach-mis.png"/>
-			<integer name="width" value="768"/>
-			<integer name="height" value="512"/>
-			<boolean name="banner" value="true"/>
-
-			<rfilter type="gaussian"/>
-		</film>
-	</sensor>
 </scene>

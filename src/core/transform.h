@@ -156,6 +156,8 @@ public:
 		return os;
 	}
 
+    const static Transform identityTransform;
+
 private:
 	Matrix4x4 m, mInv;
 };

@@ -10,7 +10,9 @@ HomogeneousMedium::Tr(
     Ray       ray, 
     Sampler & sampler) const 
 {
-    return Exp(-sigma_t * std::min(ray.tMax*ray.d.Length(), MAXFLOAT));
+    Assert(std::abs(ray.d.LengthSquare() - 1) < Epsilon, "No Normalizeing");
+
+    return Exp(-sigma_t * std::min(ray.tMax, MAXFLOAT));
 }
 
 RGBSpectrum 
@@ -20,16 +22,16 @@ HomogeneousMedium::Sample(
     MemoryArena       & arena, 
     MediumInteraction * mi) const 
 {
-    Assert(std::abs(ray.d.LengthSquare() - 1) < DBL_EPSILON, "No Normalizeing");
+    Assert(std::abs(ray.d.LengthSquare() - 1) < Epsilon, "No Normalizeing");
 
     int channel = std::min((int)(3 * sampler.Next1D()), 2);
     Float dist = -std::log(1 - sampler.Next1D()) / sigma_t[channel];
-    Float t = std::min(dist / ray.d.Length(), ray.tMax);
+    Float t = std::min(dist, ray.tMax);
     bool sampledMedium = t < ray.tMax;
     if (sampledMedium)
         *mi = MediumInteraction(ray(t), -ray.d, this, ARENA_ALLOCA(arena, HenyeyGreenstein)(g));
     RGBSpectrum Tr = Exp(-sigma_t * std::min(t*ray.d.Length(), MAXFLOAT));
-    
+
     // Return weighting factor for scattering from homogeneous medium
     RGBSpectrum density = sampledMedium ? (sigma_t * Tr) : Tr;
     Float pdf = 0;

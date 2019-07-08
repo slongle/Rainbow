@@ -43,7 +43,7 @@ public:
         Point3f origin = OffsetRayOrigin(p, pError, n, it.p - p);
         Point3f target = OffsetRayOrigin(it.p, it.pError, it.n, origin - it.p);
         Vector3f d = target - origin;
-        return Ray(origin, d, 1 - Epsilon, GetMedium(d));
+        return Ray(origin, Normalize(d), d.Length() - Epsilon, GetMedium(d));
 	}
 
     const Medium * GetMedium(const Vector3f& d) const {

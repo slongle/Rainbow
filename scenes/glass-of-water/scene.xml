@@ -18,7 +18,7 @@
 			<integer name="sampleCount" value="64" />
 		</sampler>
 		<film type="ldrfilm" >
-            <string name="filename" value="glass_of_water_final_2.png"/>
+            <string name="filename" value="glass_of_water_test.png"/>
 			<integer name="width" value="1280" />
 			<integer name="height" value="720" />
 			<string name="fileFormat" value="png" />

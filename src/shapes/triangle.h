@@ -76,33 +76,19 @@ private:
 };
 
 std::vector<std::shared_ptr<Triangle>> CreateWavefrontOBJ(
-    const Transform* o2w, 
-    const Transform* w2o, 
     const PropertyList&    list);
 std::vector<std::shared_ptr<Triangle>> CreateRectangle(
-    const Transform* o2w, 
-    const Transform* w2o, 
     const PropertyList&    list);
 std::vector<std::shared_ptr<Triangle>> CreateCube(
-    const Transform* o2w, 
-    const Transform* w2o, 
     const PropertyList&    list);
 
 std::shared_ptr<TriangleMesh> CreateWavefrontOBJMesh(
-    const Transform* o2w,
-    const Transform* w2o,
     const PropertyList&    list);
 std::shared_ptr<TriangleMesh> CreateRectangleMesh(
-    const Transform* o2w,
-    const Transform* w2o,
     const PropertyList&    list);
 std::shared_ptr<TriangleMesh> CreateCubeMesh(
-    const Transform* o2w,
-    const Transform* w2o,
     const PropertyList&    list);
 std::shared_ptr<TriangleMesh> CreateSphereTriangleMesh(
-    const Transform* o2w,
-    const Transform* w2o,
     const PropertyList&    list);
 
 RAINBOW_NAMESPACE_END

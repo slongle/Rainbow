@@ -5,7 +5,7 @@
     <integrator type="path" >
 		<integer name="maxDepth" value="7" />
         <integer name="sampleNum" value="5000"/>
-        <integer name="delta" value="20"/>
+        <integer name="delta" value="1"/>
 		<boolean name="strictNormals" value="true" />
 	</integrator>
 	<sensor type="perspective" >
@@ -18,7 +18,7 @@
 			<integer name="sampleCount" value="64" />
 		</sampler>
 		<film type="ldrfilm" >
-            <string name="filename" value="veach-bidir_embree_final_5.png"/>
+            <string name="filename" value="veach-bidir_test.png"/>
             <integer name="width" value="1024" />
 			<integer name="height" value="1024" />
 			<string name="fileFormat" value="png" />

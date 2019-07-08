@@ -248,11 +248,12 @@ Float Triangle::Area() const {
  	return static_cast<Float>(0.5) * Cross(p1-p0,p2-p0).Length();
 }
 
-std::vector<std::shared_ptr<Triangle>> CreateWavefrontOBJ(
-    const Transform* o2w, 
-    const Transform* w2o, 
-    const PropertyList & list) {
-	
+std::vector<std::shared_ptr<Triangle>> CreateWavefrontOBJ(    
+    const PropertyList & list) 
+{
+    Transform o2w = list.getTransform("toWorld", Transform::identityTransform);
+    //Transform w2o = Inverse(o2w);
+
 	std::string filename = list.getString("filename");
 	int vertexNum = 0, triangleNum = 0;
 	std::vector<Point3f>  vertices;
@@ -265,7 +266,7 @@ std::vector<std::shared_ptr<Triangle>> CreateWavefrontOBJ(
 
     std::shared_ptr<TriangleMesh> mesh =
         std::make_shared<TriangleMesh>(
-            o2w, vertexNum, triangleNum, 
+            &o2w, vertexNum, triangleNum, 
             vertices, normals, texcoords, indices);
 	std::vector<std::shared_ptr<Triangle>> tris;
 	tris.resize(triangleNum);
@@ -277,9 +278,10 @@ std::vector<std::shared_ptr<Triangle>> CreateWavefrontOBJ(
 }
 
 std::vector<std::shared_ptr<Triangle>> CreateRectangle(
-    const Transform* o2w, 
-    const Transform* w2o, 
-    const PropertyList &list) {
+    const PropertyList &list) 
+{
+    Transform o2w = list.getTransform("toWorld", Transform::identityTransform);
+    //Transform w2o = Inverse(o2w);
 
     const int vertexNum = 4;
     const int triangleNum = 2;
@@ -304,7 +306,7 @@ std::vector<std::shared_ptr<Triangle>> CreateRectangle(
 
     std::shared_ptr<TriangleMesh> mesh =
         std::make_shared<TriangleMesh>(
-            o2w, vertexNum, triangleNum, 
+            &o2w, vertexNum, triangleNum, 
             vertices, normals, texcoords, indices);
 
     std::vector<std::shared_ptr<Triangle>> tris;
@@ -321,9 +323,10 @@ static Float CubeData_vertexverticess[][3] = { { 1, -1, -1 },{ 1, -1, 1 },{ -1, 
 static uint32_t CubeData_triangles[][3] = { { 0, 1, 2 },{ 3, 0, 2 },{ 4, 5, 6 },{ 7, 4, 6 },{ 8, 9, 10 },{ 11, 8, 10 },{ 12, 13, 14 },{ 15, 12, 14 },{ 16, 17, 18 },{ 19, 16, 18 },{ 20, 21, 22 },{ 23, 20, 22 } };
 
 std::vector<std::shared_ptr<Triangle>> CreateCube(
-    const Transform* o2w, 
-    const Transform* w2o, 
-    const PropertyList &list) {
+    const PropertyList &list) 
+{
+    Transform o2w = list.getTransform("toWorld", Transform::identityTransform);
+    //Transform w2o = Inverse(o2w);
 
     const int vertexNum = 24;
     const int triangleNum = 12;
@@ -351,7 +354,7 @@ std::vector<std::shared_ptr<Triangle>> CreateCube(
 
     std::shared_ptr<TriangleMesh> mesh =
         std::make_shared<TriangleMesh>(
-            o2w, vertexNum, triangleNum,
+            &o2w, vertexNum, triangleNum,
             vertices, normals, texcoords, indices);
 
     std::vector<std::shared_ptr<Triangle>> tris;
@@ -365,10 +368,11 @@ std::vector<std::shared_ptr<Triangle>> CreateCube(
 
 std::shared_ptr<TriangleMesh>
 CreateWavefrontOBJMesh(
-    const Transform* o2w, 
-    const Transform* w2o, 
     const PropertyList& list)
 {
+    Transform o2w = list.getTransform("toWorld", Transform::identityTransform);
+    //Transform w2o = Inverse(o2w);
+
     std::string filename = list.getString("filename");
     int vertexNum = 0, triangleNum = 0;
     std::vector<Point3f>  vertices;
@@ -381,7 +385,7 @@ CreateWavefrontOBJMesh(
 
     std::shared_ptr<TriangleMesh> mesh =
         std::make_shared<TriangleMesh>(
-            o2w, vertexNum, triangleNum,
+            &o2w, vertexNum, triangleNum,
             vertices, normals, texcoords, indices);
 
     return mesh;
@@ -389,10 +393,11 @@ CreateWavefrontOBJMesh(
 
 std::shared_ptr<TriangleMesh> 
 CreateRectangleMesh(
-    const Transform* o2w, 
-    const Transform* w2o, 
     const PropertyList& list)
 {
+    Transform o2w = list.getTransform("toWorld", Transform::identityTransform);
+    //Transform w2o = Inverse(o2w);
+
     const int vertexNum = 4;
     const int triangleNum = 2;
     std::vector<Point3f>  vertices;  vertices.resize(vertexNum);
@@ -416,7 +421,7 @@ CreateRectangleMesh(
 
     std::shared_ptr<TriangleMesh> mesh =
         std::make_shared<TriangleMesh>(
-            o2w, vertexNum, triangleNum,
+            &o2w, vertexNum, triangleNum,
             vertices, normals, texcoords, indices);
 
     return mesh;
@@ -424,10 +429,11 @@ CreateRectangleMesh(
 
 std::shared_ptr<TriangleMesh> 
 CreateCubeMesh(
-    const Transform* o2w, 
-    const Transform* w2o, 
     const PropertyList& list)
 {
+    Transform o2w = list.getTransform("toWorld", Transform::identityTransform);
+    //Transform w2o = Inverse(o2w);
+
     const int vertexNum = 24;
     const int triangleNum = 12;
     std::vector<Point3f>  vertices;  vertices.resize(vertexNum);
@@ -454,7 +460,7 @@ CreateCubeMesh(
 
     std::shared_ptr<TriangleMesh> mesh =
         std::make_shared<TriangleMesh>(
-            o2w, vertexNum, triangleNum,
+            &o2w, vertexNum, triangleNum,
             vertices, normals, texcoords, indices);
 
     return mesh;
@@ -462,10 +468,11 @@ CreateCubeMesh(
 
 std::shared_ptr<TriangleMesh> 
 CreateSphereTriangleMesh(
-    const Transform* o2w, 
-    const Transform* w2o,
     const PropertyList& list)
 {
+    Transform o2w = list.getTransform("toWorld", Transform::identityTransform);
+    //Transform w2o = Inverse(o2w);
+
     // setting
     Float radius = list.getFloat("radius", 1.);
     Point3f center(0, 0, 0);
@@ -541,7 +548,7 @@ CreateSphereTriangleMesh(
     // create mesh
     std::shared_ptr<TriangleMesh> mesh =
         std::make_shared<TriangleMesh>(
-            o2w, vertexNum, triangleNum,
+            &o2w, vertexNum, triangleNum,
             vertices, normals, texcoords, indices);
 
     return mesh;

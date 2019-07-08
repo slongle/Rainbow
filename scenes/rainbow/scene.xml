@@ -5,7 +5,7 @@
 	<integrator type="path" >
 		<integer name="maxDepth" value="10" />
         <integer name="sampleNum" value="100000"/>
-        <integer name="delta" value="1000"/>
+        <integer name="delta" value="1"/>
 		<boolean name="strictNormals" value="true" />
 	</integrator>
 	<sensor type="perspective" >
@@ -17,7 +17,7 @@
 			<integer name="sampleCount" value="64" />
 		</sampler>
 		<film type="ldrfilm" >
-            <string name="filename" value="rainbow_embreescene_final_4.png"/>
+            <string name="filename" value="rainbow_test.png"/>
 			<integer name="width" value="2048" />
 			<integer name="height" value="1024" />
 			<string name="fileFormat" value="png" />

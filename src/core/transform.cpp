@@ -111,6 +111,8 @@ Matrix4x4 toMatrix(const std::string & str) {
 	return ret;
 }
 
+const Transform Transform::identityTransform = Transform();
+
 Transform Translate(const Float& x,const Float& y,const Float& z) {
 	Matrix4x4 m(1, 0, 0, x,
 		0, 1, 0, y,

@@ -27,13 +27,13 @@ void FilmTile::AddSample(
     Point2i p0(Max(pixelBounds.pMin, Ceil(sample - Vector2f(0.5) - filterRadius)));
     Point2i p1(Min(pixelBounds.pMax, Floor(sample + Vector2f(0.5) + filterRadius)));    
     
-    int* xIndex = ALLOCA(int, p1.x - p0.x);
+    //int* xIndex = ALLOCA(int, p1.x - p0.x);
     for (int x = p0.x; x < p1.x; x++) {
         Float px = std::abs((x - sample.x) * invFilterRadius.x * filterTableWidth - 0.5);
         xIndex[x - p0.x] = std::min((int)std::floor(px), filterTableWidth - 1);
     }
 
-    int* yIndex = ALLOCA(int, p1.y - p0.y);
+    //int* yIndex = ALLOCA(int, p1.y - p0.y);
     for (int y = p0.y; y < p1.y; y++) {
         Float py = std::abs((y - sample.y) * invFilterRadius.y * filterTableWidth - 0.5);
         yIndex[y - p0.y] = std::min((int)std::floor(py), filterTableWidth - 1);

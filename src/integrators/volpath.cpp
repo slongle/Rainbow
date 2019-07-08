@@ -22,7 +22,9 @@ RGBSpectrum VolPathIntegrator::Li(
         //if (!foundIntersect) break;
 
         MediumInteraction mi;
-        if (ray.medium) beta *= ray.medium->Sample(ray, sampler, arena, &mi);
+        if (ray.medium) {
+            beta *= ray.medium->Sample(ray, sampler, arena, &mi);
+        }
         if (beta.IsBlack()) break;
 
         if (mi.IsValid()) {

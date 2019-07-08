@@ -31,43 +31,55 @@
             <rfilter type="tent" />
         </film>
     </sensor>
-	<bsdf type="diffuse" id="Diffuse">
-		<rgb name="reflectance" value="0.5, 0.5, 0.5"/>
+	<bsdf type="twosided" id="Diffuse" >
+		<bsdf type="diffuse" >
+			<rgb name="reflectance" value="0.5, 0.5, 0.5"/>
+		</bsdf>
 	</bsdf>
-	<bsdf type="roughconductor" id="Smooth">
-		<float name="alpha" value="0.01" />
-		<string name="distribution" value="beckmann" />
-		<float name="extEta" value="1" />
-		<rgb name="specularReflectance" value="0.3, 0.3, 0.3"/>
-		<rgb name="eta" value="0.200438, 0.924033, 1.10221"/>
-		<rgb name="k" value="3.91295, 2.45285, 2.14219"/>
+	<bsdf type="twosided" id="Smooth" >
+		<bsdf type="roughconductor" >
+			<float name="alpha" value="0.01" />
+			<string name="distribution" value="beckmann" />
+			<float name="extEta" value="1" />
+			<rgb name="specularReflectance" value="0.3, 0.3, 0.3"/>
+			<rgb name="eta" value="0.200438, 0.924033, 1.10221"/>
+			<rgb name="k" value="3.91295, 2.45285, 2.14219"/>
+		</bsdf>
 	</bsdf>
-	<bsdf type="roughconductor" id="Glossy">
-		<float name="alpha" value="0.05" />
-		<string name="distribution" value="beckmann" />
-		<float name="extEta" value="1" />
-		<rgb name="specularReflectance" value="0.3, 0.3, 0.3"/>
-		<rgb name="eta" value="0.200438, 0.924033, 1.10221"/>
-		<rgb name="k" value="3.91295, 2.45285, 2.14219"/>
+	<bsdf type="twosided" id="Glossy" >
+		<bsdf type="roughconductor" >
+			<float name="alpha" value="0.05" />
+			<string name="distribution" value="beckmann" />
+			<float name="extEta" value="1" />
+			<rgb name="specularReflectance" value="0.3, 0.3, 0.3"/>
+			<rgb name="eta" value="0.200438, 0.924033, 1.10221"/>
+			<rgb name="k" value="3.91295, 2.45285, 2.14219"/>
+		</bsdf>
 	</bsdf>
-	<bsdf type="roughconductor" id="Rough">
-		<float name="alpha" value="0.1" />
-		<string name="distribution" value="beckmann" />
-		<float name="extEta" value="1" />
-		<rgb name="specularReflectance" value="0.3, 0.3, 0.3"/>
-		<rgb name="eta" value="0.200438, 0.924033, 1.10221"/>
-		<rgb name="k" value="3.91295, 2.45285, 2.14219"/>
+	<bsdf type="twosided" id="Rough" >
+		<bsdf type="roughconductor" >
+			<float name="alpha" value="0.1" />
+			<string name="distribution" value="beckmann" />
+			<float name="extEta" value="1" />
+			<rgb name="specularReflectance" value="0.3, 0.3, 0.3"/>
+			<rgb name="eta" value="0.200438, 0.924033, 1.10221"/>
+			<rgb name="k" value="3.91295, 2.45285, 2.14219"/>
+		</bsdf>
 	</bsdf>
-	<bsdf type="diffuse" id="Null">
-		<rgb name="reflectance" value="0, 0, 0"/>
+	<bsdf type="twosided" id="Null" >
+		<bsdf type="diffuse" >
+			<rgb name="reflectance" value="0, 0, 0"/>
+		</bsdf>
 	</bsdf>
-	<bsdf type="roughconductor" id="SuperRough">
-		<float name="alpha" value="0.25" />
-		<string name="distribution" value="beckmann" />
-		<float name="extEta" value="1" />
-		<rgb name="specularReflectance" value="0.3, 0.3, 0.3"/>
-		<rgb name="eta" value="0.200438, 0.924033, 1.10221"/>
-		<rgb name="k" value="3.91295, 2.45285, 2.14219"/>
+	<bsdf type="twosided" id="SuperRough" >
+		<bsdf type="roughconductor" >
+			<float name="alpha" value="0.25" />
+			<string name="distribution" value="beckmann" />
+			<float name="extEta" value="1" />
+			<rgb name="specularReflectance" value="0.3, 0.3, 0.3"/>
+			<rgb name="eta" value="0.200438, 0.924033, 1.10221"/>
+			<rgb name="k" value="3.91295, 2.45285, 2.14219"/>
+		</bsdf>
 	</bsdf>
 	<shape type="cube" >
 		<transform name="toWorld" >
@@ -101,9 +113,9 @@
 	</shape>
 	<shape type="sphere" >
 		<float name="radius" value="1" />		
-        <transform name="toWorld">
-            <translate value="0, 6.5, -2.8"/>
-        </transform>
+	  <transform name="toWorld">
+	    <translate value="0, 6.5, -2.8"/>
+	  </transform>
 		<ref id="Null" />
 		<emitter type="area" >
 			<rgb name="radiance" value="7.59909, 7.59909, 7.59909"/>
@@ -111,9 +123,9 @@
 	</shape>
 	<shape type="sphere" >
 		<float name="radius" value="0.5" />		
-        <transform name="toWorld">
-            <translate value="0, 6.5, 0"/>
-        </transform>
+	  <transform name="toWorld">
+	    <translate value="0, 6.5, 0"/>
+	  </transform>
 		<ref id="Null" />
 		<emitter type="area" >
 			<rgb name="radiance" value="30.3964, 30.3964, 30.3964"/>
@@ -121,9 +133,9 @@
 	</shape>
 	<shape type="sphere" >
 		<float name="radius" value="0.05" />		
-        <transform name="toWorld">
-            <translate value="0, 6.5, 2.7"/>
-        </transform>
+	  <transform name="toWorld">
+	    <translate value="0, 6.5, 2.7"/>
+	  </transform>
 		<ref id="Null" />
 		<emitter type="area" >
 			<rgb name="radiance" value="3039.64, 3039.64, 3039.64"/>

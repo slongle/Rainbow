@@ -16,7 +16,7 @@ RAINBOW_NAMESPACE_BEGIN
         return it->second.value.XMLName##_value; \
     } \
     \
-    Type PropertyList::get##Typename(const std::string &name, const Type & defaultValue) const { \
+    Type PropertyList::get##Typename(const std::string &name, const Type &defaultValue) const { \
         if (list.find(name) == list.end()) \
         return defaultValue; \
 	    auto it = list.find(name); \
@@ -43,7 +43,7 @@ ADD_PROPERTYLIST_FUNCTIONS(std::string, String, string)
 ADD_PROPERTYLIST_FUNCTIONS(Vector3f, Vector, vector)
 ADD_PROPERTYLIST_FUNCTIONS(RGBSpectrum, Color, color)
 ADD_PROPERTYLIST_FUNCTIONS(Transform, Transform, transform)
-
+//ADD_PROPERTYLIST_FUNCTIONS(void *, Object, object);
 
 
 	/*void PropertyList::setString(const std::string &name, const std::string &v) {
@@ -79,6 +79,7 @@ ADD_PROPERTYLIST_FUNCTIONS(Transform, Transform, transform)
             return false;
         }
     }*/
+
 
 
 RAINBOW_NAMESPACE_END

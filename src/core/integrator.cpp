@@ -87,7 +87,7 @@ RGBSpectrum SamplerIntegrator::EstimateDirectLight(
         }
     }
 
-    // Sample BSDF with MIS
+    // Sample BSDF/Phase function with MIS
     if (!light->IsDeltaLight()) {
         RGBSpectrum f;
         bool sampledSpecular = false;

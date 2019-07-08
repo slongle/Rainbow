@@ -2,7 +2,7 @@
 
 <scene version="0.5.0" >
     <mode type="final"/>
-    <integrator type="path" >
+    <integrator type="volpath" >
 		<integer name="maxDepth" value="7" />
         <integer name="sampleNum" value="10000"/>
         <integer name="delta" value="1"/>
@@ -18,7 +18,7 @@
 			<integer name="sampleCount" value="64" />
 		</sampler>
 		<film type="ldrfilm" >
-            <string name="filename" value="vol-caustic_4.hdr"/>
+            <string name="filename" value="vol-caustic_vol_scale=3.hdr"/>
             <integer name="width" value="1024" />
 			<integer name="height" value="1024" />
 			<string name="fileFormat" value="png" />
@@ -122,7 +122,7 @@
 			<rgb name="sigmaA" value="0, 0, 0"/>
 		</medium>
 		<emitter type="area" >
-			<float name="scale" value="5"/>                                        
+			<float name="scale" value="3"/>                                        
 			<rgb name="radiance" value="54112.7, 38197.2, 12732.4"/>
 		</emitter>
 	</shape>

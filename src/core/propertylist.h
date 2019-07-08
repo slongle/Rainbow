@@ -77,6 +77,7 @@ public:
 
 private:
 	std::map<std::string, Property> list;
+    
 };
 
 RAINBOW_NAMESPACE_END

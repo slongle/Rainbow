@@ -8,7 +8,7 @@
 
 RAINBOW_NAMESPACE_BEGIN
 
-class HeterogeneousMedium:public Medium{
+class HeterogeneousMedium :public Medium {
 public:
     HeterogeneousMedium(
         Volume *m_density,
@@ -49,6 +49,8 @@ private:
 
     Bounds3f box;
 };
+
+Medium* CreateHeterogeneousMedium(const PropertyList& list);
 
 RAINBOW_NAMESPACE_END
 

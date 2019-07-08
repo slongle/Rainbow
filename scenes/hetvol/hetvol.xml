@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <scene version="0.5.0">
+    <mode type="final"/>
 	<integrator type="volpath">
 		<integer name="maxDepth" value="8"/>
+        <integer name="sampleNum" value="10000"/>
+        <integer name="delta" value="1"/>
 	</integrator>
 
     <sensor type="perspective">
@@ -14,11 +17,12 @@
 			<lookat target="-0.166029, 0.148984, -0.537402" origin="-0.61423, 0.154197, -1.43132" up="-0.000640925, -0.999985, -0.0055102"/>
 		</transform>
 
-		<sampler type="ldsampler">
+		<sampler type="halton">
 			<integer name="sampleCount" value="64"/>
 		</sampler>
 
 		<film type="ldrfilm">
+            <string name="filename" value="hetvol_1.hdr"/>
             <string name="fileFormat" value="png" />
 			<integer name="height" value="576"/>
 			<integer name="width" value="768"/>
@@ -49,9 +53,9 @@
 		<string name="filename" value="plane.obj"/>
 
 		<bsdf type="diffuse">
-			<rgb name="diffuseReflectance" value=".2, .2, .3"/>
+			<rgb name="reflectance" value=".2, .2, .3"/>
 		</bsdf>
-		<transform name="toWorld">
+		<transform name="toWorld">  
 			<translate y=".48"/>
 		</transform>
 	</shape>

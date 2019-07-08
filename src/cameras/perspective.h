@@ -45,7 +45,6 @@ private:
 };
 
 PerspectiveCamera* CreatePerspectiveCamera(
-    const Transform         &CameraToWorld, 
     const PropertyList      &list, 
     std::shared_ptr<Film>    film);
 

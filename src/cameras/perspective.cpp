@@ -33,10 +33,11 @@ RGBSpectrum PerspectiveCamera::GenerateRay(Ray* r, const Point2f & p) const {
 
 
 PerspectiveCamera * CreatePerspectiveCamera(
-    const Transform&        CameraToWorld, 
-    const PropertyList&           list, 
+    const PropertyList     &list, 
     std::shared_ptr<Film>   film) 
 {
+    Transform c2w = list.getTransform("toWorld", Transform::identityTransform);
+
 	Float fov = list.getFloat("fov", 30.0);
 	Float nearClip = list.getFloat("nearClip", 1e-2f);
 	Float farClip = list.getFloat("farClip", 10000);
@@ -46,7 +47,7 @@ PerspectiveCamera * CreatePerspectiveCamera(
 	screen.pMin.y = -1;
 	screen.pMax.x = frame;
 	screen.pMax.y = 1;
-	return new PerspectiveCamera(CameraToWorld, screen, fov, nearClip, farClip, film);
+	return new PerspectiveCamera(c2w, screen, fov, nearClip, farClip, film);
 }
 
 RAINBOW_NAMESPACE_END

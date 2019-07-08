@@ -5,7 +5,7 @@
 	<integrator type="path" >
 		<integer name="maxDepth" value="65" />
         <integer name="sampleNum" value="10"/>
-        <integer name="delta" value="10"/>
+        <integer name="delta" value="1"/>
 		<boolean name="strictNormals" value="true" />
 	</integrator>
 	<sensor type="perspective" >
@@ -18,7 +18,7 @@
 			<integer name="sampleCount" value="64" />
 		</sampler>
 		<film type="ldrfilm" >
-            <string name="filename" value="cornell-box_embree_occlude.png"/>
+            <string name="filename" value="cornell-box_test.png"/>
 			<integer name="width" value="1024" />
 			<integer name="height" value="1024" />
 			<string name="fileFormat" value="png" />

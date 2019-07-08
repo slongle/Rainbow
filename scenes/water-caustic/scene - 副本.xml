@@ -32,33 +32,51 @@
 			<rfilter type="tent" />
 		</film>
 	</sensor>
-    <bsdf type="diffuse" id="LeftWall">
-        <rgb name="reflectance" value="0.63, 0.065, 0.05"/>
-    </bsdf>
-    <bsdf type="diffuse" id="RightWall">
-        <rgb name="reflectance" value="0.14, 0.45, 0.091"/>
-    </bsdf>
-    <bsdf type="diffuse" id="Floor">
-        <rgb name="reflectance" value="0.725, 0.71, 0.68"/>
-    </bsdf>
-    <bsdf type="diffuse" id="Ceiling">
-        <rgb name="reflectance" value="0.725, 0.71, 0.68"/>
-    </bsdf>
-    <bsdf type="diffuse" id="BackWall">
-        <rgb name="reflectance" value="0.725, 0.71, 0.68"/>
-    </bsdf>
-    <bsdf type="diffuse" id="ShortBox">
-        <rgb name="reflectance" value="0.725, 0.71, 0.68"/>
-    </bsdf>
-    <bsdf type="diffuse" id="TallBox">
-        <rgb name="reflectance" value="0.725, 0.71, 0.68"/>
-    </bsdf>
-    <bsdf type="diffuse" id="Light">
-        <rgb name="reflectance" value="0, 0, 0"/>
-    </bsdf>
-    <bsdf type="dielectric" id="Water">
-        <float name="intIOR" value="1.8" />
-        <float name="extIOR" value="1" />
+	<bsdf type="twosided" id="LeftWall" >
+		<bsdf type="diffuse" >
+			<rgb name="reflectance" value="0.63, 0.065, 0.05"/>
+		</bsdf>
+	</bsdf>
+	<bsdf type="twosided" id="RightWall" >
+		<bsdf type="diffuse" >
+			<rgb name="reflectance" value="0.14, 0.45, 0.091"/>
+		</bsdf>
+	</bsdf>
+	<bsdf type="twosided" id="Floor" >
+		<bsdf type="diffuse" >
+			<rgb name="reflectance" value="0.725, 0.71, 0.68"/>
+		</bsdf>
+	</bsdf>
+	<bsdf type="twosided" id="Ceiling" >
+		<bsdf type="diffuse" >
+			<rgb name="reflectance" value="0.725, 0.71, 0.68"/>
+		</bsdf>
+	</bsdf>
+	<bsdf type="twosided" id="BackWall" >
+		<bsdf type="diffuse" >
+			<rgb name="reflectance" value="0.725, 0.71, 0.68"/>
+		</bsdf>
+	</bsdf>
+	<bsdf type="twosided" id="ShortBox" >
+		<bsdf type="diffuse" >
+			<rgb name="reflectance" value="0.725, 0.71, 0.68"/>
+		</bsdf>
+	</bsdf>
+	<bsdf type="twosided" id="TallBox" >
+		<bsdf type="diffuse" >
+			<rgb name="reflectance" value="0.725, 0.71, 0.68"/>
+		</bsdf>
+	</bsdf>
+	<bsdf type="twosided" id="Light" >
+		<bsdf type="diffuse" >
+			<rgb name="reflectance" value="0, 0, 0"/>
+		</bsdf>
+	</bsdf>
+    <bsdf type="??" id="Water">
+        <bsdf type="dielectric">
+            <float name="intIOR" value="1.8" />
+            <float name="extIOR" value="1" />
+        </bsdf>
     </bsdf>
 	<shape type="rectangle" >
 		<transform name="toWorld" >

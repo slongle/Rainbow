@@ -38,7 +38,19 @@ public:
         size(pixelBounds.pMax.x - pixelBounds.pMin.x, pixelBounds.pMax.y - pixelBounds.pMin.y)
     {       
         pixels = std::unique_ptr<FilmTilePixel[]>(new FilmTilePixel[size.x * size.y]);
+        int xWeightSize = (int)std::ceil(2 * filterRadius.x) + 1;
+        int yWeightSize = (int)std::ceil(2 * filterRadius.y) + 1;
+        xIndex = new int[xWeightSize];
+        yIndex = new int[yWeightSize];
+        memset(xIndex, 0, sizeof(int) * xWeightSize);
+        memset(yIndex, 0, sizeof(int) * yWeightSize);
     }
+    
+    /*~FilmTile() {
+        delete[] filterTable;
+        delete[] xIndex;
+        delete[] yIndex;
+    }*/
 
     void AddSample(
         const Point2f &pixelSample, 
@@ -73,6 +85,9 @@ private:
     const Float* filterTable;
     int filterTableWidth;
     double invFilterTableWidth;
+
+    int *xIndex = nullptr;
+    int *yIndex = nullptr;
 
 };
 

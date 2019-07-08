@@ -8,6 +8,7 @@
 #include "light.h"
 #include "material.h"
 #include "medium.h"
+#include "volume.h"
 
 #include "scenes/rainbowscene.h"
 #include "scenes/embreescene.h"
@@ -46,109 +47,468 @@
 
 RAINBOW_NAMESPACE_BEGIN
 
-bool embree = true;
 
-class TransformPool {
-public:
-	TransformPool() {}
-
-	Transform* insert(const Transform& t) 
-    {
-		transforms.push_back(new Transform(t));
-		return transforms.back();
-	}
-
-private:
-	std::vector<Transform*> transforms;
-};
-
+/**
+ * \brief RenderOptions support some details setting for render.
+ *        The function named CreateXxx() aims to create instance.
+ *        
+ *        Whereas the function named RainbowXxx outside RenderOptions 
+ *        struct aims to add some information from parser, which 
+ *        builds up the bridge between .xml file or parser and RenderOptions.
+ */
 struct RenderOptions {
-	Integrator*   MakeIntegrator();
-	Sampler*      MakeSampler(const Camera& camera);
-	Scene*        MakeScene();
-	Camera*       MakeCamera();
-	Film*         MakeFilm();
-	Aggregate*    MakeAggregate();
+    RenderOptions(bool embree = true) :m_embree(embree), m_hasAreaLight(false) {}
 
-    std::string RenderMode;
+	std::shared_ptr<Scene>        CreateScene();
+    std::shared_ptr<Integrator>   CreateIntegrator();
+	std::shared_ptr<Camera>       CreateCamera();
+    std::shared_ptr<Sampler>      CreateSampler();
+    std::shared_ptr<Film>         CreateFilm();
+    std::shared_ptr<Filter>       CreateFilter();
+    std::shared_ptr<Aggregate>    CreateAggregate();
 
-	Transform CurrentTransform;
+    std::shared_ptr<TriangleMesh> CreateMesh(const std::string &type, const PropertyList &list);
+    std::vector<std::shared_ptr<Shape>> CreateShapes(const std::string &type, const PropertyList &list);
+    std::shared_ptr<Material> CreateMaterial(const std::string &type, const PropertyList&  list);
+    //std::shared_ptr<Medium> CreateMedium(const std::string &type, const PropertyList &list);
+    Medium* CreateMedium(const std::string &type, const PropertyList &list);
 
-	std::string IntegratorType;
-	PropertyList IntegratorProperty;
-	std::string CameraType;
-	PropertyList CameraProperty;
-	std::string SamplerType;
-	PropertyList SamplerProperty;
-	std::string FilmType;
-	PropertyList FilmProperty;
-	std::string LightType;
-	PropertyList LightProperty;
-	std::vector<std::shared_ptr<Primitive>> primitives;
-    std::vector<std::vector<std::shared_ptr<Primitive>>> embreePrimitives;
-    std::vector<std::shared_ptr<TriangleMesh>> embreeMeshes;
 
-	std::vector<std::shared_ptr<Light>> lights;
-	std::shared_ptr<Material> CurrentMaterial;
-    std::map<std::string, std::shared_ptr<Material>> MaterialMap;
-    std::shared_ptr<Filter> filter;
+    // Decide to use embree3 or my own SAH-BVH for accelerator
+    bool m_embree;
 
-    Medium *CurrentMediumInter, *CurrentMediumExter;
+    // Render Mode (progressive, final, adaptive, eye)
+    std::string m_renderMode;
+
+	std::string m_integratorType;
+	PropertyList m_integratorProperty;
+	
+	std::string m_cameraType;
+    PropertyList m_cameraProperty;
+    std::shared_ptr<Camera> m_camera;
+    
+    std::string m_samplerType;
+	PropertyList m_samplerProperty;
+    std::shared_ptr<Sampler> m_sampler;
+
+    std::string m_filmType;
+	PropertyList m_filmProperty;
+    std::shared_ptr<Film> m_film;
+
+    std::string m_filterType;
+    PropertyList m_filterProperty;
+    std::shared_ptr<Filter> m_filter;
+
+	std::vector<std::shared_ptr<Primitive>> m_primitives;
+    std::vector<std::vector<std::shared_ptr<Primitive>>> m_embreePrimitives;
+    std::vector<std::shared_ptr<TriangleMesh>> m_embreeMeshes;
+
+    std::vector<std::shared_ptr<Light>> m_lights;
+    
+    bool m_hasAreaLight;
+	PropertyList m_areaLightProperty;
+
+    // Record current BSDF and Medium
+	std::shared_ptr<Material> m_currentMaterial;
+    Medium *m_currentMediumInter, *m_currentMediumExter;    
+
+    // Record the BSDF and Medium with id
+    std::map<std::string, std::shared_ptr<Material>> m_materialMap;
+    std::map<std::string, std::shared_ptr<Medium>> m_mediumMap;
 };
 
 static std::shared_ptr<RenderOptions> renderOptions;
-static std::shared_ptr<TransformPool> transformPool;
 
-std::shared_ptr<TriangleMesh> MakeMesh(
+void RainbowShowSettings(
+    std::shared_ptr<Integrator> integrator,
+    std::shared_ptr<Scene> scene)
+{
+    cout << integrator->toString() << endl;
+    cout << integrator->m_camera->toString() << endl;
+    cout << scene->toString() << endl;
+}
+
+void RainbowSceneBegin() 
+{
+    renderOptions = std::make_shared<RenderOptions>();
+}
+
+
+void RainbowSceneEnd() 
+{
+    std::shared_ptr<Integrator> integrator = renderOptions->CreateIntegrator();
+    std::shared_ptr<Scene> scene = renderOptions->CreateScene();
+
+    RainbowShowSettings(integrator, scene);
+
+    Assert(scene && integrator, "No Scene or Integrator!");
+
+    if (renderOptions->m_renderMode == "progressive") {
+        //show(integrator, scene);        
+        //AdaptiveShow(integrator, scene);
+    }
+    else if (renderOptions->m_renderMode == "final") {
+        integrator->Render(*scene);        
+    }
+    else if (renderOptions->m_renderMode == "adaptive") {
+        integrator->RenderAdaptive(*scene);
+    }
+    else if (renderOptions->m_renderMode == "eye") {
+        integrator->RenderEyeLight(*scene);
+    }
+}
+
+void RainbowRenderMode(
+    const std::string& type) 
+{
+    renderOptions->m_renderMode = type;
+}
+
+void RainbowIntegrator(
+    const std::string&    type,
+    const PropertyList&   list) 
+{
+	renderOptions->m_integratorType = type;
+	renderOptions->m_integratorProperty = list;
+}
+
+void RainbowCamera(
+    const std::string&    type, 
+    const PropertyList&   list) 
+{
+    renderOptions->m_cameraType = type;
+    renderOptions->m_cameraProperty = list;
+
+    renderOptions->m_filter = renderOptions->CreateFilter();
+    renderOptions->m_film = renderOptions->CreateFilm();
+    renderOptions->m_sampler = renderOptions->CreateSampler();
+    renderOptions->m_camera = renderOptions->CreateCamera();
+}
+
+
+void RainbowFilter(
+    const std::string&   type, 
+    PropertyList&        list) 
+{
+    renderOptions->m_filterType = type;
+    renderOptions->m_filterProperty = list;
+}
+
+void RainbowFilm(
+    const std::string&    type, 
+    const PropertyList&   list) 
+{
+	renderOptions->m_filmType = type;
+	renderOptions->m_filmProperty = list;
+}
+
+void RainbowSampler(
+    const std::string&    type, 
+    const PropertyList&   list) 
+{
+	renderOptions->m_samplerType = type;
+	renderOptions->m_samplerProperty = list;    
+}
+
+void RainbowOldShape(
+    const std::string&   type, 
+    PropertyList&        list) 
+{	
+	std::vector<std::shared_ptr<Primitive>> prims;
+	std::vector<std::shared_ptr<Shape>> shapes = renderOptions->CreateShapes(type, list);
+	std::vector<std::shared_ptr<Light>> lights;
+	std::shared_ptr<Material> mtl = renderOptions->m_currentMaterial;
+	renderOptions->m_currentMaterial = nullptr;
+    MediumInterface mi = MediumInterface(renderOptions->m_currentMediumInter, 
+                                         renderOptions->m_currentMediumExter);
+    renderOptions->m_currentMediumInter = nullptr;
+    renderOptions->m_currentMediumExter = nullptr;
+
+	if (shapes.empty()) return;
+	for (auto s : shapes) {
+		std::shared_ptr<AreaLight> area;
+		if (renderOptions->m_hasAreaLight) {
+            area = CreateAreaLight(renderOptions->m_areaLightProperty, s, mi);
+			lights.push_back(area);
+		}
+        prims.push_back(std::make_shared<Primitive>(s, mtl, area, mi));
+	}
+	renderOptions->m_primitives.insert(renderOptions->m_primitives.end(), prims.begin(), prims.end());
+	if (!lights.empty()) {
+		renderOptions->m_lights.insert(renderOptions->m_lights.end(), lights.begin(), lights.end());
+	}
+
+    renderOptions->m_hasAreaLight = false;
+}
+
+void RainbowShape(
     const std::string&   type,
-    const Transform*     o2w,
-    const Transform*     w2o,
     PropertyList&        list)
+{
+    Assert(type == "obj" || type == "rectangle" || type == "cube" || type == "sphere", 
+        "Only support triangle mesh");
+
+    std::vector<std::shared_ptr<Primitive>> prims;    
+    std::shared_ptr<TriangleMesh> mesh = renderOptions->CreateMesh(type, list);
+
+    std::vector<std::shared_ptr<Shape>> shapes;
+    for(int i=0;i<mesh->m_triangleNum;i++) {
+        shapes.push_back(std::make_shared<Triangle>(mesh, i));
+    }
+
+    std::vector<std::shared_ptr<Light>> lights;
+    std::shared_ptr<Material> mtl = renderOptions->m_currentMaterial;
+    renderOptions->m_currentMaterial = nullptr;
+    MediumInterface mi = MediumInterface(renderOptions->m_currentMediumInter,
+        renderOptions->m_currentMediumExter);
+    renderOptions->m_currentMediumInter = nullptr;
+    renderOptions->m_currentMediumExter = nullptr;
+
+    if (shapes.empty()) return;
+    for (auto s : shapes) {
+        std::shared_ptr<AreaLight> area;
+        if (renderOptions->m_hasAreaLight) {
+            area = CreateAreaLight(renderOptions->m_areaLightProperty, s, mi);
+            lights.push_back(area);
+        }
+        prims.push_back(std::make_shared<Primitive>(s, mtl, area, mi));
+    }
+
+    renderOptions->m_primitives.insert(renderOptions->m_primitives.end(), prims.begin(), prims.end());
+    renderOptions->m_embreeMeshes.push_back(mesh);
+    renderOptions->m_embreePrimitives.push_back(prims);
+
+    if (!lights.empty()) {
+        renderOptions->m_lights.insert(renderOptions->m_lights.end(), lights.begin(), lights.end());
+    }
+
+    renderOptions->m_hasAreaLight = false;
+}
+
+void RainbowMaterial(
+    const std::string&   type, 
+    PropertyList&        list) 
+{
+	renderOptions->m_currentMaterial = renderOptions->CreateMaterial(type, list);
+}
+
+void RainbowMedium(
+    const std::string&   type, 
+    const std::string&   name, 
+    PropertyList&        list) 
+{
+     Medium *medium = renderOptions->CreateMedium(type, list);
+     if (name == "exterior")
+         renderOptions->m_currentMediumExter = medium;
+     else if (name == "interior")
+         renderOptions->m_currentMediumInter = medium;
+}
+
+void RainbowNamedMaterial(
+    const std::string& id, 
+    const std::string& type, 
+    const PropertyList& list) 
+{
+    auto material = renderOptions->CreateMaterial(type, list);
+    renderOptions->m_materialMap[id] = material;
+    renderOptions->m_currentMaterial = material; 
+}
+
+void RainbowNamedMedium(
+    const std::string& id, 
+    const std::string& type, 
+    const std::string& name,
+    const PropertyList& list) 
+{
+    Medium* medium = renderOptions->CreateMedium(type, list);
+    renderOptions->m_mediumMap[id] = std::shared_ptr<Medium>(medium);
+    if (name == "exterior")
+        renderOptions->m_currentMediumExter = medium;
+    else if (name == "interior")
+        renderOptions->m_currentMediumInter = medium;
+}
+
+void RainbowLight(
+    const std::string&   type, 
+    PropertyList&        list) 
+{	
+    if (type=="spot") {
+        renderOptions->m_lights.push_back(CreateSpotLight(list));
+    }
+    else if (type == "point") {
+        renderOptions->m_lights.push_back(CreatePointLight(list));
+    }
+    else if (type == "ies") {
+        renderOptions->m_lights.push_back(CreateIESLight(list));
+    }
+    else if (type == "area") {
+        renderOptions->m_areaLightProperty = list;
+        renderOptions->m_hasAreaLight = true;
+    }
+}
+
+void RainbowRef(
+    const std::string &name, 
+    const std::string &id)
+{    
+    if (renderOptions->m_materialMap.count(id) != 0) {
+        renderOptions->m_currentMaterial = renderOptions->m_materialMap[id];
+    } else if (renderOptions->m_mediumMap.count(id) != 0) {
+        auto &medium = renderOptions->m_mediumMap[id];
+        if (name == "exterior") {
+            renderOptions->m_currentMediumExter = medium.get();            
+        } else if (name == "interior") {
+            renderOptions->m_currentMediumInter = medium.get();           
+        }
+    } else {
+        Assert(false, "No reference with \"" + id);
+    }
+}
+
+std::shared_ptr<Scene> RenderOptions::CreateScene() 
+{
+    Scene* scene = nullptr;    
+
+    if (m_embree) {        
+        scene = new EmbreeScene(m_embreeMeshes, m_embreePrimitives, m_lights);
+    } else {        
+	    std::shared_ptr<Aggregate> aggregate(CreateAggregate());    
+        scene = new RainbowScene(aggregate, m_lights);
+    }
+
+    m_embreeMeshes.clear();
+    m_embreePrimitives.clear();
+	m_primitives.clear();
+	m_lights.clear();
+
+	return std::shared_ptr<Scene>(scene);
+}
+
+std::shared_ptr<Integrator> RenderOptions::CreateIntegrator()
+{
+	Assert(m_camera != nullptr, "Unable to create camera!");	
+	Assert(m_sampler != nullptr, "Unable to create sampler!");	
+
+	Integrator* integrator = nullptr;
+	if (m_integratorType == "whitted") {
+        integrator = CreateWhittedIntegrator(m_integratorProperty, m_camera, m_sampler);
+	}
+    else if (m_integratorType == "direct") {
+        integrator = CreateDirectLightIntegrator(m_integratorProperty, m_camera, m_sampler);
+    }
+    else if (m_integratorType == "path") {
+        integrator = CreatePathIntegrator(m_integratorProperty, m_camera, m_sampler);
+    }
+    else if (m_integratorType == "volpath") {
+        integrator = CreateVolPathIntegrator(m_integratorProperty, m_camera, m_sampler);
+    }
+	return std::shared_ptr<Integrator>(integrator);
+}
+
+std::shared_ptr<Camera> RenderOptions::CreateCamera()
+{
+	Assert(m_film != nullptr, "Unable to create film!");
+
+	Camera* camera = nullptr;	
+
+	if (m_cameraType == "perspective") {
+		camera = CreatePerspectiveCamera(m_cameraProperty, m_film);
+	}
+
+    return std::shared_ptr<Camera>(camera);
+}
+
+std::shared_ptr<Film> RenderOptions::CreateFilm()
+{
+	Film* film = nullptr;
+    if (m_filmType == "hdrfilm" || m_filmType == "ldrfilm") {
+		film = rainbow::CreateFilm(m_filmProperty, renderOptions->m_filter);
+	}
+	return std::shared_ptr<Film>(film);
+}
+
+std::shared_ptr<Filter> RenderOptions::CreateFilter() 
+{
+    std::shared_ptr<Filter> filter = nullptr;
+    if (m_filterType == "gaussian") {
+        filter = CreateGaussianFilter(m_filterProperty);
+    }
+    else if (m_filterType == "box") {
+        filter = CreateBoxFilter(m_filterProperty);
+    }
+    else if (m_filterType == "triangle" || m_filterType == "tent") {
+        filter = CreateTentFilter(m_filterProperty);
+    }
+    return filter;
+}
+
+
+std::shared_ptr<Sampler> RenderOptions::CreateSampler()
+{
+	Sampler* sampler = nullptr;
+	if (m_samplerType == "independent") {
+		sampler = CreateIndependentSampler(m_samplerProperty);
+	} else if (m_samplerType == "halton") {
+        sampler = CreateHaltonSampler(m_samplerProperty, m_film->resolution);
+    }
+	return std::shared_ptr<Sampler>(sampler);
+}
+
+
+std::shared_ptr<Aggregate> RenderOptions::CreateAggregate()
+{    
+	//Aggregate* aggregate = new Aggregate(primitives);
+    Aggregate* aggregate = CreateBVHAccelerator(m_primitives);
+	m_primitives.clear();
+	return std::shared_ptr<Aggregate>(aggregate);
+}
+
+std::shared_ptr<TriangleMesh> RenderOptions::CreateMesh(
+    const std::string  &type,
+    const PropertyList &list)
 {
     std::shared_ptr<TriangleMesh> mesh = nullptr;
     if (type == "obj") {
-        mesh = CreateWavefrontOBJMesh(o2w, w2o, list);
+        mesh = CreateWavefrontOBJMesh(list);
     }
     else if (type == "rectangle") {
-        mesh = CreateRectangleMesh(o2w, w2o, list);
+        mesh = CreateRectangleMesh(list);
     }
     else if (type == "cube") {
-        mesh = CreateCubeMesh(o2w, w2o, list);
+        mesh = CreateCubeMesh(list);
     }
-    else if (type=="sphere") {
-        mesh = CreateSphereTriangleMesh(o2w, w2o, list);
+    else if (type == "sphere") {
+        mesh = CreateSphereTriangleMesh(list);
     }
     return mesh;
 }
 
-std::vector<std::shared_ptr<Shape>> MakeShapes(
-    const std::string&   type,
-    const Transform*     o2w,
-    const Transform*     w2o, 
-    PropertyList&        list) 
+std::vector<std::shared_ptr<Shape>> RenderOptions::CreateShapes(
+    const std::string    &type,
+    const PropertyList   &list)
 {
     std::vector<std::shared_ptr<Shape>> shapes;
     if (type == "obj") {
-        std::vector<std::shared_ptr<Triangle>> tris(CreateWavefrontOBJ(o2w, w2o, list));
+        std::vector<std::shared_ptr<Triangle>> tris(CreateWavefrontOBJ(list));
         shapes.insert(shapes.end(), tris.begin(), tris.end());
     }
     else if (type == "sphere") {
-        shapes.push_back(CreateSphere(o2w, w2o, list));
+        shapes.push_back(CreateSphere(list));
     }
     else if (type == "rectangle") {
-        std::vector<std::shared_ptr<Triangle>> tris(CreateRectangle(o2w, w2o, list));
+        std::vector<std::shared_ptr<Triangle>> tris(CreateRectangle(list));
         shapes.insert(shapes.end(), tris.begin(), tris.end());
     }
     else if (type == "cube") {
-        std::vector<std::shared_ptr<Triangle>> tris(CreateCube(o2w, w2o, list));
+        std::vector<std::shared_ptr<Triangle>> tris(CreateCube(list));
         shapes.insert(shapes.end(), tris.begin(), tris.end());
     }
     return shapes;
 }
 
-std::shared_ptr<Material> MakeMaterial(
-    const std::string&   type, 
-    PropertyList&        list) 
+std::shared_ptr<Material> RenderOptions::CreateMaterial(
+    const std::string&   type,
+    const PropertyList&  list)
 {
     Material* material = nullptr;
     if (type == "diffuse" || type == "matte") {
@@ -166,9 +526,9 @@ std::shared_ptr<Material> MakeMaterial(
     return std::shared_ptr<Material>(material);
 }
 
-Medium* MakeMedium(
-    const std::string&   type, 
-    PropertyList&        list) 
+Medium* RenderOptions::CreateMedium(
+    const std::string&   type,
+    const PropertyList&  list)
 {
     Medium *medium = nullptr;
     if (type == "homogeneous") {
@@ -177,351 +537,15 @@ Medium* MakeMedium(
     return medium;
 }
 
-std::shared_ptr<AreaLight> MakeAreaLight(
-    PropertyList&                   list,
-    const std::shared_ptr<Shape>&   shape,
-    const MediumInterface&          mediumInterface) 
-{
-    std::shared_ptr<AreaLight> area;
-    area = CreateAreaLight(list, shape, mediumInterface);
-    return area;
-}
-
-void RainbowSceneBegin() 
-{
-    renderOptions = std::make_shared<RenderOptions>();
-    transformPool = std::make_shared<TransformPool>();
-}
-
-void RainbowShowSettings(
-    Integrator*   integrator,
-    Scene*        scene) 
-{
-    cout << integrator->toString() << endl;
-    cout << integrator->m_camera->toString() << endl;
-    cout << scene->toString() << endl;
-}
-
-void RainbowSceneEnd() 
-{
-    Integrator* integrator = renderOptions->MakeIntegrator();
-    Scene* scene = renderOptions->MakeScene();
-
-    RainbowShowSettings(integrator, scene);
-
-    Assert(scene && integrator, "No Scene or Integrator!");
-
-    if (renderOptions->RenderMode == "progressive") {
-        //show(integrator, scene);        
-        //AdaptiveShow(integrator, scene);
-    }
-    else if (renderOptions->RenderMode == "final") {
-        integrator->Render(*scene);        
-    }
-    else if (renderOptions->RenderMode == "adaptive") {
-        integrator->RenderAdaptive(*scene);
-    }
-    else if (renderOptions->RenderMode == "eye") {
-        integrator->RenderEyeLight(*scene);
-    }
-}
-
-void RainbowRenderMode(
-    const std::string& type) 
-{
-    renderOptions->RenderMode = type;
-}
-
-void RainbowIntegrator(
-    const std::string&    type,
-    const PropertyList&   list) 
-{
-	renderOptions->IntegratorType = type;
-	renderOptions->IntegratorProperty = list;
-}
-
-void RainbowCamera(
-    const std::string&    type, 
-    const PropertyList&   list) 
-{
-	renderOptions->CameraType = type;
-	renderOptions->CameraProperty = list;
-}
-
-void RainbowSampler(
-    const std::string&    type, 
-    const PropertyList&   list) 
-{
-	renderOptions->SamplerType = type;
-	renderOptions->SamplerProperty = list;
-}
-
-void RainbowFilter(
-    const std::string&   type, 
-    PropertyList&        list) 
-{
-    if (type == "gaussian") 
-    {
-        renderOptions->filter = CreateGaussianFilter(list);
-    }
-    else if (type == "box") 
-    {
-        renderOptions->filter = CreateBoxFilter(list);
-    }
-    else if (type == "triangle" || type == "tent") 
-    {
-        renderOptions->filter = CreateTentFilter(list);
-    }
-}
-
-void RainbowFilm(
-    const std::string&    type, 
-    const PropertyList&   list) 
-{
-	renderOptions->FilmType = type;
-	renderOptions->FilmProperty = list;
-}
-
-void RainbowOldShape(
-    const std::string&   type, 
-    PropertyList&        list) 
-{
-	Transform* ObjectToWorld = transformPool->insert(renderOptions->CurrentTransform);
-	Transform* WorldToObject = transformPool->insert(Inverse(renderOptions->CurrentTransform));
-
-	std::vector<std::shared_ptr<Primitive>> prims;
-	std::vector<std::shared_ptr<Shape>> shapes = MakeShapes(type, ObjectToWorld, WorldToObject, list);
-	std::vector<std::shared_ptr<Light>> lights;
-	std::shared_ptr<Material> mtl = renderOptions->CurrentMaterial;
-	renderOptions->CurrentMaterial = nullptr;
-    MediumInterface mi = MediumInterface(renderOptions->CurrentMediumInter, 
-                                         renderOptions->CurrentMediumExter);
-    renderOptions->CurrentMediumInter = nullptr;
-    renderOptions->CurrentMediumExter = nullptr;
-
-	if (shapes.empty()) return;
-	for (auto s : shapes) {
-		std::shared_ptr<AreaLight> area;
-		if (!renderOptions->LightType.empty()) {
-            area = MakeAreaLight(renderOptions->LightProperty, s, mi);
-			lights.push_back(area);
-		}
-        prims.push_back(std::make_shared<Primitive>(s, mtl, area, mi));
-	}
-	renderOptions->primitives.insert(renderOptions->primitives.end(), prims.begin(), prims.end());
-	if (!lights.empty()) {
-		renderOptions->lights.insert(renderOptions->lights.end(), lights.begin(), lights.end());
-		renderOptions->LightType = "";
-	}
-	renderOptions->CurrentTransform = Transform();
-}
-
-void RainbowShape(
+/*std::shared_ptr<Medium> RenderOptions::CreateMedium(
     const std::string&   type,
-    PropertyList&        list)
+    const PropertyList&  list)
 {
-    Assert(type == "obj" || type == "rectangle" || type == "cube" || type == "sphere", 
-        "Only support triangle mesh");
-
-    Transform* ObjectToWorld = transformPool->insert(renderOptions->CurrentTransform);
-    Transform* WorldToObject = transformPool->insert(Inverse(renderOptions->CurrentTransform));
-
-    std::vector<std::shared_ptr<Primitive>> prims;
-    //std::vector<std::shared_ptr<Shape>> shapes = MakeShapes(type, ObjectToWorld, WorldToObject, list);
-    std::shared_ptr<TriangleMesh> mesh = MakeMesh(type, ObjectToWorld, WorldToObject, list);
-
-    std::vector<std::shared_ptr<Shape>> shapes;
-    for(int i=0;i<mesh->m_triangleNum;i++) {
-        shapes.push_back(std::make_shared<Triangle>(mesh, i));
+    Medium *medium = nullptr;
+    if (type == "homogeneous") {
+        medium = CreateHomogeneousMedium(list);
     }
-
-    std::vector<std::shared_ptr<Light>> lights;
-    std::shared_ptr<Material> mtl = renderOptions->CurrentMaterial;
-    renderOptions->CurrentMaterial = nullptr;
-    MediumInterface mi = MediumInterface(renderOptions->CurrentMediumInter,
-        renderOptions->CurrentMediumExter);
-    renderOptions->CurrentMediumInter = nullptr;
-    renderOptions->CurrentMediumExter = nullptr;
-
-    if (shapes.empty()) return;
-    for (auto s : shapes) {
-        std::shared_ptr<AreaLight> area;
-        if (!renderOptions->LightType.empty()) {
-            area = MakeAreaLight(renderOptions->LightProperty, s, mi);
-            lights.push_back(area);
-        }
-        prims.push_back(std::make_shared<Primitive>(s, mtl, area, mi));
-    }
-
-    renderOptions->primitives.insert(renderOptions->primitives.end(), prims.begin(), prims.end());
-    renderOptions->embreeMeshes.push_back(mesh);
-    renderOptions->embreePrimitives.push_back(prims);
-
-    if (!lights.empty()) {
-        renderOptions->lights.insert(renderOptions->lights.end(), lights.begin(), lights.end());
-        renderOptions->LightType = "";
-    }
-    renderOptions->CurrentTransform = Transform();
-}
-
-void RainbowMaterial(
-    const std::string&   type, 
-    PropertyList&        list) 
-{
-	std::shared_ptr<Material> material = MakeMaterial(type, list);
-	renderOptions->CurrentMaterial = material;
-    if (list.findString("id")) {
-        renderOptions->MaterialMap[list.getString("id")] = renderOptions->CurrentMaterial;
-        renderOptions->CurrentMaterial = nullptr;
-    }
-}
-
-void RainbowMedium(
-    const std::string&   type, 
-    const std::string&   name, 
-    PropertyList&        list) 
-{
-     Medium *medium = MakeMedium(type, list);
-     if (name == "exterior")
-         renderOptions->CurrentMediumExter = medium;
-     else if (name == "interior")
-         renderOptions->CurrentMediumInter = medium;
-}
-
-void RainbowLight(
-    const std::string&   type, 
-    PropertyList&        list) 
-{	
-    if (type=="spot") {
-        renderOptions->lights.push_back(CreateSpotLight(list));
-    }
-    else if (type == "point") {
-        renderOptions->lights.push_back(CreatePointLight(list));
-    }
-    else if (type == "ies") {
-        renderOptions->lights.push_back(CreateIESLight(list));
-    }
-    else if (type == "area") {
-        renderOptions->LightType = type;
-        renderOptions->LightProperty = list;
-    }
-}
-
-/*void RainbowBSDFMap(
-    const std::string&   type, 
-    PropertyList&        list) 
-{
-    renderOptions->MaterialMap[list.getString("id")] = renderOptions->CurrentMaterial;
-    renderOptions->CurrentMaterial = NULL;
+    return std::shared_ptr<Medium>(medium);
 }*/
-
-void RainbowRef(
-    const std::string&   type, 
-    PropertyList&        list) 
-{
-    renderOptions->CurrentMaterial = renderOptions->MaterialMap[list.getString("id")];
-}
-
-void InitialTransform() 
-{
-	renderOptions->CurrentTransform = Transform();
-}
-
-void RainbowTransform(
-    const Transform& ObjectToWorld) 
-{
-	renderOptions->CurrentTransform = ObjectToWorld;
-}
-
-Aggregate* RenderOptions::MakeAggregate() 
-{    
-	//Aggregate* aggregate = new Aggregate(primitives);
-    Aggregate* aggregate = CreateBVHAccelerator(primitives);
-	primitives.clear();
-	return aggregate;
-}
-
-Scene* RenderOptions::MakeScene() 
-{
-    Scene* scene = nullptr;    
-
-    if (embree) {        
-        scene = new EmbreeScene(embreeMeshes, embreePrimitives, lights);
-    }
-    else {        
-	    std::shared_ptr<Aggregate> aggregate(MakeAggregate());    
-        scene = new RainbowScene(aggregate, lights);
-    }
-
-    embreeMeshes.clear();
-    embreePrimitives.clear();
-	primitives.clear();
-	lights.clear();
-
-	return scene;
-}
-
-Film* RenderOptions::MakeFilm() 
-{
-	Film* film = nullptr;
-    if (FilmType == "hdrfilm" || FilmType == "ldrfilm") 
-    {
-		film = CreateFilm(FilmProperty, renderOptions->filter);
-	}
-	return film;
-}
-
-Camera* RenderOptions::MakeCamera() 
-{
-	std::shared_ptr<Film> film(MakeFilm());
-	Assert(film != nullptr, "Unable to create film!");
-
-	Camera* camera = nullptr;
-
-	Transform CameraToWorld = CameraProperty.getTransform("toWorld",Transform());
-
-	if (CameraType == "perspective") 
-    {
-		camera = CreatePerspectiveCamera(CameraToWorld, CameraProperty, film);
-	}
-	return camera;
-}
-
-Sampler* RenderOptions::MakeSampler(const Camera& camera)
-{
-	Sampler* sampler = nullptr;
-	if (SamplerType == "independent") 
-    {
-		sampler = CreateIndependentSampler(SamplerProperty);
-	}
-    else if (SamplerType == "halton") {
-        sampler = CreateHaltonSampler(SamplerProperty, camera.film->resolution);
-    }
-	return sampler;
-}
-
-Integrator* RenderOptions::MakeIntegrator() 
-{
-	std::shared_ptr<Camera> camera(MakeCamera());
-	Assert(camera != nullptr, "Unable to create camera!");
-	
-	std::shared_ptr<Sampler> sampler(MakeSampler(*camera));
-	Assert(sampler != nullptr, "Unable to create sampler!");	
-
-	Integrator* integrator = nullptr;
-	if (IntegratorType == "whitted") {
-        integrator = CreateWhittedIntegrator(IntegratorProperty, camera, sampler);
-	}
-    else if (IntegratorType == "direct") {
-        integrator = CreateDirectLightIntegrator(IntegratorProperty, camera, sampler);
-    }
-    else if (IntegratorType == "path") {
-        integrator = CreatePathIntegrator(IntegratorProperty, camera, sampler);
-    }
-    else if (IntegratorType == "volpath") {
-        integrator = CreateVolPathIntegrator(IntegratorProperty, camera, sampler);
-    }
-	return integrator;
-}
 
 RAINBOW_NAMESPACE_END

@@ -13,16 +13,16 @@ void RainbowIntegrator(const std::string& type, const PropertyList& list);
 void RainbowCamera(const std::string& type, const PropertyList& list);
 void RainbowSampler(const std::string& type, const PropertyList& list);
 void RainbowFilm(const std::string& type, const PropertyList& list);
+void RainbowFilter(const std::string& type, PropertyList& list);
+void RainbowLight(const std::string& type, PropertyList& list);
 void RainbowShape(const std::string& type, PropertyList& list);
 void RainbowMaterial(const std::string& type, PropertyList& list);
-void RainbowLight(const std::string& type, PropertyList& list);
-void RainbowFilter(const std::string& type, PropertyList& list);
-void RainbowRef(const std::string& type, PropertyList& list);
-//void RainbowBSDFMap(const std::string& type, PropertyList& list);
 void RainbowMedium(const std::string& type, const std::string& name, PropertyList& list);
+void RainbowNamedMaterial(const std::string &id, const std::string &type, const PropertyList &list);
+void RainbowNamedMedium(const std::string &id, const std::string &type, 
+                        const std::string &name, const PropertyList &list);
+void RainbowRef(const std::string &name, const std::string &id);
 
-void InitialTransform();
-void RainbowTransform(const Transform& ObjectToWorld);
 
 
 RAINBOW_NAMESPACE_END

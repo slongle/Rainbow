@@ -23,7 +23,10 @@
 using namespace rainbow;
 
 int main(int argc, char *argv[]) {
-    
+    /*for(int x=-10;x<=30;x+=1) {
+        std::cout << 0.1*x << ' ' << (int)std::ceil(0.1*x - 0.5) << std::endl;
+    }
+    return 0;*/
 
     //EmbreeSceneMain();
     //return 0;
@@ -33,7 +36,7 @@ int main(int argc, char *argv[]) {
     std::vector<std::string> scenes(100);
     scenes[0] = "cbox/cbox(sphere).xml";
     scenes[1] = "cornell-box/scene3.xml";
-    scenes[2] = "veach-mis/scene.xml";
+    scenes[2] = "veach-mi/scene.xml";
     scenes[3] = "veach-bidir/scene.xml";
     scenes[4] = "volumetric-caustic/scene.xml";
     scenes[5] = "water-caustic/scene.xml";
@@ -43,11 +46,12 @@ int main(int argc, char *argv[]) {
     scenes[9] = "glass-of-water/scene.xml";
     scenes[10] = "hetvol/hetvol.xml";
 
-    const std::string filename(solutionDir + scenes[4]);
+    const std::string filename(solutionDir + scenes[10]);
 
 	filesystem::path path(filename);
 	getFileResolver()->prepend(path.parent_path());
-	ParserXMLFile(filename);
+    ParseRecord record(filename);
+    Parse(record);
 
 	return 0;
 }
