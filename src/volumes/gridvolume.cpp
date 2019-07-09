@@ -116,9 +116,10 @@ Float GridDensityVolume::LookUpFloat(
     }
 
     Point3i pCeil(x1, y1, z1);
-    Float fx = p.x - x1, fy = p.y - y1, fz = p.z - z1;
+    Float fx = p.x - x1, fy = p.y - y1, fz = p.z - z1,
+        _fx = 1.0f - fx, _fy = 1.0f - fy, _fz = 1.0f - fz;
 
-    Float d00 = utility::lerp(GetFloatD(pCeil), GetFloatD(pCeil + Point3i(1, 0, 0)), fx);
+    /*Float d00 = utility::lerp(GetFloatD(pCeil), GetFloatD(pCeil + Point3i(1, 0, 0)), fx);
     Float d01 = utility::lerp(GetFloatD(pCeil + Point3i(0, 1, 0)), GetFloatD(pCeil + Point3i(1, 1, 0)), fx);
     Float d10 = utility::lerp(GetFloatD(pCeil + Point3i(0, 0, 1)), GetFloatD(pCeil + Point3i(1, 0, 1)), fx);
     Float d11 = utility::lerp(GetFloatD(pCeil + Point3i(0, 1, 1)), GetFloatD(pCeil + Point3i(1, 1, 1)), fx);
@@ -127,7 +128,23 @@ Float GridDensityVolume::LookUpFloat(
     Float d1 = utility::lerp(d10, d11, fy);
     // Lerp with z
     Float d = utility::lerp(d0, d1, fz);
-    return d;
+    return d;*/
+
+    const float *floatData = (float *)m_data;
+    const Float
+        d000 = floatData[(z1*m_resolution.y + y1)*m_resolution.x + x1],
+        d001 = floatData[(z1*m_resolution.y + y1)*m_resolution.x + x2],
+        d010 = floatData[(z1*m_resolution.y + y2)*m_resolution.x + x1],
+        d011 = floatData[(z1*m_resolution.y + y2)*m_resolution.x + x2],
+        d100 = floatData[(z2*m_resolution.y + y1)*m_resolution.x + x1],
+        d101 = floatData[(z2*m_resolution.y + y1)*m_resolution.x + x2],
+        d110 = floatData[(z2*m_resolution.y + y2)*m_resolution.x + x1],
+        d111 = floatData[(z2*m_resolution.y + y2)*m_resolution.x + x2];
+
+    return ((d000*_fx + d001 * fx)*_fy +
+        (d010*_fx + d011 * fx)*fy)*_fz +
+        ((d100*_fx + d101 * fx)*_fy +
+        (d110*_fx + d111 * fx)*fy)*fz;
 }
 
 RGBSpectrum GridDensityVolume::LookUpSpectrum(

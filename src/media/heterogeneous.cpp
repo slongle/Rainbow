@@ -32,9 +32,11 @@ HeterogeneousMedium::Tr(Ray rWorld, Sampler& sampler) const
         return RGBSpectrum(1.);
     }
 
-    int cnt= 0;
+    tMin = std::max(tMin, (Float)0.);
+    tMax = std::min(tMax, rMedium.tMax);
+    //int cnt= 0;
 
-    Float t = 0;
+    Float t = tMin;
     while (true) {
         t += -std::log(1 - sampler.Next1D()) * m_invMaxDensity;
         if (t > tMax) {
@@ -45,10 +47,18 @@ HeterogeneousMedium::Tr(Ray rWorld, Sampler& sampler) const
         Float densityAtT = m_density->LookUpFloat(p) * m_scale;
         Tr *= 1 - densityAtT * m_invMaxDensity;
 
-        cnt++;
+        const Float rrThreshold = .1;
+        if (Tr < rrThreshold) {
+            Float q = std::max((Float).05, 1 - Tr);
+            if (sampler.Next1D() < q) {
+                return RGBSpectrum(0.);
+            }
+            Tr /= 1 - q;
+        }
+        /*cnt++;
         if(cnt==1000) {
             int b = 1;
-        }
+        }*/
     }
 
     return RGBSpectrum(Tr);
@@ -72,10 +82,12 @@ HeterogeneousMedium::Sample(
     if (!m_box.Intersect(rMedium, &tMin, &tMax)) {
         return RGBSpectrum(1.);
     }
+    tMin = std::max(tMin, (Float)0.);
+    tMax = std::min(tMax, rMedium.tMax);
 
-    int cnt = 0;
+    //int cnt = 0;
 
-    Float t = 0;
+    Float t = tMin;
     while(true) {
         t += -std::log(1 - sampler.Next1D()) * m_invMaxDensity;
         if (t > tMax) {            
@@ -83,8 +95,10 @@ HeterogeneousMedium::Sample(
         }
 
         Point3f p = rMedium(t);
-        Float densityAtT = m_density->LookUpFloat(p);        
+        Float densityAtT = m_density->LookUpFloat(p) * m_scale;        
         if (sampler.Next1D() < densityAtT * m_invMaxDensity) {
+            Ray ray = m_mediumToWorld(rMedium);
+            *mi = MediumInteraction(p, -rMedium.d, this, ARENA_ALLOCA(arena, HenyeyGreenstein)(m_g));
             RGBSpectrum albedoAtT = m_albedo->LookUpSpectrum(p);
             //RGBSpectrum sigma_t = densityAtT;
             //RGBSpectrum sigma_s = densityAtT * albedoAtT;
@@ -93,10 +107,10 @@ HeterogeneousMedium::Sample(
             return albedoAtT;
         }
 
-        cnt++;
+        /*cnt++;
         if (cnt == 1000) {
             int b = 1;
-        }
+        }*/
     }
 
     return RGBSpectrum(1.);
@@ -109,7 +123,7 @@ Medium* CreateHeterogeneousMedium(
 {
     Transform w2m = list.getTransform("toWorld", Transform::identityTransform);
     Float scale = list.getFloat("scale", 1.);
-    Float g = list.getFloat("g", 1);
+    Float g = list.getFloat("g", 0);
     return new HeterogeneousMedium(densityVolume, albedoVolume, scale, g, w2m);
 }
 

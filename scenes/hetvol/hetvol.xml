@@ -5,15 +5,15 @@
 	<integrator type="volpath">
 		<integer name="maxDepth" value="8"/>
         <integer name="sampleNum" value="10000"/>
-        <integer name="delta" value="1"/>
+        <integer name="delta" value="5"/>
 	</integrator>
 
     <sensor type="perspective">
 		<float name="focusDistance" value="1.25668"/>
-		<float name="fov" value="45.8402"/>
+		<float name="fov" value="35.08402"/>
 		<string name="fovAxis" value="x"/>
 		<transform name="toWorld">
-			<scale x="-1"/>
+			<!--<scale x="-1"/>-->
 			<lookat target="-0.166029, 0.148984, -0.537402" origin="-0.61423, 0.154197, -1.43132" up="-0.000640925, -0.999985, -0.0055102"/>
 		</transform>
 
