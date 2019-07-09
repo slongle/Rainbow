@@ -3,8 +3,8 @@
 #define __RAINBOW_VOLUME_H
 
 #include <string>
-#include "spectrum.h"
 #include "bbox.h"
+#include "propertylist.h"
 
 RAINBOW_NAMESPACE_BEGIN
 
@@ -15,12 +15,12 @@ public:
     virtual RGBSpectrum LookUpSpectrum(const Point3f& p) const = 0;
     virtual Float GetMaxFloatValue() const = 0;
 
-    Bounds3f& GetBounds() {
-        return box;
+    Bounds3f GetBounds() const {
+        return m_bounds;
     }
 
-private:
-    Bounds3f box;
+protected:
+    Bounds3f m_bounds;
 
 };
 

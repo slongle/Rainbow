@@ -60,10 +60,12 @@ typedef Vector2<Float> Vector2f;
 typedef Vector3<Float> Vector3f;
 typedef Point2<int>	   Point2i;
 typedef Point2<Float>  Point2f;
+typedef Point3<int>    Point3i;
 typedef Point3<Float>  Point3f;
 typedef Normal3<Float> Normal3f;
-typedef Bounds2<Float> Bounds2f;
 typedef Bounds2<int>   Bounds2i;
+typedef Bounds2<Float> Bounds2f;
+typedef Bounds3<int>   Bounds3i;
 typedef Bounds3<Float> Bounds3f;
 
 //class MicrofacetDistribution;

@@ -156,6 +156,7 @@ void HandleTag(
             break;
         }
         case EVolume:
+            RainbowVolume(type, name, myList);
             break;
         case ERef:            
             RainbowRef(name, id);
@@ -221,9 +222,9 @@ void HandleTag(
         }
         case EScale: {
             if (value == "") {
-                const Float x = toFloat(GetValue(node, "x", "0"));
-                const Float y = toFloat(GetValue(node, "y", "0"));
-                const Float z = toFloat(GetValue(node, "z", "0"));
+                const Float x = toFloat(GetValue(node, "x", "1"));
+                const Float y = toFloat(GetValue(node, "y", "1"));
+                const Float z = toFloat(GetValue(node, "z", "1"));
                 m_transform *= Scale(Vector3f(x, y, z));
             }
             else {

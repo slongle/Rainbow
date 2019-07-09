@@ -6168,7 +6168,7 @@ unsigned lodepng_encode(unsigned char** out, size_t* outsize,
 		}
 		if (!grey_icc && grey_png)
 		{
-			/* Recoverable but an unfortunate loss in compression density: We have greyscale pixels but
+			/* Recoverable but an unfortunate loss in compression m_density: We have greyscale pixels but
 			are forced to store them in more expensive RGB format that will repeat each value 3 times
 			because the PNG spec does not allow an RGB ICC profile with internal greyscale color data */
 			if (info.color.colortype == LCT_GREY) info.color.colortype = LCT_RGB;

@@ -18,6 +18,7 @@ private:
     RGBSpectrum value;
 };
 
+ConstDensityVolume * CreateConstDensityVolume(const PropertyList &list);
 
 RAINBOW_NAMESPACE_END
 

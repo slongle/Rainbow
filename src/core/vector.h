@@ -502,6 +502,7 @@ public:
     bool operator != (const Normal3<T>& n) const { return x != n.x || y != n.y || z != n.z; }
 	Normal3<T> operator + (const Normal3<T>& n) const { return Normal3<T>(x + n.x, y + n.y, z + n.z); }
 	Normal3<T> operator - () const { return Normal3<T>(-x, -y, -z); }
+    Vector3<T> operator - (const Vector3<T>& v) { return Vector3<T>(x - v.x, y - v.y, z - v.z); }
 	Normal3<T> operator * (const Float& u) const { return Normal3<T>(x*u, y*u, z*u); }
 	Normal3<T> operator / (const Float& u) const { 
 		Assert(u != 0, "Divide Zero!");
@@ -517,9 +518,7 @@ public:
 	}
 
 	template<typename U>
-	friend Normal3<T> operator * (const U& f, const Normal3<T>& n) { return Normal3<T>(n.x*f, n.y*f, n.z*f); }	
-	template<typename T>
-	friend Vector3<T> operator - (const Normal3<T>& n, const Vector3<T>& v) { return Vector3<T>(n.x - v.x, n.y - v.y, n.z - v.z); }
+	friend Normal3<T> operator * (const U& f, const Normal3<T>& n) { return Normal3<T>(n.x*f, n.y*f, n.z*f); }		
 
 	friend std::ostream &operator << (std::ostream &os, const Normal3<T> &u) {
 		os << u.toString();

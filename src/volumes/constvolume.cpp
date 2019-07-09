@@ -19,5 +19,10 @@ Float ConstDensityVolume::GetMaxFloatValue() const
     return value[0];
 }
 
+ConstDensityVolume* CreateConstDensityVolume(const PropertyList& list) {
+    Float value = list.getFloat("value", 1);
+    return new ConstDensityVolume(value);
+}
+
 
 RAINBOW_NAMESPACE_END

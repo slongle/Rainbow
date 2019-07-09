@@ -313,10 +313,10 @@ void SamplerIntegrator::Render(const Scene &scene, unsigned char* guiImage) {
         for (cnt = 1; cnt <= sampleNum / sampleDelta; cnt++)
         {
             /// Uncomment the following line for single threaded rendering
-            //map(range);
+            map(range);
 
             /// Default: parallel rendering
-            tbb::parallel_for(range, map);
+            //tbb::parallel_for(range, map);
 
             preSumSample += sampleDelta;
 

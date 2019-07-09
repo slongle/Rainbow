@@ -4,15 +4,16 @@
 RAINBOW_NAMESPACE_BEGIN
 
 HeterogeneousMedium::HeterogeneousMedium(
-    Volume *m_density,
-    Volume *m_albedo,
-    const Float &m_g,
+    const Volume *density,
+    const Volume *albedo,
+    const Float &scale,
+    const Float &g,
     const Transform &w2m)
-    :density(m_density), albedo(m_albedo), g(m_g), WorldToMedium(w2m)
+    :m_density(density), m_albedo(albedo), m_scale(scale), m_g(g), m_worldToMedium(w2m)
 {
-    maxDensity = density->GetMaxFloatValue();
-    invMaxDensity = 1. / maxDensity;
-    box = density->GetBounds();
+    m_maxDensity = m_density->GetMaxFloatValue() * m_scale;
+    m_invMaxDensity = 1. / m_maxDensity;
+    m_box = m_density->GetBounds();
 }
 
 RGBSpectrum 
@@ -20,23 +21,34 @@ HeterogeneousMedium::Tr(Ray rWorld, Sampler& sampler) const
 {
     Assert(std::abs(rWorld.d.LengthSquare() - 1) < Epsilon, "No Normalizeing");
 
-    Ray rMedium = WorldToMedium(rWorld);
+    Ray rMedium = m_worldToMedium(rWorld);
+    //rMedium.tMax = rMedium.tMax*rMedium.d.Length();
+    //rMedium.d = Normalize(rMedium.d);
+    //Assert(std::abs(rMedium.d.LengthSquare() - 1) < Epsilon, "No Normalizeing");
+
     Float Tr = 1.;
     Float tMin, tMax;
-    if (!box.Intersect(rMedium, &tMin, &tMax)) {
+    if (!m_box.Intersect(rMedium, &tMin, &tMax)) {
         return RGBSpectrum(1.);
     }
 
+    int cnt= 0;
+
     Float t = 0;
     while (true) {
-        t += -std::log(1 - sampler.Next1D()) * invMaxDensity;
+        t += -std::log(1 - sampler.Next1D()) * m_invMaxDensity;
         if (t > tMax) {
             break;
         }
 
         Point3f p = rMedium(t);
-        Float densityAtT = density->LookUpFloat(p);
-        Tr *= 1 - densityAtT * invMaxDensity;
+        Float densityAtT = m_density->LookUpFloat(p) * m_scale;
+        Tr *= 1 - densityAtT * m_invMaxDensity;
+
+        cnt++;
+        if(cnt==1000) {
+            int b = 1;
+        }
     }
 
     return RGBSpectrum(Tr);
@@ -51,36 +63,55 @@ HeterogeneousMedium::Sample(
 {
     Assert(std::abs(rWorld.d.LengthSquare() - 1) < Epsilon, "No Normalizeing");
 
-    Ray rMedium = WorldToMedium(rWorld);
+    Ray rMedium = m_worldToMedium(rWorld);
+    //rMedium.tMax = rMedium.tMax*rMedium.d.Length();
+    //rMedium.d = Normalize(rMedium.d);
+    //Assert(std::abs(rMedium.d.LengthSquare() - 1) < Epsilon, "No Normalizeing");
+
     Float tMin, tMax;
-    if (!box.Intersect(rMedium, &tMin, &tMax)) {
+    if (!m_box.Intersect(rMedium, &tMin, &tMax)) {
         return RGBSpectrum(1.);
     }
-    
+
+    int cnt = 0;
+
     Float t = 0;
     while(true) {
-        t += -std::log(1 - sampler.Next1D()) * invMaxDensity;
+        t += -std::log(1 - sampler.Next1D()) * m_invMaxDensity;
         if (t > tMax) {            
             break;
         }
 
         Point3f p = rMedium(t);
-        Float densityAtT = density->LookUpFloat(p);        
-        if (sampler.Next1D() < densityAtT * invMaxDensity) {
-            RGBSpectrum albedoAtT = albedo->LookUpSpectrum(p);
+        Float densityAtT = m_density->LookUpFloat(p);        
+        if (sampler.Next1D() < densityAtT * m_invMaxDensity) {
+            RGBSpectrum albedoAtT = m_albedo->LookUpSpectrum(p);
             //RGBSpectrum sigma_t = densityAtT;
             //RGBSpectrum sigma_s = densityAtT * albedoAtT;
             //RGBSpectrum sigma_a = RGBSpectrum(densityAtT) - sigma_s;
 
             return albedoAtT;
         }
+
+        cnt++;
+        if (cnt == 1000) {
+            int b = 1;
+        }
     }
 
     return RGBSpectrum(1.);
 }
 
-Medium* CreateHeterogeneousMedium(const PropertyList& list) {
-    return nullptr;
+Medium* CreateHeterogeneousMedium(
+    const PropertyList& list, 
+    const Volume* densityVolume,
+    const Volume* albedoVolume) 
+{
+    Transform w2m = list.getTransform("toWorld", Transform::identityTransform);
+    Float scale = list.getFloat("scale", 1.);
+    Float g = list.getFloat("g", 1);
+    return new HeterogeneousMedium(densityVolume, albedoVolume, scale, g, w2m);
 }
+
 
 RAINBOW_NAMESPACE_END

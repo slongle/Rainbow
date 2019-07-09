@@ -45,6 +45,10 @@
 #include "filters/tent.h"
 #include "filters/gaussian.h"
 
+#include "volumes/constvolume.h"
+#include "volumes/gridvolume.h"
+#include "media/heterogeneous.h"
+
 RAINBOW_NAMESPACE_BEGIN
 
 
@@ -72,6 +76,7 @@ struct RenderOptions {
     std::shared_ptr<Material> CreateMaterial(const std::string &type, const PropertyList&  list);
     //std::shared_ptr<Medium> CreateMedium(const std::string &type, const PropertyList &list);
     Medium* CreateMedium(const std::string &type, const PropertyList &list);
+    Volume* CreateVolume(const std::string &type, const PropertyList &list);
 
 
     // Decide to use embree3 or my own SAH-BVH for accelerator
@@ -110,7 +115,8 @@ struct RenderOptions {
 
     // Record current BSDF and Medium
 	std::shared_ptr<Material> m_currentMaterial;
-    Medium *m_currentMediumInter, *m_currentMediumExter;    
+    Medium *m_currentMediumInter = nullptr , *m_currentMediumExter = nullptr;
+    Volume *m_densityVolume = nullptr, *m_albedoVolume = nullptr;
 
     // Record the BSDF and Medium with id
     std::map<std::string, std::shared_ptr<Material>> m_materialMap;
@@ -243,7 +249,7 @@ void RainbowOldShape(
 
 void RainbowShape(
     const std::string&   type,
-    PropertyList&        list)
+    const PropertyList&  list)
 {
     Assert(type == "obj" || type == "rectangle" || type == "cube" || type == "sphere", 
         "Only support triangle mesh");
@@ -287,7 +293,7 @@ void RainbowShape(
 
 void RainbowMaterial(
     const std::string&   type, 
-    PropertyList&        list) 
+    const PropertyList&  list) 
 {
 	renderOptions->m_currentMaterial = renderOptions->CreateMaterial(type, list);
 }
@@ -295,13 +301,27 @@ void RainbowMaterial(
 void RainbowMedium(
     const std::string&   type, 
     const std::string&   name, 
-    PropertyList&        list) 
+    const PropertyList&  list) 
 {
      Medium *medium = renderOptions->CreateMedium(type, list);
-     if (name == "exterior")
-         renderOptions->m_currentMediumExter = medium;
-     else if (name == "interior")
-         renderOptions->m_currentMediumInter = medium;
+     if (name == "exterior") {
+         renderOptions->m_currentMediumExter = medium;         
+     } else if (name == "interior") {
+         renderOptions->m_currentMediumInter = medium;         
+     }
+}
+
+void RainbowVolume(
+    const std::string& type, 
+    const std::string& name, 
+    const PropertyList& list)
+{
+    Volume *volume = renderOptions->CreateVolume(type, list);
+    if (name == "density") {
+        renderOptions->m_densityVolume = volume;
+    } else if (name == "albedo") {
+        renderOptions->m_albedoVolume = volume;
+    }
 }
 
 void RainbowNamedMaterial(
@@ -533,9 +553,12 @@ Medium* RenderOptions::CreateMedium(
     Medium *medium = nullptr;
     if (type == "homogeneous") {
         medium = CreateHomogeneousMedium(list);
+    } else if (type == "heterogeneous") {
+        medium = CreateHeterogeneousMedium(list, m_densityVolume, m_albedoVolume);
     }
     return medium;
 }
+
 
 /*std::shared_ptr<Medium> RenderOptions::CreateMedium(
     const std::string&   type,
@@ -547,5 +570,18 @@ Medium* RenderOptions::CreateMedium(
     }
     return std::shared_ptr<Medium>(medium);
 }*/
+
+Volume* RenderOptions::CreateVolume(
+    const std::string& type, 
+    const PropertyList& list) 
+{
+    Volume *volume = nullptr;
+    if (type == "gridvolume") {
+        volume = CreateGridDensityVolume(list);
+    } else if (type == "constvolume") {
+        volume = CreateConstDensityVolume(list);
+    }
+    return volume;
+}
 
 RAINBOW_NAMESPACE_END

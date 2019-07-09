@@ -2,31 +2,12 @@
 #include "core/parser.h"
 #include "ext/filesystem/filesystem/path.h"
 
-#include <embree3/rtcore.h>
-#include <embree3/rtcore_scene.h>
-
-#include "core/film.h"
-#include "core/memory.h"
-#include "materials/glass.h"
-#include "shapes/sphere.h"
-
-
-#include "filters/box.h"
-#include "samplers/independent.h"
-
-#include "utility/string.h"
-
-
-#include "shapes/meshloaders/wavefront.h"
+#include "volumes/gridvolume.h"
 
 
 using namespace rainbow;
 
 int main(int argc, char *argv[]) {
-    /*for(int x=-10;x<=30;x+=1) {
-        std::cout << 0.1*x << ' ' << (int)std::ceil(0.1*x - 0.5) << std::endl;
-    }
-    return 0;*/
 
     //EmbreeSceneMain();
     //return 0;
@@ -48,6 +29,11 @@ int main(int argc, char *argv[]) {
 
     const std::string filename(solutionDir + scenes[10]);
 
+
+    //const std::string volumeFilename = solutionDir + "hetvol/smoke.vol";
+    //cout << volumeFilename << endl;
+    //GridDensityVolume GridDensityVolume(volumeFilename);
+    //return 0;
 	filesystem::path path(filename);
 	getFileResolver()->prepend(path.parent_path());
     ParseRecord record(filename);
