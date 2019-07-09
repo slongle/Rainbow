@@ -13,5 +13,6 @@ Or use `./setup_builds.bat`.
 
 [Project Website](https://slongle.github.io/projects/rainbow)
 
-![vpt](https://i.loli.net/2019/03/02/5c7aa1a26ec80.jpg)
+![homogeneous](https://i.postimg.cc/ryHf24pD/0002.png)
+![heterogeneous](https://i.postimg.cc/9MJN7NVb/0001.png)  
 Rendered using volumetric pathtracing.
