@@ -8,11 +8,7 @@
 using namespace rainbow;
 
 int main(int argc, char *argv[]) {
-
-    //EmbreeSceneMain();
-    //return 0;
-
-    std::string solutionDir("F:/Document/Graphics/code/Rainbow/scenes/");
+    std::string solutionDir("E:/Document/Graphics/code/Rainbow/scenes/");
     //std::string solutionDir("C:/Users/Administrator/Desktop/a/Rainbow/scenes/");
     std::vector<std::string> scenes(100);
     scenes[0] = "cbox/cbox(sphere).xml";
@@ -29,11 +25,6 @@ int main(int argc, char *argv[]) {
 
     const std::string filename(solutionDir + scenes[10]);
 
-
-    //const std::string volumeFilename = solutionDir + "hetvol/smoke.vol";
-    //cout << volumeFilename << endl;
-    //GridDensityVolume GridDensityVolume(volumeFilename);
-    //return 0;
 	filesystem::path path(filename);
 	getFileResolver()->prepend(path.parent_path());
     ParseRecord record(filename);

@@ -5,9 +5,9 @@ My renderer for learning
 Now I just test building on Windows.   
 Please build as x64 platform like
 ```bash
-mkdir build
-cd build
-cmake -G "Visual Studio 15 2017 Win64" ..
+ $ mkdir build
+ $ cd build
+ $ cmake -G "Visual Studio 15 2017 Win64" ..
 ```
 Or use `./setup_builds.bat`. 
 
