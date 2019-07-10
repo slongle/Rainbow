@@ -181,7 +181,6 @@ public:
 		return indent(tfm::format("[ %.4f, %.4f, %.4f ]", x, y, z), spaceNum);
 	}
 
-	template<typename T>
 	Vector3<T> operator + (const Normal3<T> &v) const {
 		return Vector3<T>(x + v.x, y + v.y, z + v.z);
 	}

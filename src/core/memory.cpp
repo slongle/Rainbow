@@ -1,14 +1,27 @@
 #include "memory.h"
+#include <cstddef>
 
 #define RAINBOW_L1_CACHE_LINE_SIZE 64
 
-void* AllocAligned(const size_t size) {
+void* AllocAligned(const size_t size) { 
+#if defined(RAINBOW_HAVE__ALIGNED_MALLOC)
     return _aligned_malloc(size, RAINBOW_L1_CACHE_LINE_SIZE);
+#elif defined(RAINBOW_HAVE_POSIX_MEMALIGN)
+    void *ptr;
+    if (posix_memalign(&ptr, RAINBOW_L1_CACHE_LINE_SIZE, size) != 0) ptr = nullptr;
+    return ptr;
+#else
+    return memalign(RAINBOW_L1_CACHE_LINE_SIZE, size);
+#endif
 }
 
 void FreeAligned(void *ptr) {
     if (!ptr) return;
+#if defined(RAINBOW_HAVE__ALIGNED_MALLOC)
     _aligned_free(ptr);
+#else
+    free(ptr);
+#endif
 }
 
 MemoryArena::~MemoryArena() {

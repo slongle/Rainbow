@@ -3,6 +3,24 @@
 
 RAINBOW_NAMESPACE_BEGIN
 
+/*
+#ifndef _MAX_DRIVE
+#define _MAX_DRIVE 3
+#endif // _MAX_DRIVE
+
+#ifndef _MAX_DIR
+#define _MAX_DIR 256
+#endif // _MAX_DIR
+
+#ifndef _MAX_FNAME
+#define _MAX_FNAME 256
+#endif // _MAX_FNAME
+
+#ifndef _MAX_EXT
+#define _MAX_EXT 256
+#endif // _MAX_EXT
+*/
+
 IESLight::IESLight(
     const Transform& m_LightToWorld,
     const MediumInterface& m_mediumInterface,
@@ -11,7 +29,7 @@ IESLight::IESLight(
     : Light(m_LightToWorld, m_mediumInterface),
     I(m_I), pLight(LightToWorld(Point3f(0, 0, 0)))
 {
-    char drive[_MAX_DRIVE];
+    /*char drive[_MAX_DRIVE];
     char dir[_MAX_DIR];
     char fname[_MAX_FNAME];
     char ext[_MAX_EXT];
@@ -21,7 +39,7 @@ IESLight::IESLight(
     std::memset(fname, 0, sizeof(fname));
     std::memset(ext, 0, sizeof(ext));
 
-    _splitpath_s(path.c_str(), drive, dir, fname, ext);
+    _splitpath(path.c_str(), drive, dir, fname, ext);*/
 
     if (!IESLoader.load(path, info)) 
     {

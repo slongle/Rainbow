@@ -286,7 +286,7 @@ void SamplerIntegrator::Render(const Scene &scene, unsigned char* guiImage) {
         tbb::blocked_range<int> range(0, (int)tiles.size());
         int cnt = 1;
         int area = (film->resolution.x)*(film->resolution.y);
-        std::atomic<int> finishedTiles = 0;
+        std::atomic<int> finishedTiles(0);
 
         int preSumSample = 0;
         auto map = [&](const tbb::blocked_range<int> &range) {        
@@ -354,7 +354,7 @@ void SamplerIntegrator::RenderAdaptive(const Scene &scene) {
     std::thread renderThread([&] {
 
         tbb::blocked_range<int> range(0, (int)tiles.size());
-        std::atomic<int> cnt = 0;
+        std::atomic<int> cnt(0);
         int area = (film->resolution.x)*(film->resolution.y);
 
         auto map = [&](const tbb::blocked_range<int> &range) {
@@ -409,7 +409,7 @@ void SamplerIntegrator::RenderEyeLight(const Scene &scene) {
         tbb::blocked_range<int> range(0, (int)tiles.size());
         int cnt = 1;
         int area = (film->resolution.x)*(film->resolution.y);
-        std::atomic<int> finishedTiles = 0;
+        std::atomic<int> finishedTiles(0);
 
         auto map = [&](const tbb::blocked_range<int> &range) {        
             for (int i = range.begin(); i < range.end(); ++i) {                 
