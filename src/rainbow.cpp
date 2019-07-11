@@ -2,9 +2,6 @@
 #include "core/parser.h"
 #include "ext/filesystem/filesystem/path.h"
 
-#include "volumes/gridvolume.h"
-
-
 using namespace rainbow;
 
 int main(int argc, char *argv[]) {
