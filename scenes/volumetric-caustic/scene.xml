@@ -5,7 +5,7 @@
     <integrator type="volpath" >
 		<integer name="maxDepth" value="7" />
         <integer name="sampleNum" value="10000"/>
-        <integer name="delta" value="1"/>
+        <integer name="delta" value="10"/>
 		<boolean name="strictNormals" value="true" />
 	</integrator>
 	<sensor type="perspective" >
@@ -18,7 +18,7 @@
 			<integer name="sampleCount" value="64" />
 		</sampler>
 		<film type="ldrfilm" >
-            <string name="filename" value="vol-caustic_vol_scale=3.hdr"/>
+            <string name="filename" value="vol-caustic.hdr"/>
             <integer name="width" value="1024" />
 			<integer name="height" value="1024" />
 			<string name="fileFormat" value="png" />

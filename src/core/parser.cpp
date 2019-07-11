@@ -1,5 +1,5 @@
 #include "parser.h"
-#include "ext/pugixml.hpp"
+#include "ext/pugixml/pugixml.hpp"
 
 RAINBOW_NAMESPACE_BEGIN
 

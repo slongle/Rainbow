@@ -89,6 +89,10 @@ void GridDensityVolume::LoadFile(const std::string& filename) {
     }
 }
 
+void GridDensityVolume::LoadVDBFile(const std::string& filename)
+{
+
+}
 
 GridDensityVolume::GridDensityVolume(const std::string& filename) 
     : m_filename(filename) 

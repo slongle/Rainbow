@@ -5,7 +5,7 @@
   <integrator type="path" >
 		<integer name="maxDepth" value="9" />
     <integer name="sampleNum" value="100"/>
-    <integer name="delta" value="1"/>
+    <integer name="delta" value="10"/>
 		<integer name="photonCount" value="5000000" />
 		<float name="initialRadius" value="0.05" />
 		<float name="alpha" value="0.3" />

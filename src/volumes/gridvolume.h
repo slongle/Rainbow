@@ -17,6 +17,7 @@ private:
     Float GetFloatD(const Point3i &p) const;
     Float GetD(const Point3i &p, const int &channel) const;
     void LoadFile(const std::string& filename);
+    void LoadVDBFile(const std::string& filename);
 
     // Volume data
     enum EVolumeType {
