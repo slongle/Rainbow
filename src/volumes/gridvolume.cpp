@@ -30,8 +30,6 @@ RAINBOW_NAMESPACE_BEGIN
 void GridDensityVolume::LoadFile(const std::string& filename) {
     filesystem::path path = getFileResolver()->resolve(filename);
     std::string pathName = path.str();
-    //cout << pathName << endl;
-    //std::string pathName = "F:/Document/Graphics/code/Rainbow/scenes/hetvol/smoke.vol";
     FILE* stream = fopen(pathName.c_str(), "r");
     char header[3];
     fread(header, sizeof(char), 3, stream);
@@ -89,11 +87,6 @@ void GridDensityVolume::LoadFile(const std::string& filename) {
     }
 }
 
-void GridDensityVolume::LoadVDBFile(const std::string& filename)
-{
-
-}
-
 GridDensityVolume::GridDensityVolume(const std::string& filename) 
     : m_filename(filename) 
 {
@@ -104,7 +97,7 @@ GridDensityVolume::GridDensityVolume(const std::string& filename)
         (m_resolution[2] - 1) / extent[2]) * Translate(-Vector3f(m_bounds.pMin));
 }
 
-Float GridDensityVolume::LookUpFloat(
+Float GridDensityVolume::LookUpDensityFloat(
     const Point3f& _p) const
 {
     Point3f p = m_volumeToGrid(_p);
@@ -158,9 +151,9 @@ RGBSpectrum GridDensityVolume::LookUpSpectrum(
     return RGBSpectrum(0.);
 }
 
-Float GridDensityVolume::GetMaxFloatValue() const 
+RGBSpectrum GridDensityVolume::LookUpEmissionSpectrum(const Point3f& p) const
 {
-    return m_maxDensity;
+    return RGBSpectrum(0.);
 }
 
 RGBSpectrum GridDensityVolume::GetSpectrumD(const Point3i& p) const {

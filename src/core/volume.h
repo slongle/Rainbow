@@ -11,9 +11,14 @@ RAINBOW_NAMESPACE_BEGIN
 class Volume {
 public:
     Volume(){}
-    virtual Float LookUpFloat(const Point3f& p) const = 0;
+    
+    virtual Float LookUpDensityFloat(const Point3f& p) const = 0;
     virtual RGBSpectrum LookUpSpectrum(const Point3f& p) const = 0;
-    virtual Float GetMaxFloatValue() const = 0;
+    virtual RGBSpectrum LookUpEmissionSpectrum(const Point3f& p) const = 0;
+    
+    Float GetMaxFloatValue() const {
+        return m_maxDensity;
+    }
 
     Bounds3f GetBounds() const {
         return m_bounds;
@@ -21,6 +26,7 @@ public:
 
 protected:
     Bounds3f m_bounds;
+    Float m_maxDensity;
 
 };
 

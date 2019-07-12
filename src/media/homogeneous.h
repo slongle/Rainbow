@@ -21,7 +21,8 @@ public:
         const Ray         &ray, 
         Sampler           &sampler,
         MemoryArena       &arena, 
-        MediumInteraction *mi) const override;
+        MediumInteraction *mi,
+        RGBSpectrum& emission) const override;
 
     const RGBSpectrum sigma_a, sigma_s, sigma_t;
     const Float g;

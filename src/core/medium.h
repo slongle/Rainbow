@@ -7,12 +7,16 @@
 
 RAINBOW_NAMESPACE_BEGIN
 
+struct MediumSampleRecord {
+
+};
+
 class Medium{
 public:
     virtual RGBSpectrum Tr(Ray ray, Sampler &sampler) const = 0;
     virtual RGBSpectrum Sample(
         const Ray &ray, Sampler &sampler,
-        MemoryArena &arena, MediumInteraction *mi) const = 0;
+        MemoryArena &arena, MediumInteraction *mi, RGBSpectrum& emission) const = 0;
 };
 
 class MediumInterface {

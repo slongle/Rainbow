@@ -2,7 +2,7 @@
 
 RAINBOW_NAMESPACE_BEGIN
 
-Float ConstDensityVolume::LookUpFloat(
+Float ConstDensityVolume::LookUpDensityFloat(
     const Point3f& p) const
 {
     return value[0];
@@ -14,9 +14,9 @@ RGBSpectrum ConstDensityVolume::LookUpSpectrum(
     return value;
 }
 
-Float ConstDensityVolume::GetMaxFloatValue() const 
+RGBSpectrum ConstDensityVolume::LookUpEmissionSpectrum(const Point3f& p) const
 {
-    return value[0];
+    return RGBSpectrum(0.);
 }
 
 ConstDensityVolume* CreateConstDensityVolume(const PropertyList& list) {

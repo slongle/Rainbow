@@ -8,12 +8,13 @@ RAINBOW_NAMESPACE_BEGIN
 
 class ConstDensityVolume :public Volume {
 public:
-    ConstDensityVolume(const Float &f) :value(f) {}
-    ConstDensityVolume(const RGBSpectrum &s) :value(s) {}
+    ConstDensityVolume(const Float& f) :value(f) { m_maxDensity = f; }
+    ConstDensityVolume(const RGBSpectrum& s) :value(s) { m_maxDensity = s[0]; }
 
-    Float LookUpFloat(const Point3f& p) const override;
+    Float LookUpDensityFloat(const Point3f& p) const override;
     RGBSpectrum LookUpSpectrum(const Point3f& p) const override;
-    Float GetMaxFloatValue() const override;
+    RGBSpectrum LookUpEmissionSpectrum(const Point3f& p) const override;
+
 private:
     RGBSpectrum value;
 };

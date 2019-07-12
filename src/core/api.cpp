@@ -1,7 +1,5 @@
 #include <memory>
 
-//#include "gui.h"
-
 #include "api.h"
 #include "film.h"
 #include "scene.h"
@@ -34,6 +32,7 @@
 #include "accelerators/bvh.h"
 
 #include "media/homogeneous.h"
+#include "media/heterogeneous.h"
 
 #include "lights/point.h"
 #include "lights/spot.h"
@@ -47,7 +46,7 @@
 
 #include "volumes/constvolume.h"
 #include "volumes/gridvolume.h"
-#include "media/heterogeneous.h"
+#include "volumes/openvdbvolume.h"
 
 RAINBOW_NAMESPACE_BEGIN
 
@@ -578,7 +577,11 @@ Volume* RenderOptions::CreateVolume(
     Volume *volume = nullptr;
     if (type == "gridvolume") {
         volume = CreateGridDensityVolume(list);
-    } else if (type == "constvolume") {
+    }
+    else if (type == "openvdb" || type == "openvdbvolume" || type == "OpenVDBVolume") {
+        volume = CreateOpenVDBVolume(list);
+    }
+    else if (type == "constvolume") {
         volume = CreateConstDensityVolume(list);
     }
     return volume;

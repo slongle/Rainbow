@@ -24,7 +24,8 @@ public:
         const Ray& ray, 
         Sampler& sampler, 
         MemoryArena& arena, 
-        MediumInteraction* mi) const override;
+        MediumInteraction* mi,
+        RGBSpectrum& emission) const override;
 
 private:
 

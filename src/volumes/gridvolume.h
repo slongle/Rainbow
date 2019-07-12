@@ -9,15 +9,14 @@ RAINBOW_NAMESPACE_BEGIN
 class GridDensityVolume : public Volume {
 public:
     GridDensityVolume(const std::string &filename);
-    Float LookUpFloat(const Point3f& p) const override;
+    Float LookUpDensityFloat(const Point3f& p) const override;
     RGBSpectrum LookUpSpectrum(const Point3f& p) const override;
-    Float GetMaxFloatValue() const override;
+    RGBSpectrum LookUpEmissionSpectrum(const Point3f& p) const override;
 private:
     RGBSpectrum GetSpectrumD(const Point3i &p) const;
     Float GetFloatD(const Point3i &p) const;
     Float GetD(const Point3i &p, const int &channel) const;
     void LoadFile(const std::string& filename);
-    void LoadVDBFile(const std::string& filename);
 
     // Volume data
     enum EVolumeType {

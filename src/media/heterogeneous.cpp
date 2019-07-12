@@ -44,7 +44,7 @@ HeterogeneousMedium::Tr(Ray rWorld, Sampler& sampler) const
         }
 
         Point3f p = rMedium(t);
-        Float densityAtT = m_density->LookUpFloat(p) * m_scale;
+        Float densityAtT = m_density->LookUpDensityFloat(p) * m_scale;
         Tr *= 1 - densityAtT * m_invMaxDensity;
 
         const Float rrThreshold = .1;
@@ -69,7 +69,8 @@ HeterogeneousMedium::Sample(
     const Ray& rWorld, 
     Sampler& sampler, 
     MemoryArena& arena,
-    MediumInteraction* mi) const 
+    MediumInteraction* mi,
+    RGBSpectrum& emission) const 
 {
     Assert(std::abs(rWorld.d.LengthSquare() - 1) < Epsilon, "No Normalizeing");
 
@@ -86,6 +87,7 @@ HeterogeneousMedium::Sample(
     tMax = std::min(tMax, rMedium.tMax);
 
     //int cnt = 0;
+    emission = 0.;
 
     Float t = tMin;
     while(true) {
@@ -95,11 +97,13 @@ HeterogeneousMedium::Sample(
         }
 
         Point3f p = rMedium(t);
-        Float densityAtT = m_density->LookUpFloat(p) * m_scale;        
+        Float densityAtT = m_density->LookUpDensityFloat(p) * m_scale;        
         if (sampler.Next1D() < densityAtT * m_invMaxDensity) {
             Ray ray = m_mediumToWorld(rMedium);
             *mi = MediumInteraction(p, -rMedium.d, this, ARENA_ALLOCA(arena, HenyeyGreenstein)(m_g));
             RGBSpectrum albedoAtT = m_albedo->LookUpSpectrum(p);
+            RGBSpectrum emissionAtT = m_density->LookUpEmissionSpectrum(p) * m_scale;
+            emission = emissionAtT;
             //RGBSpectrum sigma_t = densityAtT;
             //RGBSpectrum sigma_s = densityAtT * albedoAtT;
             //RGBSpectrum sigma_a = RGBSpectrum(densityAtT) - sigma_s;

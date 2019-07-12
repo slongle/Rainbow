@@ -23,7 +23,10 @@ RGBSpectrum VolPathIntegrator::Li(
 
         MediumInteraction mi;
         if (ray.medium) {
-            beta *= ray.medium->Sample(ray, sampler, arena, &mi);
+            RGBSpectrum emission;
+            RGBSpectrum weight = ray.medium->Sample(ray, sampler, arena, &mi, emission);
+            L += beta * emission;
+            beta *= weight;
         }
         if (beta.IsBlack()) break;
 
@@ -48,7 +51,7 @@ RGBSpectrum VolPathIntegrator::Li(
 
             inter.ComputeScatteringFunctions(arena);
             if (!inter.bsdf) {
-                //return RGBSpectrum(1, 0, 0);
+                return RGBSpectrum(1, 0, 0);
                 ray = inter.SpawnToRay(ray.d);
                 bounce--;
                 continue;

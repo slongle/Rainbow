@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<scene version="0.5.0">
+    <mode type="final"/>
+	<integrator type="volpath">
+		<integer name="maxDepth" value="8"/>
+        <integer name="sampleNum" value="10000"/>
+        <integer name="delta" value="5"/>
+	</integrator>
+
+    <sensor type="perspective">
+		<float name="fov" value="30.08402"/>		
+		<transform name="toWorld">
+			<!--<scale x="-1"/>-->
+			<lookat target="80, 90, 0" origin="80, 90, 100" up="0, 1, 0"/>
+		</transform>
+
+		<sampler type="independent">
+			<integer name="sampleCount" value="64"/>
+		</sampler>
+
+		<film type="ldrfilm">
+            <string name="filename" value="fire.hdr"/>
+            <string name="fileFormat" value="png" />
+			<integer name="height" value="1024"/>
+			<integer name="width" value="512"/>
+
+			<rfilter type="gaussian"/>
+		</film>
+	</sensor>
+
+	<medium type="heterogeneous" id="fire">
+		<string name="method" value="woodcock"/>
+		<volume name="density" type="openvdb">
+			<string name="filename" value="fire.vdb"/>
+            <string name="density" value="density"/>
+            <string name="emission" value="temperature"/>
+		</volume>
+
+		<volume name="albedo" type="constvolume">
+			<float name="value" value="0.9"/>
+		</volume>
+		<float name="scale" value="1"/>
+	</medium>
+
+	<shape type="obj">
+		<string name="filename" value="bounds.obj"/>
+		<ref name="interior" id="fire"/>
+	</shape>
+
+	
+	<!--<shape type="sphere">
+        <transform name="toWorld">
+            <translate x="0" y="-2" z="-1"/>
+        </transform>
+		<float name="radius" value=".2"/>
+		<emitter type="area">
+			<rgb name="radiance" value="400,400,400"/>
+		</emitter>
+	</shape>-->
+</scene>
