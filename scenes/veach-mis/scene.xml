@@ -12,7 +12,6 @@
         <float name="fov" value="35" />
 		<transform name="toWorld" >
             <matrix value="-4.37113e-008 0 -1 28.2792 0 1 0 3.5 1 0 -4.37113e-008 1.23612e-006 0 0 0 1"/>
-            <scale value="-1 1 1"/>
         </transform>
         <hide type="sobol" >
             <integer name="sampleCount" value="64" />
@@ -21,7 +20,7 @@
             <integer name="sampleCount" value="512"/>
         </sampler>
         <film type="ldrfilm" >
-            <string name="filename" value="veach-mis_test.png"/>
+            <string name="filename" value="veach-mis.png"/>
             <integer name="width" value="1280" />
             <integer name="height" value="720" />
             <string name="fileFormat" value="png" />

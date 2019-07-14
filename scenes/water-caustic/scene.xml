@@ -1,37 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <scene version="0.5.0" >
-  <mode type="final"/>
-  <integrator type="path" >
-		<integer name="maxDepth" value="9" />
-    <integer name="sampleNum" value="100"/>
-    <integer name="delta" value="10"/>
-		<integer name="photonCount" value="5000000" />
-		<float name="initialRadius" value="0.05" />
-		<float name="alpha" value="0.3" />
-		<integer name="maxPasses" value="4" />
-		<boolean name="strictNormals" value="true" />
-	</integrator>
-	<sensor type="perspective" >
-		<float name="fov" value="19.5" />
-		<transform name="toWorld" >
-			<matrix value="-1 0 1.50996e-007 -1.03263e-006 0 1 0 0.990944 -1.50996e-007 0 -1 6.83879 0 0 0 1"/>
-		  <scale value="-1 1 1"/>
-    </transform>
-		<sampler type="independent" >
-			<integer name="sampleCount" value="16" />
-		</sampler>
-		<film type="ldrfilm" >
-		  <string name="filename" value="water-caustic_test.png"/>
-      <integer name="width" value="1024" />
-			<integer name="height" value="1024" />
-			<string name="fileFormat" value="png" />
-			<string name="pixelFormat" value="rgb" />
-			<float name="gamma" value="2.2" />
-			<boolean name="banner" value="false" />
-			<rfilter type="tent" />
-		</film>
-	</sensor>
+    <mode type="final"/>
+    <integrator type="path" >
+        <integer name="maxDepth" value="9" />
+        <integer name="sampleNum" value="100"/>
+        <integer name="delta" value="1"/>
+        <integer name="photonCount" value="5000000" />
+        <float name="initialRadius" value="0.05" />
+        <float name="alpha" value="0.3" />
+        <integer name="maxPasses" value="4" />
+        <boolean name="strictNormals" value="true" />
+    </integrator>
+    <sensor type="perspective" >
+        <float name="fov" value="19.5" />
+        <transform name="toWorld" >
+            <matrix value="-1 0 1.50996e-007 -1.03263e-006 0 1 0 0.990944 -1.50996e-007 0 -1 6.83879 0 0 0 1"/>
+        </transform>
+        <sampler type="independent" >
+            <integer name="sampleCount" value="16" />
+        </sampler>
+        <film type="ldrfilm" >
+            <string name="filename" value="water-caustic.png"/>
+            <integer name="width" value="1024" />
+            <integer name="height" value="1024" />
+            <string name="fileFormat" value="png" />
+            <string name="pixelFormat" value="rgb" />
+            <float name="gamma" value="2.2" />
+            <boolean name="banner" value="false" />
+            <rfilter type="tent" />
+        </film>
+    </sensor>
     <bsdf type="diffuse" id="LeftWall">
         <rgb name="reflectance" value="0.63, 0.065, 0.05"/>
     </bsdf>
@@ -117,10 +116,10 @@
 			<matrix value="1 0 0 0 0 1.5 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<hide id="Water" />
-	  <bsdf type="dielectric">
-	    <float name="intIOR" value="1.8" />
-	    <float name="extIOR" value="1" />
-	  </bsdf>
+        <bsdf type="dielectric">
+            <float name="intIOR" value="1.8" />
+            <float name="extIOR" value="1" />
+        </bsdf>
 	</shape>
 	<shape type="obj" >
 		<string name="filename" value="models/Mesh000.obj" />
@@ -129,9 +128,9 @@
 		</transform>
 		<boolean name="faceNormals" value="true" />
 		<hide id="Water" />
-	  <bsdf type="dielectric">
-	    <float name="intIOR" value="1.8" />
-	    <float name="extIOR" value="1" />
-	  </bsdf>
+        <bsdf type="dielectric">
+            <float name="intIOR" value="1.8" />
+            <float name="extIOR" value="1" />
+        </bsdf>
 	</shape>
 </scene>

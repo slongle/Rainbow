@@ -32,7 +32,6 @@ private:
     int m_channel;
     Point3i m_resolution;
     uint8_t *m_data = nullptr;
-    Float m_maxDensity;
 };
 
 GridDensityVolume * CreateGridDensityVolume(const PropertyList &list);

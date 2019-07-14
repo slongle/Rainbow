@@ -1,26 +1,26 @@
 <scene>
     <mode type="final"/>
-	  <integrator type="path">
-		    <integer name="maxDepth" value="50"/>
+    <integrator type="path">
+		<integer name="maxDepth" value="50"/>
         <integer name="sampleNum" value="10"/>
-        <integer name="delta" value="10"/>
-	  </integrator>
-	  <sensor type="perspective">
-		    <float name="fov" value="19.5"/>
-		    <transform name="toWorld">
-		        <scale value="-1,1,1"/>
-                <lookat target="0, 0.893051, 4.41198" origin="0, 0.919769, 5.41159" up="0, 1, 0"/>
-		    </transform>
-	      <sampler type="independent">
-	          <integer name="sampleCount" value="512"/>
-	      </sampler>
-		    <film type="hdrfilm">
-            <string name="filename" value="sphere-cornell-box_embree_occlude.hdr"/>
-			      <integer name="height" value="600"/>
-			      <integer name="width" value="800"/>
-		        <rfilter type="box"/>
-		    </film>
-	  </sensor>
+        <integer name="delta" value="1"/>
+	</integrator>
+	<sensor type="perspective">
+        <float name="fov" value="27.7856"/>
+		<transform name="toWorld">
+            <lookat target="0, 0.893051, 4.41198" origin="0, 0.919769, 5.41159" up="0, 1, 0"/>
+        </transform>
+	    <sampler type="independent">
+            <integer name="sampleCount" value="512"/>
+	    </sampler>
+		<film type="hdrfilm">
+            <string name="filename" value="sphere-cornell-box(mesh).png"/>
+            <integer name="height" value="600"/>
+            <integer name="width" value="800"/>
+            <rfilter type="box"/>
+        </film>
+	</sensor>
+    
     <shape type="obj">
         <string name="filename" value="meshes/sphere1.obj"/>
         <float name="radius" value="0.3261"/>
@@ -32,13 +32,13 @@
         <float name="radius" value="0.3261"/>
         <bsdf type="glass"/>        
     </shape>
-
-	  <shape type="obj">
-		    <string name="filename" value="meshes/walls.obj"/>
-		    <bsdf type="diffuse">
-			      <rgb name="reflectance" value="0.725 0.71 0.68"/>
-		    </bsdf>
-	  </shape>
+    
+    <shape type="obj">
+        <string name="filename" value="meshes/walls.obj"/>
+        <bsdf type="diffuse">
+            <rgb name="reflectance" value="0.725 0.71 0.68"/>
+        </bsdf>
+    </shape>
 
 	<shape type="obj">
         <string name="filename" value="meshes/rightwall.obj"/>
@@ -48,17 +48,19 @@
 		</bsdf>
     </shape>
 
-	  <shape type="obj">
-		    <string name="filename" value="meshes/leftwall.obj"/>         
-		    <bsdf type="diffuse">
-		        <rgb name="reflectance" value="0.630 0.065 0.05"/>
-		    </bsdf>
-	  </shape>
+    <shape type="obj">
+        <string name="filename" value="meshes/leftwall.obj"/>         
+        <bsdf type="diffuse">
+            <rgb name="reflectance" value="0.630 0.065 0.05"/>
+        </bsdf>
+    </shape>
 
-	  <shape type="obj">
-	      <string name="filename" value="meshes/light.obj"/>
-	      <emitter type="area">
-	          <rgb name="radiance" value="40 40 40"/>
-	      </emitter>    
-	  </shape>
+    <shape type="obj">
+        <string name="filename" value="meshes/light.obj"/>
+        <emitter type="area">
+            <rgb name="radiance" value="40 40 40"/>
+        </emitter> 
+        <bsdf type="diffuse"/>        
+    </shape>
 </scene>
+    

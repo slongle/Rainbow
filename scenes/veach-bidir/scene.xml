@@ -12,13 +12,12 @@
 		<float name="fov" value="35" />
 		<transform name="toWorld" >
 			<matrix value="-0.00500708 -0.00467005 -0.999977 16.2155 0 0.999989 -0.00467011 4.05167 0.999987 -2.34659e-005 -0.00502464 0.0114864 0 0 0 1"/>
-		  <scale value="-1 1 1"/>
 		</transform>
 		<sampler type="independent" >
 			<integer name="sampleCount" value="64" />
 		</sampler>
 		<film type="ldrfilm" >
-            <string name="filename" value="veach-bidir_test.png"/>
+            <string name="filename" value="veach-bidir.png"/>
             <integer name="width" value="1024" />
 			<integer name="height" value="1024" />
 			<string name="fileFormat" value="png" />

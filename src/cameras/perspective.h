@@ -9,11 +9,10 @@ class PerspectiveCamera :public Camera {
 public:
 	PerspectiveCamera(
         const Transform&              CameraToWorld,
-        const Bounds2f&               screen, 
         const Float&                  fov, 
 		const Float&                  nearClip, 
         const Float&                  farClip,
-        std::shared_ptr<Film>   film);
+        std::shared_ptr<Film>         film);
 
 	RGBSpectrum GenerateRay(Ray* r, const Point2f& p) const override;
 
@@ -27,9 +26,9 @@ public:
             "    Film : %s,\n"
             "]"
             , indent(CameraToWorld.toString(), 20)
-            , fov
-            , nearClip
-            , farClip
+            , m_fov
+            , m_nearClip
+            , m_farClip
             , indent(film->toString(), 11)
         );
 
@@ -39,9 +38,9 @@ public:
 	Transform ScreenToRaster, RasterToScreen;
 	Transform RasterToCamera;
 private:
-    Float fov;
-    Float nearClip;
-    Float farClip;
+    Float m_fov;
+    Float m_nearClip;
+    Float m_farClip;
 };
 
 PerspectiveCamera* CreatePerspectiveCamera(

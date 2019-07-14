@@ -1,0 +1,43 @@
+<scene>
+    <mode type="final"/>
+    <integrator type="volpath">
+		<integer name="maxDepth" value="50"/>
+        <integer name="sampleNum" value="10"/>
+        <integer name="delta" value="1"/>
+	</integrator>
+	<sensor type="perspective">
+        <float name="fov" value="30"/>
+		<transform name="toWorld">
+			<lookat target="80, 80, 0" origin="80, 80, -1000" up="0, 1, 0"/>
+        </transform>
+	    <sampler type="independent">
+            <integer name="sampleCount" value="512"/>
+	    </sampler>
+		<film type="hdrfilm">
+            <string name="filename" value="scene-test.png"/>
+            <integer name="height" value="600"/>
+            <integer name="width" value="800"/>
+            <rfilter type="box"/>
+        </film>
+	</sensor>
+    
+    <medium type="heterogeneous" id="fire">
+		<string name="method" value="woodcock"/>
+		<volume name="density" type="openvdb">
+			<string name="filename" value="fire.vdb"/>
+            <string name="density" value="density"/>
+            <string name="emission" value="temperature"/>
+		</volume>
+
+		<volume name="albedo" type="constvolume">
+			<float name="value" value="0.9"/>
+		</volume>
+		<float name="scale" value="1"/>
+	</medium>
+    
+    <shape type="obj">
+		<string name="filename" value="bounds.obj"/>
+		<ref name="interior" id="fire"/>
+	</shape>
+    
+</scene>

@@ -51,7 +51,7 @@ RGBSpectrum VolPathIntegrator::Li(
 
             inter.ComputeScatteringFunctions(arena);
             if (!inter.bsdf) {
-                return RGBSpectrum(1, 0, 0);
+                //return RGBSpectrum(1, 0, 0);
                 ray = inter.SpawnToRay(ray.d);
                 bounce--;
                 continue;

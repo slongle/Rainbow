@@ -9,16 +9,15 @@
 		<boolean name="strictNormals" value="true" />
 	</integrator>
 	<sensor type="perspective" >
-		<float name="fov" value="20" />
+		<float name="fov" value="35" />
 		<transform name="toWorld" >
-            <scale value="-1 1 1"/>
 			<matrix value="-0.999993 -5.92355e-005 0.00373545 -0.0893585 3.638e-012 0.999874 0.0158556 2.69412 -0.00373592 0.0158555 -0.999867 25.6726 0 0 0 1"/>
 		</transform>
 		<sampler type="independent" >
 			<integer name="sampleCount" value="64" />
 		</sampler>
 		<film type="ldrfilm" >
-            <string name="filename" value="glass_of_water_test.png"/>
+            <string name="filename" value="glass-of-water.png"/>
 			<integer name="width" value="1280" />
 			<integer name="height" value="720" />
 			<string name="fileFormat" value="png" />

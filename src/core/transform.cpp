@@ -142,9 +142,9 @@ Transform Scale(const Vector3f & scale) {
 				0, scale.y, 0, 0,
 				0, 0, scale.z, 0,
 				0, 0, 0, 1);
-	Matrix4x4 mInv(1 / scale.x, 0, 0, 0,
-	               0, 1 / scale.y, 0, 0,
-	               0, 0, 1 / scale.z, 0,
+	Matrix4x4 mInv(1. / scale.x, 0, 0, 0,
+	               0, 1. / scale.y, 0, 0,
+	               0, 0, 1. / scale.z, 0,
 	               0, 0, 0, 1);
 	return Transform(m, mInv);
 }
@@ -154,10 +154,10 @@ Transform Scale(Float x, Float y, Float z) {
 		        0, y, 0, 0,
 		        0, 0, z, 0,
 		        0, 0, 0, 1);
-	Matrix4x4 mInv(1 / x, 0, 0, 0,
-		           0, 1 / y, 0, 0,
-		           0, 0, 1 / z, 0,
-		           0, 0, 0, 1);
+	Matrix4x4 mInv(1. / x, 0, 0, 0,
+		           0, 1. / y, 0, 0,
+		           0, 0, 1. / z, 0,
+		           0, 0, 0, 1.);
 	return Transform(m, mInv);
 }
 
@@ -228,32 +228,32 @@ Transform Rotate(Float theta, const Vector3f & axis){
 	return Transform(m, Transpose(m));
 }
 
-Transform LookAt(const Vector3f & target, const Vector3f & origin, const Vector3f & up) {
+Transform LookAt(const Vector3f & to, const Vector3f & from, const Vector3f & up) {
 	Matrix4x4 cameraToWorld;
-	cameraToWorld.m[0][3] = origin[0];
-	cameraToWorld.m[1][3] = origin[1];
-	cameraToWorld.m[2][3] = origin[2];
+	cameraToWorld.m[0][3] = from[0];
+	cameraToWorld.m[1][3] = from[1];
+	cameraToWorld.m[2][3] = from[2];
 	cameraToWorld.m[3][3] = 1;
 
-	Vector3f dir = Normalize(target - origin);
+	Vector3f forward = Normalize(to - from);
 	//std::cout << dir << std::endl;
-	Vector3f left = Normalize(Cross(up, dir));
+	Vector3f left = Normalize(Cross(up, forward));
 	//std::cout << left << std::endl;
-	Vector3f newUp = Cross(dir, left);
+    Vector3f realUp = Cross(forward, left);
 	//std::cout << newUp << std::endl;
 	cameraToWorld.m[0][0] = left[0];
 	cameraToWorld.m[1][0] = left[1];
 	cameraToWorld.m[2][0] = left[2];
 	cameraToWorld.m[3][0] = 0;
 
-	cameraToWorld.m[0][1] = newUp[0];
-	cameraToWorld.m[1][1] = newUp[1];
-	cameraToWorld.m[2][1] = newUp[2];
+	cameraToWorld.m[0][1] = realUp[0];
+	cameraToWorld.m[1][1] = realUp[1];
+	cameraToWorld.m[2][1] = realUp[2];
 	cameraToWorld.m[3][1] = 0;
 
-	cameraToWorld.m[0][2] = dir[0];
-	cameraToWorld.m[1][2] = dir[1];
-	cameraToWorld.m[2][2] = dir[2];
+	cameraToWorld.m[0][2] = forward[0];
+	cameraToWorld.m[1][2] = forward[1];
+	cameraToWorld.m[2][2] = forward[2];
 	cameraToWorld.m[3][2] = 0;
 
 	//std::cout << cameraToWorld << std::endl;
@@ -262,13 +262,13 @@ Transform LookAt(const Vector3f & target, const Vector3f & origin, const Vector3
 }
 
 Transform Perspective(const Float & fov, const Float &n, const Float &f) {
-	Matrix4x4 persp(
-		1, 0, 0, 0,
-		0, 1, 0, 0,
-		0, 0, f / (f - n), -f * n / (f - n),
-		0, 0, 1, 0);
-	Float invTanAng = 1 / std::tan(Radians(fov*0.5f));
-	return Scale(invTanAng, invTanAng, 1) *Transform(persp);
+	Float invTanAng = 1. / std::tan(Radians(fov*0.5f));    
+    Matrix4x4 perspective(
+        invTanAng, 0, 0, 0,
+        0, invTanAng, 0, 0,
+        0, 0, f / (f - n), -f * n / (f - n),
+        0, 0, 1, 0);
+    return Transform(perspective);
 }
 
 

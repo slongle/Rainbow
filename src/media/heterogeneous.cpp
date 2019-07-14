@@ -22,9 +22,6 @@ HeterogeneousMedium::Tr(Ray rWorld, Sampler& sampler) const
     Assert(std::abs(rWorld.d.LengthSquare() - 1) < Epsilon, "No Normalizeing");
 
     Ray rMedium = m_worldToMedium(rWorld);
-    //rMedium.tMax = rMedium.tMax*rMedium.d.Length();
-    //rMedium.d = Normalize(rMedium.d);
-    //Assert(std::abs(rMedium.d.LengthSquare() - 1) < Epsilon, "No Normalizeing");
 
     Float Tr = 1.;
     Float tMin, tMax;
@@ -34,7 +31,6 @@ HeterogeneousMedium::Tr(Ray rWorld, Sampler& sampler) const
 
     tMin = std::max(tMin, (Float)0.);
     tMax = std::min(tMax, rMedium.tMax);
-    //int cnt= 0;
 
     Float t = tMin;
     while (true) {
@@ -55,10 +51,6 @@ HeterogeneousMedium::Tr(Ray rWorld, Sampler& sampler) const
             }
             Tr /= 1 - q;
         }
-        /*cnt++;
-        if(cnt==1000) {
-            int b = 1;
-        }*/
     }
 
     return RGBSpectrum(Tr);
@@ -75,9 +67,6 @@ HeterogeneousMedium::Sample(
     Assert(std::abs(rWorld.d.LengthSquare() - 1) < Epsilon, "No Normalizeing");
 
     Ray rMedium = m_worldToMedium(rWorld);
-    //rMedium.tMax = rMedium.tMax*rMedium.d.Length();
-    //rMedium.d = Normalize(rMedium.d);
-    //Assert(std::abs(rMedium.d.LengthSquare() - 1) < Epsilon, "No Normalizeing");
 
     Float tMin, tMax;
     if (!m_box.Intersect(rMedium, &tMin, &tMax)) {
@@ -86,7 +75,6 @@ HeterogeneousMedium::Sample(
     tMin = std::max(tMin, (Float)0.);
     tMax = std::min(tMax, rMedium.tMax);
 
-    //int cnt = 0;
     emission = 0.;
 
     Float t = tMin;
@@ -104,17 +92,9 @@ HeterogeneousMedium::Sample(
             RGBSpectrum albedoAtT = m_albedo->LookUpSpectrum(p);
             RGBSpectrum emissionAtT = m_density->LookUpEmissionSpectrum(p) * m_scale;
             emission = emissionAtT;
-            //RGBSpectrum sigma_t = densityAtT;
-            //RGBSpectrum sigma_s = densityAtT * albedoAtT;
-            //RGBSpectrum sigma_a = RGBSpectrum(densityAtT) - sigma_s;
 
             return albedoAtT;
         }
-
-        /*cnt++;
-        if (cnt == 1000) {
-            int b = 1;
-        }*/
     }
 
     return RGBSpectrum(1.);
@@ -130,6 +110,5 @@ Medium* CreateHeterogeneousMedium(
     Float g = list.getFloat("g", 0);
     return new HeterogeneousMedium(densityVolume, albedoVolume, scale, g, w2m);
 }
-
 
 RAINBOW_NAMESPACE_END

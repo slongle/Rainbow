@@ -9,16 +9,15 @@
 		<boolean name="strictNormals" value="true" />
 	</integrator>
 	<sensor type="perspective" >
-		<float name="fov" value="20" />
+		<float name="fov" value="35" />
 		<transform name="toWorld" >
 			<matrix value="-0.678116 -0.167853 -0.715531 58.206 -4.39487e-008 0.973571 -0.228385 24.9284 0.734955 -0.154871 -0.660194 52.9501 0 0 0 1"/>
-            <scale value="-1 1 1"/>
 		</transform>
 		<sampler type="halton" >
 			<integer name="sampleCount" value="64" />
 		</sampler>
 		<film type="ldrfilm" >
-            <string name="filename" value="dragon_test.png"/>
+            <string name="filename" value="dragon.png"/>
 			<integer name="width" value="1280" />
 			<integer name="height" value="720" />
 			<string name="fileFormat" value="png" />
