@@ -23,7 +23,7 @@ int main(int argc, char *argv[]) {
     scenes[12] = "fire/fire.xml";
     scenes[13] = "scene-test/scene-test.xml";
 
-    const std::string filename(solutionDir + scenes[13]);
+    const std::string filename(solutionDir + scenes[9]);
 
 	filesystem::path path(filename);
 	getFileResolver()->prepend(path.parent_path());

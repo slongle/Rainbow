@@ -8,7 +8,7 @@
 	<sensor type="perspective">
         <float name="fov" value="30"/>
 		<transform name="toWorld">
-			<lookat target="80, 80, 0" origin="80, 80, -1000" up="0, 1, 0"/>
+			<lookat target="80, 184, 0" origin="80, 184, -1000" up="0, 1, 0"/>
         </transform>
 	    <sampler type="independent">
             <integer name="sampleCount" value="512"/>

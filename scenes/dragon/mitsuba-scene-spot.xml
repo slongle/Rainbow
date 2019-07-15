@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <scene version="0.5.0" >
-    <mode type="final"/>
 	<integrator type="path" >
 		<integer name="maxDepth" value="17" />
-        <integer name="sampleNum" value="1000"/>
-        <integer name="delta" value="100"/>
 		<boolean name="strictNormals" value="true" />
 	</integrator>
 	<sensor type="perspective" >
@@ -13,11 +10,10 @@
 		<transform name="toWorld" >
 			<matrix value="-0.678116 -0.167853 -0.715531 58.206 -4.39487e-008 0.973571 -0.228385 24.9284 0.734955 -0.154871 -0.660194 52.9501 0 0 0 1"/>
 		</transform>
-		<sampler type="halton" >
+		<sampler type="sobol" >
 			<integer name="sampleCount" value="64" />
 		</sampler>
 		<film type="ldrfilm" >
-            <string name="filename" value="dragon.png"/>
 			<integer name="width" value="1280" />
 			<integer name="height" value="720" />
 			<string name="fileFormat" value="png" />
@@ -27,35 +23,51 @@
 			<rfilter type="tent" />
 		</film>
 	</sensor>
-    
-	<bsdf type="diffuse" id="GroundInner">
-		<rgb name="reflectance" value="0.456263, 0.456263, 0.456263"/>
+	<bsdf type="twosided" id="GroundInner" >
+		<bsdf type="diffuse" >
+			<rgb name="reflectance" value="0.456263, 0.456263, 0.456263"/>
+		</bsdf>
 	</bsdf>
-	<bsdf type="diffuse" id="GroundOuter">
-		<rgb name="reflectance" value="0.456263, 0.456263, 0.456263"/>
+	<bsdf type="twosided" id="GroundOuter" >
+		<bsdf type="diffuse" >
+			<rgb name="reflectance" value="0.456263, 0.456263, 0.456263"/>
+		</bsdf>
 	</bsdf>
-	<bsdf type="diffuse" id="Cloth">
-		<rgb name="reflectance" value="0.456263, 0.456263, 0.456263"/>
+	<bsdf type="twosided" id="Cloth" >
+		<bsdf type="diffuse" >
+			<rgb name="reflectance" value="0.456263, 0.456263, 0.456263"/>
+		</bsdf>
 	</bsdf>
-	<bsdf type="diffuse" id="Dragon">
-		<rgb name="reflectance" value="0.79311, 0.79311, 0.79311"/>
+	<bsdf type="twosided" id="Dragon" >
+		<bsdf type="diffuse" >
+			<rgb name="reflectance" value="0.79311, 0.79311, 0.79311"/>
+		</bsdf>
 	</bsdf>
-	<bsdf type="diffuse" id="Blade">
-		<rgb name="reflectance" value="0.79311, 0.79311, 0.79311"/>
+	<bsdf type="twosided" id="Blade" >
+		<bsdf type="diffuse" >
+			<rgb name="reflectance" value="0.79311, 0.79311, 0.79311"/>
+		</bsdf>
 	</bsdf>
-	<bsdf type="diffuse" id="Sword">
-		<rgb name="reflectance" value="0.79311, 0.79311, 0.79311"/>
+	<bsdf type="twosided" id="Sword" >
+		<bsdf type="diffuse" >
+			<rgb name="reflectance" value="0.79311, 0.79311, 0.79311"/>
+		</bsdf>
 	</bsdf>
-	<bsdf type="diffuse" id="Deco">
-		<rgb name="reflectance" value="0.79311, 0.79311, 0.79311"/>
+	<bsdf type="twosided" id="Deco" >
+		<bsdf type="diffuse" >
+			<rgb name="reflectance" value="0.79311, 0.79311, 0.79311"/>
+		</bsdf>
 	</bsdf>
-	<bsdf type="diffuse" id="Diamond">
-		<rgb name="reflectance" value="0.79311, 0.79311, 0.79311"/>
+	<bsdf type="twosided" id="Diamond" >
+		<bsdf type="diffuse" >
+			<rgb name="reflectance" value="0.79311, 0.79311, 0.79311"/>
+		</bsdf>
 	</bsdf>
-	<bsdf type="diffuse" id="Deco2">
-		<rgb name="reflectance" value="0.79311, 0.79311, 0.79311"/>
+	<bsdf type="twosided" id="Deco2" >
+		<bsdf type="diffuse" >
+			<rgb name="reflectance" value="0.79311, 0.79311, 0.79311"/>
+		</bsdf>
 	</bsdf>
-        
 	<shape type="obj" >
 		<string name="filename" value="models/Mesh011.obj" />
 		<transform name="toWorld" >
@@ -168,18 +180,12 @@
 		</transform>
 		<ref id="Deco2" />
 	</shape>
-	<hide type="sun" >
-		<vector name="sunDirection" x="-0.18862" y="0.692312" z="0.69651" />
-		<float name="scale" value="8" />
-		<float name="sunRadiusScale" value="37.9165" />
-	</hide>
-    <emitter type="spot" >
+	<emitter type="spot" >
         <transform name="toWorld">
             <!-- Orient the light so that points from (1, 1, 1) towards (1, 2, 1) -->
             <lookat origin="0.079261  14.6623 18.2737" target="0.568776  10.4687 6.57981" up="0 1 0" />
         </transform>
-        <float name="totalAngle" value="180"/>
-        <float name="falloffAngle" value="180"/>
+        <float name="cutoffAngle" value="180" />
         <rgb name="intensity" value="800, 800, 800" />
 	</emitter>
 </scene>

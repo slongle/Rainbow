@@ -44,7 +44,9 @@ RGBSpectrum OpenVDBVolume::LookUpEmissionSpectrum(const Point3f& p) const
         openvdb::FloatGrid::ConstAccessor accessor = concreteGrid->getConstAccessor();
         openvdb::tools::GridSampler<openvdb::FloatGrid::ConstAccessor, openvdb::tools::BoxSampler>
             sampler(accessor, concreteGrid->transform());
-        return RGBSpectrum(sampler.isSample(openvdb::Vec3f(p.x, p.y, p.z)));
+        Float value = sampler.isSample(openvdb::Vec3f(p.x, p.y, p.z));
+        //return RGBSpectrum(value);
+        return RGBSpectrum(1, 1, 1 - value / 46);
     } else if (m_emissionVolume->valueType() == "vec3s") {
         openvdb::Vec3SGrid::Ptr concreteGrid = openvdb::gridPtrCast<openvdb::Vec3SGrid>(m_emissionVolume);
         openvdb::Vec3SGrid::ConstAccessor accessor = concreteGrid->getConstAccessor();
