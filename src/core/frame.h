@@ -20,16 +20,19 @@ inline void CoordinateSystem(const Normal3f& n,  Vector3f *s, Vector3f *t) {
 class Frame {
 public:
     // Guarantee n is Normalized
-    Frame(const Normal3f& m_n) :n(m_n) {
-        CoordinateSystem(n, &s, &t);
+    Frame(const Normal3f& n) :m_n(n) {
+        CoordinateSystem(m_n, &m_s, &m_t);
     }
 
+    Frame(const Vector3f& n, const Vector3f& s, const Vector3f& t) 
+        :m_n(n), m_s(s), m_t(t) {}
+
     Vector3f toLocal(const Vector3f &v) const {
-        return Vector3f(Dot(v, s), Dot(v, t), Dot(v, n));
+        return Vector3f(Dot(v, m_s), Dot(v, m_t), Dot(v, m_n));
     }
 
     Vector3f toWorld(const Vector3f v) const {
-        return v.x * s + v.y * t + v.z * n;
+        return v.x * m_s + v.y * m_t + v.z * m_n;
     }
 
     inline static Float CosTheta(const Vector3f& v) { return v.z; }
@@ -64,8 +67,8 @@ public:
         return w.z * wp.z > 0;
     }
 
-    Normal3f n;
-    Vector3f s, t;
+    Normal3f m_n;
+    Vector3f m_s, m_t;
 };
 
 RAINBOW_NAMESPACE_END

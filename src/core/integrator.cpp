@@ -54,7 +54,7 @@ RGBSpectrum SamplerIntegrator::EstimateDirectLight(
             if (inter.IsSurfaceInteraction()) {
                 // Sample BSDF
                 const SurfaceInteraction& surfaceInter = static_cast<const SurfaceInteraction&>(inter);
-                f = surfaceInter.bsdf->f(inter.wo, wi) * AbsDot(wi, inter.n);
+                f = surfaceInter.bsdf->f(surfaceInter.wo, wi) * AbsDot(wi, surfaceInter.shading.n);
                 scatterPdf = surfaceInter.bsdf->Pdf(inter.wo, wi);
             }
             else {
@@ -98,7 +98,7 @@ RGBSpectrum SamplerIntegrator::EstimateDirectLight(
             const SurfaceInteraction& surfaceInter = static_cast<const SurfaceInteraction&>(inter);
             f = surfaceInter.bsdf->SampleF(surfaceInter.wo, &wi, scatteru, 
                                            &scatterPdf, BSDF_ALL, &BSDFType);
-            f *= AbsDot(wi, surfaceInter.n);      
+            f *= AbsDot(wi, surfaceInter.shading.n);      
             sampledSpecular = (BSDFType & BSDF_SPECULAR) != 0;
         }
         else {
@@ -151,7 +151,7 @@ RGBSpectrum SamplerIntegrator::SpecularReflect(
     Float pdf;
 
     RGBSpectrum f = intersection.bsdf->SampleF(wo, &wi, m_sampler->Next2D(), &pdf);
-    Normal3f n = intersection.n;
+    Normal3f n = intersection.shading.n;
 
     if (pdf > 0.f && !f.IsBlack() && Dot(n, wi) != 0.f) {
         Ray r = intersection.SpawnToRay(wi);

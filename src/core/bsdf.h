@@ -72,7 +72,8 @@ public:
     BSDF(
         const SurfaceInteraction& m_si,
         const Float& m_eta = 1)
-        : frame(m_si.shading.n), ns(m_si.shading.n), ng(m_si.n), nBxDFs(0), eta(m_eta) {}
+        : ns(m_si.shading.n), ng(m_si.n), ss(Normalize(m_si.dpdu)), ts(Cross(ns, ss)),
+        nBxDFs(0), eta(m_eta), frame(ns, ss, ts) {}
 
     void Add(BxDF* bxdf) {        
         Assert(nBxDFs < MaxBxDFs, "Too many BxDFs!");
@@ -105,6 +106,7 @@ private:
     BxDF* bxdfs[MaxBxDFs];
     Frame frame;
     const Normal3f ns, ng;
+    const Vector3f ss, ts;
 };
 
 class BxDF{

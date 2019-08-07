@@ -69,51 +69,35 @@ bool EmbreeScene::IntersectP(
     int meshID = query.hit.geomID;
     int triangleID = query.hit.primID;
 
-    //float tHit;
-    //bool hit = primitives[meshID][triangleID]->shape->IntersectP(ray, &tHit, inter);
-    //if (!hit) return false;
-    //inter->primitive = primitives[meshID][triangleID].get();
-    //inter->shape = inter->primitive->shape.get();
-    //ray.tMax = tHit;
-
 
     float t = query.ray.tfar;
     ray.tMax = t;
     Point3f p = ray.o + ray.d * t;
 
-    /*cout << p << endl;
-    cout << inter->p << endl;
-    cout << n << endl;
-    cout << inter->n << endl;*/
-
     float u = query.hit.u;
     float v = query.hit.v;
 
-    Normal3f n;
-    n = Normalize(Normal3f(query.hit.Ng_x, query.hit.Ng_y, query.hit.Ng_z));
+    Vector3f dpdu, dpdv;
+    rtcInterpolate1(rtcGetGeometry(scene, meshID), triangleID, u, v,
+        RTC_BUFFER_TYPE_VERTEX, 0, nullptr, &dpdu.x, &dpdv.x, 3);
+
+    inter->dpdu = dpdu;
+    inter->dpdv = dpdv;
+    Normal3f ng = Normal3f(Normalize(Cross(dpdu, dpdv)));
 
     Index* idx = &meshes[meshID]->m_indices[3 * triangleID + 0];
     if (idx[0].normalIndex == -1 || idx[1].normalIndex == -1 || idx[2].normalIndex == -1) {
-        inter->n = inter->shading.n = n;
+        inter->n = inter->shading.n = ng;
     }
     else {        
         Normal3f n0 = meshes[meshID]->m_normals[idx[0].normalIndex];
         Normal3f n1 = meshes[meshID]->m_normals[idx[1].normalIndex];
         Normal3f n2 = meshes[meshID]->m_normals[idx[2].normalIndex];
-        //float tHit;
-        //primitives[meshID][triangleID]->shape->IntersectP(ray, &tHit, inter);
-        
-        /*if (n.Length()==0) {
-            cout << meshID << endl;
-            cout << u << ' ' << v << endl;
-            cout << n0 << endl;
-            cout << n1 << endl;
-            cout << n2 << endl;
-            cout << n << endl;
-        }*/
         
         inter->shading.n = Normalize((1 - u - v) * n0 + u * n1 + v * n2);
-        inter->n = FaceForward(n, inter->shading.n);
+        //inter->shading.n = Normalize(v * n0 + (1 - u - v) * n1 + u * n2);
+        //inter->shading.n = Normalize(u * n0 + v * n1 + (1 - u - v) * n2);
+        inter->n = FaceForward(ng, inter->shading.n);
     }
 
     inter->p = p;
@@ -122,23 +106,7 @@ bool EmbreeScene::IntersectP(
 
     inter->primitive = primitives[meshID][triangleID].get();
     inter->shape = inter->primitive->shape.get();
-
-    /*RTCGeometry geo = rtcGetGeometry(scene, query.hit.geomID);
-    rtcInterpolate
-
-    Vec3fa Ng = ray.Ng;
     
-    Vec3fa dPdu, dPdv;
-    unsigned int geomID = ray.geomID; {
-        rtcInterpolate1(rtcGetGeometry(g_scene, geomID), ray.primID, ray.u, ray.v, RTC_BUFFER_TYPE_VERTEX, 0, nullptr, &dPdu.x, &dPdv.x, 3);
-    }
-    //return dPdu;
-    Ng = cross(dPdu, dPdv);
-    Ng = normalize(Ng);
-    rtcInterpolate1(rtcGetGeometry(scene, query.hit.geomID), 
-        query.hit.primID, query.hit.u, query.hit.u, RTC_BUFFER_TYPE_VERTEX, 0, nullptr, &dPdu.x, &dPdv.x, 3);
-    */
-
     if (inter->primitive->mediumInterface.IsMediumTransition())
         inter->mediumInterface = inter->primitive->mediumInterface;
     else
@@ -177,9 +145,11 @@ void EmbreeScene::AddTriangleMesh(
     float *vertices = reinterpret_cast<float *>(
         rtcSetNewGeometryBuffer(geom, RTC_BUFFER_TYPE_VERTEX, 0, RTC_FORMAT_FLOAT3,
             3 * sizeof(float), mesh->m_vertexNum));
-    int* indices = reinterpret_cast<int *>(
+    int* verticesIndices = reinterpret_cast<int *>(
         rtcSetNewGeometryBuffer(geom, RTC_BUFFER_TYPE_INDEX, 0, RTC_FORMAT_UINT3, 
             3 * sizeof(int), mesh->m_triangleNum));
+
+
 
     for (int i = 0; i < mesh->m_vertexNum; i++) {
         vertices[i * 3 + 0] = mesh->m_vertices[i].x;
@@ -188,26 +158,8 @@ void EmbreeScene::AddTriangleMesh(
     }
 
     for (int i = 0; i < mesh->m_triangleNum * 3; i++) {        
-        indices[i] = mesh->m_indices[i].vertexIndex;
+        verticesIndices[i] = mesh->m_indices[i].vertexIndex;
     }
-
-    /*float *normals = nullptr;
-    if (mesh->m_normals.size() != 0) {
-        normals = reinterpret_cast<float *>(
-            rtcSetNewGeometryBuffer(geom, RTC_BUFFER_TYPE_NORMAL, 0, RTC_FORMAT_FLOAT3,
-                3 * sizeof(float), mesh->m_normals.size()));
-        for (int i = 0; i < mesh->m_normals.size(); i++) {
-            normals[i * 3 + 0] = mesh->m_normals[i].x;
-            normals[i * 3 + 1] = mesh->m_normals[i].y;
-            normals[i * 3 + 2] = mesh->m_normals[i].z;
-        }
-    }*/
-
-    //rtcSetSharedGeometryBuffer(geom, RTC_BUFFER_TYPE_VERTEX, 0, RTC_FORMAT_FLOAT3,
-    //    vertex, 0, sizeof(float) * 3, mesh->m_vertexNum);
-    //rtcSetSharedGeometryBuffer(geom, RTC_BUFFER_TYPE_INDEX, 0, RTC_FORMAT_UINT3,
-    //    index, 0, sizeof(int) * 3, mesh->m_triangleNum);
-
 
     rtcCommitGeometry(geom);    
 }

@@ -24,9 +24,8 @@ RGBSpectrum PathIntegrator::Li(
                 L += beta * inter.Le(-ray.d);
             }
         }
-        //L = Clamp(L, RGBSpectrum(1, 1, 1));
 
-        if (!foundIntersect || bounce >= maxDepth) break;                
+        if (!foundIntersect || bounce >= maxDepth) break;           
 
         inter.ComputeScatteringFunctions(arena);
         if (!inter.bsdf) {
@@ -39,14 +38,12 @@ RGBSpectrum PathIntegrator::Li(
             L += beta * UniformSampleOneLight(inter, scene, sampler);       
         }
 
-        //L = Clamp(L, RGBSpectrum(1, 1, 1));
-
         Vector3f wo = -ray.d, wi;
         Float BSDFPdf;
         BxDFType BSDFType;
         RGBSpectrum f = inter.bsdf->SampleF(wo, &wi, sampler.Next2D(), &BSDFPdf, BSDF_ALL, &BSDFType);
         if (BSDFPdf == 0 || f.IsBlack()) break;
-        beta *= f * AbsDot(wi, inter.n) / BSDFPdf;
+        beta *= f * AbsDot(wi, inter.shading.n) / BSDFPdf;
 
         SpecularBounce = (BSDFType & BSDF_SPECULAR) != 0;
         if ((BSDFType & BSDF_SPECULAR) && (BSDFType & BSDF_REFRACTION)) {
@@ -57,15 +54,6 @@ RGBSpectrum PathIntegrator::Li(
         ray = inter.SpawnToRay(wi);
 
         RGBSpectrum rrBeta = beta * etaScale;
-        /*
-        if (bounce > 5) {
-             *Float q = std::min(1.0f, rrBeta.MaxComponent());
-            if (sampler.Next1D() >= q)
-                break;
-            beta /= q;
-        }
-        */
-
         if (rrBeta.MaxComponent() < 1 && bounce > 3) {
             Float q = std::max((Float).05, 1 - rrBeta.MaxComponent());
             if (sampler.Next1D() < q) break;
