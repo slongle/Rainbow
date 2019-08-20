@@ -163,6 +163,9 @@ RGBSpectrum BSDF::SampleF(
 
     RGBSpectrum f(0.);
     Vector3f woLocal = frame.toLocal(woWorld), wiLocal;
+    if (woLocal.x < -1 || woLocal.x>1) {
+        frame.toLocal(woWorld);
+    }
     if (sampleType) *sampleType = bxdf->type;
     *pdf = 0;
     f = bxdf->SampleF(woLocal, &wiLocal, remappedSample, pdf);
@@ -172,6 +175,10 @@ RGBSpectrum BSDF::SampleF(
         return RGBSpectrum(0.);
     }
     *wiWorld = frame.toWorld(wiLocal);
+    if (std::fabs(wiWorld->Length() - 1.f) > Epsilon) {
+        bxdf->SampleF(woLocal, &wiLocal, remappedSample, pdf);
+        frame.toWorld(wiLocal);
+    }
 
     if (!(bxdf->type & BSDF_SPECULAR) && matchComp > 1) {
         for (int i = 0; i < nBxDFs; i++) {
@@ -213,7 +220,7 @@ RGBSpectrum SpecularReflection::SampleF(
 {
 	*pdf = 1;
 	*wi = Vector3f(-wo.x, -wo.y, wo.z);
-	return fresnel->Evaluate(Frame::CosTheta(*wi)) * R / Frame::AbsCosTheta(*wi);
+	return fresnel->Evaluate(Frame::CosTheta(*wi)) * R;
 }
 
 RGBSpectrum SpecularRefract::SampleF(
@@ -231,7 +238,7 @@ RGBSpectrum SpecularRefract::SampleF(
 		return RGBSpectrum(0.0);
     RGBSpectrum Ft = T * (RGBSpectrum(1.0) - fresnel.Evaluate(Frame::CosTheta(*wi)));
 	*pdf = 1;
-	return (etaI*etaI) / (etaT*etaT) * Ft / Frame::AbsCosTheta(*wi);
+	return (etaI*etaI) / (etaT*etaT) * Ft;
 }
 
 RGBSpectrum SpecularTransmission::SampleF(
@@ -249,7 +256,7 @@ RGBSpectrum SpecularTransmission::SampleF(
         //if (sampledType)
         //    *sampledType = BxDFType(BSDF_SPECULAR | BSDF_REFLECTION);
         *pdf = F;
-        return F * R / Frame::AbsCosTheta(*wi);
+        return F * R;
     }
     else {
         // Compute specular transmission for _FresnelSpecular_
@@ -270,7 +277,7 @@ RGBSpectrum SpecularTransmission::SampleF(
         //if (sampledType)
         //    *sampledType = BxDFType(BSDF_SPECULAR | BSDF_REFRACTION);
         *pdf = 1 - F;
-        return ft / Frame::AbsCosTheta(*wi);
+        return ft;
     }
 }
 
@@ -283,7 +290,7 @@ RGBSpectrum LambertianReflection::SampleF(
     *wi = CosineSampleHemisphere(sample);
 	if (wo.z < 0) (*wi).z *= -1;
 	*pdf = Frame::SameHemisphere(wo, *wi) ? Frame::AbsCosTheta(*wi) * INV_PI : 0;
-	return R * INV_PI;
+	return R * INV_PI * Frame::AbsCosTheta(*wi);
 }
 
 RGBSpectrum MicrofacetReflection::f(
@@ -296,7 +303,7 @@ RGBSpectrum MicrofacetReflection::f(
     if (wh.x == 0 && wh.y == 0 && wh.z == 0) return RGBSpectrum(0.);
     wh = Normalize(wh);
     RGBSpectrum F = fresnel->Evaluate(Dot(wo, wh)) * R;
-    return distribution->D(wh)*distribution->G(wo, wi)*F / (4 * cosThetaI*cosThetaO);
+    return distribution->D(wh)*distribution->G(wo, wi)*F / (4 * cosThetaO);
 }
 
 RGBSpectrum MicrofacetReflection::SampleF(

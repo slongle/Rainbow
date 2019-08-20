@@ -4,8 +4,8 @@
     <mode type="final"/>
     <integrator type="path" >
 		<integer name="maxDepth" value="7" />
-        <integer name="sampleNum" value="5000"/>
-        <integer name="delta" value="1"/>
+        <integer name="sampleNum" value="100"/>
+        <integer name="delta" value="100"/>
 		<boolean name="strictNormals" value="true" />
 	</integrator>
 	<sensor type="perspective" >

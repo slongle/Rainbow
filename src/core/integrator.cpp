@@ -54,7 +54,7 @@ RGBSpectrum SamplerIntegrator::EstimateDirectLight(
             if (inter.IsSurfaceInteraction()) {
                 // Sample BSDF
                 const SurfaceInteraction& surfaceInter = static_cast<const SurfaceInteraction&>(inter);
-                f = surfaceInter.bsdf->f(surfaceInter.wo, wi) * AbsDot(wi, surfaceInter.shading.n);
+                f = surfaceInter.bsdf->f(surfaceInter.wo, wi);
                 scatterPdf = surfaceInter.bsdf->Pdf(inter.wo, wi);
             }
             else {
@@ -91,14 +91,12 @@ RGBSpectrum SamplerIntegrator::EstimateDirectLight(
     if (!light->IsDeltaLight()) {
         RGBSpectrum f;
         bool sampledSpecular = false;
-        //const SurfaceInteraction& a = static_cast<const SurfaceInteraction&>(inter);
         if (inter.IsSurfaceInteraction()) {
             // Sample BSDF
             BxDFType BSDFType;
             const SurfaceInteraction& surfaceInter = static_cast<const SurfaceInteraction&>(inter);
             f = surfaceInter.bsdf->SampleF(surfaceInter.wo, &wi, scatteru, 
-                                           &scatterPdf, BSDF_ALL, &BSDFType);
-            f *= AbsDot(wi, surfaceInter.shading.n);      
+                                           &scatterPdf, BSDF_ALL, &BSDFType);  
             sampledSpecular = (BSDFType & BSDF_SPECULAR) != 0;
         }
         else {
@@ -308,7 +306,7 @@ void SamplerIntegrator::Render(const Scene &scene, unsigned char* guiImage) {
                 finishedTiles++;
                 fprintf(stderr, "\r%.2f%%", 100. * finishedTiles / tiles.size());
             }
-        };
+        };  
 
         for (cnt = 1; cnt <= sampleNum / sampleDelta; cnt++)
         {

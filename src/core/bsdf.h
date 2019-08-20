@@ -72,8 +72,12 @@ public:
     BSDF(
         const SurfaceInteraction& m_si,
         const Float& m_eta = 1)
-        : ns(m_si.shading.n), ng(m_si.n), ss(Normalize(m_si.dpdu)), ts(Cross(ns, ss)),
-        nBxDFs(0), eta(m_eta), frame(ns, ss, ts) {}
+      : ns(m_si.shading.n), 
+        ng(m_si.n), ss(Normalize(m_si.dpdu)), ts(Normalize(Cross(ns, ss))),
+        nBxDFs(0), eta(m_eta)
+    {        
+        frame = Frame(ns,ss,ts);
+    }
 
     void Add(BxDF* bxdf) {        
         Assert(nBxDFs < MaxBxDFs, "Too many BxDFs!");
@@ -83,10 +87,17 @@ public:
 
     int NumComponents(const BxDFType &flags = BSDF_ALL) const;
 
+    /**
+     * @return return cosine weighted bsdf value.
+     */
     RGBSpectrum f(
         const Vector3f&   woWorld, 
         const Vector3f&   wiWorld, 
         const BxDFType&   type = BSDF_ALL);
+    
+    /** 
+     * @return return cosine weighted bsdf value.
+     */
     RGBSpectrum SampleF(
         const Vector3f&   woWorld, 
         Vector3f*         wiWorld, 
@@ -112,7 +123,13 @@ private:
 class BxDF{
 public:	
     BxDF(const BxDFType& m_type) :type(m_type) {}
+    /**
+     * @return return cosine weighted bsdf value.
+     */
 	virtual RGBSpectrum f(const Vector3f& wo, const Vector3f& wi) = 0;
+    /**
+     * @return return cosine weighted bsdf value.
+     */
     virtual RGBSpectrum SampleF(const Vector3f& wo, Vector3f* wi, const Point2f &sample, Float *pdf) = 0;
     virtual Float Pdf(const Vector3f& wo, const Vector3f& wi) = 0;
 
@@ -130,9 +147,25 @@ public:
 		R(m_R), fresnel(m_fresnel),
 		BxDF(BxDFType(BSDF_REFLECTION | BSDF_SPECULAR)) {}
 
-    RGBSpectrum f(const Vector3f& wo, const Vector3f& wi) override { return RGBSpectrum(0.); }
-    RGBSpectrum SampleF(const Vector3f& wo, Vector3f* wi, const Point2f &sample, Float *pdf) override;
-    Float Pdf(const Vector3f& wo, const Vector3f& wi) override { return 0; }
+    RGBSpectrum f(
+        const Vector3f& wo, 
+        const Vector3f& wi) override 
+    { 
+        return RGBSpectrum(0.); 
+    }
+
+    RGBSpectrum SampleF(
+        const Vector3f& wo, 
+        Vector3f* wi, 
+        const Point2f &sample, 
+        Float *pdf) override;
+    
+    Float Pdf(
+        const Vector3f& wo, 
+        const Vector3f& wi) override 
+    { 
+        return 0; 
+    }
 
 	const RGBSpectrum R;
 	const Fresnel *fresnel;
@@ -147,9 +180,25 @@ public:
     : T(m_T), etaA(m_etaA), etaB(m_etaB), fresnel(etaA, etaB),
       BxDF(BxDFType(BSDF_REFRACTION | BSDF_SPECULAR)) {}
 
-    RGBSpectrum f(const Vector3f& wo, const Vector3f& wi) override { return RGBSpectrum(0.); }
-    RGBSpectrum SampleF(const Vector3f& wo, Vector3f* wi, const Point2f &sample, Float *pdf) override;
-    Float Pdf(const Vector3f& wo, const Vector3f& wi) override { return 0; }
+    RGBSpectrum f(
+        const Vector3f& wo, 
+        const Vector3f& wi) override 
+    { 
+        return RGBSpectrum(0.); 
+    }
+
+    RGBSpectrum SampleF(
+        const Vector3f& wo, 
+        Vector3f* wi, 
+        const Point2f &sample, 
+        Float *pdf) override;
+    
+    Float Pdf(
+        const Vector3f& wo, 
+        const Vector3f& wi) override 
+    { 
+        return 0; 
+    }
 
 	const RGBSpectrum T;
 	const Float etaA, etaB;
@@ -166,9 +215,25 @@ public:
     : R(m_R), T(m_T), etaA(m_etaA), etaB(m_etaB), fresnel(etaA, etaB),
       BxDF(BxDFType(BSDF_REFLECTION | BSDF_REFRACTION | BSDF_SPECULAR)) {}
 
-    RGBSpectrum f(const Vector3f& wo, const Vector3f& wi) override { return RGBSpectrum(0.); }
-    RGBSpectrum SampleF(const Vector3f& wo, Vector3f* wi, const Point2f& sample, Float* pdf) override;
-    Float Pdf(const Vector3f& wo, const Vector3f& wi) override { return 0; }
+    RGBSpectrum f(
+        const Vector3f& wo, 
+        const Vector3f& wi) override 
+    { 
+        return RGBSpectrum(0.); 
+    }
+    
+    RGBSpectrum SampleF(
+        const Vector3f& wo, 
+        Vector3f* wi, 
+        const Point2f& sample, 
+        Float* pdf) override;
+    
+    Float Pdf(
+        const Vector3f& wo, 
+        const Vector3f& wi) override 
+    { 
+        return 0; 
+    }
 
     const RGBSpectrum R, T;
     const Float etaA, etaB;
@@ -179,9 +244,26 @@ class LambertianReflection :public BxDF {
 public:
 	LambertianReflection(const RGBSpectrum& m_R) :
 		BxDF(BxDFType(BSDF_REFLECTION | BSDF_DIFFUSE)), R(m_R) {}
-    RGBSpectrum f(const Vector3f& wo, const Vector3f& wi) override { return R * INV_PI; }
-	RGBSpectrum SampleF(const Vector3f& wo, Vector3f* wi, const Point2f &sample, Float *pdf) override;
-    Float Pdf(const Vector3f& wo, const Vector3f& wi) override { return INV_TWOPI; }
+
+    RGBSpectrum f(
+        const Vector3f& wo, 
+        const Vector3f& wi) override 
+    { 
+        return R * INV_PI * Frame::AbsCosTheta(wi); 
+    }
+
+	RGBSpectrum SampleF(
+        const Vector3f& wo, 
+        Vector3f* wi, 
+        const Point2f &sample, 
+        Float *pdf) override;
+
+    Float Pdf(
+        const Vector3f& wo, 
+        const Vector3f& wi) override 
+    { 
+        return INV_TWOPI; 
+    }
 
 	const RGBSpectrum R;
 };
@@ -198,9 +280,19 @@ public:
         distribution(m_dis), 
         fresnel(m_fresnel) {}
 
-    RGBSpectrum f(const Vector3f& wo, const Vector3f& wi) override;
-    RGBSpectrum SampleF(const Vector3f& wo, Vector3f* wi, const Point2f &sample, Float *pdf) override;
-    Float Pdf(const Vector3f& wo, const Vector3f& wi) override;
+    RGBSpectrum f(
+        const Vector3f& wo, 
+        const Vector3f& wi) override;
+
+    RGBSpectrum SampleF(
+        const Vector3f& wo, 
+        Vector3f* wi, 
+        const Point2f &sample, 
+        Float *pdf) override;
+
+    Float Pdf(
+        const Vector3f& wo, 
+        const Vector3f& wi) override;
 
     RGBSpectrum R;
     MicrofacetDistribution* distribution;

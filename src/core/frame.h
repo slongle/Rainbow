@@ -19,20 +19,22 @@ inline void CoordinateSystem(const Normal3f& n,  Vector3f *s, Vector3f *t) {
 
 class Frame {
 public:
+    Frame() {}
+
     // Guarantee n is Normalized
     Frame(const Normal3f& n) :m_n(n) {
         CoordinateSystem(m_n, &m_s, &m_t);
     }
 
-    Frame(const Vector3f& n, const Vector3f& s, const Vector3f& t) 
+    Frame(const Normal3f& n, const Vector3f& s, const Vector3f& t) 
         :m_n(n), m_s(s), m_t(t) {}
 
     Vector3f toLocal(const Vector3f &v) const {
-        return Vector3f(Dot(v, m_s), Dot(v, m_t), Dot(v, m_n));
+        return Normalize(Vector3f(Dot(v, m_s), Dot(v, m_t), Dot(v, m_n)));
     }
 
     Vector3f toWorld(const Vector3f v) const {
-        return v.x * m_s + v.y * m_t + v.z * m_n;
+        return Normalize(v.x * m_s + v.y * m_t + v.z * m_n);
     }
 
     inline static Float CosTheta(const Vector3f& v) { return v.z; }

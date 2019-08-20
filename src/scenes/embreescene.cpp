@@ -103,6 +103,10 @@ bool EmbreeScene::IntersectP(
     inter->p = p;
     inter->wo = -ray.d;
     inter->uv = Point2f(u, v);
+    if (std::fabs(inter->wo.Length() - 1.f) > Epsilon) {
+        int a = 1;
+        a++;
+    }
 
     inter->primitive = primitives[meshID][triangleID].get();
     inter->shape = inter->primitive->shape.get();
