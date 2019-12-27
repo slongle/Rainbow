@@ -63,6 +63,5 @@ void* MemoryArena::Alloc(size_t nBytes) {
 
 void MemoryArena::Reset() {
     currentBlockPos = currentAllocSize = 0;
-    currentBlock = nullptr;
     availableBlocks.splice(availableBlocks.begin(), usedBlocks);
 }
