@@ -106,17 +106,18 @@ public:
         const std::shared_ptr<Filter>&   filter);
 
     void MergeFilmTile(const FilmTile &tile);
+    void AddSplat(const Point2i& p, const RGBSpectrum& L);
     void AddPixel(const Point2i& p, const RGBSpectrum& L, const int &num = 1) const;
 	void SetPixel(const Point2i& p, const RGBSpectrum& L) const;
     RGBSpectrum RetPixel(const Point2i & p) const;
-    void SaveImage() const;
-    void SaveImage(const std::string &name) const;    
+    void SaveImage(Float splatScale = 1) const;
+    void SaveImage(const std::string &name,Float splatScale = 1) const;
     void SaveHeatMapImage() const;
     void SaveHeatMapImage(const std::string &name) const;
 
-    void ExportToLinearFloat(float* data) const;
+    void ExportToLinearFloat(float* data, Float splatScale) const;
     void ExportToHeatMapUnsignedCharPointer(unsigned char* data) const;
-    void ExportToUnsignedCharPointer(unsigned char* data) const;
+    void ExportToUnsignedCharPointer(unsigned char* data, Float splatScale) const;
     void UpdateToUnsignedCharPointer(unsigned char* data, const int &x, const int &y) const;    
     std::vector<FilmTile> GenerateTiles(const int &tileSize);
 

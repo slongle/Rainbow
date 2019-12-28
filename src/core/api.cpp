@@ -20,6 +20,7 @@
 #include "integrators/whitted.h"
 #include "integrators/path.h"
 #include "integrators/volpath.h"
+#include "integrators/pssmlt.h"
 
 #include "materials/matte.h"
 #include "materials/mirror.h"
@@ -420,6 +421,9 @@ std::shared_ptr<Integrator> RenderOptions::CreateIntegrator()
     }
     else if (m_integratorType == "volpath") {
         integrator = CreateVolPathIntegrator(m_integratorProperty, m_camera, m_sampler);
+    }
+    else if (m_integratorType == "pssmlt") {
+        integrator = CreatePSSMLTIntegrator(m_integratorProperty, m_camera);
     }
 	return std::shared_ptr<Integrator>(integrator);
 }

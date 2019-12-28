@@ -6,8 +6,6 @@
 #include "sampler.h"
 #include "light.h"
 #include "statistic.h"
-//#include "C:\Users\del\Desktop\halton\halton_enum.h"
-//#include "C:\Users\del\Desktop\halton\halton_sampler.h"
 
 RAINBOW_NAMESPACE_BEGIN
 
@@ -17,7 +15,7 @@ public:
         std::shared_ptr<Camera>    camera,
         std::shared_ptr<Sampler>   sampler)
         :m_camera(camera), m_sampler(sampler) {}
-	virtual void Render(const Scene &scene, unsigned char* guiImage = nullptr) = 0;
+	virtual void Render(const Scene &scene) = 0;
 
     virtual void AdaptiveProgressiveRender(const Scene &scene, const int& x, const int & y)
     {
@@ -58,22 +56,7 @@ public:
         sampleNum(m_sampleNum), sampleDelta(m_sampleDelta)
     {
         //halton_sampler.init_faure();
-    }
-
-    RGBSpectrum UniformSampleOneLight(
-        const Interaction& inter,
-        const Scene& scene,
-        Sampler& sampler,
-        const bool handleMedium = false);
-
-    RGBSpectrum EstimateDirectLight(
-        const Interaction &inter,
-        const std::shared_ptr<Light> &light,
-        const Scene& scene,
-        const Point2f& scatteru,
-        const Point2f& lightu,
-        Sampler& sampler,
-        const bool handleMedia = false);
+    }    
 
     RGBSpectrum SpecularReflect(MemoryArena& arena, const Ray&ray, const Scene& scene, int depth, SurfaceInteraction intersection);
     RGBSpectrum SpecularRefract(MemoryArena& arena, const Ray&ray, const Scene& scene, int depth, SurfaceInteraction intersection);
@@ -81,7 +64,7 @@ public:
     void RenderTileEyeLight(const Scene &scene, Sampler& sampler, FilmTile &tile);
     void RenderTileAdaptive(const Scene &scene, Sampler& sampler, FilmTile &tile, bool clamp = false);
     void RenderTile(const Scene &scene, Sampler& sampler, FilmTile &tile, bool clamp = false, const int& preSampleSum = 0);
-    void Render(const Scene &scene, unsigned char* guiImage = nullptr);
+    void Render(const Scene &scene);
     void RenderAdaptive(const Scene &scene);
     void RenderEyeLight(const Scene &scene);
     virtual RGBSpectrum Li(MemoryArena& arena, const Ray &ray, const Scene& scene, Sampler &sampler, int depth) = 0;
@@ -90,6 +73,21 @@ public:
     Statistic statistic;
     //Halton_sampler halton_sampler;
 };
+
+RGBSpectrum UniformSampleOneLight(
+    const Interaction& inter,
+    const Scene& scene,
+    Sampler& sampler,
+    const bool handleMedium = false);
+
+RGBSpectrum EstimateDirectLight(
+    const Interaction& inter,
+    const std::shared_ptr<Light>& light,
+    const Scene& scene,
+    const Point2f& scatteru,
+    const Point2f& lightu,
+    Sampler& sampler,
+    const bool handleMedia = false);
 
 RAINBOW_NAMESPACE_END
 

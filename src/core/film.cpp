@@ -121,6 +121,13 @@ void Film::MergeFilmTile(const FilmTile & tile)
         }
 }
 
+void Film::AddSplat(const Point2i& p, const RGBSpectrum& L)
+{
+    Pixel& pixel = GetPixel(p);
+    for (int i = 0; i < 3; i++)
+        pixel.rgb[i] += L[i];
+}
+
 void Film::AddPixel(
     const Point2i & p, 
     const RGBSpectrum & L, 
@@ -148,33 +155,34 @@ RGBSpectrum Film::RetPixel(const Point2i & p) const {
     return rgb;
 }
 
-void Film::SaveImage() const
+void Film::SaveImage(Float splatScale) const
 {
     std::string extension = utility::GetExtension(filename);
     if (extension == "PNG" || extension == "png") {
         unsigned char *rgba = new unsigned char[4 * resolution.x * resolution.y];
-        ExportToUnsignedCharPointer(rgba);
+        ExportToUnsignedCharPointer(rgba, splatScale);
         ExportToPNG(filename, rgba, resolution.x, resolution.y);        
     }
     else if (extension == "HDR" || extension == "hdr") {
         float* rgb = new float[3 * resolution.x * resolution.y];
-        ExportToLinearFloat(rgb);
+        ExportToLinearFloat(rgb, splatScale);
         ExportToHDR(filename, rgb, resolution.x, resolution.y);
     }
 }
 
 void Film::SaveImage(
-    const std::string& name) const 
+    const std::string& name,
+    Float splatScale) const
 {
     std::string extension = utility::GetExtension(name);
     if (extension == "PNG" || extension == "png") {
         unsigned char *rgba = new unsigned char[4 * resolution.x * resolution.y];
-        ExportToUnsignedCharPointer(rgba);
+        ExportToUnsignedCharPointer(rgba, splatScale);
         ExportToPNG(name, rgba, resolution.x, resolution.y);
     }
     else if (extension == "HDR" || extension == "hdr") {
         float* rgb = new float[3 * resolution.x * resolution.y];
-        ExportToLinearFloat(rgb);
+        ExportToLinearFloat(rgb, splatScale);
         ExportToHDR(name, rgb, resolution.x, resolution.y);
     }
 }
@@ -191,16 +199,19 @@ void Film::SaveHeatMapImage(const std::string & name) const {
     ExportToPNG(name, rgba, resolution.x, resolution.y);
 }
 
-void Film::ExportToLinearFloat(float* data) const 
+void Film::ExportToLinearFloat(float* data, Float splatScale) const
 {
     int idx = 0;
     for (int y = 0; y < resolution.y; y++) {
         for (int x = 0; x < resolution.x; x++) {
             Pixel &pixel = GetPixel(Point2i(x, y));
+            if (pixel.filterWeightSum == 0) {
+                pixel.filterWeightSum = 1;
+            }
             const Float invWeight = Float(1) / pixel.filterWeightSum;
-            data[idx + 0] = (pixel.rgb[0] * invWeight);
-            data[idx + 1] = (pixel.rgb[1] * invWeight);
-            data[idx + 2] = (pixel.rgb[2] * invWeight);
+            data[idx + 0] = (pixel.rgb[0] * invWeight * splatScale);
+            data[idx + 1] = (pixel.rgb[1] * invWeight * splatScale);
+            data[idx + 2] = (pixel.rgb[2] * invWeight * splatScale);
             idx += 3;
         }
     }
@@ -241,16 +252,19 @@ void Film::ExportToHeatMapUnsignedCharPointer(unsigned char * data) const {
     }
 }
 
-void Film::ExportToUnsignedCharPointer(unsigned char* data) const {
+void Film::ExportToUnsignedCharPointer(unsigned char* data, Float splatScale) const {
     int idx = 0;
     for (int y = 0; y < resolution.y; y++) {
         for (int x = 0; x < resolution.x; x++) {
             Pixel &pixel = GetPixel(Point2i(x, y));
+            if (pixel.filterWeightSum == 0) {
+                pixel.filterWeightSum = 1;
+            }
             Float invWeight = Float(1) / pixel.filterWeightSum;
 #define TO_BYTE(v) (uint8_t) Clamp(255.f * GammaCorrect(v) + 0.5f, 0.f, 255.f)
-            data[idx + 0] = (TO_BYTE(pixel.rgb[0] * invWeight));
-            data[idx + 1] = (TO_BYTE(pixel.rgb[1] * invWeight));
-            data[idx + 2] = (TO_BYTE(pixel.rgb[2] * invWeight));
+            data[idx + 0] = (TO_BYTE(pixel.rgb[0] * invWeight * splatScale));
+            data[idx + 1] = (TO_BYTE(pixel.rgb[1] * invWeight * splatScale));
+            data[idx + 2] = (TO_BYTE(pixel.rgb[2] * invWeight * splatScale));
             data[idx + 3] = (TO_BYTE(1));
 #undef TO_BYTE
             idx += 4;

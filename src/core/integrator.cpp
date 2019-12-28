@@ -15,7 +15,7 @@ RGBSpectrum Clamp(RGBSpectrum a, RGBSpectrum b) {
     return a;
 }
 
-RGBSpectrum SamplerIntegrator::UniformSampleOneLight(
+RGBSpectrum UniformSampleOneLight(
     const Interaction& inter,
     const Scene& scene,
     Sampler& sampler,
@@ -31,7 +31,7 @@ RGBSpectrum SamplerIntegrator::UniformSampleOneLight(
         sampler, handleMedium) / lightPdf;
 }
 
-RGBSpectrum SamplerIntegrator::EstimateDirectLight(
+RGBSpectrum EstimateDirectLight(
     const Interaction&             inter,
     const std::shared_ptr<Light>  &light,
     const Scene                   &scene,
@@ -194,7 +194,7 @@ void SamplerIntegrator::RenderTileAdaptive(
                     li = Clamp(li, RGBSpectrum(1));
                 L += li;
 
-                Float sampleLuminance = li.Luma();
+                Float sampleLuminance = li.y();
                 Float delta = sampleLuminance - mean;
                 mean += delta / sampleCount;
                 meanSqr += delta * (sampleLuminance - mean);
@@ -269,7 +269,7 @@ void SamplerIntegrator::RenderTileEyeLight(const Scene &scene, Sampler& sampler,
     }
 }
 
-void SamplerIntegrator::Render(const Scene &scene, unsigned char* guiImage) {
+void SamplerIntegrator::Render(const Scene &scene) {
     std::shared_ptr<Film> film = m_camera->film;
     std::vector<FilmTile> tiles;
     tiles = film->GenerateTiles(RAINBOW_TILE_SIZE);

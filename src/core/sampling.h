@@ -5,6 +5,21 @@
 
 RAINBOW_NAMESPACE_BEGIN
 
+class Distribution1D {
+public:
+    Distribution1D(Float* f, int n);
+
+    //void BuildAliasTable();
+    int SampleDiscrete(Float u) const;
+
+
+    std::vector<Float> func, cdf;
+    Float funcInt;
+
+    //std::vector<int> aliasTable;
+    //std::vector<Float> pdf;
+};
+
 inline Point2f ConcentricSampleDisk(const Point2f &u) {
 	// Map uniform random numbers to $[-1,1]^2$
 	Point2f uOffset = 2.f * u - Vector2f(1, 1);

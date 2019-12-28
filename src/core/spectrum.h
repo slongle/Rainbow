@@ -76,7 +76,7 @@ public:
         return std::min(std::min(r, g), b);
     }
 
-    Float Luma() const {
+    Float y() const {
         return Clamp(0.2126*r + 0.7152*g + 0.0722*b, 0., 1.);
 	}
 

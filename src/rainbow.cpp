@@ -1,6 +1,7 @@
 #include "core/common.h"
 #include "core/parser.h"
 #include "ext/filesystem/filesystem/path.h"
+#include "core/sampling.h"
 
 using namespace rainbow;
 
@@ -23,7 +24,7 @@ int main(int argc, char *argv[]) {
     scenes[12] = "fire/fire.xml";
     scenes[13] = "scene-test/scene-test.xml";
 
-    const std::string filename(solutionDir + scenes[4]);
+    const std::string filename(solutionDir + scenes[3]);
 
 	filesystem::path path(filename);
 	getFileResolver()->prepend(path.parent_path());
